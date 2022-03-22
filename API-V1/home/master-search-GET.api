@@ -1,0 +1,44 @@
+
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_master_data' %>
+
+<% assign pageSize = 20 %> 
+<% if en.params.pageSize %>
+    <% assign pageSize = en.params.pageSize %>
+<% endif %>
+<% assign page = 1 %>
+<% if en.params.page %> 
+    <% assign page = en.params.page %>
+<% endif %> 
+
+<% if en.params.sortBy %>
+    <% if en.params.sortOrder =='ASC' %>
+        <% assign orderBy[en.params.sortBy] = 1 %>
+    <% else %>
+        <% assign orderBy[en.params.sortBy] = -1 %>
+    <% endif %>
+<% else %>
+    <% assign orderBy._created = -1 %>
+<% endif %>
+
+<% if en.params.type %>
+    <% assign query.type.$in = en.params.type | splittrim:"," %>
+<% endif %>
+<% if en.params.searchText %>
+    <% assign q1.text.$regex = en.params.searchText %> 
+    <% assign q1.text.$options = "i" %>
+    <% assign query.$or = [q1] %>
+<% endif %>
+<% rem return 'query' query %>
+<% en.data.find results datasetId query "" orderBy pageSize page %>
+<% assign returnData.status = 1 %>
+<% assign returnData.message = 'Searched Data list' %>
+<% assign returnData.results = results.rows %>
+<% assign returnData.pagination = results.pagination %>
+<% return returnData %> 

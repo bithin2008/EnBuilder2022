@@ -1,0 +1,17 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'crm_comments' %>
+<% assign params = en.params %>
+<% assign dataToInsert.id = params.id %>
+<% assign dataToInsert.message = params.message %>
+<% assign dataToInsert.by = UserResult.user.firstName | append: ' ' | append: UserResult.user.lastName  %>
+<% en.data.insert result datasetId dataToInsert %>
+<% assign returnData.status = 1 %>
+<% assign returnData.message = 'Comment added successfully.' %>
+<% assign returnData.result = result %>
+<% return returnData %>

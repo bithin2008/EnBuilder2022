@@ -1,0 +1,23 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+
+<% assign datasetId = 'bldr_amenities' %>
+
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% en.data.delete results datasetId query %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Amenity Section deleted successfully.' %>
+    <% assign returnData.result = results %>
+    <% return returnData %>
+<% else %>
+    <% assign returnData.status = 0 %>
+    <% assign returnData.message = 'Amenity Section id not found.' %>
+    <% assign returnData.result = null %>
+    <% return returnData %>
+<% endif %>

@@ -1,0 +1,116 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_deals' %> 
+<% assign params = en.params %>
+<% if params.deal_id %>
+    <% assign dealQuery._id = params.deal_id %>
+    <% en.data.findOne dealResult datasetId dealQuery %>
+    <% assign dealDetail = dealResult.row %>
+    <% if dealDetail %>
+        <% if dealDetail.unit %>
+            <% assign returnData.status = 0 %>
+            <% assign returnData.message = 'Unit is arealdy assigned in this deal' %>
+            <% return returnData %>
+            <% exit %> 
+        <% else %>
+            // for checking availability of unit
+            <% assign unitQuery._id = params.unit_id %>
+            <% en.data.findOne unitResult "bldr_units" unitQuery %>
+            <% assign unitDetails = unitResult.row %>
+            <% if unitDetails.status == 'AVAILABLE' %> 
+                <% assign dataToUpdate.stage = 'RESERVED' %>
+                <% assign dataToUpdate.deal_type = en.params.deal_type %>
+                <% assign dataToUpdate.deposit_structure_id = en.params.deposit_structure_id %> 
+                <% assign dataToUpdate.deposit_structure_def = en.params.deposit_structure_def %> 
+                <% assign dataToUpdate.unit._id = unitDetails._id %>
+                <% assign dataToUpdate.unit.builder_id = unitDetails.builder_id %>
+                <% assign dataToUpdate.unit.builder_name = unitDetails.builder_name %>
+                <% assign dataToUpdate.unit.project_id = unitDetails.project_id %>
+                <% assign dataToUpdate.unit.project_name = unitDetails.project_name %>
+                <% assign dataToUpdate.unit.model_id = unitDetails.model_id %>
+                <% assign dataToUpdate.unit.model_name = unitDetails.model_name %>
+                <% assign dataToUpdate.unit.area = unitDetails.area %>
+                <% assign dataToUpdate.unit.bath = unitDetails.bath %>
+                <% assign dataToUpdate.unit.bed = unitDetails.bed %>
+                <% assign dataToUpdate.unit.ceiling = unitDetails.ceiling %>
+                <% assign dataToUpdate.unit.den = unitDetails.den %>
+                <% assign dataToUpdate.unit.floor_legal = unitDetails.floor_legal %>
+                <% assign dataToUpdate.unit.floor_marketing = unitDetails.floor_marketing %>
+                <% assign dataToUpdate.unit.outdoor_area = unitDetails.outdoor_area %>
+                <% assign dataToUpdate.unit.price = unitDetails.price %>
+                <% assign dataToUpdate.unit.floor_premium = unitDetails.floor_premium %>
+                <% assign dataToUpdate.unit.unit_premium = unitDetails.unit_premium %>
+                <% assign dataToUpdate.unit.sales_price = unitDetails.sales_price %>
+                <% assign dataToUpdate.unit.tax = unitDetails.tax %>
+                <% assign dataToUpdate.unit.type = unitDetails.type %> 
+                <% assign dataToUpdate.unit.unit_no = unitDetails.unit_no %>
+                <% assign dataToUpdate.unit.unit_no_legal = unitDetails.unit_no_legal %>
+                <% assign dataToUpdate.unit.outdoor_type = unitDetails.outdoor_type %>
+                <% assign dataToUpdate.unit.flex = unitDetails.flex %>
+                <% assign dataToUpdate.unit.media = unitDetails.media %>
+                <% assign dataToUpdate.unit.collection = unitDetails.collection %>
+                <% assign dataToUpdate.unit.unit_no_marketing = unitDetails.unit_no_marketing %>
+                <% assign dataToUpdate.unit.views = unitDetails.views %>
+                
+                <% assign dataToUpdate.allocate_bicycle = unitDetails.allocate_bicycle %>
+                <% assign dataToUpdate.allocate_parking = unitDetails.allocate_parking %> 
+                <% assign dataToUpdate.allocate_locker = unitDetails.allocate_locker %>
+                
+                <% assign dataToUpdate.max_bicycle = unitDetails.max_bicycle %>
+                <% assign dataToUpdate.max_lockers = unitDetails.max_lockers %>
+                <% assign dataToUpdate.max_parking = unitDetails.max_parking %>
+                
+                <% assign dataToUpdate.is_bicycle_eligible = unitDetails.is_bicycle_eligible %>
+                <% assign dataToUpdate.is_locker_eligible = unitDetails.is_locker_eligible %>
+                <% assign dataToUpdate.is_parking_eligible = unitDetails.is_parking_eligible %>
+                
+                <% en.data.update dealUpResult datasetId dealQuery dataToUpdate %>
+                
+                // for updating unit status 
+                <% assign unitData.status = 'SOLD' %>
+                <% assign unitData.deal_id = dealDetail._id %> 
+                <% en.data.update unitUpResult "bldr_units" unitQuery unitData %>
+                
+                <% assign returnData.status = 1 %>
+                <% assign returnData.message = 'Unit assigned successfully' %>
+                <% return returnData %>
+                <% exit %> 
+                
+            <% else %> 
+                <% assign returnData.status = 0 %>
+                <% assign returnData.message = 'Unit is not available' %>
+                <% return returnData %>
+                <% exit %> 
+            <% endif %> 
+        <% endif %>
+    <% else %>
+        <% assign returnData.status = 0 %>
+        <% assign returnData.message = 'Deal not found' %>
+        <% return returnData %>
+        <% exit %> 
+    <% endif %>
+<% else %>
+    <% assign returnData.status = 0 %>
+    <% assign returnData.message = 'Deal id is required' %>
+    <% return returnData %>
+    <% exit %> 
+<% endif %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,55 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+
+<% assign datasetId = 'crm_geography' %>
+<% if en.params.pageSize %>
+    <% assign pageSize = en.params.pageSize %>
+<% else %>
+    <% assign pageSize = 200 %>
+<% endif %>
+<% if en.params.sortBy %>
+    <% if en.params.sortOrder =='ASC' %>
+        <% assign orderBy[en.params.sortBy] = 1 %>
+    <% else %>
+        <% assign orderBy[en.params.sortBy] = -1 %> 
+    <% endif %>
+<% else %>
+    <% assign orderBy.name = 1 %>
+<% endif %>
+<% if en.params.searchText %>
+    <% assign Name.name.$regex = en.params.searchText %> 
+    <% assign Name.name.$options = "i" %>
+    
+    <% assign query.$or = [Name] %>
+<% endif %>
+<% if en.params.type %>
+    <% assign query.type = en.params.type %>
+<% endif %>
+<% if en.params.parent %>
+    <% assign query.parent.$in = en.params.parent | split:"," %>
+<% endif %>
+<% if en.params.nId %>
+    <% assign query._id.$ne = en.params.nId %>
+<% endif %> 
+<% en.data.find results datasetId query "" orderBy pageSize en.params.page %>
+<% assign returnData.status = 1 %>
+<% assign returnData.message = 'Geography list' %>
+<% assign returnData.results = results.rows %>
+<% assign returnData.pagination = results.pagination %>
+<% return returnData %>
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,163 @@
+<div class="row mb-3">
+    <div class="col-md-8 col-sm-6">
+    </div>
+    <div class="col-md-4 col-sm-6">
+
+        <button style="float:right" class="btn btn-primary mr-2" type="button" (click)="openBulkAddModal(addBulkRecordsModal)">
+            Add Collections</button>
+        <button style="float:right" class="btn btn-danger mr-2" type="button" (click)="deleteBulkCollections()" *ngIf="isBulkDelete">
+            Delete Collections</button>
+    </div>
+</div>
+<div class="table-responsive mt-2 mb-3">
+    <table class="table table-striped list_table" style="table-layout: fixed;">
+        <thead>
+            <tr>
+                <th style="width: 50px;">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="th_chk_all" [(ngModel)]="selectedAll"
+                            (change)="selectAll();">
+                        <label class="custom-control-label" for="th_chk_all">&nbsp;</label>
+                    </div>
+                </th>
+                <th style="width:150px">Name</th>
+                <!-- <th style="width:150px">Cost</th>
+                <th style="width:150px">Price</th> -->
+                <th style="width:80px">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngIf="selectedCollections.length>0">
+                <tr *ngFor="let item of selectedCollections;let i=index">
+                    <td style="width: 50px;">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" id="is_select{{i}}" class="custom-control-input" (change)="onChangeDeleteCheckbox()" [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="item.should_delete">
+                            <label class="custom-control-label" for="is_select{{i}}">&nbsp;</label>
+                        </div>
+                    </td>
+                    <td>{{item?.name}}</td>
+                    <!-- <td>{{item.cost | currency:'USD'}}</td>
+                    <td>{{item.price | currency:'USD'}}</td> -->
+                    <td>
+                        <button class="btn btn-sm btn-danger" type="button" (click)="deleteCollection(item,i)">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>
+            </ng-container>
+            <ng-container *ngIf="selectedCollections.length == 0">
+                <tr>
+                    <td colspan="3" class="text-center">No collection found</td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+</div>
+<div class="row mt-3" *ngIf="paginationObj.total>=20">
+    <div class="col-md-6">
+        <div class="form-group">
+            <span class="float-left" style="width:70px;margin-top: 6px;">Page Size:</span>
+            <span class="float-left" style="width:85px;">
+                <select class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="pageSize" (change)="setPageSize()">
+                    <option value="">-Select-</option>
+                                        <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </span>
+            <span class="float-left" style="margin-top: 6px !important;margin-left: 16px !important;">{{paginationObj.total}} Record(s) Found</span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <nav>
+            <ul class="pagination">
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" (click)="doPaginationWise(paginationObj.previousPage)">
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(1)">
+                        First
+                    </a>
+                </li>
+                <li class="page-item {{pagination == paginationObj.currentPage?'active':''}}" *ngFor="let pagination of paginationObj.items">
+                    <a class="page-link" (click)="doPaginationWise(pagination)">{{pagination}}</a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.totalPages)">
+                        Last
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" (click)="doPaginationWise(paginationObj.nextPage)">
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<ng-template #addBulkRecordsModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">Add Collections</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body" style="padding-top: 0;height: calc(90vh - 100px);">
+        <form autocomplete="off" style="height: inherit;">
+            <div class="table-responsive mb-2" style="height: inherit;">
+                <table class="table table-striped table-sm list_table table-header-fixed" style="table-layout: fixed;">
+                    <thead>
+                        <tr>
+                            <th style="padding-left:10px;width: 50px;">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk_all" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedAllCollection"
+                                        (change)="selectAllModel()">
+                                    <label class="custom-control-label" for="chk_all">&nbsp;</label>
+                                </div>
+                            </th>
+                            <th style="width:100px">Name</th>
+                            <th style="width:100px">Cost</th>
+                            <th style="width:100px">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="allCollectionList?.length>0">
+                        <tr *ngFor="let item of allCollectionList; let i=index">
+                            <td style="width: 50px;">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" id="is_selected{{i}}" class="custom-control-input" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.is_selected"> &nbsp;
+                                    <label class="custom-control-label" for="is_selected{{i}}">&nbsp;</label>
+                                </div>
+                            </td>
+                            <td style="width:80px; text-align: center;">
+                                <label style="min-width: 40px;">
+                                    {{item.name}}
+                                </label>
+                            </td>
+                            <td>{{item.cost | currency:'USD'}}</td>
+                            <td>{{item.price | currency:'USD'}}</td>
+                        </tr>
+                    </tbody>
+                    <tbody *ngIf="allCollectionList?.length==0">
+                        <tr>
+                            <td colspan="4">No Collection Found</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="addBulkCollections()">Add</button>
+
+        </div>
+    </div>
+</ng-template>

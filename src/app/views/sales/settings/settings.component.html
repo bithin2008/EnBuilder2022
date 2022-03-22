@@ -1,0 +1,252 @@
+<form autocomplete="off">
+    <ngb-tabset (tabChange)="doTabFunctions($event)" [activeId]="defaultActiveTab">
+        <ngb-tab id="generalTab" title="General">
+            <ng-template ngbTabContent>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="row mt-2 ml-2">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label>Customer Name:</label>
+                                        <input [ngModelOptions]="{standalone: true}" [(ngModel)]="customerName.value" type="text" class="form-control" id="customer_name">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <!-- <button class="btn btn-primary mt-4" type="button" (click)="updateSettings('CUSTOMER_NAME')">Update</button> -->
+                                    <button class="btn btn-primary mt-4" type="button">Update</button>
+                                </div>
+                            </div>
+
+                            <div class="row mt-2 ml-2">
+                                <div class="col-md-4">
+                                    <label>Customer Logo :</label>
+                                    <div class="card">
+                                        <div class="card-body text-center" style="height: 300px;">
+                                            <div class="thumb-img" *ngIf="customerLogo?.image" [ngStyle]="{'background-image': 'url(&quot;'+ baseUrl+ customerLogo.image.url +'/400&quot;)'}">
+                                                <button type="button" class="btn btn-sm btn-primary logo-upload-btn">
+                                                    <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                                                    <input type="file" accept="image/*" (change)="uploadLogo($event.target.files , 'CUSTOMER_LOGO' ,customerLogo)">
+                                                </button>
+                                            </div>
+                                            <div class="thumb-img" *ngIf="!customerLogo?.image" [ngStyle]="{'background-image': 'url(&quot;assets/img/no-image.jpg&quot;)'}">
+                                                <!-- <button type="button" class="btn btn-sm btn-primary logo-upload-btn">
+                                                    <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                                                    <input type="file" accept="image/*" (change)="uploadLogo($event.target.files , 'CUSTOMER_LOGO' ,customerLogo)">
+                                                </button> -->
+                                                <button type="button" class="btn btn-sm btn-primary logo-upload-btn">
+                                                    <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                                                    <input type="file" accept="image/*">
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </ngb-tab>
+
+        <ngb-tab id="registrantTab" title="Registration">
+            <ng-template ngbTabContent>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="row mt-2 ml-2">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label>Registrant Title :</label>
+                                        <input [ngModelOptions]="{standalone: true}" [(ngModel)]="registrantTitle.value" type="text" class="form-control" id="registrantTitle">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-primary mt-4" type="button" (click)="updateSettings('REGISTRATION_TITLE')">Update</button>
+                                </div>
+                            </div>
+                        
+                            <div class="row mt-2 ml-2">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label>Registrant Message :</label>
+                                        <input [ngModelOptions]="{standalone: true}" [(ngModel)]="registrantMsg.value" type="text" class="form-control" id="registrantMsg">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-primary mt-4" type="button" (click)="updateSettings('REGISTRATION_MESSAGE')">Update</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </ngb-tab>
+        
+        <ngb-tab id="worksheetTab" title="Worksheet">
+            <ng-template ngbTabContent>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="row mt-2 ml-2">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label>Worksheet Customer Name:</label>
+                                        <input [ngModelOptions]="{standalone: true}" [(ngModel)]="worksheetCustomerName.value" type="text" class="form-control" id="workshhet_customer_name">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-primary mt-4" type="button" (click)="updateSettings('WORKSHEET_CUSTOMER_NAME')">Update</button>
+                                </div>
+                            </div>
+                        
+                            <div class="row mt-2 ml-2">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label>Worksheet Intro Message :</label>
+                                        <input [ngModelOptions]="{standalone: true}" [(ngModel)]="introMessage.value" type="text" class="form-control" id="intro_msg">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-primary mt-4" type="button" (click)="updateSettings('WORKSHEET_INTRO_MESSAGE')">Update</button>
+                                </div>
+                            </div>
+                        
+                            <div class="row mt-2 ml-2">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label>Worksheet Submit Statement :</label>
+                                        <input [ngModelOptions]="{standalone: true}" [(ngModel)]="submitStatement.value" type="text" class="form-control" id="submit_stmt">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-primary mt-4" type="button" (click)="updateSettings('WORKSHEET_SUBMIT_STATEMENT')">Update</button>
+                                </div>
+                            </div>
+                        
+                            <div class="row mt-2 ml-2">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label>Worksheet ID Upload Text:</label>
+                                        <input [ngModelOptions]="{standalone: true}" [(ngModel)]="idUploadText.value" type="text" class="form-control" id="id_upload_txt">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-primary mt-4" type="button" (click)="updateSettings('WORKSHEET_ID_UPLOAD_TEXT')">Update</button>
+                                </div>
+                            </div>
+                        
+                            <div class="row mt-2 ml-2">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label>Worksheet Choices :</label>
+                                        <input [ngModelOptions]="{standalone: true}" [(ngModel)]="worksheetChoices.value" type="text" class="form-control" id="worksheetChoices">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-primary mt-4" type="button" (click)="updateSettings('WORKSHEET_CHOICES')">Update</button>
+                                </div>
+                            </div>
+                        
+                            <div class="row mt-2 ml-2">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label>Worksheet Customer Logo Text:</label>
+                                        <input [ngModelOptions]="{standalone: true}" [(ngModel)]="worksheetCustomerLogo.value" type="text" class="form-control" id="worksheetCustomerLogo">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-primary mt-4" type="button" (click)="updateSettings('WORKSHEET_CUSTOMER_LOGO')">Update</button>
+                                </div>
+                            </div>
+                            <div class="row mt-2 ml-2">
+                                <div class="col-md-4">
+                                    <label>Worksheet Customer Logo :</label>
+                                    <div class="card">
+                                        <div class="card-body text-center" style="height: 300px;">
+                                            <div class="thumb-img" *ngIf="worksheetCustomerLogo?.image" [ngStyle]="{'background-image': 'url(&quot;'+ baseUrl+ worksheetCustomerLogo.image.url +'/400&quot;)'}">
+                                                <button type="button" class="btn btn-sm btn-primary logo-upload-btn">
+                                                    <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                                                    <input type="file" accept="image/*" (change)="uploadLogo($event.target.files , 'WORKSHEET_CUSTOMER_LOGO' ,worksheetCustomerLogo)">
+                                                </button>
+                                            </div>
+                                            <div class="thumb-img" *ngIf="!worksheetCustomerLogo?.image" [ngStyle]="{'background-image': 'url(&quot;assets/img/no-image.jpg&quot;)'}">
+                                                <button type="button" class="btn btn-sm btn-primary logo-upload-btn">
+                                                    <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                                                    <input type="file" accept="image/*" (change)="uploadLogo($event.target.files , 'WORKSHEET_CUSTOMER_LOGO' ,worksheetCustomerLogo)">
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </ngb-tab>
+        
+
+        <ngb-tab id="dealTab" title="Deals">
+            <ng-template ngbTabContent>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="row p-1 m-1">
+                                <div class="col">
+                                    <button style="float:right" (click)="onDealSettingUpdate()" type="button" class="btn btn-sm btn-primary" >
+                                       Update
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row mt-2 ml-2">
+                                <div class="col-md-4">
+                                    <label> Deal Satges</label>
+                                    <div class="table-responsive mb-5">
+                                        <table id="dealtTable" class="table list_table" style="table-layout: fixed;">
+                                            <thead></thead>
+                                            <tbody>
+                                                <tr *ngFor="let stage of stageList" (click)="onStageSelection(stage)">
+                                                    <td  [class]="stage.selected ? 'selected-bg text-left' :'text-left'" >
+                                                        <button type="button" class="btn btn-sm btn-default" >
+                                                            {{stage?.value}} 
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label> Features Enabled</label>
+                                    <div class="table-responsive mb-5">
+                                        <table id="dealtTable" class="table list_table" style="table-layout: fixed;">
+                                            <thead></thead>
+                                            <tbody>
+                                                <tr *ngFor="let button of buttonsList">
+                                                    <td [class]="button.selected ? 'selected-bg text-left' :'text-left'">
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input class="custom-control-input" (change)="onFeaturesChange()" type="checkbox" [value]="button?.name" [id]="button?.name" [ngModelOptions]="{standalone: true}" [(ngModel)]="button.selected">
+                                                            <label class="custom-control-label pl-2" for="{{button?.name}}">
+                                                                {{button?.name}} 
+                                                            </label>
+                                                        </div>
+                                                       
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </ngb-tab>
+
+
+    </ngb-tabset>
+</form>
+

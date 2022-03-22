@@ -1,0 +1,136 @@
+<form autocomplete="off">
+    <div class="row mb-3">
+
+        <div class="col-md-12">
+            <button class="btn btn-danger mr-2" style="float:right" type="button" (click)="clearFilter()">Clear</button>
+            <button type="button" style="float:right" class="btn btn-primary mr-2" (click)="openAddModal(addModal)">Add</button>
+
+            <div class="form-group  mr-2" style="float:right">
+                <input type="text" style="padding-right: 25px;" class="form-control" placeholder="Type name" [ngModelOptions]="{standalone: true}" [(ngModel)]="filterFormData.searchText" name="search" (keyup)="doSearch()">
+            </div>
+        </div>
+
+    </div>
+</form>
+<div class="table-responsive">
+    <table class="table table-striped table-sm driver_list_table">
+        <thead>
+            <tr>
+                <th width="120px" (click)="setOrder('name')">Name
+                    <span *ngIf="order != 'name'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'name'">▼</span>
+                    <span *ngIf="!reverse && order == 'name'">▲</span>
+                </th>
+                <!-- <th>Active</th> -->
+                <th width="30px">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of lists">
+                <td (click)="goToDetails(item._id)">{{item.name}}</td>
+                <!-- <td>{{item.is_inactive?'No':'Yes'}}</td> -->
+                <td>
+                    <button type="button" class="btn btn-sm btn-primary mr-2" (click)="openEditList(addModal,item)">
+                        <i class="fas fa-pencil-alt" style="font-size:12px;"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-danger" (click)="deleteList(item)">
+                        <i class="fas fa-trash-alt" style="font-size:12px;"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="row" *ngIf="paginationObj.total>=20">
+    <div class="col-md-6">
+        <div class="form-group">
+            <!-- <div class="col-sm-6"> -->
+            <span class="float-left" style="width:70px;margin-top: 6px;">Page Size:</span>
+            <span class="float-left" style="width:85px;">
+                <select class="form-select" [(ngModel)]="pageSize" (change)="setPageSize()">
+                    <option value="">-Select-</option>
+                                        <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </span>
+            <span class="float-left" style="margin-top: 6px !important;margin-left: 16px !important;">{{paginationObj.total}} Record(s) Found</span>
+            <!-- </div> -->
+        </div>
+    </div>
+    <div class="col-md-6">
+        <nav>
+            <ul class="pagination">
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.previousPage)">
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(1)">
+                        First
+                    </a>
+                </li>
+                <li class="page-item {{pagination == paginationObj.currentPage?'active':''}}" *ngFor="let pagination of paginationObj.items">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(pagination)">{{pagination}}</a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.totalPages)">
+                        Last
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.nextPage)">
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<ng-template #addModal>
+    <div class="modal-header">
+        <h4 *ngIf="isEdit" class="modal-title pull-left">Edit List</h4>
+        <h4 *ngIf="!isEdit" class="modal-title pull-left">Add List</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">List name:</label>
+                        <div class="col-sm-12">
+                            <input type="text" [disabled]="isEdit" [(ngModel)]="formDetails.name" class="form-control" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">List Description:</label>
+                        <div class="col-sm-12">
+                            <textarea type="text" [(ngModel)]="formDetails.description" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-md-12">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="pis_inactive" [(ngModel)]="formDetails.is_inactive">
+                        <label class="custom-control-label" for="pis_inactive">Inactive</label>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button *ngIf="isEdit" type="button" class="btn btn-primary" (click)="updateLists()">Update</button>
+            <button *ngIf="!isEdit" type="button" class="btn btn-primary" (click)="addLists()">Add</button>
+        </div>
+    </div>
+</ng-template>

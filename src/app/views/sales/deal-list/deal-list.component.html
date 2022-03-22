@@ -1,0 +1,586 @@
+<form autocomplete="off">
+    <div class="row mb-2">
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group row">
+                <div class="col-md-12">
+                    <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.project_id" (change)="onProjectChange($event.target.value)">
+                        <option value="">All Project</option>
+                        <option value="{{item._id}}" *ngFor="let item of projectList">{{item.name}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="col-md-3 col-sm-3">
+            <div class="form-group row">
+                <div class="col-sm-12">
+                    <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.floor" (change)="doSearch()">
+                        <option value="">Floor</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-3">
+            <div class="form-group row">
+                <div class="col-sm-12">
+                    <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.model_id" (change)="doSearch()">
+                        <option value="">Model</option>
+                        <option value="{{item._id}}" *ngFor="let item of modelList">{{item.name}}</option>
+                    </select>
+                </div>
+            </div>
+        </div> -->
+        <div class="col-md-3 col-sm-4" *ngIf="filterForm.project_id && modelList.length>0">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('model_id', $event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()" (onSelectAll)="onSelectAll('model_id', $event)" [placeholder]="'Select Model'" [ngModelOptions]="{standalone: true}"
+                    [data]="modelList" [(ngModel)]="filterForm.model_id" [settings]="modelDropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('floor_legal', $event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()" (onSelectAll)="onSelectAll('floor_legal', $event)" [placeholder]="'Select Floor'" [ngModelOptions]="{standalone: true}"
+                    [data]="floorList" [(ngModel)]="filterForm.floor_legal" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <!-- <div class="col-md-3 col-sm-3">
+            <div class="form-group row">
+                <div class="col-sm-12">
+                    <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.sales_agent" (change)="doSearch()">
+                        <option value="">Sales Agent</option>
+                        <option value="{{item._id}}" *ngFor="let item of salesAgent">{{item.name}}</option>
+                    </select>
+                </div>
+            </div>
+        </div> -->
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('sales_agent', $event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()" (onSelectAll)="onSelectAll('sales_agent', $event)" [placeholder]="'Select Sales Agent'" [ngModelOptions]="{standalone: true}"
+                    [data]="salesAgentList" [(ngModel)]="filterForm.sales_agent" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group row">
+                <div class="col-sm-12">
+                    <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.outside_agent" (change)="doSearch()">
+                        <option value="">Outside Agent</option>
+                        <option value="{{item._id}}" *ngFor="let item of outsideAgent">{{item.name}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('broker', $event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()" (onSelectAll)="onSelectAll('broker', $event)" [placeholder]="'Select Broker'" [ngModelOptions]="{standalone: true}" [data]="brokerList"
+                    [(ngModel)]="filterForm.broker" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <!-- <div class="col-md-3 col-sm-3">
+            <div class="form-group row">
+                <div class="col-sm-12">
+                    <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.outside_broker" (change)="doSearch()">
+                        <option value="">Outside Broker</option>
+                        <option value="{{item._id}}" *ngFor="let item of outsideBroker">{{item.name}}</option>
+                    </select>
+                </div>
+            </div>
+        </div> -->
+        <div class="col-md-3 col-sm-4 pb-2">
+            <div class="input-group position-relative">
+                <input class="form-control" name="search" placeholder="Type project name,unit no, purchaser name" style="padding-right: 25px;" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.searchText" name="Type project name,unit no, purchaser name"
+                    (keyup)="doSearch()">
+                <span class="clear-search" *ngIf="isClear" (click)="clearSearch()">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-2 col-sm-4 pb-2">
+            <div class="input-group">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="isArchive" (change)="onArchiveChange()" [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.show_archived">
+                    <label class="form-check-label" for="isArchive">
+                        Display Archived Deals
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-5">
+            <button type="button" class="btn btn-danger mr-2" (click)="clearFilter()">Clear</button>
+            <button class="btn btn-primary mr-2" type="button" (click)="openAddDeal(addDealModal)">Add</button>
+            <button type="button" class="btn btn-primary mr-2" (click)="openImportDeal(importDealModal)">Import</button>
+        </div>
+    </div>
+</form>
+<div class="table-responsive mb-5">
+    <table id="contactTable" class="table table-striped list_table" style="table-layout: fixed;">
+        <thead>
+            <tr>
+                <th width="180px" (click)="setOrder('_created')">Date
+                    <span *ngIf="order != '_created'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == '_created'">▼</span>
+                    <span *ngIf="!reverse && order == '_created'">▲</span>
+                </th>
+                <th width="180px" (click)="setOrder('unit.project_name')">Project
+                    <span *ngIf="order != 'unit.project_name'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'unit.project_name'">▼</span>
+                    <span *ngIf="!reverse && order == 'unit.project_name'">▲</span>
+                </th>
+                <th width="180px" (click)="setOrder('unit.unit_no')">Unit#
+                    <span *ngIf="order != 'unit.unit_no'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'unit.unit_no'">▼</span>
+                    <span *ngIf="!reverse && order == 'unit.unit_no'">▲</span>
+                </th>
+                <th width="180px" (click)="setOrder('stage')">Stage
+                    <span *ngIf="order != 'stage'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'stage'">▼</span>
+                    <span *ngIf="!reverse && order == 'stage'">▲</span>
+                </th>
+                <th width="180px" (click)="setOrder('purchasers.display_name')">Purchaser(s)
+                    <span *ngIf="order != 'purchasers.display_name'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'purchasers.display_name'">▼</span>
+                    <span *ngIf="!reverse && order == 'purchasers.display_name'">▲</span>
+                </th>
+                <th width="180px" (click)="setOrder('sales_agents.sales_agent_name')">Sales Agent
+                    <span *ngIf="order != 'sales_agents.sales_agent_name'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'sales_agents.sales_agent_name'">▼</span>
+                    <span *ngIf="!reverse && order == 'sales_agents.sales_agent_name'">▲</span>
+                </th>
+                <th width="180px" (click)="setOrder('co_agent')">Co-Agent
+                    <span *ngIf="order != 'co_agent'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'co_agent'">▼</span>
+                    <span *ngIf="!reverse && order == 'co_agent'">▲</span>
+                </th>
+                <th width="180px" (click)="setOrder('brokers.broker_name')">Broker
+                    <span *ngIf="order != 'brokers.broker_name'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'brokers.broker_name'">▼</span>
+                    <span *ngIf="!reverse && order == 'brokers.broker_name'">▲</span>
+                </th>
+                <th width="180px" (click)="setOrder('contact_date')">Contact Date
+                    <span *ngIf="order != 'contact_date'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'contact_date'">▼</span>
+                    <span *ngIf="!reverse && order == 'contact_date'">▲</span>
+                </th>
+                <th width="180px" (click)="setOrder('target_closing')">Target Closing
+                    <span *ngIf="order != 'target_closing'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'target_closing'">▼</span>
+                    <span *ngIf="!reverse && order == 'target_closing'">▲</span>
+                </th>
+                <th width="180px" (click)="setOrder('actual_closing')">Actual Closing
+                    <span *ngIf="order != 'actual_closing'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'actual_closing'">▼</span>
+                    <span *ngIf="!reverse && order == 'actual_closing'">▲</span>
+                </th>
+                <th width="140px">Size</th>
+                <th width="140px" (click)="setOrder('unit.psf')">PSF
+                    <span *ngIf="order != 'unit.psf'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'unit.psf'">▼</span>
+                    <span *ngIf="!reverse && order == 'unit.psf'">▲</span>
+                </th>
+                <th width="160px" (click)="setOrder('total_discount')">Total Discounts
+                    <span *ngIf="order != 'total_discount'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'total_discount'">▼</span>
+                    <span *ngIf="!reverse && order == 'total_discount'">▲</span>
+                </th>
+                <th width="160px">Total Parking Price</th>
+                <th width="160px">Total Locker Price</th>
+                <th width="160px">Total Bicycle Price</th>
+                <th width="180px">Total Contract Price</th>
+                <th width="180px">Unit Price Net Of HST</th>
+                <th width="180px" (click)="setOrder('unit.model_name')">Model
+                    <span *ngIf="order != 'unit.model_name'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'unit.model_name'">▼</span>
+                    <span *ngIf="!reverse && order == 'unit.model_name'">▲</span>
+                </th>
+                <th width="90px" (click)="setOrder('unit.bed')">Beds
+                    <span *ngIf="order != 'unit.bed'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'unit.bed'">▼</span>
+                    <span *ngIf="!reverse && order == 'unit.bed'">▲</span>
+                </th>
+                <th width="90px" (click)="setOrder('unit.bath')">Baths
+                    <span *ngIf="order != 'unit.bath'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'unit.bath'">▼</span>
+                    <span *ngIf="!reverse && order == 'unit.bath'">▲</span>
+                </th>
+                <th width="130px" (click)="setOrder('unit.floor_no_legal')">Legal Floor
+                    <span *ngIf="order != 'unit.floor_no_legal'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'unit.floor_no_legal'">▼</span>
+                    <span *ngIf="!reverse && order == 'unit.floor_no_legal'">▲</span>
+                </th>
+                <th width="130px" (click)="setOrder('unit.unit_no_legal')">Legal Unit #
+                    <span *ngIf="order != 'unit.unit_no_legal'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'unit.unit_no_legal'">▼</span>
+                    <span *ngIf="!reverse && order == 'unit.unit_no_legal'">▲</span>
+                </th>
+                <!-- <th width="180px">Actions</th> -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of dealList" (click)="goToDealDetails(item)">
+                <td>{{item?._created | date:'yyyy-MM-dd'}}&nbsp;{{item?._created | date:'shortTime'}}</td>
+                <td>{{item?.unit?.project_name}}</td>
+                <td>{{item?.unit?.unit_no}}</td>
+                <td>{{item?.stage}}</td>
+                <td>
+                    <div class="link" (click)="navigateToContact($event,purchaser?._id)" *ngFor="let purchaser of item?.purchasers"> {{purchaser?.display_name}}</div>
+                </td>
+                <td>
+                    <div class="link" (click)="navigateToContact($event,purchaser?.sales_agent_id)" *ngFor="let sales_agent of item?.sales_agents">
+                        {{sales_agent?.sales_agent_name}}</div>
+                </td>
+                <td>{{item?.co_agent}}</td>
+                <td>
+                    <div class="link" (click)="navigateToContact($event,broker?.broker_id)" *ngFor="let broker of item?.brokers"> {{broker?.broker_name}}</div>
+                </td>
+                <td>{{item?.contact_date}}</td>
+                <td>{{item?.target_closing}}</td>
+                <td>{{item?.actual_closing}}</td>
+                <td>{{item?.size}}</td>
+                <td class="text-right">{{item?.unit?.psf | currency:'USD'}}</td>
+                <td class="text-right">{{item?.total_discount | currency:'USD'}}</td>
+                <td class="text-right">{{item?.parking_price | currency:'USD'}}</td>
+                <td class="text-right">{{item?.locker_price | currency:'USD'}}</td>
+                <td class="text-right">{{item?.bicycle_price | currency:'USD'}}</td>
+                <td class="text-right">{{item?.contract_price | currency:'USD'}}</td>
+                <td class="text-right">{{item?.unit_price_nst | currency:'USD'}}</td>
+                <td>{{item?.unit?.model_name}}</td>
+                <td>{{item?.unit?.bed}}</td>
+                <td>{{item?.unit?.bath}}</td>
+                <td>{{item?.unit?.floor_legal}}</td>
+                <td>{{item?.unit?.unit_no_legal}}</td>
+                <!-- <td>
+                    <button type="button" class="btn btn-danger btn-sm" (click)="deleteDeal(item)">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </td> -->
+            </tr>
+            <tr *ngIf="dealList.length==0">
+                <td colspan="4">No Deals Found</td>
+                <td colspan="20"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="row mt-3" *ngIf="paginationObj?.total>=20">
+    <div class="col-md-6">
+        <div class="form-group">
+            <!-- <div class="col-sm-6"> -->
+            <span class="float-left" style="width:70px;margin-top: 6px;">Page Size:</span>
+            <span class="float-left" style="width:85px;">
+                <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="pageSize" (change)="setPageSize()">
+                    <option value="">-Select-</option>
+                                        <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </span>
+            <span class="float-left" style="margin-top: 6px !important;margin-left: 16px !important;">{{paginationObj.total}} Record(s) Found</span>
+            <!-- </div> -->
+        </div>
+    </div>
+    <div class="col-md-6">
+        <nav>
+            <ul class="pagination">
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.previousPage)">
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(1)">
+                        First
+                    </a>
+                </li>
+                <li class="page-item {{pagination == paginationObj.currentPage?'active':''}}" *ngFor="let pagination of paginationObj.items">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(pagination)">{{pagination}}</a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.totalPages)">
+                        Last
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.nextPage)">
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<ng-template #addDealModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Create a Deal</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form autocomplete="off">
+            <ngb-tabset #t="ngbTabset">
+                <ngb-tab id="buyerTab" title="Buyer">
+                    <ng-template ngbTabContent>
+                        <div class="modal-tab-area">
+                            <form autocomplete="off">
+                                <div class="step1">
+                                    <div class="autocomplete-container">
+                                        <div class="form-group row">
+                                            <label for="Name" class="col-sm-12 col-form-label">Search for a contact
+                                                <span style="color:red">*</span>:</label>
+                                            <div class="col-sm-8">
+                                                <div class="deal-box  mb-1">
+                                                    <p-autoComplete #autoCompleteObject [autofocus]="true" (onDropdownClick)="onDropdownClick()" [(ngModel)]="formDetails.contact_name" [suggestions]="contactList" [ngModelOptions]="{standalone: true}" [multiple]="true" (completeMethod)="searchAuto($event)"
+                                                        field="show_name"></p-autoComplete>
+                                                </div>
+                                                <div class="error text-right mb-1" *ngIf="contactList.length==0 && autosearchText.length>0">
+                                                    No results found
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <button class="btn btn-primary mr-1" type="button" (click)="openNewContact()">New Contact</button>
+                                            </div>
+                                        </div>
+                                        <div class="constituent-container" *ngIf="formDetails?.contact_name.length>0">
+                                            <p *ngFor="let contact of formDetails?.contact_name">
+                                                {{contact?._id}},{{contact?.display_name}},{{contact?.email?.email}},{{contact?.phone?.number}}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <button type="button" class="btn btn-primary" *ngIf="formDetails?.contact_name.length>0" (click)="t.select('unitTab')">Next</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab id="unitTab" title="Unit" [disabled]="!formDetails.contact_name || formDetails.contact_name.length==0">
+                    <ng-template ngbTabContent>
+                        <div class="modal-tab-area">
+                            <form autocomplete="off">
+                                <div class="form-group row">
+                                    <label class="col-md-3 coltrol-label mt-1 mb-0">Project
+                                        <span style="color:red">*</span>:</label>
+                                    <div class="col-md-5">
+                                        <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.project_id" id="projectId" (change)="changeProject()">
+                                            <option value="">All Project</option>
+                                            <option *ngFor="let item of projectList" value={{item._id}}>{{item.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 coltrol-label mt-1 mb-0">Suite #
+                                        <span style="color:red">*</span>:</label>
+                                    <div class="col-md-5 mb-2">
+                                        <input (keyup)="unitInputChanged($event.target.value)" #unit="ngModel" [disabled]="!formDetails.project_id" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.unit_no" type="number" min="1" class="form-control" id="unit_no">
+                                        <div class="error" *ngIf="!formDetails.project_id">
+                                            Select project
+                                        </div>
+                                        <div class="error" *ngIf="!isSearching && formDetails.project_id && formDetails.unit_no && (!isUnitAvailable && (unit.dirty || unit.touched))">
+                                            Unit is not available
+                                        </div>
+                                        <div class="error" *ngIf="!isSearching && formDetails.project_id && unitList.length==0">
+                                            Units are not present for this project.
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="button" [disabled]="!formDetails.project_id" class="btn btn-primary btn-block  pl-1 pr-1" (click)="openCheckInventoryModal()">Check Inventory</button>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3 m">Deal Type:</div>
+                                    <div class="col-md-9">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group form-check mb-2">
+                                                    <input type="radio" [(ngModel)]="formDetails.deal_type" value="Insider Deal" class="form-check-input" name="deal_type" id="insiderDeal">
+                                                    <label class="form-check-label" for="insiderDeal">Insider Deal</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group form-check mb-2">
+                                                    <input type="radio" [(ngModel)]="formDetails.deal_type" value="China Deal" class="form-check-input" name="deal_type" id="chinaDeal">
+                                                    <label class="form-check-label" for="chinaDeal">China Deal</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group form-check mb-2">
+                                                    <input type="radio" [(ngModel)]="formDetails.deal_type" value="Internatioanl Deal" class="form-check-input" name="deal_type" id="internatioanlDeal">
+                                                    <label class="form-check-label" for="internatioanlDeal">Internatioanl Deal</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 coltrol-label mt-1 mb-0">Deposit structure
+                                        <span style="color:red">*</span>:</label>
+                                    <div class="col-md-5">
+                                        <select [disabled]="!formDetails.project_id || !formDetails.unit_id" (change)="onChangeDepositeStructure()" class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.deposit_structure" id="Depositstructure">
+                                            <option value="">Select deposit structure</option>
+                                            <option *ngFor="let item of depositList" value={{item._id}}>{{item.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6" *ngIf="formDetails.deposit_structure">
+                                        <label>Start Date :
+                                            <b> &nbsp;&nbsp;&nbsp;{{this.formDetails.start | date:'yyyy-MM-dd'}}</b>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-6" *ngIf="formDetails.deposit_structure">
+                                        <label>End Date :
+                                            <b>&nbsp;&nbsp;&nbsp;{{this.formDetails.end | date:'yyyy-MM-dd'}}</b>
+                                        </label>
+                                    </div>
+                                </div>
+                                <ng-container *ngIf="depositInfo.length>0">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive mb-5">
+                                            <table id="contactTable" class="table table-striped list_table" style="table-layout: fixed;">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="80px"></th>
+                                                        <th width="150px">Percent</th>
+                                                        <th width="150px">Amount</th>
+                                                        <th width="150px">Due Date</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let item of depositInfo;let i=index">
+                                                        <td>{{i==0?'Initial':i+1}}</td>
+                                                        <td>{{item?.percent ? item?.percent+'%' :'-'}}</td>
+                                                        <td>{{item?.amount ? (item?.amount | currency:'USD') :'-'}}</td>
+                                                        <td>
+                                                            {{item?.due_date |date:'yyyy-MM-dd'}}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Total</td>
+                                                        <td></td>
+                                                        <td>{{formDetails?.total_amount | currency:'USD'}}</td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr *ngIf="depositInfo.length==0">
+                                                        <td colspan="4">No Record Found</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <div class="info-message bg-warning" *ngIf="!isSearching && formDetails.project_id && unitsSoldOut">
+                                    Units sold out for the project&nbsp;
+                                    <b>{{selectedProject?.name}}</b>.
+                                </div>
+                                <div class="info-message bg-warning" *ngIf="!isSearching && formDetails.project_id && depositList.length==0">
+                                    Please create a deposit structure for the project&nbsp;
+                                    <b>{{selectedProject?.name}}</b>.
+                                </div>
+                                <div class="info-message bg-warning" *ngIf="!isSearching && formDetails.unit_no && !isSalesPriceAvailable">
+                                    Please add sales price for the unit&nbsp;
+                                    <b>{{formDetails.unit_no}}</b>.
+                                </div>
+                            </form>
+                            <div class="text-right">
+                                <button type="button" class="btn btn-primary" (click)="createDeal()">Add</button>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngb-tab>
+            </ngb-tabset>
+        </form>
+    </div>
+</ng-template>
+<ng-template #importDealModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Import Deals</h4>
+        <button *ngIf="step != 2" type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group template-file">
+                    <span style="padding:0 5px">
+                        <i class="far fa-file-excel"></i>
+                    </span>
+                    <label>Download Deal Template &nbsp;&nbsp;</label>
+                    <button [disabled]="fileChoosed" class="btn btn-sm btn-primary mr-2" type="button" (click)="downloadTemplatefile()">
+                        <i class="fa fa-download" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Project
+                        <span style="color:red">*</span>:</label>
+                    <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="importFileModal.project_id" id="projectId">
+                        <option value="">Select Project</option>
+                        <option *ngFor="let item of projectList" value={{item._id}}>{{item.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Stage
+                        <span style="color:red">*</span>:</label>
+                    <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="importFileModal.stage">
+                        <option value="">Select Stage</option>
+                        <option *ngFor="let item of dealStages" value={{item.value}}>{{item.value}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6 pt-4">
+                <input [disabled]="fileChoosed" accept=".csv" type="file" name="Choose File" (change)="uploadRecordFile($event.target.files)">
+            </div>
+            <div>
+                (Help: Make sure your uploaded file is in CSV (comma delimited) format for further help, refer to our document.)
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-primary" (click)="importDeal()">Import</button>
+        </div>
+    </div>
+</ng-template>

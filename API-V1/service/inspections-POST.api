@@ -1,0 +1,34 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+
+<% assign datasetId = 'bldr_inspections' %>
+
+<% assign params = en.params %>
+<% if params._id %>
+    <% assign query._id = params._id %>
+    <% if params.date %>
+        <% assign params.date = params.date | string_to_date: "yyyy-MM-dd" time-zone %>
+    <% endif %>
+    <% en.data.update upResult datasetId query params %> 
+    
+    <% assign returnData.status = 1 %> 
+    <% assign returnData.result = upResult.row %> 
+    <% assign returnData.message = 'Inspection updated successfully.' %>
+    <% return returnData %>
+<% else %>
+    <% if params.date %>
+        <% assign params.date = params.date | string_to_date: "yyyy-MM-dd" time-zone %>
+    <% endif %>
+    <% en.data.insert upResult datasetId params %> 
+    
+    <% assign returnData.status = 1 %> 
+    <% assign returnData.result = upResult.row %> 
+    <% assign returnData.message = 'Inspection added successfully.' %>
+    <% return returnData %>
+<% endif %>
+ 

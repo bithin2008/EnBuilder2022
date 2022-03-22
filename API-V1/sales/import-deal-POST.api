@@ -1,0 +1,282 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+<% rem assign returnData.status = 1 %>
+<% rem assign returnData.message = 'Deal import api work in progress.' %>
+<% rem return returnData %>
+<% rem exit %> 
+<% assign params = en.params %>
+<% return "records" params.records %>
+<% if params.records %>
+    <% for record in params.records %>
+        <% assign suite = record.suite %> 
+        
+        // for getting contact details using p1_email
+        <% unassign cquery %>
+        <% unassign contactResult %>
+        <% unassign contactDetails %>
+        <% if record.p1_email %>
+            <% assign cquery.emails.$elemMatch.email = record.p1_email | lower %>
+        <% endif %>
+        <% if record.p1_name %>
+            <% assign cquery.display_name = record.p1_name %>
+        <% endif %>
+        <% en.data.findOne contactResult 'contacts' cquery '' %>
+        <% rem return "contactResult" contactResult %>
+        <% if contactResult.row %>
+            <% assign contactDetails = contactResult.row %>
+            <% unassign purchaser %>
+            <% assign purchaser.addresses = contactDetails.addresses %>
+            <% assign purchaser.contact_type = contactDetails.contact_type %>
+            <% assign purchaser.display_name = contactDetails.display_name %>
+            <% assign purchaser.emails = contactDetails.emails %>
+            <% assign purchaser.first_name = contactDetails.first_name %>
+            <% assign purchaser.geography = contactDetails.geography %>
+            <% assign purchaser.last_name = contactDetails.last_name %>
+            <% assign purchaser.middle_name = contactDetails.middle_name %>
+            <% assign purchaser.phones = contactDetails.phones %>
+            <% assign purchaser._id = contactDetails._id %>
+
+
+            <% assign dealData.purchasers = [] %>
+            <% en.arrayUtils.add dealData.purchasers purchaser %>
+            
+            // for purchaser 2
+            <% if record.p2_email %>
+                <% unassign cquery %>
+                <% unassign contactResult %>
+                <% unassign contactDetails %>
+                <% if record.p2_email %>
+                    <% assign cquery.emails.$elemMatch.email = record.p2_email | lower %>
+                <% endif %>
+                <% if record.p2_name %>
+                    <% assign cquery.display_name = record.p2_name %>
+                <% endif %>
+                <% en.data.findOne contactResult 'contacts' cquery '' %>
+                <% assign contactDetails = contactResult.row %>
+                <% unassign purchaser %>
+                <% assign purchaser.addresses = contactDetails.addresses %>
+                <% assign purchaser.contact_type = contactDetails.contact_type %>
+                <% assign purchaser.display_name = contactDetails.display_name %>
+                <% assign purchaser.emails = contactDetails.emails %>
+                <% assign purchaser.first_name = contactDetails.first_name %>
+                <% assign purchaser.geography = contactDetails.geography %>
+                <% assign purchaser.last_name = contactDetails.last_name %>
+                <% assign purchaser.middle_name = contactDetails.middle_name %>
+                <% assign purchaser.phones = contactDetails.phones %>
+                <% assign purchaser._id = contactDetails._id %>
+                <% en.arrayUtils.add dealData.purchasers purchaser %>
+            <% endif %>
+
+            // for purchaser 3
+            <% if record.p3_email %>
+                <% unassign cquery %>
+                <% unassign contactResult %>
+                <% unassign contactDetails %>
+                <% if record.p3_email %>
+                    <% assign cquery.emails.$elemMatch.email = record.p3_email | lower %>
+                <% endif %>
+                <% if record.p3_name %>
+                    <% assign cquery.display_name = record.p3_name %>
+                <% endif %>
+                <% en.data.findOne contactResult 'contacts' cquery '' %>
+                <% assign contactDetails = contactResult.row %>
+                <% unassign purchaser %>
+                <% assign purchaser.addresses = contactDetails.addresses %>
+                <% assign purchaser.contact_type = contactDetails.contact_type %>
+                <% assign purchaser.display_name = contactDetails.display_name %>
+                <% assign purchaser.emails = contactDetails.emails %>
+                <% assign purchaser.first_name = contactDetails.first_name %>
+                <% assign purchaser.geography = contactDetails.geography %>
+                <% assign purchaser.last_name = contactDetails.last_name %>
+                <% assign purchaser.middle_name = contactDetails.middle_name %>
+                <% assign purchaser.phones = contactDetails.phones %>
+                <% assign purchaser._id = contactDetails._id %>
+                <% en.arrayUtils.add dealData.purchasers purchaser %>
+            <% endif %>
+
+            // for purchaser 4
+            <% if record.p4_email %>
+                <% unassign cquery %>
+                <% unassign contactResult %>
+                <% unassign contactDetails %>
+                <% if record.p4_email %>
+                    <% assign cquery.emails.$elemMatch.email = record.p4_email | lower %>
+                <% endif %>
+                <% if record.p4_name %>
+                    <% assign cquery.display_name = record.p4_name %>
+                <% endif %>
+                <% en.data.findOne contactResult 'contacts' cquery '' %>
+                <% assign contactDetails = contactResult.row %>
+                <% unassign purchaser %>
+                <% assign purchaser.addresses = contactDetails.addresses %>
+                <% assign purchaser.contact_type = contactDetails.contact_type %>
+                <% assign purchaser.display_name = contactDetails.display_name %>
+                <% assign purchaser.emails = contactDetails.emails %>
+                <% assign purchaser.first_name = contactDetails.first_name %>
+                <% assign purchaser.geography = contactDetails.geography %>
+                <% assign purchaser.last_name = contactDetails.last_name %>
+                <% assign purchaser.middle_name = contactDetails.middle_name %>
+                <% assign purchaser.phones = contactDetails.phones %>
+                <% assign purchaser._id = contactDetails._id %>
+                <% en.arrayUtils.add dealData.purchasers purchaser %>
+            <% endif %>
+
+            // for purchaser 5
+            <% if record.p5_email %>
+                <% unassign cquery %>
+                <% unassign contactResult %>
+                <% unassign contactDetails %>
+                <% if record.p5_email %>
+                    <% assign cquery.emails.$elemMatch.email = record.p5_email | lower %>
+                <% endif %>
+                <% if record.p5_name %>
+                    <% assign cquery.display_name = record.p5_name %>
+                <% endif %>
+                <% en.data.findOne contactResult 'contacts' cquery '' %>
+                <% assign contactDetails = contactResult.row %>
+                <% unassign purchaser %>
+                <% assign purchaser.addresses = contactDetails.addresses %>
+                <% assign purchaser.contact_type = contactDetails.contact_type %>
+                <% assign purchaser.display_name = contactDetails.display_name %>
+                <% assign purchaser.emails = contactDetails.emails %>
+                <% assign purchaser.first_name = contactDetails.first_name %>
+                <% assign purchaser.geography = contactDetails.geography %>
+                <% assign purchaser.last_name = contactDetails.last_name %>
+                <% assign purchaser.middle_name = contactDetails.middle_name %>
+                <% assign purchaser.phones = contactDetails.phones %>
+                <% assign purchaser._id = contactDetails._id %>
+                <% en.arrayUtils.add dealData.purchasers purchaser %>
+            <% endif %>
+
+        
+            <% unassign unitQuery %>
+            <% unassign unitDetails %>
+            <% unassign unitResult %>
+            <% assign unitQuery.project_id = params.project_id %> // tanu
+            <% assign unitQuery.unit_no = record.suite %>
+            <% en.data.findOne unitResult "bldr_units" unitQuery %>
+            <% assign unitDetails = unitResult.row %>  
+            <% return "unitDetails" unitDetails %>
+            <% assign dealData.stage = params.stage %>
+            <% assign dealData.unit._id = unitDetails._id %>
+            <% assign dealData.unit.builder_id = unitDetails.builder_id %> 
+            <% assign dealData.unit.builder_name = unitDetails.builder_name %>
+            <% assign dealData.unit.project_id = unitDetails.project_id %>
+            <% assign dealData.unit.project_name = unitDetails.project_name %>
+            <% assign dealData.unit.model_id = unitDetails.model_id %>
+            <% assign dealData.unit.model_name = unitDetails.model_name %>
+            <% assign dealData.unit.area = unitDetails.area %>
+            <% assign dealData.unit.bath = unitDetails.bath %>
+            <% assign dealData.unit.bed = unitDetails.bed %>
+            <% assign dealData.unit.ceiling = unitDetails.ceiling %>
+            <% assign dealData.unit.den = unitDetails.den %>
+            <% assign dealData.unit.floor_legal = unitDetails.floor_legal %>
+            <% assign dealData.unit.floor_marketing = unitDetails.floor_marketing %>
+            <% assign dealData.unit.outdoor_area = unitDetails.outdoor_area %>
+            <% assign dealData.unit.price = unitDetails.price %>
+            <% assign dealData.unit.floor_premium = unitDetails.floor_premium %>
+            <% assign dealData.unit.unit_premium = unitDetails.unit_premium %>
+            <% assign dealData.unit.sales_price = unitDetails.sales_price %>
+            <% assign dealData.unit.tax = unitDetails.tax %>
+            <% assign dealData.unit.type = unitDetails.type %>
+            <% assign dealData.unit.unit_no = unitDetails.unit_no %>
+            <% assign dealData.unit.unit_no_legal = unitDetails.unit_no_legal %>
+            <% assign dealData.unit.views = unitDetails.views %>
+            <% assign dealData.allocate_bicycle = unitDetails.allocate_bicycle %>
+            <% assign dealData.allocate_parking = unitDetails.allocate_parking %>
+            <% assign dealData.allocate_locker = unitDetails.allocate_locker %>
+            
+            <% assign dealData.max_bicycle = unitDetails.max_bicycle %>
+            <% assign dealData.max_lockers = unitDetails.max_lockers %>
+            <% assign dealData.max_parking = unitDetails.max_parking %>
+            
+            <% assign dealData.is_bicycle_eligible = unitDetails.is_bicycle_eligible %>
+            <% assign dealData.is_locker_eligible = unitDetails.is_locker_eligible %>
+            <% assign dealData.is_parking_eligible = unitDetails.is_parking_eligible %>
+
+            <% en.data.nextsequence results 'deal-id' %>
+            <% assign id = results.value | int_to_string %>
+            <% assign dealData._id = id %> 
+            <% assign dealData.initiated_on = en.time.now %> 
+            <% assign dealData.design_studio.status = 'NOT STARTED' %>
+            <% assign dealData.parking_selection.status = 'NOT STARTED' %>
+            <% assign dealData.locker_selection.status = 'NOT STARTED' %>
+            <% assign dealData.bicycle_selection.status = 'NOT STARTED' %>
+            
+            <% comment %>
+                // for getting depoait structure
+                <% assign dealData.deposit_structure_id = "k27p4fdw-d99d9d7f-a5e9-4d42-96fa-15ffc81558e6" %>
+                <% assign depositStuctureQuery._id = dealData.deposit_structure_id %>
+                <% en.data.findOne depositStructureRes "bldr_project_settings" depositStuctureQuery %>
+                <% assign depositStucture = depositStructureRes.row %>
+    
+                <% assign dealData.deposit_structure_def = depositStucture.deposits %>
+            <% endcomment %>
+
+            <% if record.notes %>
+                <% unassign noteData %>
+                <% assign noteData.body = record.notes %> 
+            <% endif %>
+
+            <% en.data.insert result "bldr_deals" dealData %>
+            <% assign dealResult = result.row %>
+            // for updating unit status 
+            <% unassign unitData %>
+            <% assign unitData.status = 'SOLD' %>
+            <% assign unitData.deal_id = result.row._id %> 
+            <% en.data.update unitUpResult "bldr_units" unitQuery unitData %>
+            
+            <% comment %>
+                // for inserting deposits in deal_deposit
+                <% for deposit in depositStucture.deposits %>
+                    <% unassign data %>
+                    <% assign data.deposit_no = forloop.index %>
+                    <% assign data.percent = deposit.value %>
+                    <% assign data.amount = unitDetails.sales_price | multiply: deposit.value | multiply: 0.01 %>
+                    <% assign data.due_date = deposit.date  %>
+                    <% assign data.deal_id = dealResult._id %>
+                    <% assign data.unit_id = unitDetails._id %>
+                    <% assign data.unit_no = unitDetails.unit_no %>
+                    <% assign data.project_id = unitDetails.project_id %>
+                    <% assign data.project_name = unitDetails.project_name %>
+                    <% en.data.insert result "bldr_deposits" data %>
+                <% endfor %>
+            <% endcomment %>
+            
+            // for inserting notes /// 
+            <% if record.notes %>
+                <% assign user = UserResult.user %>
+                <% assign noteData.created_by = user.firstName | append: ' ' | append: user.lastName  %>
+                <% assign noteData.create_date = en.time.now %> 
+                <% assign noteData.deal_id = dealResult._id %>
+                
+                <% en.data.insert result "crm_notes" noteData %> 
+            <% endif %>
+
+        <% endif %>
+    <% endfor %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Deal imported successfully.' %>
+    <% return returnData %>
+<% else %>
+    <% assign returnData.status = 0 %>
+    <% assign returnData.message = 'No data found.' %>
+    <% return returnData %>
+<% endif %>
+
+
+
+
+
+
+
+
+
+
+
+
+

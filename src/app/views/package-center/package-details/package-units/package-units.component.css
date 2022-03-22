@@ -1,0 +1,52 @@
+table.list_table thead tr th {
+    padding: 10px 5px;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+table.list_table tbody tr:nth-of-type(odd) {
+    background-color: transparent;
+}
+
+table.list_table tbody tr td {
+    padding: 5px;
+}
+
+ul.pagination {
+    float: right;
+}
+
+.page-item.active .page-link {
+    background-color: #000000;
+    border-color: #000000;
+    /* padding-left: 13px;
+    padding-right: 13px; */
+}
+
+.search_sec .input-group {
+    width: 50%;
+    float: right;
+    margin-bottom: 15px;
+}
+
+.search_btn {
+    padding: 6px 10px;
+    background-color: #30374c;
+    border: 1px solid #30374c;
+    color: #fff;
+}
+
+.position-relative {
+    position: relative;
+}
+
+.clear-search {
+    position: absolute;
+    right: 15px;
+    top: 7px;
+    opacity: 0.5;
+    z-index: 999;
+}
+::ng-deep .custom-size.modal-xl {
+    max-width: calc(100vw - 100px) !important;
+}

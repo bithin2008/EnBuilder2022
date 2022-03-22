@@ -1,0 +1,29 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %> 
+
+ 
+<% assign datasetId = 'contacts' %> 
+<% for item in en.params.contactIds %>
+    <% unassign query %>
+    <% unassign result %>
+    <% assign query._id = item %>
+    <% en.data.findOne result datasetId query ""  %>
+    <% assign user = result.row %>
+    <% if user.lists %>
+        <% en.arrayUtils.add user.lists en.params.list %>
+        <% assign dataToUpdate.lists = user.lists %>
+        <% en.data.update upResult datasetId query dataToUpdate %> 
+    <% else %>  
+        <% assign lists = [] %>
+        <% en.arrayUtils.add lists en.params.list %>
+        <% assign dataToUpdate.lists = lists %>
+        <% en.data.update upResult datasetId query dataToUpdate %> 
+    <% endif %>
+<% endfor %>
+<% assign returnData.status = 1 %>
+<% assign returnData.message = 'Added to list successfully' %>
+<% return returnData %>

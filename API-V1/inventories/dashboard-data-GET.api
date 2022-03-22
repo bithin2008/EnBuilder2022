@@ -1,0 +1,63 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %> 
+
+// for model count
+<% if en.params.project_id %>
+    <% assign query1.project_id = en.params.project_id %>
+<% endif %>
+<% en.data.count modelCount "bldr_models" query1 %>
+<% assign returnData.results.total_models = modelCount.count %>
+
+// for unit count
+<% if en.params.project_id %>
+    <% assign query2.project_id = en.params.project_id %>
+<% endif %>
+<% en.data.count unitCount "bldr_units" query2 %>
+<% assign returnData.results.total_units = unitCount.count %>
+
+// for parking count
+<% if en.params.project_id %>
+    <% assign query3.project_id = en.params.project_id %>
+<% endif %>
+<% en.data.count parkingCount "bldr_parking_spaces" query3 %>
+<% assign returnData.results.total_parkings = parkingCount.count %>
+
+// for available parking count
+<% assign query3.status = 'AVAILABLE' %>
+<% en.data.count parkingACount "bldr_parking_spaces" query3 %>
+<% assign returnData.results.available_parkings = parkingACount.count %>
+
+// for bicycle count
+<% if en.params.project_id %>
+    <% assign query4.project_id = en.params.project_id %>
+<% endif %>
+<% en.data.count bicycleCount "bldr_bicycle_units" query4 %>
+<% assign returnData.results.total_bicycles = bicycleCount.count %>
+
+// for available bicycle count
+<% assign query4.status = 'AVAILABLE' %>
+<% en.data.count bicycleACount "bldr_bicycle_units" query4 %>
+<% assign returnData.results.available_bicycles = bicycleACount.count %>
+
+// for locker count
+<% if en.params.project_id %>
+    <% assign query5.project_id = en.params.project_id %>
+<% endif %>
+<% en.data.count lockerCount "bldr_locker_units" query5 %>
+<% assign returnData.results.total_lockers = lockerCount.count %>
+
+// for available locker count
+<% assign query5.status = 'AVAILABLE' %>
+<% en.data.count lockerACount "bldr_locker_units" query5 %>
+<% assign returnData.results.available_lockers = lockerACount.count %>
+
+<% assign returnData.status = 1 %>
+<% assign returnData.message = 'Dashboard data.' %>  
+<% return returnData %>
+
+
+ 

@@ -1,0 +1,7 @@
+.inner-crad{
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+}
+.inner-crad  .bottom-border{
+    border-bottom: 1px solid #dee2e6;
+}

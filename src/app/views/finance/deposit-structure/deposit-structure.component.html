@@ -1,0 +1,292 @@
+<form autocomplete="off">
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <button type="button" style="float:right" class="btn btn-danger mr-2" (click)="clearFilter()">Clear</button>
+            <button class="btn btn-primary mr-2" style="float:right" type="button" (click)="openAddDepositModal(addEditModal)">Add</button>
+
+            <div class="form-group  mr-2" style="float:right">
+                <input class="form-control" name="search" placeholder="Type name" style="padding-right: 25px;" type="text" [ngModelOptions]="{standalone: true}"
+                    [(ngModel)]="filterForm.searchText" name="search" (keyup)="doSearch()">
+            </div>
+        </div>
+
+    </div>
+</form>
+<div class="table-responsive mt-2 mb-3">
+    <table class="table table-striped list_table" style="table-layout: fixed;">
+        <thead>
+            <tr>
+                <th width="180px" (click)="setOrder('name')">Name
+                    <span *ngIf="order != 'name'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'name'">▼</span>
+                    <span *ngIf="!reverse && order == 'name'">▲</span>
+                </th>
+
+                <th width="180px" (click)="setOrder('start')">Start
+                    <span *ngIf="order != 'start'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'start'">▼</span>
+                    <span *ngIf="!reverse && order == 'start'">▲</span>
+                </th>
+                <th width="180px" (click)="setOrder('end')">End
+                    <span *ngIf="order != 'end'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'end'">▼</span>
+                    <span *ngIf="!reverse && order == 'end'">▲</span>
+                </th>
+                <th width="180px">Active
+
+                </th>
+                <th width="180px">Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngIf="depositeList.length>0">
+                <tr *ngFor="let item of depositeList;let i=index">
+                    <td>{{item?.name}}</td>
+                    <td>{{item?.start |date:'yyyy-MM-dd'}}</td>
+                    <td>{{item?.end |date:'yyyy-MM-dd'}}</td>
+                    <td>{{item?.active ? 'Yes':'No'}}</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm mr-2" type="button" (click)="openEditDepositeModal(addEditModal,item)">
+                            <i class="fa fa-pencil-alt" aria-hidden="true"></i>
+                        </button>
+                        <button class="btn btn-danger btn-sm" type="button" (click)="deleteDeposit(item)">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>
+            </ng-container>
+            <ng-container *ngIf="depositeList.length == 0">
+                <tr>
+                    <td colspan="5" class="text-center">No deposit found</td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+</div>
+<div class="row mt-3" *ngIf="paginationObj.total>=20">
+    <div class="col-md-6">
+        <div class="form-group">
+            <!-- <div class="col-sm-6"> -->
+            <span class="float-left" style="width:70px;margin-top: 6px;">Page Size:</span>
+            <span class="float-left" style="width:85px;">
+                <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="pageSize" (change)="setPageSize()">
+                    <option value="">-Select-</option>
+                                        <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </span>
+            <span class="float-left" style="margin-top: 6px !important;margin-left: 16px !important;">{{paginationObj.total}} Record(s) Found</span>
+            <!-- </div> -->
+        </div>
+    </div>
+    <div class="col-md-6">
+        <nav>
+            <ul class="pagination">
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" (click)="doPaginationWise(paginationObj.previousPage)">
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(1)">
+                        First
+                    </a>
+                </li>
+                <li class="page-item {{pagination == paginationObj.currentPage?'active':''}}" *ngFor="let pagination of paginationObj.items">
+                    <a class="page-link" (click)="doPaginationWise(pagination)">{{pagination}}</a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.totalPages)">
+                        Last
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" (click)="doPaginationWise(paginationObj.nextPage)">
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<ng-template #addEditModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">{{ isEdit ? 'Edit' :'Add'}} Deposit</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="depositForm">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Project
+                                <span style="color:red">*</span>:
+                            </label>
+                            <select class="form-select" formControlName="project_id">
+                                <option value="">All Project</option>
+                                <option *ngFor="let item of projectList" value={{item._id}}>{{item.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Name
+                                <span style="color:red">*</span>:
+                            </label>
+                            <input type="text" formControlName="name" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mt-1">
+                        <div class="form-group">
+                            <label>
+                                Start Date
+                                <span style="color:red">*</span>:
+                            </label>
+                            <div class="input-group">
+                                <input type="text" container="" class="form-control" placeholder="YYYY-MM-DD" #startDate="bsDatepicker" bsDatepicker [bsConfig]="{ containerClass: 'theme-dark-blue',showTodayButton: true, todayPosition: 'center',showClearButton: true, clearPosition: 'right',isAnimated: true,adaptivePosition: true,dateInputFormat: 'YYYY-MM-DD',  returnFocusToInput: true }"
+                                    formControlName="start">
+                                <span class=" input-group-prepend" (click)="startDate.toggle()" [attr.aria-expanded]="startDate.isOpen">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mt-1">
+                        <div class="form-group ">
+                            <label>
+                                End Date
+                                <span style="color:red">*</span>:
+                            </label>
+                            <div class="input-group">
+                                <input type="text" container="" class="form-control" [minDate]="minDate" placeholder="YYYY-MM-DD" #endDate="bsDatepicker"
+                                    bsDatepicker [bsConfig]="{ containerClass: 'theme-dark-blue',showTodayButton: true, todayPosition: 'center',showClearButton: true, clearPosition: 'right',isAnimated: true,adaptivePosition: true,dateInputFormat: 'YYYY-MM-DD',  returnFocusToInput: true }"
+                                    formControlName="end">
+                                <span class=" input-group-prepend" (click)="endDate.toggle()" [attr.aria-expanded]="endDate.isOpen">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <!-- <div class="table-responsive "> -->
+                        <div>
+                            <table class="table table-sm list_table" style="table-layout: fixed;">
+                                <thead>
+                                    <tr>
+                                        <th width="70px"></th>
+                                        <th>Type</th>
+                                        <th>Percent/Amount </th>
+                                        <th>Date Type </th>
+                                        <th>Days/Date </th>
+                                        <th width="50px"> </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <ng-container formArrayName="deposits">
+
+                                        <tr *ngFor="let deposit of depositForm.get('deposits')?.controls; let i=index;" [formGroupName]="i">
+                                            <td>{{i==0 ? 'Sign Up' :i }}</td>
+                                            <td>
+                                                <select class="form-select form-select-sm" formControlName="type" id="type{{i}}" name="type{{i}}">
+                                                    <option *ngFor="let type of typeList" [value]="type?.value">{{type?.name}}</option>
+                                                </select>
+                                            </td>
+
+                                            <td>
+                                                <input type="number" max="100" min="0" class="form-control form-control-sm" name="amount{{i}}" formControlName="value">
+                                                <div class="error pt-1" *ngIf="deposit.get('type').value =='PERCENT-CP' && deposit.get('value').value >100">
+                                                    Enter value less than and equal to 100.
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <select class="form-select form-select-sm" formControlName="date_type" id="date_type{{i}}" name="date_type{{i}}">
+                                                    <option *ngFor="let type of dateTypeList" [value]="type?.value">{{type?.name}}</option>
+                                                </select>
+                                            </td>
+                                            <td *ngIf="deposit.get('date_type').value =='FROM-INITIATED' || deposit.get('date_type').value == 'FROM-EXECUTED'">
+                                                <input type="number" min="0" class="form-control form-control-sm" name="days{{i}}" formControlName="days">
+                                            </td>
+                        
+                                            <td *ngIf="deposit.get('date_type').value =='FIXED'">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control form-control-sm" container="" placeholder="YYYY-MM-DD" #endDate="bsDatepicker" bsDatepicker
+                                                        [bsConfig]="{ containerClass: 'theme-dark-blue',showTodayButton: true, todayPosition: 'center',showClearButton: true, clearPosition: 'right',isAnimated: true,adaptivePosition: true,dateInputFormat: 'YYYY-MM-DD',  returnFocusToInput: true }"
+                                                        formControlName="date">
+                                                    <span class=" input-group-prepend" (click)="endDate.toggle()" [attr.aria-expanded]="endDate.isOpen">
+                                                        <span class="input-group-text">
+                                                            <i class="fa fa-calendar"></i>
+                                                        </span>
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <button *ngIf="i>5" class="btn btn-sm btn-danger" type="button" (click)="deleteDeposits(i)">
+                                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </ng-container>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="isEnable" formControlName="active">
+                            <label class="custom-control-label" for="isEnable"> Is Active</label>
+                        </div>
+                        <!-- <div class="form-check">
+                            <input formControlName="active" class="form-check-input" type="checkbox" value="" id="isEnable">
+                            <label class="form-check-label" for="isEnable">
+                                Is Active
+                            </label>
+                        </div> -->
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="custom-control custom-checkbox">
+                            <input formControlName="deduct_signup" class="custom-control-input" type="checkbox" value="" id="deduct_amount">
+                            <label class="custom-control-label" for="deduct_amount">
+                                Deduct Sign-up amount from First Deposit Amount
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-primary mr-2" (click)="addMoreDeposits()">Add More Deposits </button>
+                        <!-- <button type="button" *ngIf="depositForm.get('deposits').controls.length>5" class="btn btn-primary" (click)="deleteDeposits()">Remove Deposits </button> -->
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" *ngIf="isEdit" (click)="editDeposit()">Update</button>
+            <button type="button" class="btn btn-primary" *ngIf="!isEdit" (click)="addDeposit()">Add</button>
+
+        </div>
+    </div>
+</ng-template>

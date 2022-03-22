@@ -1,0 +1,157 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_projects' %>
+
+<% if en.params._id %>
+    <% if en.params.update_type == 'logo' %>
+        <% assign query._id = en.params._id %>
+        <% en.data.findOne result datasetId query %>
+        <% if en.req.hasFile %>
+            <% assign rowId = en.params._id %>
+            <% if result.row.logo %>
+                <% assign imageObj = result.row.logo %>
+                <% en.data.deleteFile imageDeleteResult datasetId 'logo' rowId imageObj._id  %>
+            <% endif %>
+            <% en.data.attachfile imgresult datasetId 'logo' rowId false %> 
+            <% assign returnData.result = imgresult %>
+        <% else %>
+            <% assign returnData.result = result %>
+        <% endif %>
+        <% assign returnData.status = 1 %>
+        <% assign returnData.message = 'Project logo updated successfully.' %>
+        <% return returnData %>
+    
+    <% elsif en.params.update_type == 'portal_home_logo' %>
+        <% assign query._id = en.params._id %> 
+        <% en.data.findOne result datasetId query %>
+        <% if en.req.hasFile %>
+            <% assign rowId = en.params._id %>
+            <% if result.row.portal_home_logo %>
+                <% assign imageObj = result.row.portal_home_logo %>
+                <% en.data.deleteFile imageDeleteResult datasetId 'portal_home_logo' rowId imageObj._id  %>
+            <% endif %>
+            <% en.data.attachfile imgresult datasetId 'portal_home_logo' rowId false %> 
+            <% assign returnData.result = imgresult %>
+        <% else %>
+            <% assign returnData.result = result %>
+        <% endif %>
+        <% assign returnData.status = 1 %>
+        <% assign returnData.message = 'Purchser portal home logo updated successfully.' %>
+        <% return returnData %>
+    
+    <% else %>
+        <% assign query._id = en.params._id %>
+        
+        <% en.data.findone projectDetails datasetId query %>
+        <% assign projectDetails = projectDetails.row %>
+        
+        <% assign params = en.params %>
+        <% if params.construction_start_date %>
+            <% assign params.construction_start_date = params.construction_start_date | string_to_date: "yyyy-MM-dd" time-zone %>
+        <% endif %>
+        
+        <% en.data.update upResult datasetId query params %>
+        <% if en.params.name %>
+            ///// for updating project name in other datasets///////  
+            <% if projectDetails.name != en.params.name %>
+                <% assign upQuery.project_id = en.params._id %>
+                <% assign updata.$set.project_name = en.params.name %>
+                <% en.data.updateMany rresults 'bldr_bicycle_area' upQuery updata %>
+                <% en.data.updateMany rresults 'bldr_bicycle_types' upQuery updata %>
+                <% en.data.updateMany rresults 'bldr_bicycle_units' upQuery updata %>
+                <% en.data.updateMany rresults 'bldr_locker_area' upQuery updata %>
+                <% en.data.updateMany rresults 'bldr_locker_types' upQuery updata %>
+                <% en.data.updateMany rresults 'bldr_locker_units' upQuery updata %>
+                <% en.data.updateMany rresults 'bldr_lot_types' upQuery updata %>
+                <% en.data.updateMany rresults 'bldr_models' upQuery updata %>
+                <% en.data.updateMany rresults 'bldr_parking_addons' upQuery updata %>
+                <% en.data.updateMany rresults 'bldr_parking_floors' upQuery updata %>
+                <% en.data.updateMany rresults 'bldr_parking_spaces' upQuery updata %>
+                <% en.data.updateMany rresults 'bldr_parking_types' upQuery updata %>
+                <% en.data.updateMany rresults 'bldr_units' upQuery updata %>
+                <% en.data.updateMany rresults 'bldr_deficiencies' upQuery updata %>
+                <% en.data.updateMany rresults 'bldr_project_progress' upQuery updata %>
+                <% en.data.updateMany rresults 'bldr_layout_customizations' upQuery updata %>
+            <% endif %>
+        <% endif %>
+        
+        <% assign returnData.status = 1 %> 
+        <% assign returnData.message = 'Project updated successfully.' %>
+        <% assign returnData.result = upResult %>
+        <% return returnData %>
+    <% endif %>
+<% else %>
+    <% assign params = en.params %>
+    <% assign params.image_disclaimer_text = "<p><strong style="background-color: transparent; color: rgb(0, 0, 0);">Rendering Image Disclaimer</strong></p><p><span style="background-color: transparent; color: rgb(0, 0, 0);">These images are for illustrative purposes only and is an artistic interpretation of the design. Due to differences in monitors, actual colours and textures of products may also appear different to those shown.</span></p>" %>
+    
+    <% if params.construction_start_date %>
+        <% assign params.construction_start_date = params.construction_start_date | string_to_date: "yyyy-MM-dd" time-zone %>
+    <% endif %>
+    <% en.data.insert result datasetId params %>
+    
+
+    ////// for creating default parking type///////////////
+    ///// for single/////////
+   
+    <% assign singleData.name = 'Single' %>
+    <% assign singleData.project_id = result.row._id %>
+    <% assign singleData.project_name = result.row.name %>
+    <% assign singleData.standard_available = "black-single-car.png" %>
+    <% assign singleData.premium_available = "orange-single-car.png" %>
+    <% en.data.insert result1 "bldr_parking_types" singleData %>
+     
+    ///// for tandem////////
+    <% assign tandemData.name = 'Tandem' %>
+    <% assign tandemData.project_id = result.row._id %>
+    <% assign tandemData.project_name = result.row.name %>
+    <% assign tandemData.standard_available = "black-tandam-cars.png" %>
+    <% assign tandemData.premium_available = "blue-tandam-cars.png" %>
+    <% en.data.insert result1 "bldr_parking_types" tandemData %>
+    
+    // for adding default locations
+    <% assign packageLocations = [] %>
+    <% assign issueLocations = [] %>
+    <% assign order = 1 %>
+    <% for item in params.spaces %>
+        <% assign obj1 %>
+        <% assign obj2 %>
+        <% assign obj1.name = item %>
+        <% assign obj1.order = order %>
+        <% assign obj1.type = "PROJECT-ISSUE-LOCATION" %>
+        <% assign obj1.project_id = result.row._id %>
+        <% assign obj1.project_name = result.row.name %>
+        
+        <% rem en.arrayUtils.add issueLocations obj1 %>
+        
+        <% assign obj2.name = item %>
+        <% assign obj2.order = order %>
+        <% assign obj2.type = "PROJECT-PACKAGE-LOCATION" %>
+        <% assign obj2.project_id = result.row._id %>
+        <% assign obj2.project_name = result.row.name %>
+        
+        <% rem en.arrayUtils.add packageLocations obj2 %>
+        
+        <% en.data.insert results1 "bldr_project_settings" obj2 %>
+        <% en.data.insert results2 "bldr_project_settings" obj1 %>  
+        
+        <% assign order = order | add: 1 | to_int %>
+        
+    <% endfor %>
+    
+    <% rem en.data.bulkInsert results "bldr_project_settings" packageLocations %>
+    <% rem en.data.bulkInsert results "bldr_project_settings" issueLocations %>  
+     
+    <% assign returnData.status = 1 %> 
+    <% assign returnData.message = 'Project added successfully.' %>
+    <% assign returnData.result = result.row %>
+    <% return returnData %>
+<% endif %>
+
+
+
+

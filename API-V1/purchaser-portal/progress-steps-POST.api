@@ -1,0 +1,49 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_project_progress' %>
+
+<% if en.params._id %>
+    <% if en.params.update_type == 'photo' %>
+        <% assign query._id = en.params._id %>
+        <% en.data.findOne result datasetId query %>
+        <% if en.req.hasFile %>
+            <% assign rowId = en.params._id %>
+            <% if result.row.photo %>
+                <% assign imageObj = result.row.photo %>
+                <% en.data.deleteFile imageDeleteResult datasetId 'photo' rowId imageObj._id  %>
+            <% endif %>
+            <% en.data.attachfile imgresult datasetId 'photo' rowId false %> 
+            <% assign returnData.result = imgresult %>
+        <% else %>
+            <% assign returnData.result = result %>
+        <% endif %>
+        <% assign returnData.status = 1 %>
+        <% assign returnData.message = 'Progress step photo updated successfully.' %>
+        <% return returnData %>
+    
+    <% else %>
+        <% assign query._id = en.params._id %>
+        <% en.data.update upResult datasetId query en.params %>
+        
+        <% assign returnData.status = 1 %> 
+        <% assign returnData.message = 'Progress step updated successfully.' %>
+        <% assign returnData.result = upResult %>
+        <% return returnData %>
+    <% endif %>
+<% else %>
+    <% assign params = en.params %>
+    <% en.data.insert result datasetId params %>
+    <% assign returnData.result = result.row %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Progress step added successfully.' %>
+    <% return returnData %>
+<% endif %>
+
+
+
+

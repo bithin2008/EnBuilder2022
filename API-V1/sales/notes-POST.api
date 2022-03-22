@@ -1,0 +1,40 @@
+
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign params = en.params %>
+
+<% if params._id %>
+    <% assign query._id = params._id %>
+    <% assign user = UserResult.user %>
+    <% assign noteData.updated_by = user.firstName | append: ' ' | append: user.lastName  %>
+    <% assign noteData.updated_date = en.time.now %> 
+    <% assign noteData.body = params.notes %> 
+    <% if params.deal_id %>
+        <% assign noteData.deal_id = params.deal_id %>
+    <% endif %> 
+    
+    <% en.data.update result "crm_notes" query noteData %> 
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Notes updated successfully.' %>
+    <% assign returnData.result = result %> 
+    <% return returnData %>
+<% else %>
+    <% assign user = UserResult.user %>
+    <% assign noteData.created_by = user.firstName | append: ' ' | append: user.lastName  %>
+    <% assign noteData.create_date = en.time.now %> 
+    <% assign noteData.body = params.notes %> 
+    <% if params.deal_id %>
+        <% assign noteData.deal_id = params.deal_id %>
+    <% endif %>
+    
+    <% en.data.insert result "crm_notes" noteData %> 
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Notes added successfully.' %>
+    <% assign returnData.result = result %> 
+    <% return returnData %>
+<% endif %>

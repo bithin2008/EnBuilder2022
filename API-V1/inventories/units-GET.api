@@ -1,0 +1,100 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_units' %>
+
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% en.data.findone result datasetId query %>
+    
+    <% assign unitDetails = result.row %>
+    <% assign returnData.result = unitDetails %>
+    <% if unitDetails.deal_id %>
+        <% assign dealQuery._id = unitDetails.deal_id %>
+        <% en.data.findOne dealResult "bldr_deals" dealQuery "deal_type,purchasers,stage,unit.sales_price" %>
+        <% assign returnData.result.deal_details = dealResult.row %>
+    <% endif %>
+    
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Unit details' %>
+    <% return returnData %>
+<% else %>
+    <% assign pageSize = 200 %> 
+    <% if en.params.pageSize %>
+        <% assign pageSize = en.params.pageSize %>
+    <% endif %>
+    <% assign page = 1 %>
+    <% if en.params.page %> 
+        <% assign page = en.params.page %>
+    <% endif %> 
+    
+    <% if en.params.sortBy %>
+        <% if en.params.sortOrder =='ASC' %>
+            <% assign orderBy[en.params.sortBy] = 1 %>
+        <% else %>
+            <% assign orderBy[en.params.sortBy] = -1 %>
+        <% endif %>
+    <% else %>
+        <% assign orderBy.unit_no = 1 %>
+    <% endif %>
+    <% if en.params.project_id %>
+        <% assign query.project_id = en.params.project_id %>  
+    <% endif %>
+    <% if en.params.unit_no %>
+        <% assign query.unit_no = en.params.unit_no %>  
+    <% endif %>
+    <% if en.params.model_id %>
+        <% assign query.model_id.$in = en.params.model_id | split:"," %>  
+    <% endif %>
+    <% if en.params.status %>
+        <% assign query.status = en.params.status %> 
+    <% endif %>
+    <% if en.params.floor %>
+        <% assign query.floor_legal.$in = en.params.floor | split:"," %>
+    <% endif %>
+    <% if en.params.bed %>
+        <% assign query.bed.$in = en.params.bed | splittoint:"," %>
+    <% endif %>
+    <% if en.params.bath %>
+        <% assign query.bath.$in = en.params.bath | splittoint:"," %>
+    <% endif %>
+    <% if en.params.media %>
+        <% assign query.media.$in = en.params.media | splittoint:","  %>
+    <% endif %>
+    <% if en.params.flex %>
+        <% assign query.flex.$in = en.params.flex | splittoint:","  %>
+    <% endif %>
+    <% if en.params.ceiling %>
+        <% assign query.ceiling.$in = en.params.ceiling | splittoint:","  %>
+    <% endif %>
+    <% if en.params.den %>
+        <% assign query.den.$in = en.params.den | splittoint:"," %>
+    <% endif %>  
+    <% if en.params.views %>
+        <% assign query.views.$in = en.params.views | splittrim:"," %>
+    <% endif %>
+    <% if en.params.type=='list' %>
+        <% assign query.project_id = en.params.project_id %>
+        <% en.data.find results datasetId query "_id,unit_no" orderBy pageSize page %>
+        <% assign returnData.status = 1 %>
+        <% assign returnData.message = 'Unit list' %>
+        <% assign returnData.results = results.rows %>
+        <% assign returnData.pagination = results.pagination %>
+        <% return returnData %>
+        <% exit %>
+    <% endif %>
+    <% en.data.find results datasetId query "" orderBy pageSize page %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Unit list' %>
+    <% assign returnData.results = results.rows %>
+    <% assign returnData.pagination = results.pagination %>
+    <% return returnData %>
+<% endif %>
+
+
+
+

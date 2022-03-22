@@ -1,0 +1,9 @@
+.link {
+    color: #20a8d8;
+    text-decoration: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+::ng-deep .custom-size.modal-xl {
+    max-width: calc(100vw - 100px) !important;
+}

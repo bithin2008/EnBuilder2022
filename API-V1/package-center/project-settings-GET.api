@@ -1,0 +1,34 @@
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_project_settings' %> 
+
+<% if en.params.project_id %>
+    <% assign query.project_id = en.params.project_id %>
+<% endif %>
+<% if en.params.location %>
+    <% assign query.location = en.params.location %>
+<% endif %>
+<% if en.params.type %>
+    <% assign query.type = en.params.type %>
+<% endif %>
+
+<% if en.params.sortBy %>
+    <% if en.params.sortOrder =='ASC' %>
+        <% assign orderBy[en.params.sortBy] = 1 %>
+    <% else %>
+        <% assign orderBy[en.params.sortBy] = -1 %>
+    <% endif %>
+<% else %>
+    <% assign orderBy.order = 1 %> 
+<% endif %> 
+
+<% en.data.find results datasetId query "" orderBy %>
+
+<% assign returnData.status = 1 %>
+<% assign returnData.results = results.rows %>
+<% assign returnData.message = 'Settings list.' %>
+<% return returnData %>

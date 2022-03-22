@@ -1,0 +1,130 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_deals' %>
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% en.data.findone result datasetId query %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Deal details' %>
+    <% assign returnData.result = result.row %>
+    
+    // for getting bldr_occupancy
+    <% assign oquery.unit_id = returnData.result.unit._id %>
+    <% assign fields.builder_id =  0 %>
+    <% assign fields.builder_name = 0 %>
+    <% assign fields.deal_id = 0 %>
+    <% assign fields.model_id = 0 %>
+    <% assign fields.model_name = 0 %>
+    <% assign fields.project_id = 0 %>
+    <% assign fields.project_name = 0 %>
+    <% assign fields.unit_id = 0 %>
+    <% assign fields.unit_no = 0 %>
+    <% assign fields._id = 0 %>
+    <% assign fields._created = 0 %>
+    <% assign fields._created_ = 0 %>
+    <% assign fields._updated = 0 %>
+    <% assign fields._updated_ = 0 %>
+    <% assign fields._createdBy = 0 %>
+    <% assign fields._updatedBy = 0 %>
+    <% assign fields._t = 0 %>
+    <% en.data.findOne oResults 'bldr_occupancy' oquery fields %>
+    <% assign returnData.result.occupancy_dates = oResults.row %>
+    
+    // for getting bicycle selected
+    <% assign bquery.deal_id = en.params._id %>
+    <% en.data.find bResults 'bldr_bicycle_selection' bquery  %>
+    <% assign returnData.result.assigned_bicycle = bResults.rows %>
+    // for getting locker selected
+    <% assign lquery.deal_id = en.params._id %>
+    <% en.data.find lResults 'bldr_locker_selection' bquery  %>
+    <% assign returnData.result.assigned_locker = lResults.rows %>
+    // for getting parking selected
+    <% assign pquery.deal_id = en.params._id %>
+    <% en.data.find pResults 'bldr_parking_selection' bquery  %>
+    <% assign returnData.result.assigned_parking = pResults.rows %>
+    
+    <% return returnData %> 
+<% else %>
+    <% assign pageSize = 20 %> 
+    <% if en.params.pageSize %>
+        <% assign pageSize = en.params.pageSize %>
+    <% endif %>
+    <% assign page = 1 %>
+    <% if en.params.page %> 
+        <% assign page = en.params.page %>
+    <% endif %> 
+    
+    <% if en.params.sortBy %>
+        <% if en.params.sortOrder =='ASC' %>
+            <% assign orderBy[en.params.sortBy] = 1 %>
+        <% else %>
+            <% assign orderBy[en.params.sortBy] = -1 %>
+        <% endif %>
+    <% else %>
+        <% assign orderBy.name = 1 %>
+    <% endif %>
+    
+    <% if en.params.project_id %>
+        <% assign query["unit.project_id"] = en.params.project_id %>
+    <% endif %>
+    <% if params.model_id %>
+        <% assign query["unit.model_id"].$in = params.model_id | split:"," %>  
+    <% endif %>
+    <% if en.params.floor %>
+        <% assign query["unit.floor_legal"].$in = en.params.floor | split:"," %>
+    <% endif %>
+    <% if en.params.floor_legal %>
+        <% assign query["unit.floor_legal"].$in = en.params.floor_legal | split:"," %>
+    <% endif %>
+    <% if en.params.bed %>
+        <% assign query["unit.bed"].$in = en.params.bed | splittoint:"," %>
+    <% endif %>
+    <% if en.params.bath %>
+        <% assign query["unit.bath"].$in = en.params.bath | splittoint:"," %>
+    <% endif %>
+    <% if en.params.media %>
+        <% assign query["unit.media"].$in = en.params.media | splittoint:","  %>
+    <% endif %>
+    <% if en.params.flex %>
+        <% assign query["unit.flex"].$in = en.params.flex | splittoint:","  %>
+    <% endif %>
+    <% if en.params.broker %>
+        <% assign query["brokers.broker_id"].$in = en.params.broker | split:","  %>
+    <% endif %>
+    <% if en.params.sales_agent %>
+        <% assign query["sales_agents.sales_agent_id"].$in = en.params.sales_agent | split:","  %>
+    <% endif %>
+    <% if en.params.contact_id %>
+        <% assign query["purchasers._id"] = en.params.contact_id  %>
+    <% endif %>
+
+    
+    <% if en.params.searchText %>
+        <% assign q1["purchasers.first_name"].$regex = en.params.searchText %> 
+        <% assign q1["purchasers.first_name"].$options = "i" %>
+        <% assign q2["purchasers.last_name"].$regex = en.params.searchText %> 
+        <% assign q2["purchasers.last_name"].$options = "i" %>
+        <% assign q3["unit.project_name"].$regex = en.params.searchText %> 
+        <% assign q3["unit.project_name"].$options = "i" %>
+        <% assign q4["unit.unit_no"].$regex = en.params.searchText %> 
+        <% assign q4["unit.unit_no"].$options = "i" %>
+        <% assign query.$or = [q1,q2,q3,q4] %>
+    <% endif %>
+    <% en.data.find results datasetId query "" orderBy pageSize page %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Deal list' %>
+    <% assign returnData.results = results.rows %>
+    <% assign returnData.pagination = results.pagination %>
+    <% return returnData %>
+<% endif %>
+
+
+
+
+
+

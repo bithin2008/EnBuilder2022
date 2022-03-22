@@ -1,0 +1,14 @@
+.clear-search {
+    position: absolute;
+    right: 15px;
+    top: 7px;
+    opacity: 0.5;
+    z-index: 999;
+}
+
+.link {
+    color: #20a8d8;
+    text-decoration: none;
+    background-color: transparent;
+    cursor: pointer;
+}

@@ -1,0 +1,789 @@
+table.list_table thead tr th {
+    padding: 10px 5px;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+table.list_table tbody tr:nth-of-type(odd) {
+    background-color: transparent;
+}
+
+table.list_table tbody tr td {
+    padding: 5px;
+}
+
+ul.pagination {
+    float: right;
+}
+
+::ng-deep .ui-autocomplete .ui-autocomplete-input {
+    border-color: #e4e7ea !important;
+}
+
+::ng-deep .unit-box .ui-autocomplete {
+    display: grid !important;
+}
+
+::ng-deep .unit-box .p-autocomplete {
+    display: grid !important;
+}
+
+
+/* 
+.page-item {
+    margin: 0 2px;
+}
+
+.page-item .page-link {
+    border-radius: 20px;
+} */
+
+.page-item.active .page-link {
+    background-color: #000000;
+    border-color: #000000;
+    /* padding-left: 13px;
+    padding-right: 13px; */
+}
+
+a.details_btn {
+    text-decoration: underline;
+    color: #23282c;
+}
+
+a.details_btn:hover {
+    color: #20a8d8;
+}
+
+.search_sec .input-group {
+    width: 50%;
+    float: right;
+    margin-bottom: 15px;
+}
+
+.search_btn {
+    padding: 6px 10px;
+    background-color: #30374c;
+    border: 1px solid #30374c;
+    color: #fff;
+}
+
+.position-relative {
+    position: relative;
+}
+
+.clear-search {
+    position: absolute;
+    right: 15px;
+    top: 7px;
+    opacity: 0.5;
+    z-index: 999;
+}
+
+.list_table tbody tr td {
+    vertical-align: middle;
+}
+
+.profile_back {
+    /* background: #ededed; */
+    display: flex;
+    position: relative;
+    /* margin-bottom: 20px; */
+    width: 100%;
+    /* margin-top: 30px; */
+}
+
+.image_billi {
+    width: 80%;
+}
+
+.img_table_vertical {
+    display: block;
+    /* vertical-align: middle; */
+    width: 30%;
+    float: left;
+}
+
+.search_btn {
+    padding: 6px 10px;
+    background-color: #30374c;
+    border: 1px solid #30374c;
+    color: #fff;
+}
+
+.hd_all {
+    color: #3e93cc;
+    font-size: 24px;
+}
+
+.pp-50 {
+    padding-top: 50px;
+}
+
+.tab_box {
+    margin-top: -1px;
+    background: transparent;
+    border: 1px solid transparent;
+}
+
+.tab_pl .nav-link.active {
+    color: #2f353a;
+    background: transparent;
+    border-color: transparent;
+    border-bottom-color: #3e93cc;
+    border-bottom: 2px solid #3e93cc;
+}
+
+.tab_pl {
+    border-bottom: 1px solid transparent;
+}
+
+.mp_30 {
+    margin-top: 30px;
+}
+
+.card-body p {
+    margin-bottom: 0px !important;
+}
+
+.others_back {
+    background: #ededed;
+    padding: 20px;
+    min-height: 180px;
+    margin-bottom: 20px;
+}
+
+.form_cls {
+    position: relative;
+    display: flow-root;
+    margin-top: 20px;
+}
+
+.form_cls button {
+    float: right;
+    background: #3e93cc;
+    border: transparent;
+}
+
+textarea#comment {
+    background: transparent;
+    border: 1px solid #0000002e;
+}
+
+input#exampleInputEmail1 {
+    background: transparent;
+    border: 1px solid #0000002e;
+}
+
+input#exampleInputPassword1 {
+    background: transparent;
+    border: 1px solid #0000002e;
+}
+
+.frm_lable {
+    color: #3e93cc;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.list_blg {
+    display: flex;
+}
+
+.contai {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+
+/* Hide the browser's default checkbox */
+
+.contai input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+
+/* Create a custom checkbox */
+
+.checkmark {
+    position: absolute;
+    top: 6px;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+    border: 1px solid #3e93cc;
+}
+
+
+/* On mouse-over, add a grey background color */
+
+.contai:hover input~.checkmark {
+    background-color: #ccc;
+}
+
+
+/* When the checkbox is checked, add a blue background */
+
+.contai input:checked~.checkmark {
+    background-color: #2196f3;
+}
+
+
+/* Create the checkmark/indicator (hidden when not checked) */
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+
+/* Show the checkmark when checked */
+
+.contai input:checked~.checkmark:after {
+    display: block;
+}
+
+
+/* Style the checkmark/indicator */
+
+.contai .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.choco_menu {
+    width: 26px;
+    position: relative;
+    top: 6px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.more_cls {
+    text-align: right;
+    /* float: right; */
+    display: inline-block;
+    width: 100%;
+    margin-top: 15px;
+    font-weight: 600;
+}
+
+.fnt_env {
+    color: #3e93cc;
+    margin-right: 10px;
+}
+
+.fl_margn {
+    margin-bottom: 10px;
+}
+
+.span_box {
+    min-width: 30% !important;
+    display: inline-flex;
+}
+
+.image_box {
+    display: flex;
+}
+
+.image_box img {
+    padding: 10px;
+    width: 35%;
+    object-fit: cover;
+}
+
+.padding-left-right-0 {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.min-height-card {
+    min-height: 225px;
+}
+
+.nav-tabs .nav-link .active {
+    color: #2f353a !important;
+    background: #fff !important;
+    border-color: #c8ced3 !important;
+    border-bottom-color: #fff !important;
+}
+
+@media (min-width: 320px) and (max-width: 767px) {
+    .image_box img {
+        padding: 10px;
+        width: 33.5%;
+        object-fit: cover;
+    }
+    .profile_back {
+        display: block;
+    }
+    .image_billi {
+        width: 34%;
+        margin: 0 auto;
+        position: relative;
+        display: block;
+        padding-top: 20px;
+    }
+    .img_table_vertical {
+        width: 100%;
+        float: none;
+        padding: 0px 0px 7px 20px;
+    }
+    .app-body.app_cls_sidebar {
+        margin-top: 0px !important;
+    }
+}
+
+.profile-img-container {
+    background: no-repeat;
+    background-size: cover;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.doc-img-container {
+    /* background: no-repeat;
+    background-size: cover;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    height: 100px;
+    border: 5px solid #ccc; */
+    background: no-repeat;
+    background-size: contain;
+    width: 100px;
+    overflow: hidden;
+    position: relative;
+    height: 50px;
+    margin: 0 auto;
+    background-position: center;
+}
+
+.pdf-icon{
+    font-size: 30px;
+}
+
+.doc-file-container {
+    border: 5px solid #ccc;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}
+
+.photo-container-div {
+    border: 5px solid #ccc;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    width: 250px;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.img-up-btn {
+    position: absolute;
+    overflow: hidden;
+    bottom: 10px;
+    right: 10px;
+}
+
+.doc-img-up-btn {
+    position: relative;
+    overflow: hidden;
+    /* bottom: 10px; */
+    /* right: 10px; */
+    float: right;
+}
+
+.doc-img-upload {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    left: 0;
+    top: 0;
+}
+
+.profile-img-upload {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+}
+
+.delete-img-icon {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    top: -8px;
+    padding-top: 0px;
+    text-align: center;
+    font-size: 17px;
+    background-color: black;
+    color: #e4dddd;
+    z-index: 1;
+    border-radius: 50%;
+    right: 8px;
+}
+
+.delete-photo-icon {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    top: -8px;
+    padding-top: 0px;
+    text-align: center;
+    font-size: 17px;
+    background-color: black;
+    color: #e4dddd;
+    z-index: 1;
+    border-radius: 50%;
+    right: -8px;
+}
+
+.film-strip {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.film-strip li {
+    display: inline-block;
+    margin-right: 4px;
+    height: 150px;
+    /* overflow: hidden; */
+}
+
+.details-tab-container .card-body {
+    height: 300px;
+    overflow: auto;
+}
+
+@media (min-width: 320px) and (max-width: 991px) {
+    .nav-link {
+        display: block;
+        padding: 0.5rem 8px;
+    }
+}
+
+.activity-btn {
+    position: fixed;
+    right: 88px;
+    top: 158px;
+    z-index: 1000;
+    transform: rotate(-90deg);
+}
+
+.activity-btn:focus,
+.activity-btn:active {
+    box-shadow: none;
+}
+
+.history-btn {
+    position: fixed;
+    right: 82px;
+    top: 305px;
+    z-index: 1000;
+    transform: rotate(-90deg);
+}
+
+.history-btn:focus,
+.history-btn:active {
+    box-shadow: none;
+}
+
+.notes-btn {
+    position: fixed;
+    right: 51px;
+    top: 420px;
+    z-index: 1000;
+    transform: rotate(-90deg);
+}
+
+.notes-btn:focus,
+.notes-btn:active {
+    box-shadow: none;
+}
+
+tr.highlighted {
+    background: #f7f7f7;
+}
+
+p.highlighted {
+    background: #f7f7f7;
+}
+
+.tableFixHead {
+    overflow-y: auto;
+    height: 225px;
+}
+
+.tableFixHead thead th {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+}
+
+
+/* For drag & drop */
+
+.details-tab-container .card {
+    margin-bottom: 0;
+    box-shadow: none;
+}
+
+.example-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.example-list li {
+    display: table-cell;
+    padding: 4px;
+}
+
+
+/* .example-container {
+    display: flex;
+    flex-wrap: row wrap; 
+     min-width: 600px;
+    max-width: 1200px;
+} */
+
+.example-box {
+    width: 100%;
+    height: 310px;
+    border: solid 1px #ccc;
+    /* font-size: 30pt; */
+    /* font-weight: bold; */
+    color: rgba(0, 0, 0, 0.87);
+    /* cursor: move; */
+    /* display: flex; */
+    overflow: auto;
+    justify-content: center;
+    align-items: center;
+    /* text-align: center; */
+    background: #fff;
+    border-radius: 4px;
+    position: relative;
+    z-index: 1;
+    transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
+    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+
+.example-box:active {
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    opacity: 0.6;
+}
+
+.cdk-drop-list {
+    display: inline-block;
+    /* flex: 1 100%;
+    order: 5; */
+    /* width: 33.33%; */
+    padding-right: 10px;
+    padding-bottom: 10px;
+}
+
+.cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+    opacity: 0.3;
+}
+
+.cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drop-list-dragging {
+    cursor: grabbing;
+    box-shadow: none;
+}
+
+.cdk-drag-handle {
+    cursor: move;
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    z-index: 9990;
+    margin-left: -8px;
+    opacity: 0.5;
+    font-size: 20px;
+}
+
+.constituent-container p {
+    margin-bottom: 0 !important;
+}
+
+.constituent-container span {
+    display: inline !important;
+}
+
+dl {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.photo-upload-btn {
+    cursor: pointer;
+    overflow: hidden;
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+}
+
+.photo-upload-btn input[type="file"] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+}
+
+.photo-holder {
+    padding: 5px;
+    position: relative;
+    display: block;
+    width: 250px;
+    border: 1px solid #ccc;
+    margin: 0 auto;
+}
+
+.hero-photo-holder {
+    padding: 5px;
+    position: relative;
+    display: block;
+    border: 1px solid #ccc;
+    margin: 0 auto;
+    height: 250px;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.photo-gallery {
+    padding: 5px;
+    position: relative;
+    display: inline-block;
+    border: 1px solid #ccc;
+    margin: 0 5px 5px;
+    height: 120px;
+    width: 120px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    outline: 2px solid white;
+    outline-offset: -3px;
+}
+
+.photo-holder img,
+.hero-photo-holder img,
+.photo-gallery img {
+    width: 100%;
+}
+
+.img-thumbnail {
+    padding: 2px;
+    background-color: #ffffff;
+    border: 1px solid #c8ced3;
+    border-radius: 0;
+    max-width: 100%;
+    height: auto;
+}
+
+.delete-thumb {
+    text-align: center;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    cursor: pointer;
+    z-index: 9;
+}
+
+.template-file {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.invalid-control {
+    border-color: red;
+}
+
+i.ui-autocomplete-loader {
+    margin: -44px;
+}
+.link{
+    color: #20a8d8;
+    text-decoration: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+.error {
+    color: red;
+    font-size: 0.6rem;
+    text-align: left;
+}
+/* .table-container{
+    height: calc(100vh - 250px);
+} */
+/* @media (min-width:767px) { 
+    .table-container{
+        height: calc(100vh - 460px);
+    }
+}
+@media (min-width:320px) and (max-width: 767px) { 
+    .table-container{
+        height: calc(100vh - 250px);
+    }
+} */
+
+/* th:after,
+th:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 100%;
+}
+
+th:before {
+  top: -1px;
+  border-top: 1px solid #c8ced3;
+}
+
+th:after {
+  bottom: -1px;
+  border-bottom: 2px solid #c8ced3;
+}
+.table-header-fixed thead th {
+    position: sticky;
+    top: 0px;
+    z-index: 1;
+    background: white;
+} */

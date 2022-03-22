@@ -1,0 +1,1334 @@
+<form autocomplete="off">
+    <div class="row mb-3">
+        <div class="col-md-3 col-sm-4" *ngIf="collectionOptions.length>0">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('collection', $event)" (onDeSelect)="onItemSelect('collection')"
+                    (onSelect)="onItemSelect('collection')" (onSelectAll)="onSelectAll('collection', $event)" [placeholder]="'Select Model Collection'"
+                    [ngModelOptions]="{standalone: true}" [data]="collectionOptions" [(ngModel)]="filterForm.collection" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-4" *ngIf="typeOptions.length>0">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('type', $event)" (onDeSelect)="onItemSelect('type')" (onSelect)="onItemSelect('type')"
+                    (onSelectAll)="onSelectAll('type', $event)" [placeholder]="'Select Type'" [ngModelOptions]="{standalone: true}"
+                    [data]="typeOptions" [(ngModel)]="filterForm.type" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4" *ngIf="filterForm.project_id && filterModelList.length>0">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('model_id', $event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()"
+                    (onSelectAll)="onSelectAll('model_id', $event)" [placeholder]="'Select Model'" [ngModelOptions]="{standalone: true}"
+                    [data]="filterModelList" [(ngModel)]="filterForm.model_id" [settings]="modelDropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('building_type', $event)" (onDeSelect)="onItemSelect('building_type')" (onSelect)="onItemSelect('building_type')"
+                    (onSelectAll)="onSelectAll('building_type', $event)" [placeholder]="'Select Building Type'" [ngModelOptions]="{standalone: true}"
+                    [data]="buildingTypeList" [(ngModel)]="filterForm.building_type" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4" *ngIf="floorList.length>0">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('floor_legal', $event)" (onDeSelect)="onItemSelect('floor_legal')" (onSelect)="onItemSelect('floor_legal')"
+                    (onSelectAll)="onSelectAll('floor_legal', $event)" [placeholder]="'Select Legal Floor'" [ngModelOptions]="{standalone: true}"
+                    [data]="floorList" [(ngModel)]="filterForm.floor_legal" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4" *ngIf="floorList.length>0">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('floor_marketing', $event)" (onDeSelect)="onItemSelect('floor_marketing')" (onSelect)="onItemSelect('floor_marketing')"
+                    (onSelectAll)="onSelectAll('floor_marketing', $event)" [placeholder]="'Select Marketing Floor'" [ngModelOptions]="{standalone: true}"
+                    [data]="floorList" [(ngModel)]="filterForm.floor_marketing" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('beds',$event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()"
+                    (onSelectAll)="onSelectAll('beds',$event)" [placeholder]="'Select Beds'" [ngModelOptions]="{standalone: true}"
+                    [data]="numberFields" [(ngModel)]="filterForm.beds" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('baths',$event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()"
+                    (onSelectAll)="onSelectAll('baths',$event)" [placeholder]="'Select Baths'" [ngModelOptions]="{standalone: true}"
+                    [data]="numberFields" [(ngModel)]="filterForm.baths" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('media',$event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()"
+                    (onSelectAll)="onSelectAll('media',$event)" [placeholder]="'Select Media'" [ngModelOptions]="{standalone: true}"
+                    [data]="numberFields" [(ngModel)]="filterForm.media" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('flex',$event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()"
+                    (onSelectAll)="onSelectAll('flex',$event)" [placeholder]="'Select Flex'" [ngModelOptions]="{standalone: true}"
+                    [data]="numberFields" [(ngModel)]="filterForm.flex" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('ceiling',$event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()"
+                    (onSelectAll)="onSelectAll('ceiling',$event)" [placeholder]="'Select Ceiling'" [ngModelOptions]="{standalone: true}"
+                    [data]="ceilingFields" [(ngModel)]="filterForm.ceiling" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4" *ngIf="this.filterForm.project_id">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('views',$event)" (onSelectAll)="onSelectAll('views',$event)" (onDeSelect)="onItemSelect()"
+                    (onSelect)="onItemSelect()" [placeholder]="'Select Views'" [ngModelOptions]="{standalone: true}" [data]="filterViewsList"
+                    [(ngModel)]="filterForm.views" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4" *ngIf="this.filterForm.project_id">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('spaces',$event)" (onSelectAll)="onSelectAll('spaces',$event)" (onDeSelect)="onItemSelect()"
+                    (onSelect)="onItemSelect()" [placeholder]="'Select Spaces'" [ngModelOptions]="{standalone: true}" [data]="filterSpaceList"
+                    [(ngModel)]="filterForm.spaces" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('status', $event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()"
+                    (onSelectAll)="onSelectAll('status', $event)" [placeholder]="'Select Status'" [ngModelOptions]="{standalone: true}"
+                    [data]="unitStatus" [(ngModel)]="filterForm.status" [settings]="statusDropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4 pb-2">
+            <div class="input-group position-relative">
+                <input class="form-control" name="search" placeholder="Search" style="padding-right: 25px;" type="text" [ngModelOptions]="{standalone: true}"
+                    [(ngModel)]="filterForm.searchText" name="search" (keyup)="doSearch()">
+                <span class="clear-search" *ngIf="isClear" (click)="clearSearch()">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-6">
+            <div class="input-group-btn">
+                <button class="btn btn-danger  mr-2" type="button" (click)="clearFilter()">Clear</button>
+                <button class="btn btn-primary mr-2" type="button" (click)="openAddUnitModal(addUnit)">Add New Unit</button>
+                <button class="btn btn-primary mr-2" type="button" (click)="openImportModal(importModal)">Import</button>
+                <button class="btn btn-primary mr-2" *ngIf="filterForm.project_id" type="button" (click)="openAllocateBrokerModal(allocateBroker)">Allocate Broker</button>
+                <button class="btn btn-primary mr-2" type="button" *ngIf="isBulkAssign" (click)="openAssignDetailModal(assignModal)">Update Status</button>
+
+            </div>
+        </div>
+    </div>
+</form>
+<div class="table-responsive">
+    <table class="table table-striped list_table" style="table-layout: fixed;">
+        <thead>
+            <tr>
+                <th style="width: 50px;">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="th_chk_all" [(ngModel)]="selectedAll"
+                            (change)="selectAll();">
+                        <label class="custom-control-label" for="th_chk_all">&nbsp;</label>
+                    </div>
+                </th>
+                <th width="120px">Image </th>
+                <th width="200px" (click)="setOrder('project_name')">Project
+                    <span *ngIf="order != 'project_name'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'project_name'">▼</span>
+                    <span *ngIf="!reverse && order == 'project_name'">▲</span>
+                </th>
+                <th width="200px" (click)="setOrder('collection')">Model Collection
+                    <span *ngIf="order != 'collection'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'collection'">▼</span>
+                    <span *ngIf="!reverse && order == 'collection'">▲</span>
+                </th>
+                <th width="180px" (click)="setOrder('model_name')">Model Name
+                    <span *ngIf="order != 'model_name'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'model_name'">▼</span>
+                    <span *ngIf="!reverse && order == 'model_name'">▲</span>
+                </th>
+                <th width="120px" (click)="setOrder('type')">Type
+                    <span *ngIf="order != 'type'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'type'">▼</span>
+                    <span *ngIf="!reverse && order == 'type'">▲</span>
+
+                </th>
+                <th width="180px" (click)="setOrder('unit_no')">Unit#
+                    <span *ngIf="order != 'unit_no'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'unit_no'">▼</span>
+                    <span *ngIf="!reverse && order == 'unit_no'">▲</span>
+                </th>
+                <th width="180px" (click)="setOrder('sales_price')">Sale Price
+                    <span *ngIf="order != 'sales_price'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'sales_price'">▼</span>
+                    <span *ngIf="!reverse && order == 'sales_price'">▲</span>
+                </th>
+                <th width="120px" (click)="setOrder('floor_legal')">Legal Floor
+                    <span *ngIf="order != 'floor_legal'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'floor_legal'">▼</span>
+                    <span *ngIf="!reverse && order == 'floor_legal'">▲</span>
+                </th>
+
+                <th width="150px" (click)="setOrder('floor_marketing')">Marketing Floor
+                    <span *ngIf="order != 'floor_marketing'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'floor_marketing'">▼</span>
+                    <span *ngIf="!reverse && order == 'floor_marketing'">▲</span>
+                </th>
+                <th width="120px" (click)="setOrder('unit_no_legal')">Legal Unit
+                    <span *ngIf="order != 'unit_no_legal'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'unit_no_legal'">▼</span>
+                    <span *ngIf="!reverse && order == 'unit_no_legal'">▲</span>
+                </th>
+                <th width="100px" (click)="setOrder('status')">Status
+                    <span *ngIf="order != 'status'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'status'">▼</span>
+                    <span *ngIf="!reverse && order == 'status'">▲</span>
+                </th>
+
+                <th width="200px">Deal</th>
+                <th width="180px">Deal Status</th>
+
+                <th width="90px" (click)="setOrder('bed')">Beds
+                    <span *ngIf="order != 'bed'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'bed'">▼</span>
+                    <span *ngIf="!reverse && order == 'bed'">▲</span>
+                </th>
+                <th width="90px" (click)="setOrder('bath')">Baths
+                    <span *ngIf="order != 'bath'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'bath'">▼</span>
+                    <span *ngIf="!reverse && order == 'bath'">▲</span>
+                </th>
+                <th width="90px" (click)="setOrder('den')">Den
+                    <span *ngIf="order != 'den'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'den'">▼</span>
+                    <span *ngIf="!reverse && order == 'den'">▲</span>
+                </th>
+                <th width="90px" (click)="setOrder('media')">Media
+                    <span *ngIf="order != 'media'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'media'">▼</span>
+                    <span *ngIf="!reverse && order == 'media'">▲</span>
+                </th>
+                <th width="90px" (click)="setOrder('flex')">Flex
+                    <span *ngIf="order != 'flex'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'flex'">▼</span>
+                    <span *ngIf="!reverse && order == 'flex'">▲</span>
+                </th>
+                <th width="120px" (click)="setOrder('area')">Area ({{measureUnits[0]?.area}})
+                    <span *ngIf="order != 'area'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'area'">▼</span>
+                    <span *ngIf="!reverse && order == 'area'">▲</span>
+                </th>
+                <th width="150px" (click)="setOrder('outdoor_area')">Outdoor ({{measureUnits[0]?.area}})
+                    <span *ngIf="order != 'outdoor_area'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'outdoor_area'">▼</span>
+                    <span *ngIf="!reverse && order == 'outdoor_area'">▲</span>
+                </th>
+                <th width="150px" (click)="setOrder('ceiling')">Ceiling ({{measureUnits[0]?.length}})
+                    <span *ngIf="order != 'ceiling'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'ceiling'">▼</span>
+                    <span *ngIf="!reverse && order == 'ceiling'">▲</span>
+                </th>
+                <th width="80px">Parking </th>
+                <th width="80px">Locker </th>
+                <th width="80px">Bicycle </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngIf="unitList.length>0">
+                <tr *ngFor="let item of unitList;let i=index">
+                    <td style="width: 50px;">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" id="select_unit{{i}}" [disabled]="item?.status=='SOLD' || item?.status=='MERGED & RETIRED'" class="custom-control-input"
+                                (change)="onChangeCheckbox($event)" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.select_unit">
+                            <label class="custom-control-label" for="select_unit{{i}}">&nbsp;</label>
+                        </div>
+                    </td>
+                    <td (click)="openUnitDetailsPage(item)">
+                        <div *ngIf="item.logo && item?.logo?.fileType=='IMAGE'" [ngStyle]="{'background-image': 'url(&quot;' + baseUrl+ item?.logo?.url +'/100&quot;)'}"
+                            class="doc-img-container">
+                        </div>
+                        <div class="doc-img-container" *ngIf="item.logo && item?.logo?.fileType=='FILE'">
+                            <pdf-viewer [src]="baseUrl+ item?.logo?.url" style="max-width:100px;display:block;" [autoresize]="true" [original-size]="false"></pdf-viewer>
+                        </div>
+                        <img *ngIf="!item.logo" src="assets/img/no-image.jpg" width="30px" height="30px">
+                    </td>
+                    <td (click)="openUnitDetailsPage(item)">{{item?.project_name}}</td>
+                    <td (click)="openUnitDetailsPage(item)">{{item?.collection}}</td>
+                    <td (click)="openUnitDetailsPage(item)" width="180px">{{item?.model_name}} </td>
+                    <td (click)="openUnitDetailsPage(item)" width="180px">{{item?.type}} </td>
+                    <td (click)="openUnitDetailsPage(item)" width="180px">{{item?.unit_no}}</td>
+                    <td (click)="openUnitDetailsPage(item)" width="180px">{{item?.sales_price | currency:'USD'}}</td>
+                    <td (click)="openUnitDetailsPage(item)" width="180px">{{item?.floor_legal}}</td>
+                    <td (click)="openUnitDetailsPage(item)" width="180px">{{item?.floor_marketing}}</td>
+                    <td (click)="openUnitDetailsPage(item)" width="180px">{{item?.unit_no_legal}}</td>
+                    <td (click)="openUnitDetailsPage(item)" width="180px">
+                        <div *ngIf="item?.status=='AVAILABLE'" class="badge badge-success">{{item?.status}} </div>
+                        <div *ngIf="item?.status=='SOLD'" class="badge badge-danger">{{item?.status}} </div>
+                        <div *ngIf="item?.status !='AVAILABLE' && item?.status !='SOLD'" class="badge badge-warning">{{item?.status ? item?.status :'NA'}} </div>
+                    </td>
+                    <td (click)="openUnitDetailsPage(item)" width="200px" *ngIf="!item?.deal_id || !item?.deal || item?.deal.length==0">-</td>
+                    <td width="200px" *ngIf="item?.deal_id && item?.deal && item?.deal.length>0">
+                        <div class="link" (click)="navigateToDealDetails(item?.deal[0]?._id)" *ngFor="let purchaser of item?.deal[0].purchasers ;let i=index">
+                            {{purchaser?.display_name}}
+                        </div>
+                    </td>
+                    <td (click)="openUnitDetailsPage(item)" width="180px" *ngIf="!item?.deal_id || !item?.deal || item?.deal.length==0">-</td>
+                    <td (click)="openUnitDetailsPage(item)" width="180px" *ngIf="item?.deal_id && item?.deal && item?.deal.length>0">{{item?.deal[0]?.stage}}</td>
+                    <td (click)="openUnitDetailsPage(item)" width="180px">{{item?.bed}}</td>
+                    <td (click)="openUnitDetailsPage(item)" width="180px">{{item?.bath}}</td>
+                    <td (click)="openUnitDetailsPage(item)" width="180px">{{item?.den}}</td>
+                    <td (click)="openUnitDetailsPage(item)" width="180px">{{item?.media}}</td>
+                    <td (click)="openUnitDetailsPage(item)" width="180px">{{item?.flex}}</td>
+                    <td (click)="openUnitDetailsPage(item)" width="180px">{{item?.area}}</td>
+                    <td (click)="openUnitDetailsPage(item)" width="180px">{{item?.outdoor_area}} </td>
+                    <td (click)="openUnitDetailsPage(item)" width="180px">{{item?.ceiling}} </td>
+                    <td (click)="openUnitDetailsPage(item)" width="180px">{{item?.is_parking_eligible?'Yes':'No'}} </td>
+                    <td (click)="openUnitDetailsPage(item)" width="180px">{{item?.is_locker_eligible?'Yes':'No'}} </td>
+                    <td (click)="openUnitDetailsPage(item)" width="180px">{{item?.is_bicycle_eligible?'Yes':'No'}} </td>
+                </tr>
+            </ng-container>
+            <ng-container *ngIf="unitList.length==0">
+                <tr>
+                    <td colspan="4" class="text-center">No unit found</td>
+                    <td colspan="21"></td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+</div>
+
+<div class="row mt-3" *ngIf="paginationObj.total>=20">
+    <div class="col-md-6">
+        <div class="form-group">
+            <span class="float-left" style="width:70px;margin-top: 6px;">Page Size:</span>
+            <span class="float-left" style="width:85px;">
+                <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="pageSize" (change)="setPageSize()">
+                    <option value="">-Select-</option>
+                                        <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </span>
+            <span class="float-left" style="margin-top: 6px !important;margin-left: 16px !important;">{{paginationObj.total}} Record(s) Found</span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <nav>
+            <ul class="pagination">
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.previousPage)">
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(1)">
+                        First
+                    </a>
+                </li>
+                <li class="page-item {{pagination == paginationObj.currentPage?'active':''}}" *ngFor="let pagination of paginationObj.items">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(pagination)">{{pagination}}</a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.totalPages)">
+                        Last
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.nextPage)">
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<ng-template #addUnit>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">{{isEdit?'Edit':'Add'}} Unit</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <div class="row">
+                    <div class="col-md-6" *ngIf="!isEdit">
+                        <div class="form-group">
+                            <label>Builder
+                                <span style="color:red">*</span>:</label>
+                            <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.builder_id" (change)='builderChange()'>
+                                <option value="">Select Builder</option>
+                                <option *ngFor="let item of builderList" value={{item._id}}>{{item.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6" *ngIf="isEdit">
+                        <div class="form-group">
+                            <label>Builder:
+                                <b> {{formDetails.builder_name}}</b>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6" *ngIf="!isEdit">
+                        <div class="form-group">
+                            <label>Project
+                                <span style="color:red">*</span>:</label>
+                            <select class="form-select" (change)='projectChange()' [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.project_id"
+                                [disabled]="builderSelected">
+                                <option value="">Select Project</option>
+                                <option *ngFor="let item of projectList" value={{item._id}}>{{item.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6" *ngIf="isEdit">
+                        <div class="form-group">
+                            <label>Project:
+                                <b> {{formDetails.project_name}}</b>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Model Collection
+                                <span style="color:red">*</span>
+                                :</label>
+                            <select (change)='collectionChange()' [disabled]="!formDetails.project_id" class="form-select" [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="formDetails.collection">
+                                <option value="">Select Collection</option>
+                                <option *ngFor="let item of collectionList" value={{item}}>{{item}}</option>
+                            </select>
+                            <div class="error" *ngIf="formDetails.project_id && modelList.length==0">
+                                No model available
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group autocomplete-container">
+                            <label>Model
+                                <span style="color:red">*</span>:
+                            </label>
+                            <span class="p-fluid">
+                                <p-autoComplete [disabled]="!formDetails.project_id" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.model_id"
+                                    [suggestions]="modelListSuggestions" (onSelect)="onModelSection($event)" (completeMethod)="filterModel($event)"
+                                    field="name" [dropdown]="true">
+                                </p-autoComplete>
+                            </span>
+                            <div class="error" *ngIf="formDetails.project_id && modelList.length==0">
+                                No model available
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Unit Number
+                                <span style="color:red">*</span>:</label>
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.unit_no" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Status :
+                            </label>
+                            <select [disabled]="formDetails?.status == 'SOLD' || formDetails?.status == 'ASSIGNED'" class="form-control" [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="formDetails.status">
+                                <option value="AVAILABLE"> AVAILABLE</option>
+                                <option value="ASSIGNED" *ngIf="formDetails?.status == 'ASSIGNED'"> ASSIGNED</option>
+                                <option value="BROKER ALLOCATED"> BROKER ALLOCATED</option>
+                                <option value="RESERVED">RESERVED</option>
+                                <option value="CORPORATE HOLD">CORPORATE HOLD</option>
+                                <option value="MARKETING HOLD">MARKETING HOLD</option>
+                                <option value="SALES HOLD">SALES HOLD</option>
+                                <option value="SOLD" *ngIf="formDetails?.status == 'SOLD'">SOLD</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4" *ngIf="formDetails?.status == 'RESERVED'">
+                        <div class="form-group">
+                            <label>Reservation Notes:</label>
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.reservation_notes" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-12" *ngIf="formDetails?.status == 'BROKER ALLOCATED'">
+                        <div class="unit-box form-group autocomplete-container mb-2">
+                            <label for="Name">Select Broker : </label>
+                            <p-autoComplete type="search" (onDropdownClick)="onDropdownClick()" [(ngModel)]="formDetails.contact_name" [suggestions]="contactList"
+                                [ngModelOptions]="{standalone: true}" (completeMethod)="searchAuto($event)" field="show_name"></p-autoComplete>
+                        </div>
+                        <div class="error text-right mb-1" *ngIf="contactList.length==0 && autosearchText.length>0">
+                            No results found
+                        </div>
+                        <div class="mb-2 constituent-container" *ngIf="formDetails.contact_name?._id">
+                            <p *ngIf="formDetails.contact_name">
+                                {{formDetails.contact_name?._id}},{{formDetails.contact_name?.display_name}},{{formDetails.contact_name?.emails?.email}},{{formDetails.contact_name?.phones?.number}}
+                            </p>
+                            <p *ngIf="formDetails.contact_name?.addresses">
+                                <span *ngIf="formDetails.contact_name.addresses?.street1">{{formDetails.contact_name.addresses.street1}},</span>
+                                <span *ngIf="formDetails.contact_name.addresses?.street2">{{formDetails.contact_name.addresses.street2}},</span>
+                                <span *ngIf="formDetails.contact_name.addresses?.street3">{{formDetails.contact_name.addresses.street3}},</span>
+                                <span *ngIf="formDetails.contact_name.addresses?.city">{{formDetails.contact_name.addresses.city}},</span>
+                                <span *ngIf="formDetails.contact_name.addresses?.state">{{formDetails.contact_name.addresses.state}},</span>
+                                <span *ngIf="formDetails.contact_name.addaddress?.zip">{{formDetails.contact_name.addresses.zip}},</span>
+                                <span *ngIf="formDetails.contact_name.addresses?.country">{{formDetails.contact_name.addresses.country}}.</span>
+                            </p>
+                            <p>
+                                <span class="text-left" *ngIf="formDetails.contact_name?.spouse_name">Spouse: {{formDetails.contact_name?.spouse_name}}</span>
+                                <span class="text-right" *ngIf="formDetails.contact_name?.territory">Territory: {{formDetails.contact_name?.territory}}</span>
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Bed :
+                            </label>
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.bed" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Bath :
+                            </label>
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.bath" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Den :
+                            </label>
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.den" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Flex :</label>
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.flex" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Media :</label>
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.media" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Ceiling ({{measureUnits[0]?.length}}) :
+                            </label>
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.ceiling" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Area ({{measureUnits[0]?.area}}) :
+                            </label>
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.area" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Outdoor Type :
+                            </label>
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.outdoor_type" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Outdoor Area ({{measureUnits[0]?.area}}) :
+                            </label>
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.outdoor_area" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Floor Marketing :
+                            </label>
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.floor_marketing" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Floor Legal :
+                            </label>
+                            <input type="text" (focusout)="setFloorPosition()" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.floor_legal"
+                                class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Unit Number Marketing :
+                            </label>
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.unit_no_marketing" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Unit Number Legal :
+                            </label>
+                            <input type="text" (focusout)="setUnitPosition()" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.unit_no_legal"
+                                class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label> Building Type:</label>
+                            <select class="form-select" [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="formDetails.building_type">
+                                <option value="">Select Type</option>
+                                <option value="condominium">Condominium</option>
+                                <option value="townhouse">Townhouse</option>
+                                <option value="semi-detached">Semi-Detached</option>
+                                <option value="detached">Detached</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Views:</label>
+                            <ng-multiselect-dropdown (onDeSelectAll)="onViewsSelect('views',$event)" (onSelectAll)="onViewsSelect('views',$event)" [placeholder]="'Select Views'"
+                                [ngModelOptions]="{standalone: true}" [data]="projectViews" [(ngModel)]="formDetails.views" [settings]="dropdownSettings">
+                            </ng-multiselect-dropdown>
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-6" *ngIf=" formDetails?.spaces &&  formDetails?.spaces.length>0"> 
+                        <div class="form-group">
+                            <label>Spaces:</label>
+                            <span *ngFor="let item of formDetails?.spaces; let i=index">
+                                <dl class="row" *ngIf="item?.name">
+                                    <dd class="col-md-5">{{i+1}}. {{item?.name}}</dd>
+                                    <dd class="col-md-5">{{item?.size}} ({{measureUnits[0]?.area}})</dd>
+                                </dl>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Eligible to Buy:</label>
+                            <div class="form-check">
+                                <div class="row">
+                                    <div class="col-md-4" style="padding-top: 15px;">
+                                        <input class="form-check-input" type="checkbox" value="" id="parking" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.is_parking_eligible">
+                                        <label class="form-check-label" for="parking">
+                                            Parking
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4" *ngIf="formDetails.is_parking_eligible">
+                                        <div>Max # of Parkings</div>
+                                        <input type="number" min="1" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.max_parking">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-check">
+                                <div class="row">
+                                    <div class="col-md-4" style="padding-top: 15px;">
+                                        <input class="form-check-input" type="checkbox" value="" id="locker" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.is_locker_eligible">
+                                        <label class="form-check-label" for="locker">
+                                            Locker
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4" *ngIf="formDetails.is_locker_eligible">
+                                        <div>Max # of Lockers</div>
+                                        <input type="number" min="1" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.max_lockers">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-check">
+                                <div class="row">
+                                    <div class="col-md-4" style="padding-top: 15px;">
+                                        <input class="form-check-input" type="checkbox" value="" id="bicycle" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.is_bicycle_eligible">
+                                        <label class="form-check-label" for="bicycle">
+                                            Bicycle Parking
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4" *ngIf="formDetails.is_bicycle_eligible">
+                                        <div>Max # of Bicycle Parking</div>
+                                        <input type="number" min="1" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.max_bicycle">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h5>Building View</h5>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Floor Position
+                                <span style="color:red">*</span>
+                                :</label>
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.building_view_floor" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Unit Position
+                                <span style="color:red">*</span>
+                                :</label>
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.building_view_unit" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Unit Width (px)
+                                <span style="color:red">*</span>
+                                :</label>
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.building_view_width" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Unit Height (px)
+                                <span style="color:red">*</span>
+                                :</label>
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.building_view_height" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col mt-3 ml-3" *ngIf="formDetails.project_id">
+                        <div class="form-group">
+                            <input class="form-check-input" type="checkbox" value="" id="merged-unit" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.merged_unit">
+                            <label class="form-check-label" for="merged-unit">
+                                Merged Unit
+                                <br>(This unit is a result of merging multiple units)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="formDetails.merged_unit && formDetails.project_id">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Merged Unit No
+                                <span style="color:red">*</span>
+                                :</label>
+                            <input type="text" (keyup)="isAvailableUnit1=true" (focusout)="checkUnitExistance(formDetails.unit_1,1)" min="0" [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="formDetails.unit_1" class="form-control">
+                            <div class="error" *ngIf="formDetails.unit_1 && !isAvailableUnit1 && !formDetails.unit_1_id"> This unit is not available</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <input type="text" (keyup)="isAvailableUnit2=true" (focusout)="checkUnitExistance(formDetails.unit_2,2)" min="0" [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="formDetails.unit_2" class="form-control">
+                            <div class="error" *ngIf="formDetails.unit_2  && !isAvailableUnit2 &&  !formDetails.unit_2_id"> This unit is not available</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <input type="text" (keyup)="isAvailableUnit3=true" (focusout)="checkUnitExistance(formDetails.unit_3,3)" min="0" [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="formDetails.unit_3" class="form-control">
+                            <div class="error" *ngIf="formDetails.unit_3  && !isAvailableUnit3 && !formDetails.unit_3_id"> This unit is not available</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="formDetails.project_id && formDetails.property_type && (formDetails.property_type=='townhouse' || formDetails.property_type=='semi-detached' || formDetails.property_type=='detached')">
+                    <div class="col-md-12">
+                        <h5>Lot Information</h5>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Type :
+
+                            </label>
+                            <select class="form-select" (change)="onTypeChange($event.target.value)" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.lot_type">
+                                <option value="">Select lot type</option>
+                                <option *ngFor="let item of lotTypeList" value={{item._id}}>{{item.lot_name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4" *ngIf="formDetails.lot_type">
+                        <div class="form-group">
+                            <label>Width :
+
+                            </label>
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.width" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4" *ngIf="formDetails.lot_type">
+                        <div class="form-group">
+                            <label>Depth :
+
+                            </label>
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.depth" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4" *ngIf="formDetails.lot_type">
+                        <div class="form-group">
+                            <label>Area ({{measureUnits[0]?.area}}) :
+
+                            </label>
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.lot_area" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="col-md-4" *ngIf="formDetails.lot_type">
+                        <div class="form-group mt-4">
+                            <input type="checkbox" value="" id="isIrregular" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.is_irregular">
+                            <label class="form-check-label pl-2" for="isIrregular">
+                                Irregular
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="text-right" *ngIf="formDetails?.status == 'SOLD'">
+            <span style="color:red">Status of the unit is sold</span>
+        </div>
+
+        <div class="text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" *ngIf="!isEdit" (click)="addUnitData()">Add</button>
+        </div>
+    </div>
+</ng-template>
+<ng-template #importModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">Import Units</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form autocomplete="off">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group template-file">
+                        <span style="padding:0 5px">
+                            <i class="far fa-file-excel"></i>
+                        </span>
+                        <label>Download Units Template &nbsp;&nbsp;</label>
+                        <button class="btn btn-sm btn-primary mr-2" type="button" [disabled]="fileChoosed" (click)="downloadTemplatefile()">
+                            <i class="fa fa-download" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Builder
+                            <span style="color:red">*</span>:</label>
+                        <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="importFileModal.builder_id" (change)='getProjectListByBuilder()'>
+                            <option value="">Select Builder</option>
+                            <option *ngFor="let item of builderList" value={{item._id}}>{{item.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Project
+                            <span style="color:red">*</span>:</label>
+                        <select class="form-select" (change)='importProjectChange()' [disabled]="!importFileModal.builder_id" [ngModelOptions]="{standalone: true}"
+                            [(ngModel)]="importFileModal.project_id" id="projectId">
+                            <option value="">Select Project</option>
+                            <option *ngFor="let item of projectListByBuilder" value={{item._id}}>{{item.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Model:
+                            <span style="color:red">*</span>
+                        </label>
+                        <select class="form-select" [disabled]="!importFileModal.project_id" [ngModelOptions]="{standalone: true}" [(ngModel)]="importFileModal.model_id">
+                            <option value="">Select Model</option>
+                            <option *ngFor="let item of modelList" value={{item._id}}>{{item.name}}</option>
+                        </select>
+                    </div>
+                </div> -->
+                <div class="col-md-6 pt-4" *ngIf="allowImport">
+                    <input [disabled]="fileChoosed" accept=".csv" type="file" name="Choose File" (change)="uploadRecordFile($event.target.files)">
+                </div>
+                <div *ngIf="allowImport">
+                    (Help: Make sure your uploaded file is in CSV (comma delimited) format for further help, refer to our document.)
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" [disabled]="fileChoosed" (click)="modalRef.hide();clearUnitBulkEditModal()">Cancel</button>
+            <button type="button" class="btn btn-primary" [disabled]="fileChoosed || !allowImport" (click)="onImportFile(bulkImportModal)">{{ fileChoosed ? 'Please wait..' : 'Import'}}</button>
+        </div>
+    </div>
+</ng-template>
+<ng-template #bulkImportModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">Import Units</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="importUnitsRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body custom-wide-modal-body">
+        <form [formGroup]="unitForm" autocomplete="off" style="height: inherit; overflow-x: scroll;overflow-y: hidden;">
+            <div class="table-responsive mb-2" style="height: -webkit-fill-available;padding-bottom: 1.5rem !important;">
+                <table class="table table-striped table-sm list_table table-header-fixed" style="table-layout: fixed;">
+                    <thead>
+                        <tr>
+                            <th style="width:150px">Unit No
+                                <span style="color:red">*</span>
+
+                            </th>
+                            <th style="width:150px">Legal Unit No </th>
+                            <th style="width:150px">Marketing Floor </th>
+                            <th style="width:150px">Legal Floor </th>
+                            <th style="width:150px">Basic Price</th>
+                            <th style="width:150px">Unit Premium</th>
+                            <th style="width:150px">Floor Premium</th>
+                            <th style="width:150px">Tax</th>
+                            <th style="width:150px">Sales Price</th>
+                            <th style="width:180px">Building View Floor</th>
+                            <th style="width:180px">Building View Unit</th>
+                            <th style="width:180px">Building View Width</th>
+                            <th style="width:180px">Building View Height</th>
+                            <th style="width:180px">Model Collection</th>
+                            <th style="width:180px">Model Name
+                                <span style="color:red">*</span>
+
+                            </th>
+                            <th style="width:150px">Type</th>
+                            <th style="width:150px">Bed</th>
+                            <th style="width:150px">Bath</th>
+                            <th style="width:150px">Den</th>
+                            <th style="width:150px">Media</th>
+                            <th style="width:150px">Flex</th>
+                            <th style="width:150px">Ceiling</th>
+                            <th style="width:150px">Area </th>
+                            <th style="width:150px">Outdoor Type</th>
+                            <th style="width:150px">Outdoor Area</th>
+                            <th style="width:200px">Views</th>
+                            <th style="width:200px">Spaces </th>
+                            <th style="width:200px">Number of Parkings </th>
+                            <th style="width:200px">Number of Lockers</th>
+                            <th style="width:200px">Number of Bicycle</th>
+                            <th style="width:150px">Notes</th>
+                            <th style="width:150px">Atrribute 1</th>
+                            <th style="width:150px">Atrribute 2</th>
+                            <th style="width:150px">Atrribute 3</th>
+                            <th style="width:150px">Atrribute 4</th>
+                            <th style="width:150px">Atrribute 5</th>
+
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="importRecords.length>0" formArrayName="units">
+                        <ng-container *ngFor="let unit of unitForm.get('units')?.controls; let i=index;" [formGroupName]="i">
+                            <tr class="bulk-edit-row">
+                                <td width="100">
+                                    <input type="text" [ngStyle]="{'border-color': unit.get('unit_no').hasError('required') ? 'red':''}" class="form-control form-control-sm"
+                                        name="unit_no" formControlName="unit_no">
+                                    <div *ngIf="unit.get('unit_no').hasError('required')" class="error bulk-edit-error">Unit number is required</div>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control form-control-sm" formControlName="unit_no_legal" class="form-control form-control-sm"
+                                        name="unit_no_legal">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control form-control-sm" formControlName="floor_marketing" class="form-control form-control-sm"
+                                        name="floor_marketing">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control form-control-sm" formControlName="floor_legal" class="form-control form-control-sm"
+                                        name="floor_legal">
+                                </td>
+                                <td>
+                                    <input type="text" [ngStyle]="{'border-color': unit.get('price').hasError('pattern') ? 'red':''}" class="form-control form-control-sm"
+                                        formControlName="price" class="form-control form-control-sm" name="price">
+                                    <div *ngIf="unit.get('price').hasError('pattern')" class="error bulk-edit-error">Enter valid numeric value</div>
+                                </td>
+                                <td>
+                                    <input type="text" [ngStyle]="{'border-color': unit.get('unit_premium').hasError('pattern') ? 'red':''}" class="form-control form-control-sm"
+                                        formControlName="unit_premium" class="form-control form-control-sm" name="unit_premium">
+                                    <div *ngIf="unit.get('unit_premium').hasError('pattern')" class="error bulk-edit-error">Enter valid numeric value</div>
+                                </td>
+                                <td>
+                                    <input type="text" [ngStyle]="{'border-color': unit.get('floor_premium').hasError('pattern') ? 'red':''}" class="form-control form-control-sm"
+                                        formControlName="floor_premium" class="form-control form-control-sm" name="floor_premium">
+                                    <div *ngIf="unit.get('floor_premium').hasError('pattern')" class="error bulk-edit-error">Enter valid numeric value</div>
+                                </td>
+                                <td>
+                                    <input type="text" [ngStyle]="{'border-color': unit.get('tax').hasError('pattern') ? 'red':''}" class="form-control form-control-sm"
+                                        formControlName="tax" class="form-control form-control-sm" name="tax">
+                                    <div *ngIf="unit.get('tax').hasError('pattern')" class="error bulk-edit-error">Enter valid numeric value</div>
+                                </td>
+                                <td>
+                                    <input type="text" [ngStyle]="{'border-color': unit.get('sales_price').hasError('pattern') ? 'red':''}" class="form-control form-control-sm"
+                                        formControlName="sales_price" class="form-control form-control-sm" name="sales_price">
+                                    <div *ngIf="unit.get('sales_price').hasError('pattern')" class="error bulk-edit-error">Enter valid numeric value</div>
+                                </td>
+                                <td>
+                                    <input type="text" [ngStyle]="{'border-color': unit.get('building_view_floor').hasError('pattern') ? 'red':''}" class="form-control form-control-sm"
+                                        formControlName="building_view_floor" class="form-control form-control-sm" name="building_view_floor">
+                                    <div *ngIf="unit.get('building_view_floor').hasError('pattern')" class="error bulk-edit-error">Enter valid numeric value</div>
+                                </td>
+                                <td>
+                                    <input type="text" [ngStyle]="{'border-color': unit.get('building_view_unit').hasError('pattern') ? 'red':''}" class="form-control form-control-sm"
+                                        formControlName="building_view_unit" class="form-control form-control-sm" name="building_view_unit">
+                                    <div *ngIf="unit.get('building_view_unit').hasError('pattern')" class="error bulk-edit-error">Enter valid numeric value</div>
+                                </td>
+                                <td>
+                                    <input type="text" [ngStyle]="{'border-color': unit.get('building_view_width').hasError('pattern') ? 'red':''}" class="form-control form-control-sm"
+                                        formControlName="building_view_width" class="form-control form-control-sm" name="building_view_width">
+                                    <div *ngIf="unit.get('building_view_width').hasError('pattern')" class="error bulk-edit-error">Enter valid numeric value</div>
+                                </td>
+                                <td>
+                                    <input type="text" [ngStyle]="{'border-color': unit.get('building_view_height').hasError('pattern') ? 'red':''}" class="form-control form-control-sm"
+                                        formControlName="building_view_height" class="form-control form-control-sm" name="building_view_height">
+                                    <div *ngIf="unit.get('building_view_height').hasError('pattern')" class="error bulk-edit-error">Enter valid numeric value</div>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control form-control-sm" formControlName="collection" class="form-control form-control-sm"
+                                        name="collection">
+                                </td>
+
+                                <td>
+                                    <input type="text" class="form-control form-control-sm" [ngStyle]="{'border-color': unit.get('model_name').hasError('required') ? 'red':''}"
+                                        formControlName="model_name" class="form-control form-control-sm" name="model_name">
+                                    <div *ngIf="unit.get('model_name').hasError('required')" class="error bulk-edit-error">Model name is required</div>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control form-control-sm" formControlName="type" class="form-control form-control-sm" name="type">
+                                </td>
+
+                                <td>
+                                    <input type="text" [ngStyle]="{'border-color': unit.get('bed').hasError('pattern') ? 'red':''}" class="form-control form-control-sm"
+                                        formControlName="bed" class="form-control form-control-sm" name="bed">
+                                    <div *ngIf="unit.get('bed').hasError('pattern')" class="error bulk-edit-error">Enter valid numeric value</div>
+
+                                </td>
+                                <td>
+                                    <input type="text" [ngStyle]="{'border-color': unit.get('bath').hasError('pattern') ? 'red':''}" class="form-control form-control-sm"
+                                        formControlName="bath" class="form-control form-control-sm" name="bath">
+                                    <div *ngIf="unit.get('bath').hasError('pattern')" class="error bulk-edit-error">Enter valid numeric value</div>
+
+                                </td>
+                                <td>
+                                    <input type="text" [ngStyle]="{'border-color': unit.get('den').hasError('pattern') ? 'red':''}" class="form-control form-control-sm"
+                                        formControlName="den" class="form-control form-control-sm" name="den">
+                                    <div *ngIf="unit.get('den').hasError('pattern')" class="error bulk-edit-error">Enter valid numeric value</div>
+
+                                </td>
+                                <td>
+                                    <input type="text" [ngStyle]="{'border-color': unit.get('media').hasError('pattern') ? 'red':''}" class="form-control form-control-sm"
+                                        formControlName="media" class="form-control form-control-sm" name="media">
+                                    <div *ngIf="unit.get('media').hasError('pattern')" class="error bulk-edit-error">Enter valid numeric value</div>
+                                </td>
+                                <td>
+                                    <input type="text" [ngStyle]="{'border-color': unit.get('flex').hasError('pattern') ? 'red':''}" class="form-control form-control-sm"
+                                        formControlName="flex" class="form-control form-control-sm" name="flex">
+                                    <div *ngIf="unit.get('flex').hasError('pattern')" class="error bulk-edit-error">Enter valid numeric value</div>
+                                </td>
+                                <td>
+                                    <input type="text" [ngStyle]="{'border-color': unit.get('ceiling').hasError('pattern') ? 'red':''}" class="form-control form-control-sm"
+                                        formControlName="ceiling" class="form-control form-control-sm" name="ceiling">
+                                    <div *ngIf="unit.get('ceiling').hasError('pattern')" class="error bulk-edit-error">Enter valid numeric value</div>
+                                </td>
+                                <td>
+                                    <input type="text" [ngStyle]="{'border-color': unit.get('area').hasError('pattern') ? 'red':''}" class="form-control form-control-sm"
+                                        formControlName="area" class="form-control form-control-sm" name="area">
+                                    <div *ngIf="unit.get('area').hasError('pattern')" class="error bulk-edit-error">Enter valid numeric value</div>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control form-control-sm" formControlName="outdoor_type" class="form-control form-control-sm"
+                                        name="outdoor_type">
+                                </td>
+                                <td>
+                                    <input type="text" [ngStyle]="{'border-color': unit.get('outdoor_area').hasError('pattern') ? 'red':''}" class="form-control form-control-sm"
+                                        formControlName="outdoor_area" class="form-control form-control-sm" name="outdoor_area">
+                                    <div *ngIf="unit.get('outdoor_area').hasError('pattern')" class="error bulk-edit-error">Enter valid numeric value</div>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control form-control-sm" formControlName="views" class="form-control form-control-sm" name="views">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control form-control-sm" formControlName="spaces" class="form-control form-control-sm" name="spaces">
+                                </td>
+                                <td>
+                                    <input type="text" [ngStyle]="{'border-color': unit.get('max_parking').hasError('pattern') ? 'red':''}" class="form-control form-control-sm"
+                                        formControlName="max_parking" class="form-control form-control-sm" name="max_parking">
+                                    <div *ngIf="unit.get('max_parking').hasError('pattern')" class="error bulk-edit-error">Enter valid numeric value</div>
+                                </td>
+                                <td>
+                                    <input type="text" [ngStyle]="{'border-color': unit.get('max_lockers').hasError('pattern') ? 'red':''}" class="form-control form-control-sm"
+                                        formControlName="max_lockers" class="form-control form-control-sm" name="max_lockers">
+                                    <div *ngIf="unit.get('max_lockers').hasError('pattern')" class="error bulk-edit-error">Enter valid numeric value</div>
+                                </td>
+                                <td>
+                                    <input type="text" [ngStyle]="{'border-color': unit.get('max_bicycle').hasError('pattern') ? 'red':''}" class="form-control form-control-sm"
+                                        formControlName="max_bicycle" class="form-control form-control-sm" name="max_bicycle">
+                                    <div *ngIf="unit.get('max_bicycle').hasError('pattern')" class="error bulk-edit-error">Enter valid numeric value</div>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control form-control-sm" formControlName="notes" class="form-control form-control-sm" name="notes">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control form-control-sm" formControlName="atrribute_1" class="form-control form-control-sm"
+                                        name="atrribute_1">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control form-control-sm" formControlName="atrribute_2" class="form-control form-control-sm"
+                                        name="atrribute_2">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control form-control-sm" formControlName="atrribute_3" class="form-control form-control-sm"
+                                        name="atrribute_3">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control form-control-sm" formControlName="atrribute_4" class="form-control form-control-sm"
+                                        name="atrribute_4">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control form-control-sm" formControlName="atrribute_5" class="form-control form-control-sm"
+                                        name="atrribute_5">
+                                </td>
+
+                                <!-- <td style="width:120px">
+                                        <select class="form-control form-control-sm" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.status" id="bicycle_status{{i}}"
+                                            name="bicycle_status">
+                                            <option value="">Select status</option>
+                                            <option value="AVAILABLE">Available</option>
+                                            <option value="MARKETING HOLD">MARKETING HOLD</option>
+                                            <option value="SALES HOLD">SALES HOLD</option>
+                                            <option value="SOLD">Sold</option>
+                                        </select>
+                                    </td> -->
+
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                    <tbody *ngIf="importRecords?.length==0">
+                        <tr>
+                            <td colspan="4" class="text-center">No modules found</td>
+                            <td colspan="32"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+    <div style="padding: 10px; border-top: 1px solid #c8ced3;">
+        <div class="row">
+            <div class="col-md-12 text-right">
+                <button class="btn btn-sm btn-danger mr-2" (click)="importUnitsRef.hide()">Close</button>
+                <button class="btn btn-sm btn-primary" [disabled]="unitForm.invalid" (click)="addImportedFinalRecord()">Add</button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<ng-template #allocateBroker>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">Broker Allocation</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body custom-wide-modal-body">
+        <form autocomplete="off" style="height: inherit;">
+            <div class="row">
+                <label for="Name" class="col-md-3 col-sm-6 col-form-label">Project :
+                    <b> {{formDetails?.project_name}}</b>
+                </label>
+
+                <label for="Name" class="col-md-1 col-sm-4 col-form-label">Broker
+                    <span style="color:red">*</span>:</label>
+                <div class="col-md-5">
+                    <div class="form-group unit-box autocomplete-container mb-2">
+                        <!-- <p-autoComplete (onDropdownClick)="onDropdownClick()" [(ngModel)]="formDetails.broker_name" [suggestions]="brokerList" [ngModelOptions]="{standalone: true}"
+                            (completeMethod)="getBrokerList($event)" field="show_name"></p-autoComplete> -->
+                        <p-autoComplete [group]="true" [suggestions]="filteredBrokerGroups" [(ngModel)]="formDetails.broker_name" [ngModelOptions]="{standalone: true}"
+                            (completeMethod)="filterGroupedBroker($event)" field="label" [dropdown]="false">
+                            <ng-template let-group pTemplate="group">
+                                <div class="p-d-flex p-ai-center">
+                                    <span>{{group?.label}}</span>
+                                </div>
+                            </ng-template>
+                        </p-autoComplete>
+                    </div>
+                    <div class="error text-right mb-1" *ngIf="filteredBrokerGroups.length==0 && brokerSearchQuery.length>0">
+                        No results found
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <button class="btn btn-danger mr-2" *ngIf="formDetails.broker_name" type="button" (click)="clearBroker()">Clear</button>
+                    <button class="btn btn-primary " type="button" (click)="openNewContact()">New Contact</button>
+                </div>
+            </div>
+            <div class="table-responsive mb-2" style="height: inherit;padding-bottom: 5rem !important;">
+                <table class="table table-striped table-sm list_table table-header-fixed" style="table-layout: fixed;">
+                    <thead>
+                        <tr>
+                            <th style="padding-left: 10px; width: 50px;">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk_all" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedAllUnit"
+                                        (change)="selectAllUnits()">
+                                    <label class="custom-control-label" for="chk_all">&nbsp;</label>
+                                </div>
+                            </th>
+                            <th style="width:100px">Floor</th>
+                            <th style="width:100px">Suite </th>
+                            <th style="width:150px">Unit Type </th>
+                            <th style="width:250px">View </th>
+                            <th style="width:200px">Model</th>
+                            <th style="width:200px">Unit price</th>
+                            <th style="width:150px">Status</th>
+
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="allUnitList.length>0">
+                        <ng-container *ngFor="let unit of allUnitList; let i=index;">
+                            <tr>
+                                <td style="width: 50px;">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" id="is_select{{i}}" class="custom-control-input" [ngModelOptions]="{standalone: true}" [(ngModel)]="unit.is_selected"> &nbsp;
+                                        <label class="custom-control-label" for="is_select{{i}}">&nbsp;</label>
+                                    </div>
+                                </td>
+                                <td>
+                                    {{unit?.floor_legal}}
+                                </td>
+                                <td>
+                                    {{unit?.unit_no}}
+                                </td>
+                                <td>
+                                    {{unit?.type}}
+                                </td>
+                                <td>
+                                    {{unit?.views}}
+                                </td>
+                                <td>
+                                    {{unit?.model_name}}
+                                </td>
+                                <td>
+                                    {{unit?.price | currency:'USD'}}
+                                </td>
+                                <td>
+                                    <div *ngIf="unit?.status=='AVAILABLE'" class="badge badge-success">
+                                        {{unit?.status}}
+                                    </div>
+                                    <div *ngIf="unit?.status !='AVAILABLE' && item?.status !='SOLD'" class="badge badge-warning">
+                                        {{unit?.status ? unit?.status :'NA'}}
+                                    </div>
+                                </td>
+                                <!-- <td width="100px" *ngIf="unit?.status=='SOLD'" class="badge badge-danger">{{unit?.status}} </td>-->
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                    <tbody *ngIf="allUnitList?.length==0">
+                        <tr>
+                            <td colspan="8">No Units Found</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+    <div style="padding: 10px; border-top: 1px solid #c8ced3;">
+        <div class="row">
+            <div class="col-md-12 text-right">
+                <button class="btn btn-sm btn-danger mr-2" (click)="modalRef.hide()">Close</button>
+                <button class="btn btn-sm btn-primary" (click)="addAllocatedBroker()">Allocate</button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #assignModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Update Status</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label>Status: </label>
+                        <select class="form-select form-select-sm" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.status" name="status">
+                            <option value=""> Select Status</option>
+                            <option value="AVAILABLE"> AVAILABLE</option>
+                            <option value="ASSIGNED"> ASSIGNED</option>
+                            <option value="BROKER ALLOCATED"> BROKER ALLOCATED</option>
+                            <option value="RESERVED">RESERVED</option>
+                            <option value="CORPORATE HOLD">CORPORATE HOLD</option>
+                            <option value="MARKETING HOLD">MARKETING HOLD</option>
+                            <option value="SALES HOLD">SALES HOLD</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updateUnit()">Update</button>
+        </div>
+    </div>
+</ng-template>

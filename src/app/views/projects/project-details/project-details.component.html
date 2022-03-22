@@ -1,0 +1,1650 @@
+<div class="animated fadeIn">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="const_hd">
+                    <button class="btn btn-primary btn-sm mr-2" (click)="goToProjectList()">
+                        <i class="fa fa-arrow-left" aria-hidden="true"></i> &nbsp; Back
+                    </button> Project Details: {{projectDetailsObj?.name}}
+                    <button style="float: right;" class="btn btn-danger mt-2" type="button" (click)="deleteProject()">
+                        <i class="fa fa-trash" style="font-size:12px;float: right;"></i>
+                    </button>
+
+                </div>
+            </div>
+        </div>
+        <div class="content-wrap">
+            <div class="row">
+                <div class="col-lg-12 col-xs-12">
+                    <ngb-tabset (tabChange)="doTabFunctions($event)" [activeId]="defaultActiveTab">
+                        <ngb-tab id="generalTab" title="General">
+                            <ng-template ngbTabContent>
+                                <div class="project-details">
+                                    <div class="row">
+                                        <div class="col-md-4 mb-2 padding-right-2">
+                                            <div class="card">
+                                                <div class="card-body text-center" style="height: 370px;">
+                                                    <div class="thumb-img" *ngIf="projectDetailsObj?.logo" [ngStyle]="{'background-image': 'url(&quot;'+ baseUrl+ projectDetailsObj.logo.url +'/400&quot;)'}">
+                                                        <button type="button" class="btn btn-sm btn-primary logo-upload-btn">
+                                                            <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                                                            <input type="file" accept="image/*" (change)="uploadProjectLogo($event)">
+                                                        </button>
+                                                    </div>
+                                                    <div class="thumb-img" *ngIf="!projectDetailsObj?.logo" [ngStyle]="{'background-image': 'url(&quot;assets/img/no-image.jpg&quot;)'}">
+                                                        <button type="button" class="btn btn-sm btn-primary logo-upload-btn">
+                                                            <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                                                            <input type="file" accept="image/*" (change)="uploadProjectLogo($event)">
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8 mb-2 padding-left-1">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <h4>Basic Information
+                                                                <button style="float: right;" type="button" class="btn btn-primary" (click)="openEditBasicModal(basicModal)">
+                                                                    <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                                                                </button>
+                                                            </h4>
+                                                            <!-- <h4>
+                                                                <a href="javascript:void(0);" style="text-decoration: none;">
+                                                                    {{projectDetailsObj.name}}
+                                                                </a>
+                                                            </h4> -->
+                                                            <dl class="row">
+                                                                <dd class="col-md-5">Builder Name</dd>
+                                                                <dd class="col-md-7">: {{projectDetailsObj?.builder_name}}</dd>
+                                                                <dd class="col-md-5">Name</dd>
+                                                                <dd class="col-md-7">: {{projectDetailsObj?.name}}</dd>
+                                                                <ng-container *ngIf="projectDetailsObj?.project_code">
+                                                                    <dd class="col-md-5">Project Code</dd>
+                                                                    <dd class="col-md-7">: {{projectDetailsObj?.project_code}}</dd>
+                                                                </ng-container>
+                                                                <ng-container *ngIf="projectDetailsObj?.subdivision_name">
+                                                                    <dd class="col-md-5">Subdivision</dd>
+                                                                    <dd class="col-md-7">: {{projectDetailsObj?.subdivision_name}}</dd>
+                                                                </ng-container>
+                                                                <ng-container *ngIf="projectDetailsObj?.contact_name">
+                                                                    <dd class="col-md-5">Contact Name</dd>
+                                                                    <dd class="col-md-7">: {{projectDetailsObj?.contact_name}}</dd>
+                                                                </ng-container>
+                                                                <ng-container *ngIf="projectDetailsObj?.contact_email">
+                                                                    <dd class="col-md-5">Email</dd>
+                                                                    <dd class="col-md-7">: {{projectDetailsObj?.contact_email}}</dd>
+                                                                </ng-container>
+                                                                <ng-container *ngIf="projectDetailsObj?.contact_phone?.formatted">
+                                                                    <dd class="col-md-5">Phone</dd>
+                                                                    <dd class="col-md-7">: {{projectDetailsObj?.contact_phone?.formatted}}</dd>
+                                                                </ng-container>
+                                                                <ng-container *ngIf="projectDetailsObj?.contact_website">
+                                                                    <dd class="col-md-5">Website</dd>
+                                                                    <dd class="col-md-5">:
+                                                                        <a href="{{projectDetailsObj?.contact_website}}" target="_blank">{{projectDetailsObj?.contact_website}}</a>
+                                                                    </dd>
+                                                                </ng-container>
+                                                                <ng-container *ngIf="projectDetailsObj?.phase">
+                                                                    <dd class="col-md-5">Phase</dd>
+                                                                    <dd class="col-md-7">: {{projectDetailsObj?.phase}}</dd>
+                                                                </ng-container>
+                                                                <ng-container *ngIf="projectDetailsObj?.status">
+                                                                    <dd class="col-md-5">Status</dd>
+                                                                    <dd class="col-md-7">: {{projectDetailsObj?.status}}</dd>
+                                                                </ng-container>
+                                                                <ng-container *ngIf="projectDetailsObj?.construction_start_date">
+                                                                    <dd class="col-md-5">Construction Start Date</dd>
+                                                                    <dd class="col-md-7">: {{projectDetailsObj?.construction_start_date | date:'yyyy-MM-dd'}}</dd>
+                                                                </ng-container>
+                                                                <ng-container *ngIf="projectDetailsObj?.estimated_completion_date">
+                                                                    <dd class="col-md-5">Estimated Completion Date</dd>
+                                                                    <dd class="col-md-7">: {{projectDetailsObj?.estimated_completion_date | date:'yyyy-MM-dd'}}</dd>
+                                                                </ng-container>
+                                                                <!-- <ng-container *ngIf="projectDetailsObj?.default_cooling_period">
+                                                                    <dd class="col-md-5">Default Cooling Period (days)</dd>
+                                                                    <dd class="col-md-7">: {{projectDetailsObj?.default_cooling_period}}</dd>
+                                                                </ng-container> -->
+                                                                <dd class="col-md-5" *ngIf="projectDetailsObj?.project_address?.street1 || projectDetailsObj?.project_address?.street2|| projectDetailsObj?.project_address?.city||projectDetailsObj?.project_address?.state ||projectDetailsObj?.project_address?.zip || projectDetailsObj?.project_address?.country">Project Address</dd>
+                                                                <dd class="col-md-7">
+                                                                    <span *ngIf="projectDetailsObj?.project_address?.street1">: {{projectDetailsObj?.project_address?.street1}},</span>
+                                                                    <span *ngIf="projectDetailsObj?.project_address?.street2">&nbsp; {{projectDetailsObj?.project_address?.street2}},</span>
+                                                                    <br>
+                                                                    <span *ngIf="projectDetailsObj?.project_address?.city">&nbsp; {{projectDetailsObj?.project_address?.city}},</span>
+                                                                    <span *ngIf="projectDetailsObj?.project_address?.state">&nbsp; {{projectDetailsObj?.project_address?.state}},</span>
+                                                                    <br>
+                                                                    <span *ngIf="projectDetailsObj?.project_address?.zip">&nbsp; {{projectDetailsObj?.project_address?.zip}},</span>
+                                                                    <span *ngIf="projectDetailsObj?.project_address?.country">&nbsp; {{projectDetailsObj?.project_address?.country}}.</span>
+                                                                </dd>
+                                                                <dd class="col-md-5" *ngIf="projectDetailsObj?.office_address?.street1 || projectDetailsObj?.office_address?.street2|| projectDetailsObj?.office_address?.city||projectDetailsObj?.office_address?.state ||projectDetailsObj?.office_address?.zip || projectDetailsObj?.office_address?.country">Office Address</dd>
+                                                                <dd class="col-md-7">
+                                                                    <span *ngIf="projectDetailsObj?.office_address?.street1">: {{projectDetailsObj?.office_address?.street1}},</span>
+                                                                    <span *ngIf="projectDetailsObj?.office_address?.street2">&nbsp; {{projectDetailsObj?.office_address?.street2}},</span>
+                                                                    <br>
+                                                                    <span *ngIf="projectDetailsObj?.office_address?.city">&nbsp; {{projectDetailsObj?.office_address?.city}},</span>
+                                                                    <span *ngIf="projectDetailsObj?.office_address?.state">&nbsp; {{projectDetailsObj?.office_address?.state}},</span>
+                                                                    <br>
+                                                                    <span *ngIf="projectDetailsObj?.office_address?.zip">&nbsp; {{projectDetailsObj?.office_address?.zip}},</span>
+                                                                    <span *ngIf="projectDetailsObj?.office_address?.country">&nbsp; {{projectDetailsObj?.office_address?.country}}.</span>
+                                                                </dd>
+                                                            </dl>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-2 padding-right-2">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <h4>Description
+                                                                <button style="float: right;" type="button" class="btn btn-primary mr-2" (click)="openEditDescriptionModal(descriptionModal)">
+                                                                    <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                                                                </button>
+                                                            </h4>
+                                                            <div [innerHtml]="projectDetailsObj.description"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-2 padding-left-1">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <h4>Unit/Lot Information
+                                                                <button style="float: right;" type="button" class="btn btn-primary mr-2" (click)="openEditUniInfoModal(additionalModal)">
+                                                                    <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                                                                </button>
+                                                            </h4>
+                                                            <dl class="row mb-0">
+                                                                <!-- <dd class="col-md-6">Type</dd>
+                                                                <dd class="col-md-6" style="text-transform: capitalize;">: {{projectDetailsObj.type}}</dd>
+                                                                <dd class="col-md-6">Total Number of Units/Lots</dd>
+                                                                <dd class="col-md-6">: {{projectDetailsObj.no_of_lots}}</dd>
+                                                                <dd class="col-md-6">Total Number Floors</dd>
+                                                                <dd class="col-md-6">: {{projectDetailsObj.no_of_floors}}</dd> -->
+                                                                <dd class="col-md-12 mb-0">Condominium</dd>
+                                                                <dd class="col-md-12 mb-0">
+                                                                    <dl class="row pl-5 mb-0">
+                                                                        <dd class="col-md-6">Total Units : {{projectDetailsObj.additional_info ? projectDetailsObj.additional_info[0] ? projectDetailsObj.additional_info[0].total_units : '':'' }} </dd>
+                                                                        <dd class="col-md-6">Total Floors :{{projectDetailsObj.additional_info ? projectDetailsObj.additional_info[0] ? projectDetailsObj.additional_info[0].total_floors : '':'' }} </dd>
+                                                                    </dl>
+                                                                </dd>
+
+                                                                <dd class="col-md-12 mb-0">Townhouses</dd>
+                                                                <dd class="col-md-12 mb-0">
+                                                                    <dl class="row pl-5 mb-0">
+                                                                        <dd class="col-md-6">Total Buildings : {{projectDetailsObj.additional_info ? projectDetailsObj.additional_info[1] ? projectDetailsObj.additional_info[1].total_buildings : '':'' }} </dd>
+                                                                        <dd class="col-md-6">Total Homes : {{projectDetailsObj.additional_info ? projectDetailsObj.additional_info[1] ? projectDetailsObj.additional_info[1].total_homes : '':'' }}</dd>
+                                                                    </dl>
+                                                                </dd>
+                                                                <dd class="col-md-12 mb-0">Semi-Detached Homes</dd>
+                                                                <dd class="col-md-12 mb-0">
+                                                                    <dl class="row pl-5 mb-0">
+                                                                        <dd class="col-md-6">Total Lots : {{projectDetailsObj.additional_info ? projectDetailsObj.additional_info[2] ? projectDetailsObj.additional_info[2].total_units : '':'' }} </dd>
+                                                                        <dd class="col-md-6">Total Homes : {{projectDetailsObj.additional_info ? projectDetailsObj.additional_info[2] ? projectDetailsObj.additional_info[2].total_homes : '':'' }}</dd>
+                                                                    </dl>
+                                                                </dd>
+                                                                <dd class="col-md-12 mb-0 ">Detached Homes</dd>
+                                                                <dd class="col-md-12 mb-0">
+                                                                    <dl class="row pl-5 mb-0">
+                                                                        <dd class="col-md-6">Total Lots : {{projectDetailsObj.additional_info ? projectDetailsObj.additional_info[3] ? projectDetailsObj.additional_info[3].total_units : '':'' }} </dd>
+                                                                    </dl>
+                                                                </dd>
+                                                            </dl>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-2 padding-right-2">
+                                            <div class="card">
+                                                <div class="card-body" style="max-height: 350px">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <h4>Spaces
+                                                                <button style="float: right;" type="button" class="btn btn-primary mr-2" (click)="openEditSpaceModal(spaceModal)">
+                                                                    <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                                                                </button>
+                                                            </h4>
+                                                                <p *ngFor="let item of projectDetailsObj.spaces">{{item}}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-2 padding-left-1">
+                                            <div class="card">
+                                                <div class="card-body" style="max-height: 350px">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <h4>Views
+                                                                <button style="float: right;" type="button" class="btn btn-primary mr-2" (click)="openEditViewModal(viewModal)">
+                                                                    <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                                                                </button>
+                                                            </h4>
+                                                            <p *ngFor="let item of projectDetailsObj.views">{{item}}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-2 padding-right-2">
+                                            <div class="card">
+                                                <div class="card-body text-center" style="height: 300px">
+                                                    <h4 class="pt-3 mb-2">Purchaser Portal Home Logo</h4>
+                                                    <div class="home-logo-img" *ngIf="projectDetailsObj?.portal_home_logo" [ngStyle]="{'background-image': 'url(&quot;'+ baseUrl+ projectDetailsObj.portal_home_logo.url +'/400&quot;)'}">
+                                                        <button type="button" class="btn btn-sm btn-primary logo-upload-btn">
+                                                            <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                                                            <input type="file" accept="image/*" (change)="uploadPurchaserHomeLogo($event)">
+                                                        </button>
+                                                    </div>
+                                                    <div class="home-logo-img" *ngIf="!projectDetailsObj?.portal_home_logo" [ngStyle]="{'background-image': 'url(&quot;assets/img/no-image.jpg&quot;)'}">
+                                                        <button type="button" class="btn btn-sm btn-primary logo-upload-btn">
+                                                            <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                                                            <input type="file" accept="image/*" (change)="uploadPurchaserHomeLogo($event)">
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ngb-tab>
+                        <ngb-tab id="featureTab" title="Features and Finishes">
+                            <ng-template ngbTabContent>
+                                <div class="card mt-2">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4>Features and Finishes Description
+                                                    <button style="float: right;" type="button" class="btn btn-primary mr-2" (click)="openEditFeatureModal(featureFinishesModal)">
+                                                        <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                                                    </button>
+                                                </h4>
+                                                <div [innerHtml]="projectDetailsObj.features"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row pt-2">
+                                    <div class="col-md-12">
+
+                                        <button class="btn btn-sm btn-primary doc-img-up-btn" style="float: right;" type="button">Upload Documents
+                                            <input class="doc-img-upload" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" type="file" (change)="uploadDocument($event.target.files)">
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive ng-tns-c2-3 ng-star-inserted mt-2">
+                                            <table class="table table-sm table-borderless" style="table-layout: fixed;">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="text-align: left;" width="40px"></th>
+                                                        <th style="text-align: left;" width="200px">Name</th>
+                                                        <th style="text-align: left;" width="100px">Size</th>
+                                                        <th width="200px"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <ng-container *ngIf="getFeaturesDocument.length>0">
+                                                        <tr *ngFor="let item of getFeaturesDocument">
+                                                            <td style="text-align: left;" [ngSwitch]="item.file_type">
+                                                                <span style="padding:0 5px;font-size: x-large" *ngSwitchCase="'pdf'">
+                                                                    <i class="far fa-file-pdf"></i>
+                                                                </span>
+                                                                <span style="padding:0 5px;font-size: x-large" *ngSwitchCase="'doc'">
+                                                                    <i class="far fa-file-word"></i>
+                                                                </span>
+                                                                <span style="padding:0 5px;font-size: x-large" *ngSwitchCase="'docx'">
+                                                                    <i class="far fa-file-word"></i>
+                                                                </span>
+                                                                <span style="padding:0 5px;font-size: x-large" *ngSwitchCase="'jpg'">
+                                                                    <i class="far fa-file-image"></i>
+                                                                </span>
+                                                                <span style="padding:0 5px;font-size: x-large" *ngSwitchCase="'jpeg'">
+                                                                    <i class="far fa-file-image"></i>
+                                                                </span>
+                                                                <span style="padding:0 5px;font-size: x-large" *ngSwitchCase="'png'">
+                                                                    <i class="far fa-file-image"></i>
+                                                                </span>
+                                                                <span style="padding:0 5px;font-size: x-large" *ngSwitchCase="'xlsx'">
+                                                                    <i class="far fa-file-excel"></i>
+                                                                </span>
+                                                                <span style="padding:0 5px;font-size: x-large" *ngSwitchCase="'pptx'">
+                                                                    <i class="far fa-file-powerpoint"></i>
+                                                                </span>
+                                                                <span style="padding:0 5px;font-size: x-large" *ngSwitchDefault>
+                                                                    <i class="fa fa-file"></i>
+                                                                </span>
+                                                            </td>
+                                                            <td style="text-align: left;">
+                                                                {{item?.name}}
+                                                            </td>
+                                                            <td style="text-align: left;"> {{item?.filesize}}</td>
+                                                            <td class="text-right">
+                                                                <button class="btn btn-sm btn-primary mr-2" type="button" (click)="openFeaturesDocumentModal(openFeaturesDocument,item)">
+                                                                    <i class="fas fa-eye" aria-hidden="true"></i>
+                                                                </button>
+                                                                <button class="btn btn-sm btn-danger mr-2" type="button" (click)="deleteFeatureDocument(item)">
+                                                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="getFeaturesDocument.length==0">
+                                                        <tr>
+                                                            <td class="text-center" colspan="5"> No document found</td>
+                                                        </tr>
+                                                    </ng-container>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ngb-tab>
+                        <ngb-tab id="amenitiesTab" title="Amenities">
+                            <ng-template ngbTabContent>
+                                <app-amenities [projectData]="projectDetailsObj" (updateProjectEvent)="onUpdateAmenities($event)"></app-amenities>
+                            </ng-template>
+                        </ngb-tab>
+                        <ngb-tab id="documentsTab" title="Documents">
+                            <ng-template ngbTabContent>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <h5>Legal Documents</h5>
+                                                <div>(Help: Please upload Word Templates) </div>
+                                            </div>
+                                            <div class="col-md-2 text-right">
+                                                <button class="btn btn-sm btn-primary" type="button" (click)="openAddDocumentModal(addDocument,'legal')"> Add</button>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="table-responsive ng-tns-c2-3 ng-star-inserted mt-2">
+                                                    <table class="table table-sm table-borderless" style="table-layout: fixed;">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="text-align: left;" width="25px"></th>
+                                                                <th style="text-align: left;" width="200px">Name</th>
+                                                                <th style="text-align: left;" width="100px">Size</th>
+                                                                <th style="text-align: left;" width="150px">Active
+
+                                                                </th>
+                                                                <th width="200px"></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <ng-container *ngIf="legalDocumentList.length>0">
+                                                                <tr *ngFor="let item of legalDocumentList">
+                                                                    <td style="text-align: left;" [ngSwitch]="item.file_type">
+                                                                        <span style="padding:0 5px;font-size: x-large" *ngSwitchCase="'pdf'">
+                                                                            <i class="far fa-file-pdf"></i>
+                                                                        </span>
+                                                                        <span style="padding:0 5px;font-size: x-large" *ngSwitchCase="'doc'">
+                                                                            <i class="far fa-file-word"></i>
+                                                                        </span>
+                                                                        <span style="padding:0 5px;font-size: x-large" *ngSwitchCase="'docx'">
+                                                                            <i class="far fa-file-word"></i>
+                                                                        </span>
+                                                                        <span style="padding:0 5px;font-size: x-large" *ngSwitchCase="'jpg'">
+                                                                            <i class="far fa-file-image"></i>
+                                                                        </span>
+                                                                        <span style="padding:0 5px;font-size: x-large" *ngSwitchCase="'jpeg'">
+                                                                            <i class="far fa-file-image"></i>
+                                                                        </span>
+                                                                        <span style="padding:0 5px;font-size: x-large" *ngSwitchCase="'png'">
+                                                                            <i class="far fa-file-image"></i>
+                                                                        </span>
+                                                                        <span style="padding:0 5px;font-size: x-large" *ngSwitchCase="'xlsx'">
+                                                                            <i class="far fa-file-excel"></i>
+                                                                        </span>
+                                                                        <span style="padding:0 5px;font-size: x-large" *ngSwitchCase="'pptx'">
+                                                                            <i class="far fa-file-powerpoint"></i>
+                                                                        </span>
+                                                                        <span style="padding:0 5px;font-size: x-large" *ngSwitchDefault>
+                                                                            <i class="fa fa-file"></i>
+                                                                        </span>
+                                                                    </td>
+                                                                    <td style="text-align: left;">
+                                                                        {{item?.name}}
+                                                                    </td>
+                                                                    <td style="text-align: left;"> {{item?.filesize}}</td>
+                                                                    <td style="text-align: left;"> {{item.is_active?'True':'False'}} </td>
+                                                                    <td class="text-right">
+                                                                        <button class="btn btn-sm btn-primary mr-2" type="button" (click)="openEditDocumentModal(editDocument,'legal',item)">
+                                                                            <i class="fas fa-pencil-alt" aria-hidden="true"></i>
+                                                                        </button>
+                                                                        <button class="btn btn-sm btn-primary mr-2" type="button" (click)="openPDFDocumentModal(openPDFDocument,'legal',item)">
+                                                                            <i class="fas fa-eye" aria-hidden="true"></i>
+                                                                        </button>
+                                                                        <button class="btn btn-sm btn-primary mr-2" type="button" (click)="downloadDocument(item)">
+                                                                            <i class="fa fa-download" aria-hidden="true"></i>
+                                                                        </button>
+                                                                        <button class="btn btn-sm btn-danger" type="button" (click)="deleteDocument(item,'legal')">
+                                                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                                                        </button>
+                                                                    </td>
+                                                                </tr>
+                                                            </ng-container>
+                                                            <ng-container *ngIf="legalDocumentList.length==0">
+                                                                <tr>
+                                                                    <td class="text-center" colspan="5"> No document found</td>
+                                                                </tr>
+                                                            </ng-container>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <h5>Marketing Documents</h5>
+                                                <div>(Help: Please upload PDF or Word Templates) </div>
+                                            </div>
+                                            <div class="col-md-2 text-right">
+                                                <button class="btn btn-sm btn-primary" type="button" (click)="openAddDocumentModal(addDocument,'marketing')"> Add</button>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="table-responsive ng-tns-c2-3 ng-star-inserted mt-2">
+                                                    <table class="table table-sm table-borderless" style="table-layout: fixed;">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="text-align: left;" width="25px"></th>
+                                                                <th style="text-align: left;" width="200px">Name</th>
+                                                                <th style="text-align: left;" width="100px">Size</th>
+                                                                <th style="text-align: left;" width="150px">Active</th>
+                                                                <th width="200px"></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <ng-container *ngIf="marketingDocumentList.length>0">
+                                                                <tr *ngFor="let item of marketingDocumentList">
+                                                                    <td style="text-align: left;" [ngSwitch]="item.file_type">
+                                                                        <span style="padding:0 5px;font-size: x-large" *ngSwitchCase="'pdf'">
+                                                                            <i class="far fa-file-pdf"></i>
+                                                                        </span>
+                                                                        <span style="padding:0 5px;font-size: x-large" *ngSwitchCase="'doc'">
+                                                                            <i class="far fa-file-word"></i>
+                                                                        </span>
+                                                                        <span style="padding:0 5px;font-size: x-large" *ngSwitchCase="'docx'">
+                                                                            <i class="far fa-file-word"></i>
+                                                                        </span>
+                                                                        <span style="padding:0 5px;font-size: x-large" *ngSwitchCase="'jpg'">
+                                                                            <i class="far fa-file-image"></i>
+                                                                        </span>
+                                                                        <span style="padding:0 5px;font-size: x-large" *ngSwitchCase="'jpeg'">
+                                                                            <i class="far fa-file-image"></i>
+                                                                        </span>
+                                                                        <span style="padding:0 5px;font-size: x-large" *ngSwitchCase="'png'">
+                                                                            <i class="far fa-file-image"></i>
+                                                                        </span>
+                                                                        <span style="padding:0 5px;font-size: x-large" *ngSwitchCase="'xlsx'">
+                                                                            <i class="far fa-file-excel"></i>
+                                                                        </span>
+                                                                        <span style="padding:0 5px;font-size: x-large" *ngSwitchCase="'pptx'">
+                                                                            <i class="far fa-file-powerpoint"></i>
+                                                                        </span>
+                                                                        <span style="padding:0 5px;font-size: x-large" *ngSwitchDefault>
+                                                                            <i class="fa fa-file"></i>
+                                                                        </span>
+                                                                    </td>
+                                                                    <td style="text-align: left;"> {{item?.document?.name}}</td>
+                                                                    <td style="text-align: left;"> {{item?.filesize}}</td>
+                                                                    <td style="text-align: left;"> {{item.is_active?'True':'False'}} </td>
+                                                                    <td class="text-right">
+                                                                        <button class="btn btn-sm btn-primary mr-2" type="button" (click)="openEditDocumentModal(editDocument,'marketing',item)">
+                                                                            <i class="fas fa-pencil-alt" aria-hidden="true"></i>
+                                                                        </button>
+                                                                        <button class="btn btn-sm btn-primary mr-2" type="button" (click)="openPDFDocumentModal(openPDFDocument,'marketing',item)">
+                                                                            <i class="fas fa-eye" aria-hidden="true"></i>
+                                                                        </button>
+                                                                        <button class="btn btn-sm btn-primary mr-2" type="button" (click)="downloadDocument(item)">
+                                                                            <i class="fa fa-download" aria-hidden="true"></i>
+                                                                        </button>
+                                                                        <button class="btn btn-sm btn-danger" type="button" (click)="deleteDocument(item,'marketing')">
+                                                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                                                        </button>
+                                                                    </td>
+                                                                </tr>
+                                                            </ng-container>
+                                                            <ng-container *ngIf="marketingDocumentList.length==0">
+                                                                <tr>
+                                                                    <td class="text-center" colspan="5"> No document found</td>
+                                                                </tr>
+                                                            </ng-container>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ngb-tab>
+                        <ngb-tab id="mediaTab" title="Media">
+                            <ng-template ngbTabContent>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4>Photo Gallery
+                                                    <button class="btn btn-sm btn-primary doc-img-up-btn" style="float: right;" type="button"> Add
+                                                        <input class="doc-img-upload" accept="image/*" type="file" multiple (change)="uploadProjectPhoto($event.target.files)">
+                                                    </button>
+                                                </h4>
+                                                <br>
+                                                <ng-container *ngIf="mediaPhotoList?.length>0">
+
+                                                    <ul class="film-strip">
+                                                        <li class="photo" style="position: relative;" *ngFor="let item of mediaPhotoList;let j=index">
+                                                            <!-- <li style="position: relative;"> -->
+                                                            <div class="icons-block">
+
+                                                                <div class="delete-photo-icon" (click)="deletePhoto(item,$event)">
+                                                                    <i class="fas fa-times"></i>
+                                                                </div>
+                                                                <div class="delete-photo-icon mr-1" (click)="openPhotoDescription(photoDescriptionModal,item)">
+                                                                    <i class="fa fa-info-circle"></i>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="photo-container-div " [ngStyle]="{ 'background-image':
+                                                                'url(&quot;' + baseUrl + item?.file?.url + '/350&quot;)', 'background-size': 'cover',
+                                                                'background-repeat': 'no-repeat', 'background-position': 'center' } " (click)="openPhotoBox(photoViewModal, baseUrl + item?.file?.url, item)">
+                                                            </div>
+
+                                                            <div class="photo-description">
+                                                                <div [innerHtml]="item?.description ? item?.description :' '"></div>
+                                                            </div>
+                                                        </li>
+
+                                                    </ul>
+                                                </ng-container>
+                                                <ng-container *ngIf="mediaPhotoList.length==0">
+                                                    <p class="text-center">No photo found.</p>
+                                                </ng-container>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4>Video Gallery
+                                                    <button class="btn btn-sm btn-primary doc-img-up-btn" style="float: right;" type="button" (click)="openAddVideoModal(videoModal)">
+                                                        Add
+                                                    </button>
+                                                </h4>
+                                                <br>
+                                                <ng-container *ngIf="mediaVideoList?.length>0">
+                                                    <!-- <ul class="film-strip">
+                                                        <li class="video" style="position: relative;" *ngFor="let item of mediaVideoList">
+                                                            <div class="video-delete-photo-icon" (click)="deleteVideo(item,$event)">
+                                                                <i class="fas fa-times"></i>
+                                                            </div>
+                                                            <div *ngIf="item.video_type == 'YOUTUBE'" class="video-container-div" [ngStyle]="{'background-image': 'url(&quot;https://img.youtube.com/vi/'+ item?.video_id +'/mqdefault.jpg&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }"
+                                                                (click)="openVideoViewer(videoViewerModal,item.showing_url)">
+                                                            </div>
+                                                            <div *ngIf="item.video_type == 'VIMEO'" class="video-container-div" [ngStyle]="{'background-image': 'url(&quot;https://i.vimeocdn.com/video/'+ item?.video_id +'_400.jpg&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }"
+                                                                (click)="openVideoViewer(videoViewerModal,item.showing_url)">
+                                                            </div>
+                                                            <div *ngIf="item.video_type == 'MP4'" class="video-container-div" [ngStyle]="{'background-image': 'url(&quot;/assets/img/mp4-icon.jpg&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }"
+                                                                (click)="openVideoViewer(videoViewerModal,item.showing_url)">
+                                                            </div>
+                                                        </li>
+                                                    </ul> -->
+                                                    <ul class="film-strip">
+                                                        <li class="photo" style="position: relative;" *ngFor="let item of mediaVideoList">
+                                                            <div class="video-delete-photo-icon" (click)="deleteVideo(item,$event)">
+                                                                <i class="fas fa-times"></i>
+                                                            </div>
+                                                            <div *ngIf="item.video_type == 'YOUTUBE'" class="photo-container-div" [ngStyle]="{'background-image': 'url(&quot;https://img.youtube.com/vi/'+ item?.video_id +'/mqdefault.jpg&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }"
+                                                                (click)="openVideoViewer(videoViewerModal,item)">
+                                                            </div>
+                                                            <div *ngIf="item.video_type == 'VIMEO'" class="photo-container-div" [ngStyle]="{'background-image': 'url(&quot;https://i.vimeocdn.com/video/'+ item?.video_id +'_400.jpg&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }"
+                                                                (click)="openVideoViewer(videoViewerModal,item)">
+                                                            </div>
+                                                            <div *ngIf="item.video_type == 'MP4'" class="photo-container-div" [ngStyle]="{'background-image': 'url(&quot;/assets/img/mp4-icon.jpg&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }" (click)="openVideoViewer(videoViewerModal,item)">
+                                                            </div>
+
+                                                            <div class="photo-description">
+                                                                <div [innerHtml]="item?.title ? item?.title :' '"></div>
+                                                            </div>
+
+                                                        </li>
+                                                    </ul>
+                                                </ng-container>
+                                                <ng-container *ngIf="mediaVideoList.length==0">
+                                                    <p class="text-center">No video found.</p>
+                                                </ng-container>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ngb-tab>
+                        <ngb-tab id="settingTab" title="Settings">
+                            <ng-template ngbTabContent>
+                                <div class="card mt-2">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4>
+                                                    <button style="float: right;" type="button" class="btn btn-primary mr-2" (click)="openProjectSettingModal(projectSettingModal)">
+                                                        <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                                                    </button>
+                                                </h4>
+                                            </div>
+                                        </div>
+
+                                        <dl class="row">
+                                            <dd class="col-md-5">Allow Import Models</dd>
+                                            <dd class="col-md-7">: {{projectDetailsObj?.import_models ?'Yes' :'No'}}</dd>
+
+                                            <dd class="col-md-5">Allow Import Units</dd>
+                                            <dd class="col-md-7">: {{projectDetailsObj?.import_units ?'Yes' :'No'}}</dd>
+
+                                            <dd class="col-md-5">Allow Import Overwrite Unit Details </dd>
+                                            <dd class="col-md-7">: {{projectDetailsObj?.import_overwrite_unit_details ?'Yes' :'No'}}</dd>
+
+                                            <dd class="col-md-5">Allow Import Overwrite Model Details </dd>
+                                            <dd class="col-md-7">: {{projectDetailsObj?.import_overwrite_model_details ?'Yes' :'No'}}</dd>
+
+                                            <dd class="col-md-5">Allow Import Overwrite Prices</dd>
+                                            <dd class="col-md-7">: {{projectDetailsObj?.import_overwrite_prices ?'Yes' :'No'}}</dd>
+
+                                            <dd class="col-md-5">Default Cooling Period (days)</dd>
+                                            <dd class="col-md-7">: {{projectDetailsObj?.default_cooling_period ?projectDetailsObj?.default_cooling_period :'' }}</dd>
+
+                                        </dl>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ngb-tab>
+                    </ngb-tabset>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #basicModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Project</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Builder
+                            <span style="color:red">*</span>:</label>
+                        <div class="col-sm-12">
+                            <select class="form-select" [disabled]="formDetails.builder_id ? true:false" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.builder_id" (change)="getSubdivisionList(formDetails.builder_id)">
+                                <option value="">Select Builder</option>
+                                <option *ngFor="let item of builderList" value="{{item._id}}"> {{item.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Subdivision:
+                            <!-- <span style="color:red">*</span> -->
+                        </label>
+                        <div class="col-sm-12">
+                            <select class="form-select" [disabled]="isSubdivisionDisabled" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.subdivision_id">
+                                <option value="">Select Subdivision</option>
+                                <option *ngFor="let item of subdivisionList" value="{{item._id}}"> {{item.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Project Name:
+                            <span style="color:red">*</span>
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.name" class="form-control" placeholder="Project name - Building Name">
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Project Id:</label>
+                        <div class="col-sm-12">
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.project_id" class="form-control" placeholder="Project Id">
+                        </div>
+                    </div>
+                </div> -->
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Project Code:
+                            <!-- <span style="color:red">*</span> -->
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.project_code" class="form-control uppercase" placeholder="Project code" (focusout)="validateProjectCode()">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Phase :</label>
+                        <div class="col-sm-12">
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.phase" class="form-control" placeholder="Phase">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Status :</label>
+                        <div class="col-sm-12">
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.status" class="form-control" placeholder="Status">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Contact Name
+                            <!-- <span style="color:red">*</span> -->
+                            :</label>
+                        <div class="col-sm-12">
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.contact_name" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Email
+                            <!-- <span style="color:red">*</span> -->
+                            :</label>
+                        <div class="col-sm-12">
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.contact_email" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Phone
+                            <!-- <span style="color:red">*</span> -->
+                            :</label>
+                        <div class="col-sm-12">
+                            <form #f="ngForm" [formGroup]="phone">
+
+                                <ngx-intl-tel-input [cssClass]="'custom'" [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true" [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]" [selectFirstCountry]="false"
+                                    [selectedCountryISO]="CountryISO.Canada" [maxLength]="15" [phoneValidation]="true" [separateDialCode]="separateDialCode" name="contact_phone" formControlName="contact_phone">
+                                </ngx-intl-tel-input>
+                            </form>
+                            <span *ngIf="f.form.controls['contact_phone'].touched && f.form.controls['contact_phone'].invalid" style="color: red;">Phone number is not valid.</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Website :
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.contact_website" class="form-control">
+                        </div>
+                    </div>
+                </div> -->
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Website :</label>
+                        <div class="input-group col-sm-12">
+                            <div class="input-group-text">{{protocol}}</div>
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.contact_website" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-form-label">Construction Start Date :</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="YYYY-MM-DD" #startDate="bsDatepicker" bsDatepicker [bsConfig]="{ containerClass: 'theme-dark-blue',showTodayButton: true, todayPosition: 'center',showClearButton: true, clearPosition: 'right',isAnimated: true,adaptivePosition: true,dateInputFormat: 'YYYY-MM-DD',  returnFocusToInput: true }"
+                                [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.construction_start_date">
+                            <span class=" input-group-prepend" (click)="startDate.toggle()" [attr.aria-expanded]="startDate.isOpen">
+                                <span class="input-group-text">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-form-label">Estimated Completion Date :</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="YYYY-MM-DD" #completionDate="bsDatepicker" bsDatepicker [bsConfig]="{ containerClass: 'theme-dark-blue',showTodayButton: true, todayPosition: 'center',showClearButton: true, clearPosition: 'right',isAnimated: true,adaptivePosition: true,dateInputFormat: 'YYYY-MM-DD',  returnFocusToInput: true }"
+                                [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.estimated_completion_date">
+                            <span class=" input-group-prepend" (click)="completionDate.toggle()" [attr.aria-expanded]="completionDate.isOpen">
+                                <span class="input-group-text">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Default Cooling Period (days): </label>
+                        <div class="col-sm-12">
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.default_cooling_period" class="form-control">
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+            <h5>Project Address:</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Street1:</label>
+                        <div class="col-sm-12">
+                            <input type="text" name="street1" [(ngModel)]="formDetails.project_address.street1" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Street2:</label>
+                        <div class="col-sm-12">
+                            <input type="text" name="street2" [(ngModel)]="formDetails.project_address.street2" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">City :
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="text" name="city" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.project_address.city" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Province/State :
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="text" name="state" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.project_address.state" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Postal Code/ZIP:
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="text" name="zip" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.project_address.zip" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Country :
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="text" name="country" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.project_address.country" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <h5>Office Address:</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Street1:</label>
+                        <div class="col-sm-12">
+                            <input type="text" name="street1" [(ngModel)]="formDetails.office_address.street1" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Street2:</label>
+                        <div class="col-sm-12">
+                            <input type="text" name="street2" [(ngModel)]="formDetails.office_address.street2" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">City :
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="text" name="city" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.office_address.city" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Province/State :
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="text" name="state" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.office_address.state" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Postal Code/ZIP:
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="text" name="zip" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.office_address.zip" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Country :
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="text" name="country" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.office_address.country" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="editProjectBasic()">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #descriptionModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Description</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <div [froalaEditor]="nonInlineEdit" [(froalaModel)]="formDetails.description">
+                                {{formDetails.description ? formDetails.description : ''}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updateDescription()">Update</button>
+        </div>
+    </div>
+</ng-template>
+<ng-template #additionalModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Unit/Lot Information</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+
+                <label class="mb-0">Condominium :</label>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Total Units/Lots::</label>
+                        <div class="col-sm-12">
+                            <input type="number" min="0" step="1" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.condominium.total_units" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label" for="type">Total Floors:</label>
+                        <div class="col-sm-12">
+                            <input type="number" min="0" step="1" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.condominium.total_floors" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <label class="mb-0">Detached Homes :</label>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Total Units/Lots:</label>
+                        <div class="col-sm-12">
+                            <input type="number" min="0" step="1" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.detached.total_units" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <label class="mb-0">Semi-Detached Homes :</label>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Total Units/Lots:</label>
+                        <div class="col-sm-12">
+                            <input type="number" min="0" step="1" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.semiDetached.total_units" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label" for="type">Total  Homes:</label>
+                        <div class="col-sm-12">
+                            <input type="number" min="0" step="1" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.semiDetached.total_homes" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <label class="mb-0">Townhouses :</label>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Total Buildings:</label>
+                        <div class="col-sm-12">
+                            <input type="number" min="0" step="1" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.townhouse.total_buildings" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label" for="type">Total Homes:</label>
+                        <div class="col-sm-12">
+                            <input type="number" min="0" step="1" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.townhouse.total_homes" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updateAdditionalInfo()">Update</button>
+        </div>
+    </div>
+</ng-template>
+<ng-template #spaceModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Spaces</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="form-group row">
+                        <div class="col-sm-8 pr-1">
+                            <input type="text" class="form-control" (keyup.enter)="onSpacesKeyEnter($event)" (focusout)="checkExistSpacesName()" placeholder="Enter space name" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.space">
+                        </div>
+                        <div class="col-sm-3 pl-1">
+                            <button style="float: right;" type="button" class="btn btn-primary" (click)="addSpaces()">Add</button>
+                        </div>
+                    </div>
+                    <div class="mb-5" *ngIf="formDetails?.spaces.length==0">
+                        <p> No Space added</p>
+                    </div>
+                    <ng-container *ngIf="formDetails?.spaces.length>0">
+                        <h6 class="mb-3 mt-4">Spaces :</h6>
+                        <div class="list-scroll">
+                            <div class="row  pt-2" *ngFor="let item of formDetails.spaces; let i =index">
+                                <div class="col-sm-6 pr-1">
+                                    <label class="form-check-label">
+                                        {{item}}
+                                    </label>
+                                </div>
+                                <div class="col-sm-5 pl-1 text-right">
+                                    <button class="btn btn-primary btn-sm mr-2" type="button" [disabled]="i==0" (click)="reArrangeSpaces('up',i)">
+                                        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                                    </button>
+                                    <button class="btn btn-primary btn-sm mr-2" type="button" [disabled]="(i+1)==formDetails.spaces.length" (click)="reArrangeSpaces('down',i)">
+                                        <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                                    </button>
+                                    <button style="float: right;" class="btn btn-danger" type="button" (click)="deleteSpaces(item,i)">
+                                        <i class="fa fa-trash" style="font-size:12px;float: right;"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <!-- <button type="button" class="btn btn-primary" (click)="updateSpaces()">Update</button> -->
+        </div>
+    </div>
+</ng-template>
+<ng-template #viewModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Views</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="form-group row">
+                        <div class="col-sm-8 pr-1">
+                            <input type="text" class="form-control" placeholder="Enter view name" [ngModelOptions]="{standalone: true}" (keyup.enter)="onViewsKeyEnter($event)" [(ngModel)]="formDetails.view">
+                        </div>
+                        <div class="col-sm-3 pl-1">
+                            <button style="float: right;" type="button" class="btn btn-primary" (click)="addViews()">Add</button>
+                        </div>
+                    </div>
+                    <div class="mb-5" *ngIf="formDetails?.views.length==0">
+                        <p> No view added</p>
+                    </div>
+                    <ng-container *ngIf="formDetails?.views.length>0">
+                        <h6 class="mb-3 mt-4">Views :</h6>
+                        <div class="list-scroll">
+                            <div class="row  pt-2" *ngFor="let item of formDetails.views; let i =index">
+                                <div class="col-sm-6 pr-1">
+                                    <label class="form-check-label">
+                                        {{item}}
+                                    </label>
+                                </div>
+                                <div class="col-sm-5 pl-1 text-right">
+                                    <button class="btn btn-primary btn-sm mr-2" type="button" [disabled]="i==0" (click)="reArrangeViews('up',i)">
+                                        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                                    </button>
+                                    <button class="btn btn-primary btn-sm mr-2" type="button" [disabled]="(i+1)==formDetails.views.length" (click)="reArrangeViews('down',i)">
+                                        <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                                    </button>
+                                    <button class="btn btn-danger" type="button" (click)="deleteViews(item,i)">
+                                        <i class="fa fa-trash" style="font-size:12px;float: right;"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <!-- <button type="button" class="btn btn-primary" (click)="modalRef.hide()">Update</button> -->
+        </div>
+    </div>
+</ng-template>
+<ng-template #featureFinishesModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">{{isEdit?'Edit':'Add'}} Feature and Finishes </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div [froalaEditor]="featureNonInlineEdit" [(froalaModel)]="formDetails.features">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <div class="col-md-12 text-right">
+                <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+                <button type="button" class="btn btn-primary" (click)="updateFeature()">Update</button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<ng-template #addDocument>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left"> Add {{documentType=='legal'?'Legal':'Marketing'}} Document </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="isactive" [(ngModel)]="docFormDetails.is_active">
+                        <label class="form-check-label" for="isactive">
+                            Active
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-6" *ngIf="documentType=='legal'">
+                    <input accept=".doc,.docx" type="file" name="Choose Document" (change)="uploadProjectDocument(documentType, $event.target.files)">
+                </div>
+                <div class="col-md-6" *ngIf="documentType=='marketing'">
+                    <input accept=".pdf,.doc,.docx" type="file" name="Choose Document" (change)="uploadProjectDocument(documentType, $event.target.files)">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <label> 
+                        <b>Document type :</b>
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group form-check mb-2">
+                        <input type="radio" [(ngModel)]="docFormDetails.document_for" value="Deal" class="form-check-input" name="type" id="deal">
+                        <label class="form-check-label" for="deal">Deal</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group form-check mb-2">
+                        <input type="radio" [(ngModel)]="docFormDetails.document_for" value="PDI" class="form-check-input" name="type" id="pdi">
+                        <label class="form-check-label" for="pdi">PDI</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group form-check mb-2">
+                        <input type="radio" [(ngModel)]="docFormDetails.document_for" value="Parking" class="form-check-input" name="type"
+                            id="parking">
+                        <label class="form-check-label" for="parking">Parking</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group form-check mb-2">
+                        <input type="radio" [(ngModel)]="docFormDetails.document_for" value="Bicycle Parking" class="form-check-input" name="type"
+                            id="bicycle_parking">
+                        <label class="form-check-label" for="bicycle_parking">Bicycle Parking</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group form-check mb-2">
+                        <input type="radio" [(ngModel)]="docFormDetails.document_for" value="Locker" class="form-check-input" name="type"
+                            id="locker">
+                        <label class="form-check-label" for="locker">Locker</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="witness_required" [(ngModel)]="docFormDetails.witness_required_for_each_purchaser">
+                        <label class="form-check-label" for="witness_required">
+                            Witness Required for each purchaser
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <div class="col-md-12 text-right">
+                <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+                <button type="button" class="btn btn-primary" (click)="addNewDocument()">Add</button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<ng-template #openPDFDocument>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left"> View Document </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body custom-media-body">
+        <div class="container-fluid">
+            <div class="pdf-container">
+                <pdf-viewer [src]="selectedDocument?.thumbnailUrl" [original-size]="false"></pdf-viewer>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<ng-template #editDocument>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left"> Edit {{documentType=='legal'?'Legal':'Marketing'}} Document </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="isactive" [(ngModel)]="selectedDocument.is_active">
+                        <label class="form-check-label" for="isactive">
+                            Active
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label>File:{{selectedDocument?.document?.name}}</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <label> 
+                        <b>Document type :</b>
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group form-check mb-2">
+                        <input type="radio" [(ngModel)]="selectedDocument.document_for" value="Deal" class="form-check-input" name="type" id="deal">
+                        <label class="form-check-label" for="deal">Deal</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group form-check mb-2">
+                        <input type="radio" [(ngModel)]="selectedDocument.document_for" value="PDI" class="form-check-input" name="type" id="pdi">
+                        <label class="form-check-label" for="pdi">PDI</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group form-check mb-2">
+                        <input type="radio" [(ngModel)]="selectedDocument.document_for" value="Parking" class="form-check-input" name="type"
+                            id="parking">
+                        <label class="form-check-label" for="parking">Parking</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group form-check mb-2">
+                        <input type="radio" [(ngModel)]="selectedDocument.document_for" value="Bicycle Parking" class="form-check-input" name="type"
+                            id="bicycle_parking">
+                        <label class="form-check-label" for="bicycle_parking">Bicycle Parking</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group form-check mb-2">
+                        <input type="radio" [(ngModel)]="selectedDocument.document_for" value="Locker" class="form-check-input" name="type"
+                            id="locker">
+                        <label class="form-check-label" for="locker">Locker</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="witness_required" [(ngModel)]="selectedDocument.witness_required_for_each_purchaser">
+                        <label class="form-check-label" for="witness_required">
+                            Witness Required for each purchaser
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <div class="col-md-12 text-right">
+                <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+                <button type="button" class="btn btn-primary" (click)="onUpdateDocument()">Update</button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<ng-template #photoViewModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left"> {{selectedPhotoPath?.name ? selectedPhotoPath?.name :'Image is not available'}} </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body text-center custom-media-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12" *ngIf="selectedPhotoPath?.path">
+                    <img style="max-width:100%" [src]="selectedPhotoPath?.path" alt="{{selectedPhotoPath?.name}}">
+                </div>
+                <div class="col-md-12 text-center pt-2">
+                    <div [innerHtml]="selectedPhotoPath?.description ? selectedPhotoPath?.description :' '"></div>
+                </div>
+                <div *ngIf="!selectedPhotoPath?.path">
+                    Image is not available
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<ng-template #videoViewerModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left"> {{selectedVideoPath.name? selectedVideoPath?.name :''}} </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body text-center custom-media-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- <img [src]="selectedPhotoPath?.path" alt="{{selectedPhotoPath?.name}}"> -->
+                    <iframe [src]="selectedVideoPath?.path" frameborder="0" width="100%" height="500px" webkitallowfullscreen mozallowfullscreen allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="col-md-12 text-center pt-2" *ngIf="selectedVideoPath?.body">
+                    <div [innerHtml]="selectedVideoPath?.body ? selectedVideoPath?.body :' '"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<ng-template #videoModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Add Video</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="name">Video Type :</label>
+                                <select class="form-select" [(ngModel)]="videoDetails.video_type">
+                                    <option value="">Select Video Type</option>
+                                    <option value="YOUTUBE">Youtube</option>
+                                    <option value="VIMEO">Vimeo</option>
+                                    <option value="MP4">MP4</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="name">Video Url :</label>
+                                <input type="text" class="form-control" [(ngModel)]="videoDetails.url" name="url" placeholder="Video url">
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="name">Title :</label>
+                                <input type="text" class="form-control" [(ngModel)]="videoDetails.title" name="url" placeholder="Title">
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <label for="name">Body :</label>
+                            <div [froalaEditor]="nonInlineEdit" [(froalaModel)]="videoDetails.body">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="addProjectVideos()">Add</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #openFeaturesDocument>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left"> View Feature Document </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body custom-media-body">
+        <div class="container-fluid">
+            <div class="pdf-container" *ngIf="selectedDocument?.file_type=='pdf' ||selectedDocument?.file_type== 'docx'">
+                <pdf-viewer [src]="selectedDocument?.thumbnailUrl" [original-size]="false"></pdf-viewer>
+            </div>
+            <!-- <div class="row" *ngIf="selectedDocument?.file_type=='png' || selectedDocument?.file_type=='jpg' || selectedDocument?.file_type=='jpeg'">
+                <pdf-viewer [src]="selectedDocument?.thumbnailUrl" [original-size]="false"></pdf-viewer>
+            </div> -->
+            <div class="row" *ngIf="selectedDocument?.file_type=='png' || selectedDocument?.file_type=='jpg' || selectedDocument?.file_type=='jpeg'">
+                <img style="max-width:100%" src="{{selectedDocument?.thumbnailUrl}}" alt="{{selectedDocument?.name}}">
+                <div *ngIf="!selectedDocument?.thumbnailUrl">
+                    Image is not available
+                </div>
+            </div>
+        </div>
+    </div>
+
+</ng-template>
+
+<ng-template #projectSettingModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Project</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="import_models">
+                            Allow Import Models
+                        </label>&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.import_models" id="import_models">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="import_units">
+                            Allow Import Units
+                        </label>&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.import_units" id="import_units">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="import_overwrite_unit_details">
+                            Allow Import Overwrite Unit Details
+                        </label>&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.import_overwrite_unit_details" id="import_overwrite_unit_details">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="import_overwrite_model_details">
+                            Allow Import Overwrite Model Details
+                        </label>&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.import_overwrite_model_details" id="import_overwrite_model_details">
+                    </div>
+                </div>
+
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="import_overwrite_prices">
+                            Allow Import Overwrite Prices
+                        </label>&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.import_overwrite_prices" id="import_overwrite_prices">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Default Cooling Period (days): </label>
+                        <div class="col-sm-12">
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.default_cooling_period" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="editProjectSettings()">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #photoDescriptionModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">Photo Description</h5>
+        <button type="button " class="close pull-right " aria-label="Close " (click)="modalRef.hide() ">
+            <span aria-hidden="true ">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body ">
+        <div class="container-fluid ">
+            <form autocomplete="off ">
+                <div class="row ">
+                    <div class="col-md-12 ">
+                        <div class="form-group ">
+                            <label>Description :
+                            </label>
+                            <div [froalaEditor]="nonInlineEdit" [(froalaModel)]="formDetails.description">
+                                {{formDetails.description ? formDetails.description : ''}}
+                            </div>
+                            <!-- <textarea type="text" rows="4" cols="4" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.description" class="form-control"></textarea> -->
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer ">
+        <div class="col-md-12 text-right ">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updatePhotoDescription()">Update</button>
+        </div>
+    </div>
+</ng-template>

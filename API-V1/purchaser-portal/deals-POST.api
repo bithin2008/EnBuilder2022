@@ -1,0 +1,44 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_deals' %> 
+
+<% if en.params.deal_id %>
+    <% assign query._id = en.params.deal_id %>
+    <% en.data.findOne dealResult datasetId query %>
+    <% assign dealResult = dealResult.row %>
+    <% assign params = en.params %>
+    <% if params.design_studio_status %>
+        <% assign params.design_studio = dealResult.design_studio %>
+        <% assign params.design_studio.status = params.design_studio_status %>
+        <% unassign params.design_studio_status %> 
+    <% endif %>
+    <% if params.parking_selection_status %>
+        <% assign params.parking_selection = dealResult.parking_selection %>
+        <% assign params.parking_selection.status = params.parking_selection_status %>
+        <% unassign params.parking_selection_status %> 
+    <% endif %>
+    <% if params.bicycle_parking_status %>
+        <% assign params.bicycle_selection = dealResult.bicycle_selection %>
+        <% assign params.bicycle_selection.status = params.bicycle_parking_status %>
+        <% unassign params.bicycle_parking_status %> 
+    <% endif %>
+    <% if params.locker_selection_status %>
+        <% assign params.locker_selection = dealResult.locker_selection %>
+        <% assign params.locker_selection.status = params.locker_selection_status %>
+        <% unassign params.locker_selection_status %> 
+    <% endif %>
+    <% en.data.update upResult datasetId query params %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Deal updated successfully.' %>
+    <% assign returnData.result = upResult %> 
+    <% return returnData %>
+<% else %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Deal id required.' %>
+    <% return returnData %>
+<% endif %>

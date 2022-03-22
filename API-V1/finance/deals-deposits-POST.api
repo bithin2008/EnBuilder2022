@@ -1,0 +1,85 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_deposits' %> 
+<% assign params = en.params %>
+///////// possible operations are add, edit, change
+
+<% if params.operation == 'add' %>
+    ///// we need to insert all deposits into database
+    <% for deposit in params.deposits %>
+        <% unassign data %>
+        <% assign data = deposit %>
+        <% if data.due_date %>
+            <% assign data.due_date = data.due_date | string_to_date: "yyyy-MM-dd" time-zone %>
+        <% endif %>
+        <% assign data.deal_id = params.deal_id %>
+        <% assign data.unit_id = params.unit_id %>
+        <% assign data.unit_no = params.unit_no %>
+        <% assign data.project_id = params.project_id %>
+        <% assign data.project_name = params.project_name %>
+        <% en.data.insert result datasetId data %>
+    <% endfor %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Deposits added successfully.' %>
+    <% return returnData %>
+    <% exit %>
+<% elsif params.operation == 'edit' %>
+    ///// we need to update the row using _id
+    <% if data.due_date %>
+        <% assign params.due_date = params.due_date | string_to_date: "yyyy-MM-dd" time-zone %>
+    <% endif %>
+    <% if data.due_date %>
+        <% assign params.payment_date = params.payment_date | string_to_date: "yyyy-MM-dd" time-zone %>
+    <% endif %>
+    <% assign query._id = params._id %>
+    <% en.data.update result datasetId query params %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Deposit updated successfully.' %>
+    <% return returnData %>
+    <% exit %>
+<% elsif params.operation == 'change' %>
+    ///// we need to delete all rows for the deal and insert all deposits into database
+    <% assign query.deal_id = params.deal_id %>
+    <% en.data.delete result datasetId query %>
+    
+    <% for deposit in params.deposits %>
+        <% unassign data %>
+        <% assign data = deposit %>
+        <% if data.due_date %>
+            <% assign data.due_date = data.due_date | string_to_date: "yyyy-MM-dd" time-zone %>
+        <% endif %>
+        <% assign data.deal_id = params.deal_id %>
+        <% assign data.unit_id = params.unit_id %>
+        <% assign data.unit_no = params.unit_no %>
+        <% assign data.project_id = params.project_id %>
+        <% assign data.project_name = params.project_name %>
+        <% en.data.insert result datasetId data %>
+    <% endfor %> 
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Deposits changed successfully.' %>
+    <% return returnData %>
+    <% exit %>
+<% endif %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

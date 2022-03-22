@@ -1,0 +1,224 @@
+
+
+.thumb-img {
+    background: #fff;
+    min-height: 225px;
+    /* min-height: 325px;     */
+    width: 100%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+.logo-upload-btn {
+    cursor: pointer;
+    overflow: hidden;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.logo-upload-btn input[type="file"] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+}
+.project-details .row {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+/* custom-color-drop-down */
+
+.dropdown-title-container{
+    padding: 5px;
+    width: 100%;
+    height: 35px;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #acacac;
+    -webkit-appearance: none;
+    background-color: #ffff;
+    border: 1px solid lightgrey;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.04);
+       
+}
+.dropdown-title {
+    color: #4a4a4a;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.selected-item{
+    display: flex;
+    width: auto;
+    height: 24px;
+    border-radius: 3px;
+    align-items: center;
+}
+.theme-color{
+    max-width: 20px;
+    max-height: 20px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+.dropdown-content {
+    display: block;
+    width: 350px;
+    position: absolute;
+    background:white;
+    z-index: 1;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.17);
+    color: black;
+    padding-top: 2px;
+    border-radius: 4px;
+    margin-top: 1px;
+}
+.dropdown-list {
+    width: 100%;
+    height: auto;
+}
+    
+.dropdown-list .dropdown-item {
+    width: 100%;
+    float: left;
+    margin: 0;
+    padding: 10px;
+    background-color: var(--ion-color-generaliBgSecondary);
+    
+}
+.dropdown-list .dropdown-item li{
+    margin-top:0 !important;
+}
+.dropdown-item:hover{
+    background-color: var(--ion-color-generaliBgSecondary);
+}
+
+.dropdown-item .item:nth-child(odd) {
+    margin-right: 6%;
+}
+
+.dropdown-item  .item:hover {
+    background-color: var(--ion-pill-CardIconBg);
+    border: solid 1px var(--ion-pill-CardIconBg);
+    cursor: pointer;
+}
+
+.dropdown-item .item {
+    width: 45%;
+    height: 30px;
+    border-radius: 3px;
+    list-style-position: inside;
+    border: solid 1px var(--ion-pill-CardIconBg);
+    margin-bottom: 3px;
+    float: left;
+    list-style: none;
+    font-size: 14px;
+    font-stretch: condensed;
+    line-height: 1.43;
+    text-align: left;
+    font-family: "Roboto Condensed",Verdana,sans-serif;
+    padding-top: 8px;
+    font-weight: 500;
+    text-transform: capitalize;
+    display: flex;
+    justify-content: left;
+    
+}
+
+.action {
+    flex: 0 0 20%;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    max-width: 18px;
+    max-height: 18px;
+    width: 18px;
+    height: 18px;
+    margin: 0px 5px;
+}
+    
+.item-color{
+    display: inline-block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 15%;
+}
+
+.item-name{
+    margin-left:10px;
+    
+}
+
+.shape-item-name{
+    text-overflow: ellipsis;
+    display: block;
+    overflow: hidden;
+}
+
+.shape-item-container label{
+    font-size:25px;
+}
+.Red-theme{
+    background-color: red;
+}
+    
+.Pink-theme {
+    background-color:pink;
+}
+    
+.Blue-theme{
+    background-color: blue;
+}
+
+.Yellow-theme{
+    background-color: yellow;
+}
+.Green-theme{
+    background-color: green;
+}
+.photo-upload-btn {
+    cursor: pointer;
+    overflow: hidden;
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+}
+
+.photo-upload-btn input[type="file"] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+}
+
+.photo-holder {
+    padding: 5px;
+    position: relative;
+    display: block;
+    width: 250px;
+    border: 1px solid #ccc;
+    margin: 0 auto;
+}
+
+.photo-holder img {
+    width: 100%;
+}
+
+.photo-delete-icon{
+    cursor: pointer;
+    overflow: hidden;
+    position: absolute;
+    right: 10px;
+    top: 0;
+}

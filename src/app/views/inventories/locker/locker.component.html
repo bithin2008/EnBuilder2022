@@ -1,0 +1,550 @@
+<form autocomplete="off">
+    <!-- <div class="row mb-3">
+        <div class="col-md-9">
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedProject" (change)="onProjectChange()">
+                    <option *ngFor="let item of projectList" value="{{item._id}}">{{item.name}}</option>
+                </select>
+            </div>
+        </div>
+    </div> -->
+</form>
+<div class="row">
+    <div class="col-md-6">
+        <h5>Locker Floor/Area</h5>
+    </div>
+    <div class="col-md-6 text-right">
+        <button class="btn btn-primary" type="button" (click)="openAddLockerFloorModal(addModal)"> Add</button>
+    </div>
+</div>
+<div class="table-responsive mt-2 mb-3">
+    <table class="table table-striped table-sm list_table" style="table-layout: fixed;">
+        <thead>
+            <tr>
+                <th width="180px">Project</th>
+                <th width="180px" (click)="setLockerFloorOrder('name')">Name
+                    <span *ngIf="order != 'name'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'name'">▼</span>
+                    <span *ngIf="!reverse && order == 'name'">▲</span>
+                </th>
+                <th width="90px">Total</th>
+                <th width="90px">Available</th>
+                <th width="90px">Sold</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngIf="lockerFloorPlan.length>0">
+                <tr *ngFor="let item of lockerFloorPlan" (click)="goToFloorDetails(item)">
+                    <td>{{item.project_name}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item?.spaces ?  item?.spaces?.total ? item?.spaces?.total  : '-' : '-' }}</td>
+                    <td>{{item?.spaces ?  item?.spaces?.available ? item?.spaces?.available  : '-': '-'}}</td>
+                    <td>{{item?.spaces ?  item?.spaces?.sold ? item?.spaces?.sold  :'-' : '-'}}</td>
+                </tr>
+            </ng-container>
+            <ng-container *ngIf="lockerFloorPlan.length == 0">
+                <tr>
+                    <td colspan="5" class="text-center">No record found</td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+</div>
+<div class="row mt-3" *ngIf="paginationObj.total>=20">
+    <div class="col-md-6">
+        <div class="form-group">
+            <!-- <div class="col-sm-6"> -->
+            <span class="float-left" style="width:70px;margin-top: 6px;">Page Size:</span>
+            <span class="float-left" style="width:85px;">
+                <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="pageSize" (change)="setPageSizeFloorPlan()">
+                    <option value="">-Select-</option>
+                                        <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </span>
+            <span class="float-left" style="margin-top: 6px !important;margin-left: 16px !important;">{{paginationObj.total}} Record(s) Found</span>
+            <!-- </div> -->
+        </div>
+    </div>
+    <div class="col-md-6">
+        <nav>
+            <ul class="pagination">
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.previousPage)">
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(1)">
+                        First
+                    </a>
+                </li>
+                <li class="page-item {{pagination == paginationObj.currentPage?'active':''}}" *ngFor="let pagination of paginationObj.items">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(pagination)">{{pagination}}</a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.totalPages)">
+                        Last
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.nextPage)">
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<div class="row  mt-5">
+    <div class="col-md-6">
+        <h5>
+            Locker Addons
+        </h5>
+    </div>
+    <div class="col-md-6 text-right">
+        <button class="btn btn-primary" type="button" (click)="openAddLockerAddonsModal(addAddonsModal)"> Add</button>
+    </div>
+</div>
+<div class="table-responsive mt-2 mb-3">
+    <table class="table table-striped table-sm list_table" style="table-layout: fixed;">
+        <thead>
+            <tr>
+                <th width="180px">Project</th>
+                <th width="180px" (click)="setLockerAddonsOrder('name')">Name
+                    <span *ngIf="addOnOrder != 'name'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="addOnReverse && addOnOrder == 'name'">▼</span>
+                    <span *ngIf="!addOnReverse && addOnOrder == 'name'">▲</span>
+                </th>
+                <th width="90px">Total</th>
+                <th width="90px">Available</th>
+                <th width="90px">Sold</th>
+                <th width="120px">Cost</th>
+                <th width="120px">Price</th>
+                <th width="150px"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngIf="lockerAddons.length>0">
+                <tr *ngFor="let item of lockerAddons">
+                    <td>{{item.project_name}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item?.total ? item?.total :'-'}}</td>
+                    <td>{{item?.available ? item?.available :'-'}}</td>
+                    <td>{{item?.sold ? item?.sold : '-'}}</td>
+                    <td>{{item.cost | currency:'USD'}}</td>
+                    <td>{{item.price | currency:'USD'}}</td>
+                    <td class="text-right">
+                        <button class="btn btn-primary btn-sm mr-2" type="button" (click)="openEditLockerAddonsModal(addAddonsModal,item)">
+                            <i class="fa fa-pencil-alt" aria-hidden="true"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" type="button" (click)="deleteLockerAddons(item)">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>
+            </ng-container>
+            <ng-container *ngIf="lockerAddons.length == 0">
+                <tr>
+                    <td colspan="8" class="text-center">No record found</td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+</div>
+<div class="row mt-3" *ngIf="addOnPaginationObj.total>=20">
+    <div class="col-md-6">
+        <div class="form-group">
+            <span class="float-left" style="width:70px;margin-top: 6px;">Page Size:</span>
+            <span class="float-left" style="width:85px;">
+                <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="addOnPageSize" (change)="addOnSetPageSize($event)">
+                    <option value="">-Select-</option>
+                                        <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </span>
+            <span class="float-left" style="margin-top: 6px !important;margin-left: 16px !important;">{{addOnPaginationObj.total}} Record(s) Found</span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <nav>
+            <ul class="pagination">
+                <li class="page-item {{addOnPaginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doAddOnPaginationWise(addOnPaginationObj.previousPage)">
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="page-item {{addOnPaginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doAddOnPaginationWise(1)">
+                        First
+                    </a>
+                </li>
+                <li class="page-item {{pagination == addOnPaginationObj.currentPage?'active':''}}" *ngFor="let pagination of addOnPaginationObj.items">
+                    <a class="page-link" href="javascript:void(0);" (click)="doAddOnPaginationWise(pagination)">{{pagination}}</a>
+                </li>
+                <li class="page-item {{addOnPaginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doAddOnPaginationWise(addOnPaginationObj.totalPages)">
+                        Last
+                    </a>
+                </li>
+                <li class="page-item {{addOnPaginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doAddOnPaginationWise(addOnPaginationObj.nextPage)">
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <h5>Locker Types</h5>
+    </div>
+    <div class="col-md-6 text-right">
+        <button class="btn btn-primary" type="button" (click)="openAddLockerTypeModal(addTypesModal)"> Add</button>
+    </div>
+</div>
+<div class="table-responsive mt-2 mb-3">
+    <table class="table table-striped table-sm list_table" style="table-layout: fixed;">
+        <thead>
+            <tr>
+                <th width="180px">Project</th>
+                <th width="180px" (click)="setLockerTypesOrder('name')">Name
+                    <span *ngIf="typeOrder != 'name'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="typeReverse && typeOrder == 'name'">▼</span>
+                    <span *ngIf="!typeReverse && typeOrder == 'name'">▲</span>
+                </th>
+                <th width="90px">Total</th>
+                <th width="90px">Available</th>
+                <th width="90px">Sold</th>
+                <th width="120px">Cost</th>
+                <th width="120px">Price</th>
+                <th width="100px"></th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngIf="lockerTypes.length>0">
+                <tr *ngFor="let item of lockerTypes">
+                    <td>{{item?.project_name}}</td>
+                    <td>{{item?.name}}</td>
+                    <td>{{item?.spaces ?  item?.spaces?.total ? item?.spaces?.total  : '-' : '-' }}</td>
+                    <td>{{item?.spaces ?  item?.spaces?.available ? item?.spaces?.available  : '-': '-'}}</td>
+                    <td>{{item?.spaces ?  item?.spaces?.sold ? item?.spaces?.sold  :'-' : '-'}}</td>
+                    <td>{{item?.cost | currency:'USD'}}</td>
+                    <td>{{item?.price | currency:'USD'}}</td>
+                    <td class="text-right">
+                        <button class="btn btn-primary btn-sm mr-2" type="button" (click)="openEditLockerTypesModal(addTypesModal,item)">
+                            <i class="fa fa-pencil-alt" aria-hidden="true"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" type="button" (click)="deleteLockerTypes(item)">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>
+            </ng-container>
+            <ng-container *ngIf="lockerTypes.length == 0">
+                <tr>
+                    <td colspan="8" class="text-center">No record found</td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+</div>
+<div class="row mt-3" *ngIf="lockerTypesPaginationObj.total>=20">
+    <div class="col-md-6">
+        <div class="form-group">
+            <!-- <div class="col-sm-6"> -->
+            <span class="float-left" style="width:70px;margin-top: 6px;">Page Size:</span>
+            <span class="float-left" style="width:85px;">
+                <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="pageSize" (change)="setPageSizeTypes()">
+                    <option value="">-Select-</option>
+                                        <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </span>
+            <span class="float-left" style="margin-top: 6px !important;margin-left: 16px !important;">{{lockerTypesPaginationObj.total}} Record(s) Found</span>
+            <!-- </div> -->
+        </div>
+    </div>
+    <div class="col-md-6">
+        <nav>
+            <ul class="pagination">
+                <li class="page-item {{lockerTypesPaginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doLockerTypesPaginationWise(lockerTypesPaginationObj.previousPage)">
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="page-item {{lockerTypesPaginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doLockerTypesPaginationWise(1)">
+                        First
+                    </a>
+                </li>
+                <li class="page-item {{pagination == lockerTypesPaginationObj.currentPage?'active':''}}" *ngFor="let pagination of lockerTypesPaginationObj.items">
+                    <a class="page-link" href="javascript:void(0);" (click)="doLockerTypesPaginationWise(pagination)">{{pagination}}</a>
+                </li>
+                <li class="page-item {{lockerTypesPaginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doLockerTypesPaginationWise(lockerTypesPaginationObj.totalPages)">
+                        Last
+                    </a>
+                </li>
+                <li class="page-item {{lockerTypesPaginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doLockerTypesPaginationWise(lockerTypesPaginationObj.nextPage)">
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<ng-template #addModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">{{isEdit?'Edit':'Add'}} Locker Floor</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Project
+                                <span style="color:red">*</span>:</label>
+                            <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.project_id" id="projectId">
+                                <option value="">Select Project</option>
+                                <option *ngFor="let item of projectList" value={{item._id}}>{{item.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Name
+                                <span style="color:red">*</span>:</label>
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.name" class="form-control">
+                        </div>
+                    </div>
+                    <label> Floor plan :</label>
+                    <div class="photo-holder mt-3">
+                        <span>
+                            <img class="component-icon" *ngIf="formDetails?.layout" [src]="formDetails?.layout" alt="">
+                            <img class="component-icon" *ngIf="!formDetails?.layout" src="assets/img/no-image.jpg" alt="">
+                        </span>
+                        <button class="btn btn-primary btn-sm photo-upload-btn">
+                            <i class="fa fa-upload"></i>
+                            <input type="file" id="uploadLogo" accept="image/*" placeholder="Add Photo" (change)="uploadFloorplan($event.target.files)">
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="addLockerFloor()">Add</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #addAddonsModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">{{isEdit?'Edit':'Add'}} Locker Addons</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Project
+                                <span style="color:red">*</span>:</label>
+                            <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="addonsFormDetails.project_id" id="projectId">
+                                <option value="">Select Project</option>
+                                <option *ngFor="let item of projectList" value={{item._id}}>{{item.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Name
+                                <span style="color:red">*</span>:</label>
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="addonsFormDetails.name" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label style="display:block">Addons icon
+                            <span style="color:red">*</span>
+                        </label>
+
+                        <div [class]="item?.value != addonsFormDetails.addon_icon ? 'addon-img-holder photo-upload-btn mt-2 ml-2' :'addon-img-holder photo-upload-btn mt-2 ml-2 green-border'"
+                            *ngFor="let item of addonsImages" (click)="selectAddonsImages(item)">
+                            <ng-container *ngIf="item?.value">
+                                <img class="uploaded-image" [src]="'assets/img/addons-icon/'+item?.value" alt="">
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mt-2">
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="limited_quantity" [ngModelOptions]="{standalone: true}" [(ngModel)]="addonsFormDetails.limited_quantity">
+                                <label class="custom-control-label" for="limited_quantity"> Limited Quantity</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12" *ngIf="addonsFormDetails.limited_quantity">
+                        <div class="form-group">
+                            <label>Total
+                                <span style="color:red">*</span>:
+                                <small> (limit maximum available parking)</small>
+                            </label>
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="addonsFormDetails.total" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Sold :
+                                <b> Not calculated</b>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Available :
+                                <b> Not calculated</b>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Cost:</label>
+                            <!-- <span style="color:red">*</span> -->
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="addonsFormDetails.cost" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Price:</label>
+                            <!-- <span style="color:red">*</span> -->
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="addonsFormDetails.price" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" *ngIf="!isEdit" (click)="addLockerAddons()">Add</button>
+            <button type="button" class="btn btn-primary" *ngIf="isEdit" (click)="editLockerAddons()">Update</button>
+        </div>
+    </div>
+</ng-template>
+<ng-template #addTypesModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">{{isEdit?'Edit':'Add'}} Locker Types</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form autocomplete="off">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group" *ngIf="!isEdit">
+                        <label>Project
+                            <span style="color:red">*</span>:</label>
+                        <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="lockerTypesFormDetails.project_id" id="projectId">
+                            <option value="">Select Project</option>
+                            <option *ngFor="let item of projectList" value={{item._id}}>{{item.name}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group" *ngIf="isEdit">
+                        <label>Project :
+                            <b>{{lockerTypesFormDetails.project_name}}</b>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Name
+                            <span style="color:red">*</span>:</label>
+                        <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="lockerTypesFormDetails.name" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label style="display:block">Standard image
+                        <span style="color:red">*</span>:
+                    </label>
+                    <div [class]="item?.value != lockerTypesFormDetails.standard_available ? 'upload-img-holder photo-upload-btn mt-2 ml-1 ml-2' :'upload-img-holder photo-upload-btn mt-2 ml-1 ml-2 green-border'"
+                        *ngFor="let item of standardPremiumImages" (click)="selectStandardImage(item)">
+                        <!-- <img class="component-icon" *ngIf="!lockerTypesFormDetails.standard_available" src="assets/img/placeholder-image.png" alt=""> -->
+                        <img class="uploaded-image" *ngIf="item?.value" [src]="'assets/img/locker-icons/'+item?.value" alt="">
+                    </div>
+
+                </div>
+                <div class="col-md-12">
+                    <label style="display:block">Selected image
+                        <span style="color:red">*</span>:
+                    </label>
+                    <div [class]="item?.value != lockerTypesFormDetails.premium_available ? 'upload-img-holder photo-upload-btn mt-2 ml-1 ml-2' :'upload-img-holder photo-upload-btn mt-2 ml-1 ml-2 green-border'"
+                        *ngFor="let item of standardPremiumImages" (click)="selectPremiumImage(item)">
+                        <!-- <img class="component-icon" *ngIf="!lockerTypesFormDetails.premium_available" src="assets/img/placeholder-image.png" alt=""> -->
+                        <img class="uploaded-image" *ngIf="item?.value" [src]="'assets/img/locker-icons/'+item?.value" alt="">
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Total :
+                            <b> Not calculated</b>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Sold :
+                            <b> Not calculated</b>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Available :
+                            <b> Not calculated</b>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" *ngIf="!isEdit" (click)="addLockerTypes()">Add</button>
+            <button type="button" class="btn btn-primary" *ngIf="isEdit" (click)="editLockerTypes()">Update</button>
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,231 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_pc_models_units' %>
+<% assign params = en.params %> 
+<% if params._id %>
+    <% assign query._id = params._id %>
+    <% en.data.findOne unitResult "bldr_units" query "model_id" %>
+    <% assign unitResult = unitResult.row  %>
+    <% assign model_id = unitResult.model_id  %>
+    
+    <% unassign query %>
+    <% assign query.type = 'UNIT' %>
+    <% assign query.subtype = params.subtype %>
+    <% assign query.unit_id = params._id %>
+    <% assign query.excluded.$ne = true %>
+    <% en.data.distinct dresults1 datasetId "source_id" query %>
+    <% return 'dresults1' dresults1  %> 
+
+    
+    <% unassign query %>
+    <% if dresults1.values.length > 0 %>
+        <% assign query.source_id.$nin  = dresults1.values %>
+    <% endif %>
+    <% assign query.type = 'MODEL' %>
+    <% assign query.subtype = params.subtype %>
+    <% assign query.model_id = unitResult.model_id %>
+    <% en.data.distinct dresults2 datasetId "source_id" query %>
+    <% return 'dresults2' dresults2  %>
+    
+    
+    <% if params.subtype == 'COLOR_COLLECTION' %>
+        <% assign lookupDatasetId = "bldr_color_collections" %>
+    <% elsif params.subtype == 'PACKAGE' %>
+        <% assign lookupDatasetId = "bldr_packages" %>
+    <% elsif params.subtype == 'PERSONALIZATION_OPTION' %>
+        <% assign lookupDatasetId = "bldr_personalization_options" %>
+    <% endif %>    
+    
+    <% if dresults1.values.length > 0 %>
+        <% unassign query %>    
+        <% assign query.type = 'UNIT' %>
+        <% assign query.source_id.$in = dresults1.values  %>    
+        <% assign query.unit_id = params._id %>
+        <% json cquery1 %>
+        {
+            "queries":[
+                {
+                    "$match":{
+                        
+                    }
+                },
+                {
+                    "$lookup":{
+                        from: "<<lookupDatasetId>>",
+                        as: "source",
+                        let: { 
+                            source_id: "$source_id"
+                        }, 
+                        pipeline:[
+                            { 
+                                $match : { 
+                                    $expr : {
+                                        $and : [
+                                            { $eq : [ '$_id', '$$source_id' ] }
+                                        ]
+                                    }
+                                    
+                                } 
+                            },
+                            { 
+                                $project : {
+                                    cost: 0,
+                                    price: 0,
+                                    _updated: 0,
+                                    _updated_: 0,
+                                    _created: 0,
+                                    _created_: 0,
+                                    _createdBy: 0, 
+                                    _updatedBy: 0,
+                                    _t: 0
+                                } 
+                            }
+                        ]
+                    }
+                },
+                {
+                    $project:{
+                        collection:1,
+                        cost:1,
+                        price:1,
+                        upgraded:1,
+                        construction_notes:1,
+                        description:1,
+                        type:1,
+                        subtype:1,
+                        source: { $arrayElemAt: [ "$source", 0 ] },
+                    }
+                }
+            ]
+        } 
+        <% endjson %>
+        <% if query %>
+            <% assign cquery1.queries[0].$match = query %>
+        <% endif %>
+        <% rem return 'cquery1' cquery1.queries %>
+        <% en.data.aggregate result1 datasetId cquery1.queries %> 
+        <% rem return 'result1' result1 %>
+    <% endif %>
+    
+     <% if dresults2.values.length > 0 %>
+        <% unassign query %>    
+        <% unassign cquery1 %>   
+        <% assign query.type = 'MODEL' %>
+        <% assign query.source_id.$in = dresults2.values  %>    
+        <% assign query.model_id = unitResult.model_id %>
+        <% json cquery1 %>
+        {
+            "queries":[
+                {
+                    "$match":{
+                        
+                    }
+                },
+                {
+                    "$lookup":{
+                        from: "<<lookupDatasetId>>",
+                        as: "source",
+                        let: { 
+                            source_id: "$source_id"
+                        },
+                        pipeline:[
+                            { 
+                                $match : { 
+                                    $expr : {
+                                        $and : [
+                                            { $eq : [ '$_id', '$$source_id' ] }
+                                        ]
+                                    }
+                                    
+                                } 
+                            },
+                            { 
+                                $project : {
+                                    cost: 0,
+                                    price: 0,
+                                    _updated: 0,
+                                    _updated_: 0,
+                                    _created: 0,
+                                    _created_: 0,
+                                    _createdBy: 0, 
+                                    _updatedBy: 0,
+                                    _t: 0
+                                } 
+                            }
+                        ]
+                    }
+                },
+                {
+                    $project:{
+                        collection:1,
+                        cost:1,
+                        price:1,
+                        upgraded:1,
+                        construction_notes:1,
+                        description:1,
+                        type:1,
+                        subtype:1,
+                        source: { $arrayElemAt: [ "$source", 0 ] },
+                    }
+                }
+            ]
+        } 
+        <% endjson %>
+        <% if query %>
+            <% assign cquery1.queries[0].$match = query %>
+        <% endif %>
+        <% rem return 'cquery1' cquery1.queries %>
+        <% en.data.aggregate result2 datasetId cquery1.queries %> 
+    <% endif %>
+    
+    <% assign records = [] %> 
+    <% if result1.rows %>
+        <% for item in result1.rows %>
+            <% en.arrayUtils.add records item %>
+        <% endfor %>
+    <% endif %>
+    <% if result2.rows %>
+        <% for item in result2.rows %>
+            <% en.arrayUtils.add records item %>
+        <% endfor %>
+    <% endif %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Available selection list' %>
+    <% assign returnData.results = records %>
+    <% return returnData %>
+<% else %>
+    <% assign returnData.status = 0 %>
+    <% assign returnData.message = 'Unit id not found' %>
+    <% return returnData %>
+<% endif %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

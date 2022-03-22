@@ -1,0 +1,280 @@
+<form autocomplete="off">
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <button style="float:right" class="btn btn-danger mr-1 mb-1" type="button" (click)="clearFilter()">Clear</button>
+            <div class="form-group  mr-2" style="float:right">
+                <input class="form-control" name="search" placeholder="Type name or unit" style="padding-right: 25px;" type="text" [ngModelOptions]="{standalone: true}"
+                    [(ngModel)]="filterForm.searchText" name="search" (keyup)="doSearch()">
+            </div>
+        </div>
+    </div>
+</form>
+<div class="table-responsive mt-2 mb-3">
+    <table class="table table-striped list_table" style="table-layout: fixed;">
+        <thead>
+            <tr>
+                <th width="180px" (click)="setOrder('project_name')">Project
+                    <span *ngIf="order != 'project_name'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'project_name'">▼</span>
+                    <span *ngIf="!reverse && order == 'project_name'">▲</span>
+                </th>
+                <th width="100px" (click)="setOrder('unit_no')">Unit
+                    <span *ngIf="order != 'unit_no'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'unit_no'">▼</span>
+                    <span *ngIf="!reverse && order == 'unit_no'">▲</span>
+                </th>
+                <th width="100px" (click)="setOrder('deal_id')">Deal
+                    <span *ngIf="order != 'deal_id'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'deal_id'">▼</span>
+                    <span *ngIf="!reverse && order == 'deal_id'">▲</span>
+                </th>
+                <th width="120px" (click)="setOrder('deposit_no')">Deposit No
+                    <span *ngIf="order != 'deposit_no'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'deposit_no'">▼</span>
+                    <span *ngIf="!reverse && order == 'deposit_no'">▲</span>
+                </th>
+                <th width="180px" class="text-right" (click)="setOrder('payment_amount')">Payment Amount
+                    <span *ngIf="order != 'payment_amount'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'payment_amount'">▼</span>
+                    <span *ngIf="!reverse && order == 'payment_amount'">▲</span>
+                </th>
+                <th width="150px" (click)="setOrder('payment_date')">Payment Date
+                    <span *ngIf="order != 'payment_date'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'payment_date'">▼</span>
+                    <span *ngIf="!reverse && order == 'payment_date'">▲</span>
+                </th>
+                <th width="170px" (click)="setOrder('payment_type')">Payment Type
+                    <span *ngIf="order != 'payment_type'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'payment_type'">▼</span>
+                    <span *ngIf="!reverse && order == 'payment_type'">▲</span>
+                </th>
+                <th width="200px" (click)="setOrder('financial_institution')">Financial Institution
+                    <span *ngIf="order != 'financial_institution'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'financial_institution'">▼</span>
+                    <span *ngIf="!reverse && order == 'financial_institution'">▲</span>
+                </th>
+                <th width="200px" (click)="setOrder('account_holder_name')">Account Holder Name
+                    <span *ngIf="order != 'account_holder_name'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'account_holder_name'">▼</span>
+                    <span *ngIf="!reverse && order == 'account_holder_name'">▲</span>
+                </th>
+                <th width="150px" (click)="setOrder('account')">Account #
+                    <span *ngIf="order != 'account'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'account'">▼</span>
+                    <span *ngIf="!reverse && order == 'account'">▲</span>
+                </th>
+                <th width="150px" (click)="setOrder('last_4digits')">Last 4 digits
+                    <span *ngIf="order != 'last_4digits'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'last_4digits'">▼</span>
+                    <span *ngIf="!reverse && order == 'last_4digits'">▲</span>
+                </th>
+                <th width="100px">NSF</th>
+                <th width="100px" class="text-right" (click)="setOrder('interest')">Interest
+                    <span *ngIf="order != 'interest'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'interest'">▼</span>
+                    <span *ngIf="!reverse && order == 'interest'">▲</span>
+
+                </th>
+                <th width="100px" class="text-right" (click)="setOrder('penalty')">Penalty
+                    <span *ngIf="order != 'penalty'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'penalty'">▼</span>
+                    <span *ngIf="!reverse && order == 'penalty'">▲</span>
+
+                </th>
+                <th width="100px" class="text-right" (click)="setOrder('nsf_fee')">NSF Fee
+                    <span *ngIf="order != 'nsf_fee'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'nsf_fee'">▼</span>
+                    <span *ngIf="!reverse && order == 'nsf_fee'">▲</span>
+
+                </th>
+                <th width="200px">Notes</th>
+                <!-- <th width="50px"></th> -->
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngIf="paymentList.length>0">
+                <tr *ngFor="let item of paymentList;let i=index">
+                    <td>{{item?.project_name}}</td>
+                    <td>{{item?.unit_no}}</td>
+                    <td>{{item?.deal_id}}</td>
+                    <td>{{item?.deposit_no}}</td>
+                    <td class="text-right">{{item?.payment_amount ? (item?.payment_amount | currency:'USD') :'-'}}</td>
+                    <td>{{item?.payment_date ? (item?.payment_date | date:'yyyy-MM-dd') :'-'}}</td>
+                    <td>{{item?.payment_type ? item?.payment_type : ''}}
+                    </td>
+                    <td>{{item?.financial_institution ? item?.financial_institution :'-'}}</td>
+                    <td>{{item?.account_holder_name ? item?.account_holder_name:'-'}}</td>
+                    <td>{{item?.account ? item?.account:'-'}}</td>
+                    <td>{{item?.last_4digits ? item?.last_4digits :'-'}}</td>
+                    <td>{{item?.nsf ? 'Yes' :'No'}}</td>
+                    <td class="text-right">{{item?.interest ? (item?.interest| currency:'USD') :'-'}}</td>
+                    <td class="text-right">{{item?.penalty ? (item?.penalty | currency:'USD'):'-'}}</td>
+                    <td class="text-right">{{item?.nsf_fee ? (item?.nsf_fee | currency:'USD'):'-'}}</td>
+                    <td>
+                        {{item?.notes ? item?.notes :'-'}}
+                    </td>
+                </tr>
+            </ng-container>
+            <ng-container *ngIf="paymentList.length == 0">
+                <tr>
+                    <td colspan="4" class="text-center">No deposit found</td>
+                    <td colspan="12"></td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+</div>
+<div class="row mt-3" *ngIf="paginationObj.total>=20">
+    <div class="col-md-6">
+        <div class="form-group">
+            <!-- <div class="col-sm-6"> -->
+            <span class="float-left" style="width:70px;margin-top: 6px;">Page Size:</span>
+            <span class="float-left" style="width:85px;">
+                <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="pageSize" (change)="setPageSize()">
+                    <option value="">-Select-</option>
+                                        <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </span>
+            <span class="float-left" style="margin-top: 6px !important;margin-left: 16px !important;">{{paginationObj.total}} Record(s) Found</span>
+            <!-- </div> -->
+        </div>
+    </div>
+    <div class="col-md-6">
+        <nav>
+            <ul class="pagination">
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" (click)="doPaginationWise(paginationObj.previousPage)">
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(1)">
+                        First
+                    </a>
+                </li>
+                <li class="page-item {{pagination == paginationObj.currentPage?'active':''}}" *ngFor="let pagination of paginationObj.items">
+                    <a class="page-link" (click)="doPaginationWise(pagination)">{{pagination}}</a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.totalPages)">
+                        Last
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" (click)="doPaginationWise(paginationObj.nextPage)">
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<ng-template #updateDepositModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Deposit</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+
+                <div class="col-md-4">
+                    <div class="form-group row">
+                        <label class="col-sm-12 coltrol-label mt-1 mb-0">Project Name :
+                            <b> {{formDetails?.project_name}}</b>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group row">
+                        <label class="col-sm-12 coltrol-label mt-1 mb-0">Unit :
+                            <b> {{formDetails?.unit_no}}</b>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group row">
+                        <label class="col-sm-12 coltrol-label mt-1 mb-0">Deposit No :
+                            <b> {{formDetails?.deposit_no}}</b>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 coltrol-label mt-1 mb-0">Percent :</label>
+                        <div class="col-sm-12">
+                            <input type="number" min="0" disabled [ngModelOptions]="{standalone: true}" name="percent" [(ngModel)]="formDetails.percent"
+                                class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 coltrol-label mt-1 mb-0">Amount :</label>
+                        <div class="col-sm-12">
+                            <input type="number" min="0" disabled [ngModelOptions]="{standalone: true}" name="amount" [(ngModel)]="formDetails.amount"
+                                class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 coltrol-label mt-1 mb-0">Due Date :</label>
+                        <div class="col-sm-12 input-group">
+                            <input type="text" class="form-control" placeholder="YYYY-MM-DD" #dueDate="bsDatepicker" bsDatepicker [bsConfig]="{ containerClass: 'theme-dark-blue',showTodayButton: true, todayPosition: 'center',showClearButton: true, clearPosition: 'right',isAnimated: true,adaptivePosition: true,dateInputFormat: 'YYYY-MM-DD',  returnFocusToInput: true }"
+                                [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.due_date">
+                            <span class=" input-group-prepend" (click)="dueDate.toggle()" [attr.aria-expanded]="dueDate.isOpen">
+                                <span class="input-group-text">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="editDeposit()">Update</button>
+        </div>
+    </div>
+</ng-template>

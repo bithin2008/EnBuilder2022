@@ -1,0 +1,244 @@
+{
+    "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+    "version": 1,
+    "newProjectRoot": "projects",
+    "projects": {
+        "enbuilder": {
+            "root": "",
+            "sourceRoot": "src",
+            "projectType": "application",
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-angular:browser",
+                    "options": {
+                        "outputPath": "dist",
+                        "index": "src/index.html",
+                        "main": "src/main.ts",
+                        "tsConfig": "src/tsconfig.app.json",
+                        "polyfills": "src/polyfills.ts",
+                        "assets": [
+                            "src/assets",
+                            "src/manifest.webmanifest"
+                        ],
+                        "styles": [
+                            "node_modules/simple-line-icons/css/simple-line-icons.css",
+                            "node_modules/bootstrap/dist/css/bootstrap.min.css",
+                            "src/scss/style.scss",
+                            "node_modules/ngx-toastr/toastr.css",
+                            "node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
+                            "node_modules/intl-tel-input/build/css/intlTelInput.css",
+                            "node_modules/primeflex/primeflex.css",
+                            "node_modules/primeicons/primeicons.css",
+                            "node_modules/primeng/resources/themes/saga-blue/theme.css",
+                            "node_modules/primeng/resources/primeng.min.css",
+                            "node_modules/@syncfusion/ej2/material.css",
+                            "node_modules/froala-editor/css/froala_editor.pkgd.min.css",
+                            "node_modules/froala-editor/css/froala_style.min.css",
+                            "node_modules/froala-editor/js/plugins/lists.min.js",
+                            "node_modules/froala-editor/css/plugins/table.min.css",
+                            "node_modules/froala-editor/js/plugins/table.min.js",
+                            "node_modules/froala-editor/js/plugins/font_family.min.js",
+                            "node_modules/froala-editor/js/plugins/font_size.min.js",
+                            "node_modules/froala-editor/js/plugins/link.min.js",
+                            "node_modules/froala-editor/js/plugins/emoticons.min.js",
+                            "node_modules/froala-editor/css/plugins/emoticons.min.css",
+                            "node_modules/froala-editor/js/plugins/inline_style.min.js",
+                            "node_modules/froala-editor/js/plugins/colors.min.js",
+                            "node_modules/froala-editor/css/plugins/colors.min.css",
+                            "node_modules/froala-editor/js/plugins/align.min.js",
+                            "node_modules/froala-editor/js/plugins/draggable.min.js",
+                            "node_modules/froala-editor/css/plugins/draggable.min.css",
+                            "node_modules/froala-editor/js/plugins/entities.min.js",
+                            "node_modules/froala-editor/js/third_party/font_awesome.min.js",
+                            "node_modules/froala-editor/css/third_party/font_awesome.min.css",
+                            "node_modules/froala-editor/js/plugins/inline_class.min.js",
+                            "node_modules/froala-editor/js/plugins/special_characters.min.js",
+                            "node_modules/froala-editor/css/plugins/special_characters.min.css",
+                            "node_modules/froala-editor/js/third_party/spell_checker.min.js",
+                            "node_modules/froala-editor/css/third_party/spell_checker.min.css",
+                            "node_modules/froala-editor/js/plugins/word_paste.min.js",
+                            "node_modules/froala-editor/js/plugins/url.min.js",
+                            "node_modules/froala-editor/js/plugins/quote.min.js",
+                            "node_modules/froala-editor/js/plugins/video.min.js",
+                            "node_modules/froala-editor/css/plugins/video.min.css",
+                            "node_modules/froala-editor/js/plugins/paragraph_style.min.js",
+                            "node_modules/froala-editor/js/plugins/paragraph_format.min.js",
+                            "node_modules/froala-editor/js/plugins/line_height.min.js",
+                            "node_modules/froala-editor/js/plugins/line_breaker.min.js",
+                            "node_modules/froala-editor/css/plugins/line_breaker.min.css",
+                            "node_modules/froala-editor/js/third_party/embedly.min.js",
+                            "node_modules/froala-editor/css/third_party/embedly.min.css",
+                            "node_modules/froala-editor/css/plugins/help.min.css",
+                            "node_modules/froala-editor/js/plugins/help.min.js",
+                            "node_modules/froala-editor/js/plugins/fullscreen.min.js",
+                            "node_modules/froala-editor/css/plugins/fullscreen.min.css",
+                            "node_modules/ngx-lightbox/lightbox.css"
+                        ],
+                        "stylePreprocessorOptions": {
+                            "includePaths": [
+                                "./node_modules"
+                            ]
+                        },
+                        "scripts": [
+                            "node_modules/chart.js/dist/Chart.min.js"
+                        ]
+                    },
+                    "configurations": {
+                        "production": {
+                            "budgets": [
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "6kb"
+                                }
+                            ],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "extractCss": true,
+                            "namedChunks": false,
+                            "aot": true,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                            "buildOptimizer": true,
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.prod.ts"
+                                }
+                            ]
+                        },
+                        "production-hi": {
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.prod.ts"
+                                }
+                            ],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "extractCss": true,
+                            "namedChunks": false,
+                            "aot": true,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                            "buildOptimizer": true,
+                            "outputPath": "dist/",
+                            "i18nFile": "src/locale/messages.hi.xlf",
+                            "i18nFormat": "xlf",
+                            "i18nLocale": "hi",
+                            "i18nMissingTranslation": "error"
+                        },
+                        "hi": {
+                            "aot": true,
+                            "outputPath": "dist/",
+                            "i18nFile": "src/locale/messages.hi.xlf",
+                            "i18nFormat": "xlf",
+                            "i18nLocale": "hi",
+                            "i18nMissingTranslation": "error"
+                        }
+                    }
+                },
+                "serve": {
+                    "builder": "@angular-devkit/build-angular:dev-server",
+                    "options": {
+                        "browserTarget": "enbuilder:build",
+                        "proxyConfig": "./proxy.conf.json"
+                    },
+                    "configurations": {
+                        "production": {
+                            "browserTarget": "enbuilder:build:production"
+                        },
+                        "hi": {
+                            "browserTarget": "enbuilder:build:hi"
+                        }
+                    }
+                },
+                "extract-i18n": {
+                    "builder": "@angular-devkit/build-angular:extract-i18n",
+                    "options": {
+                        "browserTarget": "enbuilder:build"
+                    }
+                },
+                "test": {
+                    "builder": "@angular-devkit/build-angular:karma",
+                    "options": {
+                        "main": "src/test.ts",
+                        "karmaConfig": "./karma.conf.js",
+                        "polyfills": "src/polyfills.ts",
+                        "tsConfig": "src/tsconfig.spec.json",
+                        "scripts": [
+                            "node_modules/chart.js/dist/Chart.min.js"
+                        ],
+                        "styles": [
+                            "node_modules/flag-icon-css/css/flag-icon.css",
+                            "node_modules/font-awesome/css/font-awesome.css",
+                            "node_modules/simple-line-icons/css/simple-line-icons.css",
+                            "src/scss/style.scss"
+                        ],
+                        "stylePreprocessorOptions": {
+                            "includePaths": [
+                                "./node_modules"
+                            ]
+                        },
+                        "assets": [
+                            "src/assets",
+                            "src/favicon.ico",
+                            "src/manifest.webmanifest"
+                        ]
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-devkit/build-angular:tslint",
+                    "options": {
+                        "tsConfig": [
+                            "src/tsconfig.app.json",
+                            "src/tsconfig.spec.json"
+                        ],
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
+                    }
+                }
+            }
+        },
+        "enbuilder-e2e": {
+            "root": "",
+            "sourceRoot": "",
+            "projectType": "application",
+            "architect": {
+                "e2e": {
+                    "builder": "@angular-devkit/build-angular:protractor",
+                    "options": {
+                        "protractorConfig": "./protractor.conf.js",
+                        "devServerTarget": "enbuilder:serve"
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-devkit/build-angular:tslint",
+                    "options": {
+                        "tsConfig": [
+                            "e2e/tsconfig.e2e.json"
+                        ],
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    "defaultProject": "enbuilder",
+    "schematics": {
+        "@schematics/angular:component": {
+            "prefix": "app",
+            "styleext": "scss"
+        },
+        "@schematics/angular:directive": {
+            "prefix": "app"
+        }
+    },
+    "cli": {
+        "analytics": false
+    }
+}

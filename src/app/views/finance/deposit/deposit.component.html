@@ -1,0 +1,219 @@
+<form autocomplete="off">
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <button style="float:right" class="btn btn-danger mr-1 mb-1" type="button" (click)="clearFilter()">Clear</button>
+            <div class="form-group  mr-2" style="float:right">
+                <input class="form-control" name="search" placeholder="Type name or unit" style="padding-right: 25px;" type="text" [ngModelOptions]="{standalone: true}"
+                    [(ngModel)]="filterForm.searchText" name="search" (keyup)="doSearch()">
+            </div>
+        </div>
+    </div>
+</form>
+<div class="table-responsive mt-2 mb-3">
+    <table class="table table-striped list_table" style="table-layout: fixed;">
+        <thead>
+            <tr>
+                <th width="180px" (click)="setOrder('project_name')">Project
+                    <span *ngIf="order != 'project_name'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'project_name'">▼</span>
+                    <span *ngIf="!reverse && order == 'project_name'">▲</span>
+                </th>
+                <th width="100px" (click)="setOrder('unit_no')">Unit
+                    <span *ngIf="order != 'unit_no'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'unit_no'">▼</span>
+                    <span *ngIf="!reverse && order == 'unit_no'">▲</span>
+                </th>
+                <th width="120px" (click)="setOrder('percent')">Percent
+                    <span *ngIf="order != 'percent'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'percent'">▼</span>
+                    <span *ngIf="!reverse && order == 'percent'">▲</span>
+                </th>
+                <th width="130px" class="text-right" (click)="setOrder('amount')">Amount
+                    <span *ngIf="order != 'amount'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'amount'">▼</span>
+                    <span *ngIf="!reverse && order == 'amount'">▲</span>
+                </th>
+                <th width="120px" (click)="setOrder('due_date')">Due Date
+                    <span *ngIf="order != 'due_date'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'due_date'">▼</span>
+                    <span *ngIf="!reverse && order == 'due_date'">▲</span>
+                </th>
+                <th width="170px" class="text-right" (click)="setOrder('payment_received')">Payment Received
+                    <span *ngIf="order != 'payment_received'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'payment_received'">▼</span>
+                    <span *ngIf="!reverse && order == 'payment_received'">▲</span>
+                </th>
+                <th width="100px">Paid</th>
+                <th width="50px"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngIf="depositList.length>0">
+                <tr *ngFor="let item of depositList;let i=index">
+                    <td>{{item?.project_name}}</td>
+                    <td>{{item?.unit_no}}</td>
+                    <td>{{item?.percent}}
+                        <span *ngIf="item?.percent">%</span>
+                    </td>
+                    <td class="text-right">{{item?.amount | currency:'USD'}}</td>
+                    <td>{{item?.due_date |date:'yyyy-MM-dd'}}</td>
+                    <td class="text-right">{{item?.payment_received? (item?.payment_received | currency:'USD'): ''}}
+                    </td>
+                    <td>{{item?.is_paid ?'Yes':'No'}}</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm mr-2" type="button" (click)="openEditDepositModal(updateDepositModal,item)">
+                            <i class="fa fa-pencil-alt" aria-hidden="true"></i>
+                        </button>
+                        <!-- <button class="btn btn-danger btn-sm" type="button" (click)="deleteDeposit(item)">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </button> -->
+                    </td>
+                </tr>
+            </ng-container>
+            <ng-container *ngIf="depositList.length == 0">
+                <tr>
+                    <td colspan="4" class="text-center">No deposit found</td>
+                    <td colspan="4"></td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+</div>
+<div class="row mt-3" *ngIf="paginationObj.total>=20">
+    <div class="col-md-6">
+        <div class="form-group">
+            <!-- <div class="col-sm-6"> -->
+            <span class="float-left" style="width:70px;margin-top: 6px;">Page Size:</span>
+            <span class="float-left" style="width:85px;">
+                <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="pageSize" (change)="setPageSize()">
+                    <option value="">-Select-</option>
+                                        <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </span>
+            <span class="float-left" style="margin-top: 6px !important;margin-left: 16px !important;">{{paginationObj.total}} Record(s) Found</span>
+            <!-- </div> -->
+        </div>
+    </div>
+    <div class="col-md-6">
+        <nav>
+            <ul class="pagination">
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" (click)="doPaginationWise(paginationObj.previousPage)">
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(1)">
+                        First
+                    </a>
+                </li>
+                <li class="page-item {{pagination == paginationObj.currentPage?'active':''}}" *ngFor="let pagination of paginationObj.items">
+                    <a class="page-link" (click)="doPaginationWise(pagination)">{{pagination}}</a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.totalPages)">
+                        Last
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" (click)="doPaginationWise(paginationObj.nextPage)">
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<ng-template #updateDepositModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Deposit</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+
+                <div class="col-md-4">
+                    <div class="form-group row">
+                        <label class="col-sm-12 coltrol-label mt-1 mb-0">Project Name :
+                            <b> {{formDetails?.project_name}}</b>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group row">
+                        <label class="col-sm-12 coltrol-label mt-1 mb-0">Unit :
+                            <b> {{formDetails?.unit_no}}</b>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group row">
+                        <label class="col-sm-12 coltrol-label mt-1 mb-0">Deposit No :
+                            <b> {{formDetails?.deposit_no}}</b>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 coltrol-label mt-1 mb-0">Percent :</label>
+                        <div class="col-sm-12">
+                            <input type="number" min="0" disabled [ngModelOptions]="{standalone: true}" name="percent" [(ngModel)]="formDetails.percent"
+                                class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 coltrol-label mt-1 mb-0">Amount :</label>
+                        <div class="col-sm-12">
+                            <input type="number" min="0" disabled [ngModelOptions]="{standalone: true}" name="amount" [(ngModel)]="formDetails.amount"
+                                class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 coltrol-label mt-1 mb-0">Due Date :</label>
+                        <div class="col-sm-12 input-group">
+                            <input type="text" class="form-control" placeholder="YYYY-MM-DD" #dueDate="bsDatepicker" bsDatepicker [bsConfig]="{ containerClass: 'theme-dark-blue',showTodayButton: true, todayPosition: 'center',showClearButton: true, clearPosition: 'right',isAnimated: true,adaptivePosition: true,dateInputFormat: 'YYYY-MM-DD',  returnFocusToInput: true }"
+                                [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.due_date">
+                            <span class=" input-group-prepend" (click)="dueDate.toggle()" [attr.aria-expanded]="dueDate.isOpen">
+                                <span class="input-group-text">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="editDeposit()">Update</button>
+        </div>
+    </div>
+</ng-template>

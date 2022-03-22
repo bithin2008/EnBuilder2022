@@ -1,0 +1,151 @@
+<div class="row mb-3">
+    <div class="col-md-9">
+        <h3>Books</h3>
+    </div>
+    <div class="col-md-3">
+        <button style="float:right" class="btn btn-primary mr-2" type="button" (click)="openAddBookModal(bookModal)">Add</button>
+    </div>
+</div>
+<div class="table-responsive mt-4">
+    <table class="table table-striped list_table" style="table-layout: fixed;">
+        <thead>
+            <tr>
+                <th>Photo</th>
+                <th>Name</th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of books" (click)="goToDetails(item._id)">
+                <td>
+                    <div *ngIf="item.photo" [ngStyle]="{'background-image': 'url(&quot;' + baseUrl+ item.photo.url +'/100&quot;)'}" class="doc-img-container">
+                    </div>
+                    <img *ngIf="!item.photo" class="doc-img-container" src="assets/img/no-image.jpg" width="30px" height="30px">
+                </td>
+                <td>
+                    {{item.name}}
+                </td>
+                <td style="width:100px">
+                    <button class="btn btn-sm btn-primary mr-2" ngbTooltip="View Book" container="body" placement="bottom" type="button">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="btn btn-sm btn-primary mr-2" ngbTooltip="Edit Book" container="body" placement="bottom" type="button" (click)="openEditBookModal($event,bookModal,item)">
+                        <i class="fa fa-pencil-alt"></i>
+                    </button>
+                    <button class="btn btn-sm btn-danger" type="button" (click)="deleteBook($event,item)">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="row" *ngIf="paginationObj.total > 20">
+    <div class="col-md-6">
+        <div class="form-group">
+            <!-- <div class="col-sm-6"> -->
+            <span class="float-left" style="width:70px;margin-top: 6px;">Page Size:</span>
+            <span class="float-left" style="width:85px;">
+                <select class="form-select" [(ngModel)]="pageSize" (change)="setPageSize()">
+                    <option value="">-Select-</option>
+                                        <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </span>
+            <span class="float-left" style="margin-top: 6px !important;margin-left: 16px !important;">{{paginationObj.total}} Record(s) Found</span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <nav>
+            <ul class="pagination">
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.previousPage)">
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(1)">
+                        First
+                    </a>
+                </li>
+                <li class="page-item {{pagination == paginationObj.currentPage?'active':''}}" *ngFor="let pagination of paginationObj.items">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(pagination)">{{pagination}}</a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.totalPages)">
+                        Last
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.nextPage)">
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<ng-template #bookModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">{{isEdit? 'Edit' :'Add'}} Book</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="mb-1 form-group">
+                    <label for="status" class="form-label">Name
+                        <span style="color:red">*</span> :
+                    </label>
+                    <input placeholder="Book name" [(ngModel)]="formDetails.name" type="text" class="form-control">
+                </div> 
+            </div>
+            <div class="col-md-12">
+                <div class="pt-4 mb-1 mt-1">
+                    <input [(ngModel)]="formDetails.is_published" type="checkbox" id="publish">&nbsp;&nbsp;&nbsp;
+                    <label for="publish">Publish :
+                        <!-- <span style="color:red">*</span> -->
+                    </label>
+                </div>
+            </div>
+            <div class="photo-holder mt-3">
+                <span *ngIf="!uploadedPhoto">
+                    <img class="component-icon" *ngIf="formDetails?.layout" [src]="formDetails?.layout" alt="">
+                    <img class="component-icon" *ngIf="!formDetails?.layout" src="assets/img/no-image.jpg" alt="">
+                </span>
+                <button class="btn btn-primary btn-sm photo-upload-btn">
+                    <i class="fa fa-upload"></i>
+                    <input type="file" id="uploadLogo" accept="image/*" placeholder="Add Photo" (change)="uploadImage($event.target.files)">
+                </button>
+            </div>
+
+            <div class="col-md-12">
+                <label for="">Select Projects: </label>
+                <div class="row">
+                    <div class="col-md-6" *ngFor="let project of projectList;let l=index">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [name]="project?.name" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_project{{l}}" [(ngModel)]="project.is_selected">
+                            <label class="custom-control-label" for="is_project{{l}}">
+                                {{project?.name}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" *ngIf="isEdit" (click)="addOrUpdateBook()">Update</button>
+            <button type="button" class="btn btn-primary" *ngIf="!isEdit" (click)="addOrUpdateBook()">Add</button>
+        </div>
+    </div>
+</ng-template>

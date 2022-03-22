@@ -1,0 +1,53 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_models' %> 
+
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% assign obj = en.params %>
+    
+    <% en.data.findone modelDetails datasetId query %>
+    <% assign modelDetails = modelDetails.row %>
+    
+    <% if en.params.collection %>
+        ///// for updating collection name in other datasets///////  
+        <% if modelDetails.collection != en.params.collection %>
+            <% assign upQuery.model_id = en.params._id %>
+            <% assign updata.$set.collection = en.params.collection %>
+            <% en.data.updateMany rresults 'bldr_units' upQuery updata %>
+            <% en.data.updateMany rresults 'bldr_pc_models_units' upQuery updata %>
+        <% endif %>
+    <% endif %>
+    
+    <% en.data.update upResult datasetId query obj %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Model updated successfully.' %>
+    <% assign returnData.result = upResult %>
+    <% return returnData %>
+<% else %>
+    <% assign obj = en.params %>
+    
+    //for checking model name availability////
+    <% assign query.project_id = obj.project_id %>
+    <% assign query.name = obj.name %>
+    <% en.data.findOne result datasetId query %>
+    <% if result.row %>
+        <% assign returnData.status = 0 %>
+        <% assign returnData.message = 'Model name already exist.' %>
+        <% assign returnData.result = result %>
+        <% return returnData %>
+    <% else %>
+        <% en.data.insert result1 datasetId obj %>
+        <% assign returnData.status = 1 %>
+        <% assign returnData.message = 'Model added successfully.' %>
+        <% assign returnData.result = result1 %>
+        <% return returnData %>
+    <% endif %>
+<% endif %>
+
+

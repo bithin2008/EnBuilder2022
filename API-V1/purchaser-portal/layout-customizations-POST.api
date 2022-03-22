@@ -1,0 +1,46 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_layout_customizations' %> 
+<% assign userDetails = UserResult.user %>
+
+<% assign params = en.params %>
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% if params.reply %>
+        <% en.data.findOne result datasetId query %>
+        <% assign replies = [] %>
+        <% if result.row.replies %>
+            <% assign replies = result.row.replies %>
+        <% endif %>
+        <% assign params.reply.is_admin = true %>
+        <% assign params.reply.created_at = en.time.now %>
+        <% assign params.reply.author_name = userDetails.firstName | append: ' ' | append: userDetails.lastName %>
+        <% assign params.reply.author_id = userDetails._id %>
+        <% assign params.reply.author_email = userDetails.email %>
+        <% en.arrayUtils.add replies params.reply %>
+        <% assign params.replies =  replies %>
+        <% unassign params.reply %>
+    <% endif %>
+    <% en.data.update upResult datasetId query params %>
+    <% assign returnData.result = result.row %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Change request updated successfully.' %>
+    <% return returnData %>
+<% else %>
+    
+    <% assign params.created_at = en.time.now %>
+    <% assign params.author_name = userDetails.firstName | append: ' ' | append: userDetails.lastName %>
+    <% assign params.author_id = userDetails._id %>
+    <% assign params.author_email = userDetails.email %>
+    
+    <% en.data.insert result datasetId params %>
+    <% assign returnData.result = result.row %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Change request added successfully.' %>
+    <% return returnData %>
+<% endif %>

@@ -1,0 +1,28 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_projects' %>
+
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% assign params.$push.occupancy_dates = en.params.occupancy_date %>
+    <% en.data.update upResult datasetId query params %>
+    <% assign returnData.status = 1 %> 
+    <% assign returnData.message = 'Occupancy date added successfully.' %>
+    <% assign returnData.result = upResult.row %> 
+    <% return returnData %>
+<% else %>
+    <% assign returnData.status = 0 %> 
+    <% assign returnData.message = 'Project id missing.' %>
+    <% return returnData %>
+<% endif %>
+ 
+ 
+ 
+
+
+

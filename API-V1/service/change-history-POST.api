@@ -1,0 +1,18 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'crm_history' %>
+<% assign params = en.params %>
+<% assign dataToInsert.type = params.type %>
+<% assign dataToInsert.id = params.id %>
+<% assign dataToInsert.history = params.history %>
+<% assign dataToInsert.by = UserResult.user.firstName | append: ' ' | append: UserResult.user.lastName  %>
+<% en.data.insert result datasetId dataToInsert %>
+<% assign returnData.status = 1 %>
+<% assign returnData.message = 'Change history added successfully.' %>
+<% assign returnData.result = result %>
+<% return returnData %> 

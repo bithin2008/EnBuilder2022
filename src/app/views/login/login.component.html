@@ -1,0 +1,57 @@
+<div class="login-page">
+    <div class="login-box login_body">
+        <div class="card">
+            <div class="card-body login-card-body card_padd_reduce">
+                <div class="login-logo logo-sec">
+                    <div class="text-center"><img src="assets/img/login_screen_logo.png" alt=""></div>
+                </div>
+                <!-- /.login-logo -->
+                <!-- <h3 class="text-center">LOGIN</h3>
+                <p class="login-box-msg">Enter your Username and Password</p> -->
+                <form class="full_frm" [formGroup]="loginForm" (ngSubmit)="login()">
+                    <div class="input-group mb-3">
+                        <input type="email" formControlName="email" id="email" name="email" class="form-control from_input" placeholder="Email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
+                        <div class="icon_sec">
+                            <i class="fa fa-envelope" aria-hidden="true"></i>
+                        </div>
+                        <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+                            <div *ngIf="f.username.errors.required">Username is required</div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3 mr_top">
+                        <input type="password" formControlName="password" id="password" name="password" class="form-control from_input" placeholder="Password" [ngClass]="{ 'is-invalid': submitted && f.password.errors }">
+                        <div class="icon_sec">
+                            <i class="fa fa-lock" aria-hidden="true"></i>
+                        </div>
+                        <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                            <div *ngIf="f.password.errors.required">Password is required</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- <div class="col-12">
+                            <div class="icheck-primary primary_check">
+                                <input type="checkbox" id="remember">
+                                <label for="remember" class="remember_label">
+                                    Remember Me
+                                </label>
+                            </div>
+                        </div> -->
+                        <!-- /.col -->
+                        <div class="col-12 pt-3 ">
+                            <button type="submit" class="btn btn-dark btn-block sign_btn">Sign In</button>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                </form>
+                <!-- /.social-auth-links -->
+                <!-- <p class="mb-1">
+                    <a href="forgot-password.html">I forgot my password</a>
+                </p>
+                <p class="mb-0">
+                    <a href="register.html" class="text-center">Register a new membership</a>
+                </p> -->
+            </div>
+            <!-- /.login-card-body -->
+        </div>
+    </div>
+</div>

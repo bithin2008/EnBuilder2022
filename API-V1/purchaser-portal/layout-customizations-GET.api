@@ -1,0 +1,74 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_layout_customizations' %> 
+<% assign params = en.params %>
+
+<% assign pageSize = 200 %> 
+<% if en.params.pageSize %>
+    <% assign pageSize = en.params.pageSize %>
+<% endif %>
+<% assign page = 1 %>
+<% if en.params.page %> 
+    <% assign page = en.params.page %>
+<% endif %>
+
+<% if en.params.sortBy %>
+    <% if en.params.sortOrder =='ASC' %>
+        <% assign orderBy[en.params.sortBy] = 1 %>
+    <% else %>
+        <% assign orderBy[en.params.sortBy] = -1 %>
+    <% endif %>
+<% else %>
+    <% assign orderBy._created = 1 %>
+<% endif %>
+
+<% if params.deal_id %>
+    <% assign query.deal_id = params.deal_id %>
+<% endif %>
+<% if params.project_id %>
+    <% assign query.project_id = params.project_id %>
+<% endif %> 
+<% if params.unit_id %>
+    <% assign query.unit_id = params.unit_id %>
+<% endif %> 
+
+<% en.data.find optionsResults datasetId query "" orderBy pageSize page %>
+<% assign returnData.results = optionsResults.rows %>
+<% assign returnData.pagination = optionsResults.pagination %>
+
+// for getting layout
+<% assign unitQuery._id = en.params.unit_id %>
+<% en.data.findOne unitResult "bldr_units" unitQuery "model_id" %>
+<% assign unitResult =  unitResult.row %>
+
+<% rem return 'unitResult' unitResult %>
+// for searching the layout for unit level
+<% assign uquery.unit_id = en.params.unit_id %>
+<% assign uquery.type = 'FLOOR-LAYOUT' %>
+<% assign uquery.source = 'UNIT' %>
+<% en.data.find unitLayputs "crm_media" uquery %>
+<% if unitLayputs.rows %>
+    <% assign returnData.layouts = unitLayputs.rows %>
+<% else %>
+    <% assign mquery.model_id = unitResult.model_id %>
+    <% assign mquery.type = 'FLOOR-LAYOUT' %>
+    <% assign mquery.source = 'MODEL' %>
+    <% en.data.find modelLayputs "crm_media" mquery %>
+    <% assign returnData.layouts = modelLayputs.rows %>
+<% endif %>
+
+<% assign returnData.status = 1 %>
+<% assign returnData.message = 'Layout customizations.' %>  
+<% return returnData %> 
+
+
+
+
+
+
+

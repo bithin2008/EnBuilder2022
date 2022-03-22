@@ -1,0 +1,591 @@
+<form autocomplete="off">
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <div style="float:right" class="form-check mr-2 mb-1">
+                <input class="form-check-input" (change)="updateProjectAmenitiesStatus()" type="checkbox" id="isactive" [ngModelOptions]="{standalone: true}" [(ngModel)]="projectData.amenities_enabled">
+                <label class="form-check-label" for="isactive">
+                    Enabled
+                </label>
+            </div>
+            <button style="float:right" class="btn btn-primary mr-3 mb-1" type="button" (click)="openAddSectionModal(addModal)">Add Section</button>
+            <!-- <div class="form-group mr-2" style="float:right">
+                <select class="width-210 form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedProjectId" (change)="onProjectChange($event)">
+                    <option *ngFor="let item of projectList" value="{{item._id}}">{{item.name}}</option>
+                </select>
+            </div> -->
+        </div>
+    </div>
+</form>
+<div class="table-responsive mt-2 mb-3">
+    <table class="table table-striped list_table" style="table-layout: fixed;">
+        <thead>
+            <tr>
+                <!-- <th width="70px">Step</th> -->
+                <th width="200px">Photo</th>
+                <th width="300px">Description</th>
+                <th width="250px">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngIf="projectAmenities.length>0">
+                <tr *ngFor="let item of projectAmenities;let i=index">
+                    <td>
+                        <img *ngIf="item?.section_type == 'INTRO_SECTION_1'" class="doc-img-container" src="assets/img/amenities-sections/sample-01.jpg" width="30px" height="30px">
+                        <img *ngIf="item?.section_type == 'INTRO_SECTION_2'" class="doc-img-container" src="assets/img/amenities-sections/sample-02.jpg" width="30px" height="30px">
+                        <img *ngIf="item?.section_type == 'IMAGE_GALLERY'" class="doc-img-container" src="assets/img/amenities-sections/sample-03.jpg" width="30px" height="30px">
+                        <img *ngIf="item?.section_type == 'SLIDER'" class="doc-img-container" src="assets/img/amenities-sections/sample-04.jpg" width="30px" height="30px">
+                    </td>
+                    <td>
+                        <h4>{{item?.title}}</h4>
+                        <h6>{{item?.sub_title}}</h6>
+                        <div [innerHtml]="item?.body"> </div>
+                    </td>
+                    <td class="text-right">
+                        <button class="btn btn-primary btn-sm mr-2" type="button" [disabled]="i==0" (click)="reArrangeAmenities('up',i)">
+                            <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                        </button>
+                        <button class="btn btn-primary btn-sm mr-2" type="button" [disabled]="(i+1)==projectAmenities.length" (click)="reArrangeAmenities('down',i)">
+                            <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                        </button>
+                        <button class="btn btn-primary btn-sm mr-2" type="button" (click)="openEditAmenitiesModal(addModal,item,i)">
+                            <i class="fa fa-pencil-alt" aria-hidden="true"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" type="button" (click)="deleteprojectAmenities(item)">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>
+            </ng-container>
+            <ng-container *ngIf="projectAmenities.length == 0">
+                <tr>
+                    <td colspan="3" class="text-center">No Amenities found</td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+</div>
+<div class="row mt-3" *ngIf="paginationObj.total>=20">
+    <div class="col-md-6">
+        <div class="form-group">
+            <!-- <div class="col-sm-6"> -->
+            <span class="float-left" style="width:70px;margin-top: 6px;">Page Size:</span>
+            <span class="float-left" style="width:85px;">
+                <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="pageSize" (change)="setPageSize()">
+                    <option value="">-Select-</option>
+                                        <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </span>
+            <span class="float-left" style="margin-top: 6px !important;margin-left: 16px !important;">{{paginationObj.total}} Record(s) Found</span>
+            <!-- </div> -->
+        </div>
+    </div>
+    <div class="col-md-6">
+        <nav>
+            <ul class="pagination">
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" (click)="doPaginationWise(paginationObj.previousPage)">
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(1)">
+                        First
+                    </a>
+                </li>
+                <li class="page-item {{pagination == paginationObj.currentPage?'active':''}}" *ngFor="let pagination of paginationObj.items">
+                    <a class="page-link" (click)="doPaginationWise(pagination)">{{pagination}}</a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.totalPages)">
+                        Last
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" (click)="doPaginationWise(paginationObj.nextPage)">
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<ng-template #addModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" *ngIf="step=='step1'">Choose Section Style</h4>
+        <h4 class="modal-title pull-left" *ngIf="step=='step2'">
+            <ng-container *ngIf="formDetails.section_type =='INTRO_SECTION_1'">Intro section 1</ng-container>
+            <ng-container *ngIf="formDetails.section_type =='INTRO_SECTION_2'">Intro section 2</ng-container>
+            <ng-container *ngIf="formDetails.section_type =='IMAGE_GALLERY'">Image Gallery</ng-container>
+            <ng-container *ngIf="formDetails.section_type =='SLIDER'">Slider</ng-container>
+        </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="sectionModalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body custom-edit-body">
+        <form autocomplete="off">
+            <div class="modal-tab-area" *ngIf="step=='step1'">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="pl-2"> Intro Section 1 :</label>
+                        <div [class]="formDetails.section_type =='INTRO_SECTION_1' ? 'photo-holder mt-2 green-border' : 'photo-holder mt-2'" (click)="onSectionSelection('INTRO_SECTION_1')">
+                            <span>
+                                <img class="component-icon" *ngIf="formDetails?.layout" [src]="formDetails?.layout" alt="">
+                                <img class="component-icon" *ngIf="!formDetails?.layout" src="assets/img/amenities-sections/sample-01.jpg" alt="">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="pl-2"> Intro Section 2 :</label>
+                        <div [class]="formDetails.section_type =='INTRO_SECTION_2' ? 'photo-holder mt-2 green-border' : 'photo-holder mt-2'" (click)="onSectionSelection('INTRO_SECTION_2')">
+                            <span>
+                                <img class="component-icon" *ngIf="formDetails?.layout" [src]="formDetails?.layout" alt="">
+                                <img class="component-icon" *ngIf="!formDetails?.layout" src="assets/img/amenities-sections/sample-02.jpg" alt="">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 pt-2">
+                        <label class="pl-2"> Image Gallery :</label>
+                        <div [class]="formDetails.section_type =='IMAGE_GALLERY' ? 'photo-holder mt-2 green-border' : 'photo-holder mt-2'" (click)="onSectionSelection('IMAGE_GALLERY')">
+                            <span>
+                                <img class="component-icon" *ngIf="formDetails?.layout" [src]="formDetails?.layout" alt="">
+                                <img class="component-icon" *ngIf="!formDetails?.layout" src="assets/img/amenities-sections/sample-03.jpg" alt="">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 pt-2">
+                        <label class="pl-2"> Slider 1 :</label>
+                        <div [class]="formDetails.section_type =='SLIDER' ? 'photo-holder mt-2 green-border' : 'photo-holder mt-2'" (click)="onSectionSelection('SLIDER')">
+                            <span>
+                                <img class="component-icon" *ngIf="formDetails?.layout" [src]="formDetails?.layout" alt="">
+                                <img class="component-icon" *ngIf="!formDetails?.layout" src="assets/img/amenities-sections/sample-04.jpg" alt="">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-tab-area" *ngIf="step=='step2'">
+                <div *ngIf="formDetails.section_type =='INTRO_SECTION_1'">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="name">Align :</label>
+                                <select class="form-select" nane="align" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.content_alignment">
+                                    <!-- <option value="">Select Align</option> -->
+                                    <option value="center">Center</option>
+                                    <option value="left">Left</option>
+                                    <option value="right">Right</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="title" class="diplay-block">Title :
+                                    <div  *ngIf="formDetails.title" style="float:right" class="form-check mr-2 mb-1 ">
+                                        <input class="form-check-input"  type="checkbox" id="is_title_show" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.show_title">
+                                        <label class="form-check-label" for="is_title_show">
+                                            Show
+                                        </label>
+                                    </div>
+                                </label>
+                                <input type="text"  class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.title" name="title" placeholder="Title">
+                            </div>
+                        </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label for="sub_title" class="diplay-block">Sub Title :                                   
+                                    <div  *ngIf="formDetails.sub_title"   style="float:right" class="form-check mr-2 mb-1 ">
+                                        <input class="form-check-input"  type="checkbox" id="is_subtitle_show" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.show_subtitle">
+                                        <label class="form-check-label" for="is_subtitle_show">
+                                            Show
+                                        </label>
+                                    </div>
+                            </label>
+                            <input type="text" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.sub_title" name="sub_title" placeholder="Sub title">
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="diplay-block">Body :
+                                        <div  *ngIf="formDetails.body"  style="float:right" class="form-check mr-2 mb-1 ">
+                                            <input class="form-check-input" type="checkbox" id="is_body_show" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.show_body">
+                                            <label class="form-check-label" for="is_body_show">
+                                                Show
+                                            </label>
+                        </div>
+                        </label>
+                        <div [froalaEditor]="nonInlineEdit" [(froalaModel)]="formDetails.body">
+                            {{formDetails.body ? formDetails.body : ''}}
+                        </div>
+                    </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label class="diplay-block">Text Color : </label>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <!-- <color-sketch width="100" [color]="formDetails.text_color" [ngModelOptions]="{standalone: true}" (onChangeComplete)="changeTextComplete($event)"></color-sketch> -->
+                <input [style.background]="formDetails.text_color" [(colorPicker)]="formDetails.text_color" (colorPickerOpen)="onEventLog($event)" (colorPickerClose)="onEventLog($event)" (cpInputChange)="onEventLog($event)" (colorPickerChange)="formDetails.text_color=$event">
+            </div>
+            <div class="col-sm-4"></div>
+            <h5>Background</h5>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group form-check mb-2">
+                        <input type="radio" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.background_type" value="NO_BACKGROUND" class="form-check-input" name="background" id="no_background">
+                        <label class="form-check-label" for="NO_BACKGROUND">No Background</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group form-check mb-2">
+                        <input type="radio" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.background_type" value="BACKGROUND_COLOR" class="form-check-input" name="background" id="background_color">
+                        <label class="form-check-label" for="background_color">Background Color</label>
+                    </div>
+                </div>
+                <div class="col-md-5 mb-2">
+                    <!-- <button class="btn btn-sm btn-primary bg-img-up-btn" type="button"> Add</button>    -->
+                    <!-- <color-sketch width="100" [color]="formDetails.background_color" *ngIf="formDetails.background_type=='BACKGROUND_COLOR'" (onChangeComplete)="changeComplete($event)"></color-sketch> -->
+                    <input [style.background]="formDetails.background_color" *ngIf="formDetails.background_type=='BACKGROUND_COLOR'" [(colorPicker)]="formDetails.background_color" (colorPickerOpen)="changeComplete($event)" (colorPickerClose)="changeComplete($event)" (cpInputChange)="changeComplete($event)" (colorPickerChange)="formDetails.background_color=$event">
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group form-check mb-2">
+                        <input type="radio" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.background_type" value="BACKGROUND_IMAGE" class="form-check-input" name="background" id="background_image">
+                        <label class="form-check-label" for="background_image">Background Image</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <button *ngIf="formDetails.background_type=='BACKGROUND_IMAGE'" class="btn btn-sm btn-primary bg-img-up-btn" type="button"> Add Image
+                                    <input class="doc-img-upload" accept="image/*" type="file" (change)="uploadImage($event.target.files)">
+                                </button>
+                    <div class="bg-photo-holder" *ngIf="formDetails.background_type=='BACKGROUND_IMAGE'  && formDetails?.layout">
+                        <img class="component-icon" *ngIf="formDetails?.layout" [src]="formDetails?.layout" alt="">
+                        <img class="component-icon" *ngIf="!formDetails?.layout" src="assets/img/no-image.jpg" alt="">
+                    </div>
+                    <div *ngIf="formDetails.background_type=='BACKGROUND_IMAGE' && !formDetails?.layout && formDetails?.background_image" class="bg-photo-holder" [ngStyle]="{'background-image': 'url(&quot;' + baseUrl + formDetails?.background_image?.url + '/350&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group form-check mb-2">
+                        <input type="radio" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.background_type" value="BACKGROUND_VIDEO" class="form-check-input" name="background" id="background_video">
+                        <label class="form-check-label" for="background_video">Background Video</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <button *ngIf="formDetails.background_type=='BACKGROUND_VIDEO'" class="btn btn-sm btn-primary" (click)="openAddVideoModal(videoModal)">Add Video</button>
+                </div>
+                <div class="col-md-3">
+                    <div *ngIf="videoDetails?.video_type == 'YOUTUBE'" class="video-icon" [ngStyle]="{'background-image': 'url(&quot;https://img.youtube.com/vi/'+ videoDetails?.video_id +'/mqdefault.jpg&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }">
+                    </div>
+                    <div *ngIf="videoDetails?.video_type == 'VIMEO'" class="video-icon" [ngStyle]="{'background-image': 'url(&quot;https://i.vimeocdn.com/video/'+ videoDetails?.video_id +'_400.jpg&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }">
+                    </div>
+                    <div *ngIf="videoDetails?.video_type == 'MP4'" class="video-icon" [ngStyle]="{'background-image': 'url(&quot;/assets/img/mp4-icon.jpg&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }" (click)="openVideoViewer(videoViewerModal,item)">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-check mr-2 mb-1">
+                    <input class="form-check-input" [ngModelOptions]="{standalone: true}" name="parallex" type="checkbox" id="parallex" [(ngModel)]="formDetails.parallex">
+                    <label class="form-check-label" for="parallex">
+                                    Parallex
+                                </label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-check mr-2 mb-1">
+                    <input class="form-check-input" [ngModelOptions]="{standalone: true}" name="overlay" type="checkbox" id="overlay" [(ngModel)]="formDetails.overlay">
+                    <label class="form-check-label" for="overlay">
+                                    Overlay
+                                </label>
+                </div>
+            </div>
+            <div class="col-md-6" *ngIf="formDetails.overlay">
+                <label class="form-check-label" for="color">
+                                 Overlay  Color
+                            </label>
+            </div>
+            <div class="col-sm-5" *ngIf="formDetails.overlay">
+                <!-- <color-sketch width="100" [color]="formDetails.overlay_color" (onChangeComplete)="changeOverlayComplete($event)"></color-sketch> -->
+                <input [style.background]="formDetails.overlay_color" [(colorPicker)]="formDetails.overlay_color" (colorPickerOpen)="changeOverlayComplete($event)" (colorPickerClose)="changeOverlayComplete($event)" (cpInputChange)="changeOverlayComplete($event)" (colorPickerChange)="formDetails.overlay_color=$event">
+
+            </div>
+            <div class="col-md-6" *ngIf="formDetails.overlay">
+                <div class="form-group">
+                    <label for="name"> Overlay Opacity :</label>
+                    <select class="form-select" [ngModelOptions]="{standalone: true}" name="overlay_oapacity" [(ngModel)]="formDetails.overlay_capacity">
+                                    <option value="">Select Align</option>
+                                    <option [value]="item" *ngFor="let item of overlayVlaues">{{item}}%</option>
+                                </select>
+                </div>
+            </div>
+    </div>
+    </div>
+    <div *ngIf="formDetails.section_type =='INTRO_SECTION_2'">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="name">Align :</label>
+                    <select class="form-select" nane="align" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.content_alignment">
+                                    <!-- <option value="">Select Align</option> -->
+                                    <option value="center">Center</option>
+                                    <option value="left">Left</option>
+                                    <option value="right">Right</option>
+                                </select>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label for="title" class="diplay-block">Title :
+                                    <div *ngIf="formDetails.title" style="float:right" class="form-check mr-2 mb-1 ">
+                                        <input class="form-check-input" type="checkbox" id="is_title_show" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.show_title">
+                                        <label class="form-check-label" for="is_title_show">
+                                            Show
+                                        </label>
+                </div>
+                </label>
+                <input type="text" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.title" name="title" placeholder="Title">
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label for="body" class="diplay-block">Body :                                   
+                                    <div *ngIf="formDetails.body"  style="float:right" class="form-check mr-2 mb-1 ">
+                                        <input class="form-check-input" type="checkbox" id="body_show" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.show_body">
+                                        <label class="form-check-label" for="body_show">
+                                            Show
+                                        </label>
+            </div>
+            </label>
+            <!-- <input type="text" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.sub_title" name="sub_title" placeholder="Sub title"> -->
+            <div [froalaEditor]="nonInlineEdit" [(froalaModel)]="formDetails.body">
+                {{formDetails.body ? formDetails.body : ''}}
+            </div>
+        </div>
+    </div>
+    <!-- <div class="col-sm-12">
+        <div class="form-group">
+            <label class="diplay-block">Button text :
+                <div   *ngIf="formDetails.button_text" style="float:right" class="form-check mr-2 mb-1 ">
+                <input class="form-check-input" type="checkbox" id="button_text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.show_button">
+                <label class="form-check-label" for="button_text">
+                    Show
+                </label>
+        </div>
+        </label>
+        <input type="text" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.button_text" name="title" placeholder="Title">
+    </div>
+    </div> -->
+    <div class="col-sm-2">
+        <div class="form-group">
+            <label class="diplay-block">Text Color : </label>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <!-- <color-sketch width="100" (onChangeComplete)="changeTextComplete($event)"></color-sketch> -->
+        <input [style.background]="formDetails.text_color" [(colorPicker)]="formDetails.text_color" (colorPickerOpen)="changeTextComplete($event)" (colorPickerClose)="changeTextComplete($event)" (cpInputChange)="changeTextComplete($event)" (colorPickerChange)="formDetails.text_color=$event">
+
+    </div>
+    <div class="col-md-12 mt-2">
+        <label style="display: block;">Grid Image:
+            <button style="float:right" class="btn btn-sm btn-primary" type="button"> Add Image
+                <input class="doc-img-upload" accept="image/*" type="file" (change)="uploadGridImage($event.target.files)">
+            </button>
+        </label>
+        <div class="bg-photo-holder-sec-2" *ngIf="formDetails?.layout">
+            <img class="component-icon" *ngIf="formDetails?.layout" [src]="formDetails?.layout" alt="">
+            <img class="component-icon" *ngIf="!formDetails?.layout" src="assets/img/no-image.jpg" alt="">
+        </div>
+        <div *ngIf="!formDetails?.layout && formDetails?.grid_image" class="bg-photo-holder-sec-2" [ngStyle]="{'background-image': 'url(&quot;' + baseUrl + formDetails?.grid_image?.url + '/350&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }">
+        </div>
+    </div>
+    </div>
+    </div>
+    <div *ngIf="formDetails.section_type =='IMAGE_GALLERY'">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label for="title" class="diplay-block">Title :
+                        <div   *ngIf="formDetails.title" style="float:right" class="form-check mr-2 mb-1 ">
+                        <input class="form-check-input"  type="checkbox" id="is_title_show" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.show_title">
+                        <label class="form-check-label" for="is_title_show">
+                            Show
+                        </label>
+                </div>
+                </label>
+                <input type="text" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.title" name="title" placeholder="Title">
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <button style="float:right" class="btn btn-md btn-primary  mb-4" type="button"> Add Image
+                <input class="doc-img-upload" accept="image/*" multiple type="file" (change)="uploadGalleryImage($event.target.files)">
+            </button>
+        </div>
+        <ng-container *ngIf="formDetails.layouts && formDetails.layouts.length>0">
+            <div class="col-sm-4 mb-2" *ngFor="let image of formDetails.layouts;let k=index ">
+                <div class="bg-photo-holder-sec-2" *ngIf="!image._id">
+                    <div class="delete-photo-icon" (click)="removeImage(k)">
+                        <i class="fas fa-times"></i>
+                    </div>
+                    <img class="component-icon" *ngIf="image" [src]="image" alt="">
+                    <img class="component-icon" *ngIf="!image" src="assets/img/no-image.jpg" alt="">
+                </div>
+                <div class="bg-photo-holder-sec-2" *ngIf="image._id">
+                    <div class="delete-photo-icon" (click)="deleteImage(image,k)">
+                        <i class="fas fa-times"></i>
+                    </div>
+                    <img class="component-icon" [src]="baseUrl + image?.url" alt="">
+                </div>
+            </div>
+        </ng-container>
+    </div>
+    </div>
+    <div *ngIf="formDetails.section_type =='SLIDER'">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label for="title" class="diplay-block">Title :
+                    <div *ngIf="formDetails.title" style="float:right" class="form-check mr-2 mb-1 ">
+                        <input class="form-check-input"  type="checkbox" id="is_title_show" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.show_title">
+                        <label class="form-check-label" for="is_title_show">
+                            Show
+                        </label>
+                </div>
+                </label>
+                <input type="text" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.title" name="title" placeholder="Title">
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <button style="float:right" class="btn btn-md btn-primary  mb-4" type="button"> Add Image
+                <input class="doc-img-upload" accept="image/*" multiple type="file" (change)="uploadGalleryImage($event.target.files)">
+            </button>
+        </div>
+        <ng-container *ngIf="formDetails.layouts && formDetails.layouts.length>0">
+            <div class="col-sm-4 mb-2" *ngFor="let image of formDetails.layouts;let k=index ">
+                <div class="bg-photo-holder-sec-2" *ngIf="!image._id">
+                    <div class="delete-photo-icon" (click)="removeImage(k)">
+                        <i class="fas fa-times"></i>
+                    </div>
+                    <img class="component-icon" *ngIf="image" [src]="image" alt="">
+                    <img class="component-icon" *ngIf="!image" src="assets/img/no-image.jpg" alt="">
+                </div>
+                <div class="bg-photo-holder-sec-2" *ngIf="image._id">
+                    <div class="delete-photo-icon" (click)="deleteImage(image,k)">
+                        <i class="fas fa-times"></i>
+                    </div>
+                    <img class="component-icon" [src]="baseUrl + image?.url" alt="">
+                </div>
+            </div>
+        </ng-container>
+    </div>
+    </div>
+    </div>
+    </form>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="sectionModalRef.hide()">Cancel</button>
+            <button type="button" [disabled]="!formDetails.section_type" *ngIf="step=='step1'" class="btn btn-primary" (click)="addSection()">Next</button>
+            <button type="button" *ngIf="step!='step1' && !isEdit" class="btn btn-primary mr-2" (click)="addSectionBack()">Back</button>
+            <button type="button" *ngIf="step!='step1' && !isEdit" class="btn btn-primary" (click)="addAmenities()">Add</button>
+            <button type="button" *ngIf="step!='step1' && isEdit" class="btn btn-primary" (click)="updateAmenities()">Update</button>
+        </div>
+    </div>
+</ng-template>
+<ng-template #videoModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Add Video</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="name">Video Type :</label>
+                                <select class="form-select" [(ngModel)]="videoDetails.video_type">
+                                    <option value="">Select Video Type</option>
+                                    <option value="YOUTUBE">Youtube</option>
+                                    <option value="VIMEO">Vimeo</option>
+                                    <option value="MP4">MP4</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="name">Video Url :</label>
+                                <input type="text" class="form-control" [(ngModel)]="videoDetails.url" name="url" placeholder="Video url">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="addVideos()">Add</button>
+        </div>
+    </div>
+</ng-template>
+<ng-template #mediaViewerModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left"> View Image </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body custom-all-media-body">
+        <div class="container-fluid">
+            <div *ngIf="selectedFile?.video_type=='YOUTUBE'">
+                <div class="row">
+                    <div class="text-center col-md-12">
+                        <iframe [src]="selectedFile?.showing_url" frameborder="0" width="100%" height="500px" webkitallowfullscreen mozallowfullscreen allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="selectedFile?.video_type=='VIMEO'">
+                <div class="row">
+                    <div class="text-center col-md-12">
+                        <iframe [src]="selectedFile?.showing_url" frameborder="0" width="100%" height="500px" webkitallowfullscreen mozallowfullscreen allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="selectedFile?.fileType=='IMAGE'">
+                <div class="row">
+                    <div class="text-center  col-md-12">
+                        <img loading="lazy" style="max-width:100%" [src]="baseUrl + selectedFile?.url+'/1000'" alt="{{selectedFile?.name}}">
+                    </div>
+                </div>
+            </div>
+            <div class="pt-3 row">
+            </div>
+        </div>
+    </div>
+    <!-- <div class="pt-1 pl-1 pr-1 pb-0 modal-footer">
+        <div class="text-center col-md-12" style="overflow-y: hidden">
+            <ul class="film-strip scrollable-ul">
+                <li class="all-media" style="position: relative;" *ngFor="let item of allMediaList">
+                    <div (click)="changeSelectedFile(item)" *ngIf="item.fileType == 'IMAGE'" [class]="item?.url==selectedFile?.url ? 'green-border pointer modal-photo-container-div' :'pointer modal-photo-container-div' "
+                        [ngStyle]="{'background-image': 'url(&quot;' + baseUrl + item?.url + '/350&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }">
+                    </div>
+                    <div (click)="changeSelectedFile(item)" *ngIf="item.video_type == 'YOUTUBE'" [class]="item?.url==selectedFile?.url ? 'green-border pointer modal-video-container-div' :'pointer modal-video-container-div'"
+                        [ngStyle]="{'background-image': 'url(&quot;https://img.youtube.com/vi/'+ item?.video_id +'/mqdefault.jpg&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }">
+                    </div>
+                    <div (click)="changeSelectedFile(item)" *ngIf="item.video_type == 'VIMEO'" [class]="item?.url==selectedFile?.url ? 'green-border pointer modal-video-container-div' :'pointer modal-video-container-div'"
+                        [ngStyle]="{'background-image': 'url(&quot;https://i.vimeocdn.com/video/'+ item?.video_id +'_400.jpg&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }">
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div> -->
+</ng-template>

@@ -1,0 +1,37 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_color_selection' %>
+<% assign params = en.params %>
+<% if params._id %>
+    <% assign query._id = params._id %>
+    <% en.data.findOne result datasetId query %>
+    <% assign itemResult = result.row %>
+    
+    <% en.data.delete result datasetId query %>
+    
+    <% assign dataToInsert.deal_id = itemResult.deal_id %>
+    <% assign dataToInsert.unit_id = itemResult.unit_id %>
+    <% assign dataToInsert.item_id = itemResult.item_id %>
+    <% assign dataToInsert.item_name = itemResult.item_name %>
+    <% assign dataToInsert.cost = itemResult.cost %>
+    <% assign dataToInsert.price = itemResult.price %>
+    <% assign dataToInsert.action = 'Item deleted'  %>
+    <% assign dataToInsert.time = en.time.now  %>
+    <% assign dataToInsert.user_id = UserResult.user._id %>
+    <% assign dataToInsert.user_name = UserResult.user.firstName | append: ' ' | append: UserResult.user.lastName %>
+    <% en.data.insert result1 "bldr_portal_activity" dataToInsert %>
+    
+    <% assign returnData.status = 1 %>
+    <% assign returnData.result = result %>
+    <% assign returnData.message = 'Item deleted successfully.' %> 
+    <% return returnData %>
+<% else %>
+    <% assign returnData.status = 0 %>
+    <% assign returnData.message = 'Unit id is required' %>
+    <% return returnData %>
+<% endif %>

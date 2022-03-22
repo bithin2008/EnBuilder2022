@@ -1,0 +1,48 @@
+<div class="row">
+    <div class="col-md-12">
+        <ngb-tabset class="inner-tabset" (tabChange)="doTabFunctions($event)" [activeId]="defaultActiveTab">
+            <ngb-tab id="rolesTab" title="Roles">
+                <ng-template ngbTabContent>
+                    <app-roles [projectList]="projectList" [events]="eventsSubject.asObservable()"  (projectChanged)="onProjectChanged($event)" returnUrl="service"></app-roles>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab id="locationTab" title="Location / Category">
+                <ng-template ngbTabContent>
+                    <app-location [projectList]="projectList"  [events]="eventsSubject.asObservable()"  (projectChanged)="onProjectChanged($event)" returnUrl="service"></app-location>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab id="tagsTab" title="Tags">
+                <ng-template ngbTabContent>
+                    <app-tag [projectList]="projectList"  [events]="eventsSubject.asObservable()"  (projectChanged)="onProjectChanged($event)" returnUrl="service"></app-tag>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab id="typeDeficiencyTab" title="Type of Deficiency">
+                <ng-template ngbTabContent>
+                    <app-type-deficiency [projectList]="projectList"  [events]="eventsSubject.asObservable()"  (projectChanged)="onProjectChanged($event)" returnUrl="service"></app-type-deficiency>
+                </ng-template>
+            </ngb-tab>
+
+            <ngb-tab id="priorityTab" title="Priority">
+                <ng-template ngbTabContent>
+                    <app-priority  [projectList]="projectList" [events]="eventsSubject.asObservable()"  (projectChanged)="onProjectChanged($event)" returnUrl="service"> </app-priority>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab id="usersTab" title="Users">
+                <ng-template ngbTabContent>
+                    <app-users  [projectList]="projectList" [events]="eventsSubject.asObservable()"  (projectChanged)="onProjectChanged($event)" returnUrl="service"></app-users>
+                </ng-template>
+            </ngb-tab>
+            <!-- <ngb-tab id="checklistTab" title="Checklist">
+                <ng-template ngbTabContent>
+                    <app-checklist [projectList]="projectList" [events]="eventsSubject.asObservable()"  (projectChanged)="onProjectChanged($event)" returnUrl="service"></app-checklist>
+                </ng-template>
+            </ngb-tab> -->
+            <ngb-tab id="inspectionTypeTab" title="Inspection Type">
+                <ng-template ngbTabContent>
+                    <app-inspcetion-type  [projectList]="projectList" [events]="eventsSubject.asObservable()"  (projectChanged)="onProjectChanged($event)" returnUrl="service"></app-inspcetion-type>
+                </ng-template>
+            </ngb-tab>
+        </ngb-tabset>
+
+    </div>
+</div>

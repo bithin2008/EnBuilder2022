@@ -1,0 +1,33 @@
+
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'crm_media' %>
+
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% en.data.findOne docResult datasetId query %>
+    <% assign docResult = docResult.row %>
+    <% assign fieldId = 'file' %>
+    <% assign rowId = en.params._id %>
+    <% assign fileId = docResult.file._id %>
+    
+    <% en.data.deleteFile results datasetId fieldId rowId fileId %>
+    
+    <% en.data.delete results datasetId query %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Photo deleted successfully.' %>
+    <% assign returnData.result = results %>
+    <% return returnData %>
+<% else %>
+    <% assign returnData.status = 0 %>
+    <% assign returnData.message = 'Photo id not found.' %>
+    <% assign returnData.result = null %>
+    <% return returnData %>
+<% endif %> 
+
+

@@ -1,0 +1,192 @@
+.tableFixHead {
+    overflow-y: auto;
+    height: 225px;
+}
+
+.tableFixHead thead th {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+}
+.no-td-top-boder{
+    border-top:none
+}
+
+.details-tab-container.card-body {
+    height: 300px !important;
+    overflow: auto;
+}
+.details-container.card-body{
+    height: 265px !important;
+    overflow: auto;
+
+}
+::ng-deep .unit-box .ui-autocomplete {
+    display: grid !important;
+}
+::ng-deep .unit-box .p-autocomplete{
+    display: grid !important;
+}
+.link{
+    color: #20a8d8;
+    text-decoration: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.info-message {
+    display: flex;
+    padding: 10px 25px;
+    border: 1px solid;
+    border-radius: 5px;
+}
+
+.doc-img-up-btn {
+    position: relative;
+    overflow: hidden;
+}
+.doc-img-upload {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    left: 0;
+    top: 0;
+}
+.film-strip {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.film-strip li {
+    display: inline-block;
+    margin-right: 10px;
+    height: 150px;
+    /* overflow: hidden; */
+}
+.delete-photo-icon {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    padding-top: 0px;
+    text-align: center;
+    font-size: 20px;
+    background-color: black;
+    color: #e4dddd;
+    z-index: 1;
+    border-radius: 50%;
+    right: -8px;
+    top: -8px;
+    float: right;
+}
+
+.photo-container-div {
+    border: 5px solid #ccc;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    width: 250px;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.pdf-icon{
+    position: absolute;
+    font-size: 40px;
+}
+.pointer{
+    cursor: pointer;
+}
+
+.film-strip-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.film-strip-list li.video {
+    display: inline-block;
+    margin-right: 10px;
+    height: 150px;
+}
+
+
+.film-strip-list li.photo {
+    display: inline-block;
+    margin-right: 10px;
+    height: 200px;
+    position: relative;
+    padding: 10px;
+    background: #ccc;
+    margin-bottom: 10px;
+    /* overflow: hidden; */
+}
+.photo-gallery-div{
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    width: 250px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 5px;
+    height: 82%; 
+    border: 1px solid darkgray;
+}
+.photo-description{
+    padding:5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 250px;
+    height: 30px;
+}
+.video-container {
+    border: 3px solid #ccc;
+    padding: 2px;
+    position: relative;
+}
+
+.video-delete-photo-icon {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    font-size: 17px;
+    top: -8px;
+    padding-top: 0px;
+    text-align: center;
+    background-color: black;
+    color: #e4dddd;
+    z-index: 1;
+    border-radius: 50%;
+    right: -8px;
+}
+.delete-icon {
+    width: 30px;
+    height: 30px;
+    padding-top: 0px;
+    text-align: center;
+    font-size: 20px;
+    background-color: black;
+    color: #e4dddd;
+    z-index: 1;
+    border-radius: 50%;
+    right: -8px;
+    float: right;
+}
+.icons-block{
+    width: 250px;
+    position: absolute;
+    padding: 5px;
+}
+/* Space and Views modal */
+::ng-deep .modal-dialog.modal-lg.space-views-list-modal .modal-content{
+    height: calc(90vh);
+}
+.list-scroll{
+    max-height: calc(100vh - 360px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}

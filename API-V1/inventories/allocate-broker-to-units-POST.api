@@ -1,0 +1,47 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% if en.params.broker_id %>
+    // for gettings contact details
+    <% assign contactQuery._id = en.params.broker_id %>
+    <% en.data.findOne contactDetails "contacts" contactQuery "contact_type,display_name" %>
+    <% if contactDetails.row %>
+        <% assign contactDetails = contactDetails.row %>
+        <% assign brokerObj.broker_id = contactDetails._id %>
+        <% assign brokerObj.broker_name = contactDetails.display_name %>
+        <% assign contact_types = contactDetails.contact_type %>
+        
+        <% en.arrayUtils.contains containsResults contact_types 'Broker' %>
+        
+        // for checking and updating as broker if this is not broker
+        <% if !containsResults %>
+            // we need to make this as Broker
+            <% assign contactData.$addToSet.contact_type = "Broker" %>
+            <% en.data.update contactUpResult "contacts" contactQuery contactData %>
+        <% endif %>
+        
+        <% assign units = en.params.units %>
+        <% for unit in units %>
+            <% unassign unitData %>
+            <% unassign unitQuery %>
+            <% assign unitQuery._id = unit %>
+            <% assign unitData.$addToSet.brokers = brokerObj %>
+            <% en.data.update unitResult "bldr_units" unitQuery unitData %>
+        <% endfor %>
+        <% assign returnData.status = 1 %>
+        <% assign returnData.message = 'Broker allocated successfully.' %>
+        <% return returnData %>
+    <% else %>
+        <% assign returnData.status = 0 %>
+        <% assign returnData.message = 'Broker is not exist.' %>
+        <% return returnData %>
+    <% endif %>
+<% else %>
+    <% assign returnData.status = 0 %>
+    <% assign returnData.message = 'Broker can not be empty.' %>
+    <% return returnData %>
+<% endif %>

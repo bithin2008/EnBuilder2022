@@ -1,0 +1,24 @@
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_project_settings' %> 
+
+<% if en.params.project_id %>
+    <% assign query.project_id = en.params.project_id %>
+<% endif %>
+<% if en.params.location %>
+    <% assign query.location = en.params.location %>
+<% endif %>
+
+<% assign query.type = 'SERVICE-CHECKLIST-TEMPLATE' %>
+<% en.data.find results datasetId query %>
+
+<% assign returnData.status = 1 %>
+<% assign returnData.results = results.rows %>
+<% assign returnData.message = 'Checklist template list.' %>
+<% return returnData %>
+
+ 

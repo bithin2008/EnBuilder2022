@@ -1,0 +1,472 @@
+<div class="collection-details">
+    <div class="row">
+        <div class="col-md-4 mb-2 padding-right-2">
+            <div class="card">
+                <div class="card-body text-center" style="height: 300px;">
+                    <div class="thumb-img" *ngIf="packageDetails?.hero_image" [ngStyle]="{'background-image': 'url(&quot;'+ baseUrl+ packageDetails?.hero_image?.url +'/400&quot;)'}">
+                        <button type="button" class="btn btn-sm btn-primary logo-upload-btn">
+                            <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                            <input type="file" accept="image/*" (change)="uploadHeroImage($event)">
+                        </button>
+                    </div>
+                    <div class="thumb-img" *ngIf="!packageDetails?.hero_image" [ngStyle]="{'background-image': 'url(&quot;assets/img/no-image.jpg&quot;)'}">
+                        <button type="button" class="btn btn-sm btn-primary logo-upload-btn">
+                            <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                            <input type="file" accept="image/*" (change)="uploadHeroImage($event)">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8 mb-2 padding-left-1">
+            <div class="card">
+                <div class="card-body" style="height: 300px;">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>Basic Information
+                                <button style="float: right;" type="button" class="btn btn-primary" (click)="openEditBasicModal(basicModal)">
+                                    <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                                </button>
+                            </h4>
+
+                            <dl class="row">
+                                <dd class="col-md-5">Name</dd>
+                                <dd class="col-md-7">: {{packageDetails?.name}}</dd>
+                                <dd class="col-md-5">Caption</dd>
+                                <dd class="col-md-7">: {{packageDetails?.caption}}</dd>
+                                <dd class="col-md-5">Location</dd>
+                                <dd class="col-md-7">: {{packageDetails?.location}}</dd>
+                                <dd class="col-md-5">Active</dd>
+                                <dd class="col-md-7">: {{packageDetails?.is_active ?'Yes':'No'}}</dd>
+                                <dd class="col-md-5">Only valid with another package</dd>
+                                <dd class="col-md-7">: {{packageDetails?.is_valid ? 'Yes':'No' }}</dd>
+                                <dd class="col-md-5">Order</dd>
+                                <dd class="col-md-7">: {{packageDetails?.order}}</dd>
+                                <dd class="col-md-5">Specifications</dd>
+                                <dd class="col-md-7">: {{packageDetails?.specifications}}</dd>
+                                <dd class="col-md-5">Included Item Models</dd>
+                                <dd class="col-md-7">: {{packageDetails?.models}}</dd>
+                                <dd class="col-md-5">Associated Trades</dd>
+                                <dd class="col-md-7">: {{packageDetails?.trades}}</dd>
+
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 mb-2">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>Description & Construction Notes
+                                <button style="float: right;" type="button" class="btn btn-primary" (click)="openEditDescriptionModal(descriptionModal)">
+                                    <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                                </button>
+                            </h4>
+                            <dl class="row">
+                                <h6 class="col-md-12">Description</h6>
+                                <dd class="col-md-12" [innerHtml]="packageDetails?.description"> </dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <dl class="row">
+                                <h6 class="col-md-12">Construction Notes</h6>
+                                <dd class="col-md-12"> {{packageDetails?.construction_notes}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-2 padding-right-2">
+            <div class="card">
+                <div class="card-body" style="height: 200px;">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>
+                                <!-- Basic Information -->
+                                <button style="float: right;" type="button" class="btn btn-primary" (click)="openEditSecondBasicModal(secondBasicModal)">
+                                    <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                                </button>
+                            </h4>
+
+                            <dl class="row">
+                                <dd class="col-md-5">Labour Cost</dd>
+                                <dd class="col-md-7">: {{packageDetails?.labour_cost ? ( packageDetails?.labour_cost | currency:'USD') : ''}}</dd>
+                                <dd class="col-md-5">Material Cost</dd>
+                                <dd class="col-md-7">: {{packageDetails?.material_cost ? ( packageDetails?.material_cost | currency:'USD') : '' }}</dd>
+                                <!-- <dd class="col-md-5">Cost</dd>
+                                <dd class="col-md-7">: {{packageDetails?.cost | currency:'USD'}}</dd>
+                                <dd class="col-md-5">Price</dd>
+                                <dd class="col-md-7">: {{packageDetails?.price | currency:'USD'}}</dd> -->
+                                <!-- <dd class="col-md-5">Margin</dd>
+                                <dd class="col-md-7">: {{packageDetails?.margin}}</dd> -->
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-2 padding-left-1">
+            <div class="card">
+                <div class="card-body" style="height: 200px;">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>Spaces
+                                <button style="float: right;" type="button" class="btn btn-primary" (click)="openEditSpaces(spacesModal)">
+                                    <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                                </button>
+                            </h4>
+
+                            <!-- <p *ngFor="let item of packageDetails?.spaces">{{item}}</p> -->
+                                <dl class="row">
+                                <ng-container *ngFor="let item of packageDetails?.spaces; let i=index">
+                                    <dd class="col-md-6">{{i+1}}. {{item}}</dd>
+                                </ng-container>
+                                </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 mb-2">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>Photos
+                                <button class="btn btn-sm btn-primary doc-img-up-btn" style="float: right;" type="button"> Add
+                                    <input class="doc-img-upload" accept="image/*" type="file" multiple (change)="uploadPhotos($event.target.files)">
+                                </button>
+                            </h4>
+                            <br>
+                            <ng-container *ngIf="packageDetails?.photos?.length>0">
+                                <ul class="film-strip">
+                                    <li style="position: relative;" *ngFor="let item of packageDetails?.photos;let j=index">
+                                        <!-- <li style="position: relative;"> -->
+                                        <div class="icons-block">
+
+                                            <div class="delete-photo-icon" (click)="deletePhoto(item,$event)">
+                                                <i class="fas fa-trash "></i>
+                                            </div>
+                                            <div class="delete-photo-icon mr-1" (click)="openPhotoDescription(photoDescriptionModal,item)">
+                                                <i class="fa fa-info-circle"></i>
+                                            </div>
+                                            <div class="delete-photo-icon mr-1" *ngIf="(j+1)<packageDetails?.photos?.length" (click)="reArrangePhotos('right',j)">
+                                                <i class="fa fa-arrow-right"></i>
+                                            </div>
+
+                                            <div class="delete-photo-icon mr-1" *ngIf="j>0" (click)="reArrangePhotos('left',j)">
+                                                <i class="fa fa-arrow-left"></i>
+                                            </div>
+                                        </div>
+                                        <div class="photo-container-div " [ngStyle]="{ 'background-image':
+                                                'url(&quot;' + baseUrl + item?.url + '/350&quot;)', 'background-size': 'cover',
+                                                'background-repeat': 'no-repeat', 'background-position': 'center' } ">
+                                        </div>
+
+                                        <div class="photo-description">
+                                            {{item?.description?item?.description :' ' }}
+                                        </div>
+                                    </li>
+
+                                </ul>
+                            </ng-container>
+                            <ng-container *ngIf="packageDetails?.photos?.length==0">
+                                <p class="text-center ">No photo found.</p>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #basicModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">Edit Package</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Order
+                                <span style="color:red">*</span>:
+                            </label>
+                            <input type="text" disabled [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.order
+                                                       " class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label>Name
+                                <span style="color:red">*</span>:</label>
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.name
+                                               " class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group mt-2">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" id="is_active" class="custom-control-input" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.is_active">&nbsp;
+                                <label class="custom-control-label" for="is_active">Active</label>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group mt-2">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" id="is_valid" class="custom-control-input" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.is_valid">&nbsp;
+                                <label class="custom-control-label" for="is_valid">Valid with another package</label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Locations
+                                <span style="color:red">*</span>:</label>
+                            <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.location">
+                                <option value="">Select Location</option>
+                                <option *ngFor="let item of locationList" value={{item.name}}>{{item.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Caption
+                                <!-- <span style="color:red">*</span> -->
+                                :</label>
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.caption
+                                                           " class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Associated Trades :</label>
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.trades
+                                                                   " class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Included Item Models
+                                <!-- <span style="color:red">*</span> -->
+                                :</label>
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.models
+                                                           " class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Specifications
+                                <!-- <span style="color:red">*</span> -->
+                                :</label>
+                            <!-- <textarea type="text" rows="5" cols="7" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.specifications
+                                                           " class="form-control"></textarea> -->
+                              <div [froalaEditor]="nonInlineEdit" [(froalaModel)]="formDetails.specifications"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updatePackageBasicData()">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #descriptionModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">Edit Description</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Description :
+                            </label>
+                            <div [froalaEditor]="nonInlineEdit" [(froalaModel)]="formDetails.description">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Construction Notes :
+                            </label>
+                            <textarea type="text" rows="5" cols="7" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.construction_notes
+                                                                           " class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updateDescription()">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #secondBasicModal>
+
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">Edit Package</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Labour Cost
+                                <!-- <span style="color:red">*</span> -->
+                                :</label>
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.labour_cost
+                                                   " class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Material Cost
+                                <!-- <span style="color:red">*</span> -->
+                                :</label>
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.material_cost" class="form-control">
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Cost
+                                :</label>
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.cost" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Price
+                                :</label>
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.price" class="form-control">
+                        </div>
+                    </div>
+ -->
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updatePackage()">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-template #spacesModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">Edit Spaces</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <h6 class="mb-3">Select Spaces apply to this package : {{packageDetails.name}}</h6>
+                <div class="mb-4 list-scroll pl-1 pr-1" *ngIf="projectSpaces.length>0">
+                    <div class="row">
+                        <div class="col-md-6">
+                            Name
+                        </div>
+                    </div>
+                    <div class="form-check mb-2" *ngFor="let item of formDetails?.spaces; let i =index">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input class="form-check-input" type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.is_enable" id="spaces{{i}}">
+                                <label class="form-check-label" for="spaces{{i}}">
+                                    {{item?.name}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-5" *ngIf="formDetails?.spaces.length==0">
+                    <p> No spaces added</p>
+                </div>
+                <div class="form-group row">
+                    <div class="col-8 pr-1">
+                        <input type="text" (focusout)="checkExistSpacesName()" class="form-control" placeholder="Spaces" [ngModelOptions]="{standalone: true}"
+                            [(ngModel)]="spaceName">
+                    </div>
+                    <div class="col pl-1">
+                        <button type="button" class="btn btn-primary" (click)="addSpaces()">Add</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updateSpaces()">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #photoDescriptionModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">Photo Description</h5>
+        <button type="button" class="close pull-right " aria-label="Close " (click)="modalRef.hide() ">
+            <span aria-hidden="true ">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body ">
+        <div class="container-fluid ">
+            <form autocomplete="off ">
+                <div class="row ">
+                    <div class="col-md-12 ">
+                        <div class="form-group ">
+                            <label>Description :
+                            </label>
+                            <textarea type="text" rows="4" cols="4" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.description" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer ">
+        <div class="col-md-12 text-right ">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updatePhotoDescription()">Update</button>
+        </div>
+    </div>
+</ng-template>

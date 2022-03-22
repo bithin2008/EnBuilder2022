@@ -1,0 +1,31 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+
+<% assign datasetId = 'bldr_projects' %>
+
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% en.data.findone result datasetId query %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Project Details' %>
+    <% assign returnData.result = result.row %>
+    <% return returnData %>
+<% else %>
+    <% if en.params.builder_id != '' %>
+        <% assign query.builder_id = en.params.builder_id %>
+    <% endif %>
+    <% assign orderBy.name = 1 %>
+    <% en.data.find results datasetId query "name,is_progress_enabled,progress_label_text" orderBy 100 1 %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Project list' %>
+    <% assign returnData.results = results.rows %>
+    <% assign returnData.pagination = results.pagination %>
+    <% return returnData %>
+<% endif %>
+
+  

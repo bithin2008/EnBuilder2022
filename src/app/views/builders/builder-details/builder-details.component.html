@@ -1,0 +1,440 @@
+<div class="animated fadeIn">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="const_hd">
+                    <button class="btn btn-primary btn-sm mr-2" (click)="goToBuilderList()">
+                        <i class="fa fa-arrow-left" aria-hidden="true"></i> &nbsp; Back
+                    </button> Builder Details: {{builderDetailsObj.name}}
+                    <button style="float: right;" class="btn btn-danger mt-2" type="button" (click)="deleteBuilder()">
+                        <i class="fa fa-trash" style="font-size:12px;float: right;"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 padding-right-2">
+                <div class="card">
+                    <div class="card-body text-center" style="min-height: 369px;">
+                        <div class="thumb-img" *ngIf="builderDetailsObj?.logo" [ngStyle]="{'background-image': 'url(&quot;'+ baseUrl+ builderDetailsObj.logo.url +'/400&quot;'}">
+                            <button type="button" class="btn btn-sm btn-primary logo-upload-btn mr-5">
+                                <i class="fas fa-pencil-alt" style="font-size:15px;float: right;"></i>
+                                <input type="file" accept="image/*" (change)="uploadBuilderLogo($event)">
+                            </button>
+                            <button style="float: right;" class="btn btn-danger logo-upload-btn" type="button" (click)="deleteBuilderLogo()">
+                                <i class="fa fa-trash" style="font-size:12px;float: right;"></i>
+                            </button>
+                        </div>
+                        <div class="thumb-img" *ngIf="!builderDetailsObj?.logo" [ngStyle]="{'background-image': 'url(&quot;assets/img/builder-placeholder.jpg&quot;)'}">
+                            <button type="button" class="btn btn-sm btn-primary logo-upload-btn">
+                                <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                                <input type="file" accept="image/*" (change)="uploadBuilderLogo($event)">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 padding-left-1">
+                <div class="card">
+                    <div class="card-body" style="height:369px">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4 class="">Builder Details
+
+                                    <button style="float: right;" type="button" class="btn btn-primary" (click)="openEditBuilderModal(editBuilderModal)">
+                                        <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                                    </button>
+                                </h4>
+                                <!-- <h4>
+                                    <a href="javascript:void(0);" style="text-decoration: none;">
+                                        {{builderDetailsObj.name}}
+                                    </a>
+                                </h4> -->
+                                <dl class="row mb-0">
+                                    <dd class="col-md-5">Name</dd>
+                                    <dd class="col-md-7">: {{builderDetailsObj.name}}</dd>
+                                    <ng-container *ngIf="builderDetailsObj?.contact_email">
+                                        <dd class="col-md-5">Email</dd>
+                                        <dd class="col-md-7">: {{builderDetailsObj.contact_email}}</dd>
+                                    </ng-container>
+                                    <ng-container *ngIf="builderDetailsObj?.contact_phone?.formatted">
+                                        <dd class="col-md-5">Phone</dd>
+                                        <dd class="col-md-7">: {{builderDetailsObj.contact_phone?.formatted}}</dd>
+                                    </ng-container>
+                                    <ng-container *ngIf="builderDetailsObj?.contact_website">
+                                        <dd class="col-md-5">Website</dd>
+                                        <dd class="col-md-5">:
+                                            <a href="{{builderDetailsObj.contact_website}}" target="_blank">{{builderDetailsObj?.contact_website}}</a>
+                                        </dd>
+                                    </ng-container>
+                                    <dd class="col-md-5" *ngIf="builderDetailsObj?.address?.street1 || builderDetailsObj?.address?.street2|| builderDetailsObj?.address?.city||builderDetailsObj?.address?.state ||builderDetailsObj?.address?.zip || builderDetailsObj?.address?.country">Address</dd>
+                                    <dd class="col-md-7">
+                                        <span *ngIf="builderDetailsObj?.address?.street1">: {{builderDetailsObj?.address?.street1}},</span>
+                                        <span *ngIf="builderDetailsObj?.address?.street2">&nbsp; {{builderDetailsObj?.address?.street2}},</span>
+                                        <br>
+                                        <span *ngIf="builderDetailsObj?.address?.city">&nbsp; {{builderDetailsObj?.address?.city}},</span>
+                                        <span *ngIf="builderDetailsObj?.address?.state">&nbsp; {{builderDetailsObj?.address?.state}},</span>
+                                        <br>
+                                        <span *ngIf="builderDetailsObj?.address?.zip">&nbsp; {{builderDetailsObj?.address?.zip}},</span>
+                                        <span *ngIf="builderDetailsObj?.address?.country">&nbsp; {{builderDetailsObj?.address?.country}}.</span>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body" style="min-height: 300px;">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4 class="">Description
+                                    <button style="float: right;" type="button" class="btn btn-primary mr-2" (click)="openEditDescriptionModal(descriptionModal)">
+                                        <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                                    </button>
+                                </h4>
+                                <div [innerHtml]="builderDetailsObj.description"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body" style="min-height: 300px;">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4 class="">Photos
+                                    <button style="float: right;" class="btn btn-primary btn-sm img-upload-btn">
+                                        Add Photo
+                                        <input type="file" id="uploadLogo" accept="image/*" multiple placeholder="Add Photo" (change)="uploadBuilderPhoto($event.target.files)">
+                                    </button>
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <ng-container *ngIf="builderDetailsObj?.photos?.length>0">
+                                    <ul class="film-strip">
+                                        <li class="image" style="position: relative;" *ngFor="let item of builderDetailsObj?.photos">
+                                                <div class="delete-photo-icon" (click)="deletePhoto(item)">
+                                                    <i class="fas fa-times"></i>
+                                                </div>
+                                            <div class="image-container-div" [ngStyle]="{'background-image': 'url(&quot;' + baseUrl + item?.url + '/350&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }"
+                                                (click)="openPhotoBox(photoViewModal,item)">
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </ng-container>
+                                <ng-container *ngIf="!builderDetailsObj.hasOwnProperty('photos') || builderDetailsObj?.photos?.length==0">
+                                    <div class="col-md-12">
+                                        <p class="text-center">No photo found.</p>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>Video Gallery
+                                    <button class="btn btn-sm btn-primary doc-img-up-btn" style="float: right;" type="button" (click)="openAddVideoModal(videoModal)">
+                                        Add
+                                    </button>
+                                </h4>
+                                <br>
+                                <ng-container *ngIf="mediaVideoList?.length>0">
+                                    <ul class="film-strip">
+                                        <li class="photo" style="position: relative;" *ngFor="let item of mediaVideoList">
+                                            <div class="video-delete-photo-icon" (click)="deleteVideo(item,$event)">
+                                                <i class="fas fa-times"></i>
+                                            </div>
+                                            <div *ngIf="item.video_type == 'YOUTUBE'" class="photo-container-div" [ngStyle]="{'background-image': 'url(&quot;https://img.youtube.com/vi/'+ item?.video_id +'/mqdefault.jpg&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }"
+                                                (click)="openVideoViewer(videoViewerModal,item)">
+                                            </div>
+                                            <div *ngIf="item.video_type == 'VIMEO'" class="photo-container-div" [ngStyle]="{'background-image': 'url(&quot;https://i.vimeocdn.com/video/'+ item?.video_id +'_400.jpg&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }"
+                                                (click)="openVideoViewer(videoViewerModal,item)">
+                                            </div>
+                                            <div *ngIf="item.video_type == 'MP4'" class="photo-container-div" [ngStyle]="{'background-image': 'url(&quot;/assets/img/mp4-icon.jpg&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }"
+                                                (click)="openVideoViewer(videoViewerModal,item)">
+                                            </div>
+
+                                            <div class="photo-description">
+                                                <div [innerHtml]="item?.title ? item?.title :' '"></div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </ng-container>
+                                <ng-container *ngIf="mediaVideoList.length==0">
+                                    <p class="text-center">No video found.</p>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #photoViewModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left"> {{selectedPhoto?.name ? selectedPhoto?.name :'Image is not available'}} </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body text-center custom-media-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12" *ngIf="selectedPhoto?.path">
+                    <img style="max-width:100%" [src]="selectedPhoto?.path" alt="{{selectedPhoto?.name}}">
+                </div>
+                <div *ngIf="!selectedPhoto?.path">
+                    Image is not available
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<ng-template #editBuilderModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Builder</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Name
+                                <span style="color:red">*</span>:</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.name" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Contact Name
+                                <span style="color:red">*</span>:</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.contact_name" class="form-control">
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Email:</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.contact_email" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Phone Number:</label>
+                            <div class="col-sm-12">
+                                <form #f="ngForm" [formGroup]="phone">
+                                    <ngx-intl-tel-input [cssClass]="'custom'" [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="true" [enablePlaceholder]="true"
+                                        [searchCountryFlag]="true" [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                                        [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.Canada" [maxLength]="15"
+                                        [phoneValidation]="true" [separateDialCode]="separateDialCode" name="contact_phone" formControlName="contact_phone">
+                                    </ngx-intl-tel-input>
+                                </form>
+                                <span *ngIf="f.form.controls['contact_phone'].touched && f.form.controls['contact_phone'].invalid" style="color: red;">Phone number is not valid.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Website :</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.contact_website" class="form-control">
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Website :</label>
+                            <div class="input-group col-sm-12">
+                                <div class="input-group-text">{{protocol}}</div>
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.contact_website" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <h5>Address:</h5>
+                    <!-- <div class="row"> -->
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Street1:</label>
+                            <div class="col-sm-12">
+                                <input type="text" name="street1" [(ngModel)]="formDetails.address.street1" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Street2:</label>
+                            <div class="col-sm-12">
+                                <input type="text" name="street2" [(ngModel)]="formDetails.address.street2" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">City :
+                            </label>
+                            <div class="col-sm-12">
+                                <input type="text" name="city" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.address.city" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Province/State :
+                            </label>
+                            <div class="col-sm-12">
+                                <input type="text" name="state" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.address.state" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Zip/Postal :
+                            </label>
+                            <div class="col-sm-12">
+                                <input type="text" name="zip" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.address.zip" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Country :
+                            </label>
+                            <div class="col-sm-12">
+                                <input type="text" name="country" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.address.country" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- </div> -->
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="editBuilder()">Update</button>
+        </div>
+    </div>
+</ng-template>
+<ng-template #descriptionModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Descriptionn</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <div [froalaEditor]="nonInlineEdit" [(froalaModel)]="formDetails.description">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updateDescription()">Update</button>
+        </div>
+    </div>
+</ng-template>
+<ng-template #videoModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Add Video</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="name">Video Type</label>
+                                <select class="form-select" [(ngModel)]="videoDetails.video_type">
+                                    <option value="">Select Video Type</option>
+                                    <option value="YOUTUBE">Youtube</option>
+                                    <option value="VIMEO">Vimeo</option>
+                                    <option value="MP4">MP4</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="name">Video Url</label>
+                                <input type="text" class="form-control" [(ngModel)]="videoDetails.url" name="url" placeholder="Video url">
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="name">Title :</label>
+                                <input type="text" class="form-control" [(ngModel)]="videoDetails.title" name="url" placeholder="Title">
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <label for="name">Body :</label>
+                            <div [froalaEditor]="nonInlineEdit" [(froalaModel)]="videoDetails.body">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="addBuilderVideos()">Add</button>
+        </div>
+    </div>
+</ng-template>
+<ng-template #videoViewerModal>
+    <div class="modal-header">
+            <h4 class="modal-title pull-left"> {{selectedVideoPath.name? selectedVideoPath?.name :''}} </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body text-center custom-media-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- <img [src]="selectedPhotoPath?.path" alt="{{selectedPhotoPath?.name}}"> -->
+                    <iframe [src]="selectedVideoPath?.path" frameborder="0" width="100%" height="500px" webkitallowfullscreen mozallowfullscreen
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="col-md-12 text-center pt-2" *ngIf="selectedVideoPath?.body">
+                    <div [innerHtml]="selectedVideoPath?.body ? selectedVideoPath?.body :' '"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</ng-template>

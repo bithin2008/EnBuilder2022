@@ -1,0 +1,45 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_project_settings' %>
+
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% en.data.findone result datasetId query %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Incentive details' %>
+    <% assign returnData.result = result.row %>
+    <% return returnData %>
+<% else %>
+
+    <% if en.params.searchText %>
+        <% assign Name.name.$regex = en.params.searchText %> 
+        <% assign Name.name.$options = "i" %>
+        <% assign query.$or = [Name] %>
+    <% endif %>
+    <% assign query.project_id = en.params.project_id %> 
+    <% assign query.active = true %> 
+    <% assign query.type = "INCENTIVE" %>
+    <% assign query.start.$lte = en.time.now %>
+    <% assign query.end.$gt = en.time.now %>
+    <% assign fields._updated = 0 %>
+    <% assign fields._updated_ = 0 %>
+    <% assign fields._created = 0 %>
+    <% assign fields._createdBy = 0 %>
+    <% assign fields._updatedBy = 0 %>
+    <% assign fields._t = 0 %>
+    <% en.data.find results datasetId query fields orderBy pageSize page %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Incentives list' %>
+    <% assign returnData.results = results.rows %>
+    <% assign returnData.pagination = results.pagination %>
+    <% return returnData %>
+<% endif %>
+
+
+
+

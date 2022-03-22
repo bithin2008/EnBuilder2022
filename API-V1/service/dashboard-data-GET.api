@@ -1,0 +1,212 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign time-zone = 'America/Toronto' %>
+<% assign datasetId = 'bldr_deficiencies' %>
+
+<% assign today = en.time.today %>
+
+<% rem return 'today' today %>
+<% assign tomorrow = en.time.tomorrow %>
+<% rem return 'tomorrow' tomorrow %>
+
+<% assign dayofweek =  en.time.now | dayofweek %>
+<% rem return 'dayofweek' dayofweek %>
+
+<% assign thisWeekStart = tomorrow | minus: dayofweek 'days' %>
+<% rem return 'thisWeekStart' thisWeekStart %>
+<% assign thisWeekEnd = thisWeekStart | plus: 7 'days' %>
+<% rem return 'thisWeekEnd' thisWeekEnd %>
+
+// for due deficiencies of this week
+<% if en.params.project_id %>
+    <% assign query1.project_id = en.params.project_id %>
+<% endif %>
+<% assign query1.status = 'Open' %>
+<% assign query1.due_date.$gte = thisWeekStart %>
+<% assign query1.due_date.$lt = thisWeekEnd %>
+<% en.data.count thisWeekCount datasetId query1 %>
+<% assign returnData.results.total_due_this_week = thisWeekCount.count %>
+
+<% assign nextWeekStart = thisWeekEnd %>
+<% rem return 'nextWeekStart' nextWeekStart %>
+<% assign nextWeekEnd = nextWeekStart | plus: 7 'days' %>
+<% rem return 'nextWeekEnd' nextWeekEnd %>
+
+// for due deficiencies of this week
+<% if en.params.project_id %>
+    <% assign query2.project_id = en.params.project_id %>
+<% endif %>
+<% assign query2.status = 'Open' %>
+<% assign query2.due_date.$gte = nextWeekStart %>
+<% assign query2.due_date.$lt = nextWeekEnd %>
+<% en.data.count nextWeekCount datasetId query2 %>
+<% assign returnData.results.total_due_next_week = nextWeekCount.count %>
+
+// for overdue deficiencies of this week
+<% if en.params.project_id %>
+    <% assign query3.project_id = en.params.project_id %>
+<% endif %>
+<% assign query3.status = 'Open' %>
+<% assign query3.due_date.$lt = today %>
+<% en.data.count totalOverdueCount datasetId query3 %>
+<% assign returnData.results.total_over_due = totalOverdueCount.count %>
+
+// for getting inspection completed count
+<% unassign queryJson %>
+<% json queryJson %>
+{
+    "queries":[
+        {
+  		    "$match": {}
+  	    },
+  	    {
+  	        "$unwind":"$inspection_reports" 
+  	    },
+  	    {
+            "$group": {
+                "_id": "$inspection_reports.type",
+                "total_count": {
+                    "$sum": 1
+                }
+            }
+        },
+        {
+            "$sort": {
+                "total_count": -1
+            }
+        }
+    ]
+}
+<% endjson %>
+<% assign queryJson.queries[0].$match["inspection_reports.is_complete"] = true %>
+<% if en.params.project_id %>
+    <% assign queryJson.queries[0].$match.project_id = en.params.project_id %>
+<% endif %> 
+<% rem return 'inspectionQuery' queryJson.queries %>
+<% en.data.aggregate inspectionResult1 'bldr_units' queryJson.queries %>
+<% if inspectionResult1 %>
+    <% assign returnData.results.inspection_complete_data =  inspectionResult1.rows %>
+<% else %>
+    <% assign returnData.results.inspection_complete_data =  [] %>
+<% endif %>
+
+
+// for getting status wise count
+<% unassign queryJson %>
+<% json queryJson %>
+{
+    "queries":[
+        {
+  		    "$match": {}
+  	    },
+        {
+           "$group":
+             {
+               "_id": "$status",
+               total_count: { $sum: 1 },
+            }
+        },
+        {
+            $sort:{ _id: 1}
+        }
+    ]
+}
+<% endjson %>
+<% if en.params.project_id %>
+    <% assign queryJson.queries[0].$match.project_id = en.params.project_id %>
+<% endif %> 
+<% en.data.aggregate statusResult datasetId queryJson.queries %>
+<% if statusResult.rows %>
+    <% assign returnData.results.status_wise_data =  statusResult.rows %>
+<% else %>
+    <% assign returnData.results.status_wise_data =  [] %>
+<% endif %>
+
+// for getting inspection type wise count
+<% unassign queryJson %>
+<% json queryJson %>
+{
+    "queries":[
+        {
+  		    "$match": {}
+  	    },
+        {
+           "$group":
+             {
+               "_id": "$inspection_type",
+               total_count: { $sum: 1 },
+            }
+         },
+         {
+            $sort:{ _id: 1}
+        }
+    ]
+}
+<% endjson %>
+<% if en.params.project_id %> 
+    <% assign queryJson.queries[0].$match.project_id = en.params.project_id %>
+<% endif %> 
+<% en.data.aggregate inspectionResult datasetId queryJson.queries %>
+<% if inspectionResult.rows %>
+    <% assign returnData.results.inspection_wise_data =  inspectionResult.rows %>
+<% else %>
+    <% assign returnData.results.inspection_wise_data =  [] %>
+<% endif %>
+
+// for getting assignee_name wise count
+<% unassign queryJson %>
+<% json queryJson %>
+{
+    "queries":[
+        {
+  		    "$match": {}
+  	    },
+        {
+           "$group":
+             {
+               "_id": "$assignee_name",
+               total_count: { $sum: 1 },
+            }
+         },
+         {
+            $sort:{ _id: 1}
+        }
+    ]
+}
+<% endjson %>
+<% if en.params.project_id %> 
+    <% assign queryJson.queries[0].$match.project_id = en.params.project_id %>
+<% endif %> 
+<% en.data.aggregate assigneeResult datasetId queryJson.queries %>
+<% if assigneeResult.rows %>
+    <% assign returnData.results.trade_wise_data =  assigneeResult.rows %>
+<% else %>
+    <% assign returnData.results.trade_wise_data =  [] %>
+<% endif %>
+<% assign returnData.status = 1 %>
+<% assign returnData.message = 'Deficiency data' %>
+<% return returnData %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

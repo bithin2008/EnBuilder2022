@@ -1,0 +1,4 @@
+
+<% assign order = "9'" | replace: "'" "" | to_int %>
+<% rem assign order = order | to_int %> 
+<% return 'order' order %>

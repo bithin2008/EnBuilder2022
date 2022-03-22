@@ -1,0 +1,237 @@
+<div class="animated fadeIn">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="const_hd">
+                    Builders
+                </div>
+            </div>
+            <div class="col-lg-12 col-xs-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form autocomplete="off">
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <button class="btn btn-danger mr-2" style="float:right" type="button" (click)="clearFilter()">Clear</button>
+                                    <button type="button" style="float:right" class="btn btn-primary mr-2" (click)="openAddBuilderMdal(addModal)">Add</button>
+
+                                    <div class="form-group  mr-2" style="float:right">
+                                        <input type="text" class="form-control" name="search" placeholder="Type name or email or phone" style="padding-right: 25px;"
+                                            [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.searchText" name="search"
+                                            (keyup)="doSearch()">
+                                    </div>
+                                </div>
+                                <!-- <div class="col-md-6 col-sm-5"></div>
+                                <div class="col-md-3 col-sm-4 pb-2">
+                                    <div class="">
+                                        <div class="input-group position-relative">
+                                            <input class="form-control" name="search" placeholder="Type name or email or phone" style="padding-right: 25px;" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.searchText" name="search" (keyup)="doSearch()">
+                                            <span class="clear-search" *ngIf="isClear" (click)="clearSearch()">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-3">
+                                    <button type="button" class="btn btn-danger mr-1" (click)="clearFilter()">Clear</button>
+                                    <button class="btn btn-primary" type="button" (click)="openAddBuilderMdal(addModal)">Add</button>
+                                </div> -->
+                            </div>
+                        </form>
+                        <div class="table-responsive mb-5">
+                            <table class="table table-striped list_table" style="table-layout: fixed;">
+                                <thead>
+                                    <tr>
+                                        <th width="100px">Image</th>
+                                        <th width="200px" (click)="setOrder('name')">Name
+                                            <span *ngIf="order != 'name'">
+                                                <i class="fas fa-sort"></i>
+                                            </span>
+                                            <span *ngIf="reverse && order == 'name'">▼</span>
+                                            <span *ngIf="!reverse && order == 'name'">▲</span>
+                                        </th>
+                                        <!-- <th width="120px">Contact Name</th> -->
+                                        <th width="200px">Email</th>
+                                        <th width="220px">Phone Number</th>
+                                        <th width="200px">Website</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <ng-container *ngIf="builderList.length>0">
+                                        <tr *ngFor="let item of builderList" (click)="goToBuilderDetails(item)">
+                                            <td>
+                                                <div *ngIf="item.logo" [ngStyle]="{'background-image': 'url(&quot;' + baseUrl+ item.logo.url +'/100&quot;)'}" class="doc-img-container">
+                                                </div>
+                                                <img *ngIf="!item.logo" src="assets/img/builder-placeholder.jpg" width="30px" height="30px">
+                                            </td>
+                                            <td>{{item.name}}</td>
+                                            <!-- <td>{{item.contact_name}}</td> -->
+                                            <td>{{item.contact_email}}</td>
+                                            <td>{{item.contact_phone?.formatted}}</td>
+                                            <td>{{item.contact_website}}</td>
+                                        </tr>
+                                    </ng-container>
+                                    <ng-container *ngIf="builderList.length==0">
+                                        <tr>
+                                            <td colspan="5">No builders found</td>
+                                        </tr>
+                                    </ng-container>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row mt-3" *ngIf="paginationObj.total>=20">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <span class="float-left" style="width:70px;margin-top: 6px;">Page Size:</span>
+                                    <span class="float-left" style="width:85px;">
+                                        <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="pageSizeB" (change)="setPageSize()">
+                                            <option value="">-Select-</option>
+                                             <option value="20">20</option>
+                                            <option value="30">30</option>
+                                            <option value="50">50</option>
+                                            <option value="100">100</option>
+                                        </select>
+                                    </span>
+                                    <span class="float-left" style="margin-top: 6px !important;margin-left: 16px !important;">{{paginationObj.total}} Record(s) Found</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <nav>
+                                    <ul class="pagination">
+                                        <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                                            <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.previousPage)">
+                                                <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                                            </a>
+                                        </li>
+                                        <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                                            <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(1)">
+                                                First
+                                            </a>
+                                        </li>
+                                        <li class="page-item {{pagination == paginationObj.currentPage?'active':''}}" *ngFor="let pagination of paginationObj.items">
+                                            <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(pagination)">{{pagination}}</a>
+                                        </li>
+                                        <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                                            <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.totalPages)">
+                                                Last
+                                            </a>
+                                        </li>
+                                        <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                                            <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.nextPage)">
+                                                <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #addModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Add Builder</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Name
+                                <span style="color:red">*</span>:</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.name" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-12">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Contact Name <span style="color:red">*</span>:</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.contact_name" class="form-control">
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Email:</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.contact_email" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Phone Number:</label>
+                            <div class="col-sm-12">
+                                <form #f="ngForm" [formGroup]="phone">
+                                    <ngx-intl-tel-input [cssClass]="'custom'" [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="true" [enablePlaceholder]="true"
+                                        [searchCountryFlag]="true" [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                                        [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.Canada" [maxLength]="15"
+                                        [phoneValidation]="true" [separateDialCode]="separateDialCode" name="contact_phone" formControlName="contact_phone">
+                                    </ngx-intl-tel-input>
+                                </form>
+                                <span *ngIf="f.form.controls['contact_phone'].touched && f.form.controls['contact_phone'].invalid" style="color: red;">Phone number is not valid.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Website :</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.contact_website" class="form-control">
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Website :</label>
+                            <div class="input-group col-sm-12">
+                                <div class="input-group-text">https://</div>
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.contact_website" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Description :</label>
+                            <div class="col-sm-12">
+                                <!-- <textarea class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.description" rows="3"></textarea> -->
+                                <div [froalaEditor]="nonInlineEdit" [(froalaModel)]="formDetails.description">
+                                    {{formDetails.description ? formDetails.description : ''}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <label>Logo :</label>
+                    <div class="photo-holder mt-3">
+                        <span *ngIf="!uploadedPhoto">
+                            <img class="component-icon 1" *ngIf="formDetails?.logo?.url" [src]="baseUrl+formDetails?.logo?.url+'/400'" alt="">
+                            <img class="component-icon" *ngIf="!formDetails?.logo?.url" src="assets/img/no-image.jpg" alt="">
+                        </span>
+                        <span *ngIf="uploadedPhoto">
+                            <img class="component-icon" *ngIf="formDetails?.logo" [src]="formDetails?.logo" alt="">
+                        </span>
+                        <button class="btn btn-primary btn-sm photo-upload-btn">
+                            <i class="fa fa-upload"></i>
+                            <input type="file" id="uploadLogo" accept="image/*" placeholder="Add Photo" (change)="selectBuilderLogo($event.target.files)">
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="addBuilder()">Add</button>
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,98 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_models' %>
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% en.data.findone result datasetId query %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Model details' %>
+    <% assign returnData.result = result.row %>
+    <% return returnData %>
+<% else %>
+    <% assign pageSize = 20 %> 
+    <% if en.params.pageSize %>
+        <% assign pageSize = en.params.pageSize %>
+    <% endif %>
+    <% assign page = 1 %>
+    <% if en.params.page %> 
+        <% assign page = en.params.page %>
+    <% endif %> 
+    
+    <% if en.params.sortBy %>
+        <% if en.params.sortOrder =='ASC' %>
+            <% assign orderBy[en.params.sortBy] = 1 %>
+        <% else %>
+            <% assign orderBy[en.params.sortBy] = -1 %>
+        <% endif %>
+    <% else %>
+        <% assign orderBy.name = 1 %>
+    <% endif %>
+    
+    <% if en.params.project_id %>
+        <% assign query.project_id = en.params.project_id %> 
+    <% endif %>
+    <% if en.params.bed %>
+        <% assign query.bed.$in = en.params.bed | splittoint:","  %>
+    <% endif %>
+    <% if en.params.den %>
+        <% assign query.den.$in = en.params.den | splittoint:"," %>
+    <% endif %>
+    <% if en.params.views %>
+        <% assign query.views.$in = en.params.views | splittrim:"," %>
+    <% endif %>
+    <% if en.params.spaces %>
+        <% assign query.spaces.$elemMatch.name.$in = en.params.spaces | splittrim:"," %>
+    <% endif %>
+    
+    <% if en.params.searchText %>
+        <% assign q1.name.$regex = en.params.searchText %> 
+        <% assign q1.name.$options = "i" %>
+        <% assign q2.project_name.$regex = en.params.searchText %> 
+        <% assign q2.project_name.$options = "i" %>
+        <% assign query.$or = [q1,q2] %>
+    <% endif %>
+    
+    <% if en.params.type=='list' %>
+        <% en.data.find results datasetId query "_id,name,collection,type" orderBy pageSize page %>
+        <% assign returnData.status = 1 %>
+        <% assign returnData.message = 'Model list' %> 
+        <% assign returnData.results = results.rows %>
+        <% assign returnData.pagination = results.pagination %>
+        <% return returnData %>
+        <% exit %>
+    <% endif %>
+    <% return 'query' query %>
+    <% en.data.find results datasetId query "" orderBy pageSize page %>
+    
+    //// for getting 1st floor layout
+    <% for item in results.rows %>
+        <% unassign floorQuery %>
+        <% unassign floorResult %>
+        <% unassign layout %>
+        <% unassign firstLayout %>
+        <% assign floorQuery.type = "FLOOR-LAYOUT" %>
+        <% assign floorQuery.model_id = item._id %>
+        <% assing fOrderBy._created = 1 %>
+        <% en.data.find floorResult "crm_media" floorQuery "" fOrderBy 1 1 %>
+        <% if floorResult.rows %>
+            <% assign layout = floorResult.rows %>
+            <% assign firstLayout = layout[0] %>
+            <% assign item.logo = firstLayout.file %>
+        <% endif %>
+    <% endfor%>
+    
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Model list' %>
+    <% assign returnData.results = results.rows %>
+    <% assign returnData.pagination = results.pagination %>
+    <% return returnData %>
+<% endif %>
+
+
+
+

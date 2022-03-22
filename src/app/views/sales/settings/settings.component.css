@@ -1,0 +1,34 @@
+
+.thumb-img {
+    background: #fff;
+    min-height: 225px;
+    /* min-height: 325px;     */
+    width: 100%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+.logo-upload-btn {
+    cursor: pointer;
+    overflow: hidden;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.logo-upload-btn input[type="file"] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+}
+
+#dealtTable tbody{
+    border-left: 1px solid #c8ced3;
+    border-right: 1px solid #c8ced3;
+}
+
+.selected-bg{
+    background: #d6d9db;
+}

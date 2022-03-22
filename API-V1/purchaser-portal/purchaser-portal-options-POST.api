@@ -1,0 +1,58 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_deals' %> 
+
+<% if en.params.deals %>
+    <% for deal in en.params.deals %>
+        <% unassign query %>
+        <% unassign dealResult %>
+        <% assign query._id = deal %>
+        <% en.data.findOne dealResult datasetId query %>
+        <% assign dealResult = dealResult.row %>
+        <% if en.params.enable_design_studio %>
+            <% if dealResult.design_studio.status == 'NOT STARTED' %>
+                <% assign dataToUpdate.design_studio = dealResult.design_studio %>
+                <% assign dataToUpdate.design_studio.status = 'OPEN' %>
+            <% endif %>
+        <% endif %>
+        <% if en.params.enable_parking_selection %>
+            <% if dealResult.parking_selection.status == 'NOT STARTED' %>
+                <% assign dataToUpdate.parking_selection = dealResult.parking_selection %> 
+                <% assign dataToUpdate.parking_selection.status = 'OPEN' %>
+            <% endif %>
+        <% endif %>
+        <% if en.params.enable_locker_selection %>
+            <% if dealResult.locker_selection.status == 'NOT STARTED' %>
+                <% assign dataToUpdate.locker_selection = dealResult.locker_selection %> 
+                <% assign dataToUpdate.locker_selection.status = 'OPEN' %>
+            <% endif %>
+        <% endif %>
+        <% if en.params.enable_bicycle_selection %>
+            <% if dealResult.bicycle_selection.status == 'NOT STARTED' %>
+                <% assign dataToUpdate.bicycle_selection = dealResult.bicycle_selection %>
+                <% assign dataToUpdate.bicycle_selection.status = 'OPEN' %>
+            <% endif %>
+        <% endif %>
+        <% assign dataToUpdate.portal.enable_design_studio = en.params.enable_design_studio %>
+        <% assign dataToUpdate.portal.enable_parking_selection = en.params.enable_parking_selection %>
+        <% assign dataToUpdate.portal.enable_locker_selection = en.params.enable_locker_selection %>
+        <% assign dataToUpdate.portal.enable_bicycle_selection = en.params.enable_bicycle_selection %> 
+        <% assign dataToUpdate.portal.enable_layout_customization = en.params.enable_layout_customization %> 
+        <% en.data.update upResult datasetId query dataToUpdate %>
+    <% endfor %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Deal(s) updated successfully.' %>
+    <% assign returnData.result = upResult %> 
+    <% return returnData %>
+<% else %> 
+    <% assign returnData.status = 0 %>
+    <% assign returnData.message = 'Deal id(s) not found.' %>
+    <% assign returnData.result = null %>
+    <% return returnData %>
+
+<% endif %>

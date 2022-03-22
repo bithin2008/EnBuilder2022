@@ -1,0 +1,40 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_locker_selection' %>
+<% assign params = en.params %>
+<% if params.space_id %> 
+
+        <% assign query.space_id = params.space_id %>
+        <% en.data.findOne result datasetId query %>
+        <% assign itemResult = result.row %>
+        
+        <% en.data.delete result datasetId query %>
+        
+        // to change the parking lot status
+        <% assign squery._id = itemResult.space_id %>
+        <% assign sdata.status = 'AVAILABLE' %>
+        <% assign sdata.deal_id = null %>
+        <% assign sdata.unit_id = null %>
+        <% assign sdata.unit_no = null %> 
+        <% en.data.update result "bldr_locker_units" squery sdata %>  
+        
+        <% assign dataToInsert = itemResult %>
+        <% assign dataToInsert.action = 'Locker deleted'  %> 
+        <% assign dataToInsert.time = en.time.now  %>
+        <% assign dataToInsert.user_id = UserResult.user._id %>
+        <% assign dataToInsert.user_name = UserResult.user.firstName | append: ' ' | append: UserResult.user.lastName %>
+        <% en.data.insert result1 "bldr_portal_activity" dataToInsert %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.result = result %>
+    <% assign returnData.message = 'locker deleted successfully.' %> 
+    <% return returnData %>
+<% else %>
+    <% assign returnData.status = 0 %>
+    <% assign returnData.message = 'Unit id is required' %>
+    <% return returnData %>
+<% endif %>

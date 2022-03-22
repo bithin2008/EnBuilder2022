@@ -1,0 +1,80 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_color_selection' %>
+<% assign params = en.params %>
+
+//_id <— UUID
+//type - COLOR_COLLECTION/PACKAGE/PERSONALIZATION_OPTION
+//type - PACKAGE
+//deal_id
+//unit_id
+//time: 
+//cost
+//price
+//invoice_id
+
+<% if params.unit_id %>
+    <% rem if params.deal_id %>
+        ////////// if type=COLOR_COLLECTION then before add we need to check if already any   ////////////////////////
+        ////////// COLOR_COLLECTION added or not        ////////////////////////////////////////////
+        ////////// if COLOR_COLLECTION exit then it needs to be removed and related packages and options also be removed   ////////////////
+        <% if params.type == 'COLOR_COLLECTION' %>
+            <% assign query1.unit_id = params.unit_id %>
+            <% if params.deal_id %>
+                <% assign query1.deal_id = params.deal_id %>
+            <% endif %>
+            <% en.data.find result1 datasetId query1 %>
+            <% if result1.rows %>
+                <% en.data.delete deleteResult1 datasetId query1 %> 
+                <% for itemResult in result1.rows %>
+                    <% unassign dataToInsert %>
+                    <% assign dataToInsert.deal_id = itemResult.deal_id %>
+                    <% assign dataToInsert.unit_id = itemResult.unit_id %>
+                    <% assign dataToInsert.item_id = itemResult.item_id %>
+                    <% assign dataToInsert.item_name = itemResult.item_name %>
+                    <% assign dataToInsert.cost = itemResult.cost %>
+                    <% assign dataToInsert.price = itemResult.price %>
+                    <% assign dataToInsert.action = 'Item deleted'  %>
+                    <% assign dataToInsert.time = en.time.now  %>
+                    <% assign dataToInsert.user_id = UserResult.user._id %>
+                    <% assign dataToInsert.user_name = UserResult.user.firstName | append: ' ' | append: UserResult.user.lastName %>
+                    <% en.data.insert result1 "bldr_portal_activity" dataToInsert %>
+                <% endfor %>
+            <% endif %>
+        <% endif %> 
+        <% assign params.time = en.time.now %>
+        <% en.data.insert result datasetId params %>
+        
+        <% assign params.action = 'Item added'  %>
+        <% assign params.user_id = UserResult.user._id %>
+        <% assign params.user_name = UserResult.user.firstName | append: ' ' | append: UserResult.user.lastName %>
+        <% en.data.insert result1 "bldr_portal_activity" params %>
+        <% assign returnData.status = 1 %>
+        <% assign returnData.result = result.row %>
+        <% assign returnData.message = 'Item added successfully.' %> 
+        <% return returnData %>
+    <% rem else %>
+        <% rem assign returnData.status = 0 %>
+        <% rem assign returnData.message = 'Deal id is required' %>
+        <% rem return returnData %>
+    <% rem endif %>
+<% else %>
+    <% assign returnData.status = 0 %>
+    <% assign returnData.message = 'Unit id is required' %>
+    <% return returnData %>
+<% endif %>
+
+
+
+
+
+
+
+
+
+

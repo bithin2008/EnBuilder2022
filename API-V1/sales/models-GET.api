@@ -1,0 +1,79 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_models' %>
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% en.data.findone result datasetId query %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Model details' %>
+    <% assign returnData.result = result.row %>
+    <% return returnData %>
+<% else %>
+    <% assign pageSize = 20 %> 
+    <% if en.params.pageSize %>
+        <% assign pageSize = en.params.pageSize %>
+    <% endif %>
+    <% assign page = 1 %>
+    <% if en.params.page %> 
+        <% assign page = en.params.page %>
+    <% endif %> 
+    
+    <% if en.params.sortBy %>
+        <% if en.params.sortOrder =='ASC' %>
+            <% assign orderBy[en.params.sortBy] = 1 %>
+        <% else %>
+            <% assign orderBy[en.params.sortBy] = -1 %>
+        <% endif %>
+    <% else %>
+        <% assign orderBy.name = 1 %>
+    <% endif %>
+    
+    <% if en.params.project_id %>
+        <% assign query.project_id = en.params.project_id %> 
+    <% endif %>
+    <% if en.params.bed %>
+        <% assign query.bed.$in = en.params.bed | split:"," %>
+    <% endif %>
+    <% if en.params.den %>
+        <% assign query.den.$in = en.params.den | split:"," %>
+    <% endif %>
+    <% if en.params.views %>
+        <% assign query.views.$in = en.params.views | split:"," %>
+    <% endif %>
+    <% if en.params.spaces %>
+        <% assign query.spaces.$elemMatch.name.$in = en.params.spaces | split:"," %>
+    <% endif %>
+    
+    <% if en.params.searchText %>
+        <% assign Name.name.$regex = en.params.searchText %> 
+        <% assign Name.name.$options = "i" %>
+        <% assign query.$or = [Name] %>
+    <% endif %>
+    
+    <% if en.params.type=='list' %>
+        <% en.data.find results datasetId query "_id,name" orderBy pageSize page %>
+        <% assign returnData.status = 1 %>
+        <% assign returnData.message = 'Model list' %>
+        <% assign returnData.results = results.rows %>
+        <% assign returnData.pagination = results.pagination %>
+        <% return returnData %>
+        <% exit %>
+    <% endif %>
+    <% return 'query' query %>
+    <% en.data.find results datasetId query "" orderBy pageSize page %>
+    
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Model list' %>
+    <% assign returnData.results = results.rows %>
+    <% assign returnData.pagination = results.pagination %>
+    <% return returnData %>
+<% endif %>
+
+
+
+

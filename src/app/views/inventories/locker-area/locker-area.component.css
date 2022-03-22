@@ -1,0 +1,71 @@
+
+.img-up-btn {
+    position: absolute;
+    overflow: hidden;
+    bottom: 10px;
+    right: 10px;
+}
+
+.doc-img-up-btn {
+    position: relative;
+    overflow: hidden;
+    /* bottom: 10px; */
+    /* right: 10px; */
+}
+
+.doc-img-upload {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    left: 0;
+    top: 0;
+}
+
+.contai {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.parking-floorplan {
+    width: 1000px !important;;
+    height: 1000px;
+    margin: 0px auto;
+    overflow: auto;
+    background: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+.floor-map {
+    position: relative;
+    width: 1000px;
+    height: 1000px;
+    overflow: auto;
+    background: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+.car-img{
+    /* transform: rotate(90deg); */
+    height: 55px;
+    padding: 0 10px;
+    margin: 0 10px;
+}
+::ng-deep .custom-size.modal-xl {
+    max-width: calc(100vw - 100px) !important;
+}
+.addon-img{
+    height: 20px;
+    padding: 0 10px;
+    margin: 0 10px;
+}

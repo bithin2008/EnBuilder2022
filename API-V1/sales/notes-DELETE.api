@@ -1,0 +1,20 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'crm_notes' %>
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% en.data.delete results datasetId query %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Notes deleted successfully' %>
+    <% assign returnData.result = results %>
+    <% return returnData %>
+<% else %>
+    <% assign returnData.status = 0 %>
+    <% assign returnData.message = 'Id missing' %>
+    <% return returnData %>
+<% endif %>

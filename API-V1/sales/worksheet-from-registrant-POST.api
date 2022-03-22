@@ -1,0 +1,23 @@
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% en.data.findone result 'bldr_registrants' query %>
+    <% assign registrant = result.row %>
+    <% assign registrant.rid = registrant._id %>
+    <% unassign registrant._id %>
+    <% en.data.insert wresult 'bldr_worksheets' registrant %>
+    
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Worksheet created successfully' %>
+    <% assign returnData.result = wresult.row %>
+    <% return returnData %>
+<% else %>
+    <% assign returnData.status = 0 %>
+    <% assign returnData.message = 'Registrant not found' %>
+    <% return returnData %>
+<% endif %> 

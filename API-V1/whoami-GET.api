@@ -1,0 +1,5 @@
+
+
+<% en.users.whoami loginUser %>
+
+<% return 'result' loginUser %>

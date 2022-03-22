@@ -1,0 +1,223 @@
+<form autocomplete="off">
+
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <button class="btn btn-danger  mr-2" style="float:right" type="button" (click)="clearFilter()">Clear</button>
+            <button class="btn btn-primary mr-2" style="float:right" type="button" (click)="openAddLotTypeModal(addModal)">Add</button>
+            <div class="form-group  mr-2" style="float:right">
+                <input class="form-control" name="search" placeholder="Search" style="padding-right: 25px;" type="text" [ngModelOptions]="{standalone: true}"
+                    [(ngModel)]="filterForm.searchText" name="search" (keyup)="doSearch()">
+            </div>
+        </div>
+        <!-- <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <select class="form-select" (change)="doSearch()" [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.project_id">
+                    <option value="">Select Projects</option>
+                    <option *ngFor="let item of projectList" value={{item._id}}>{{item.name}}</option>
+                </select>
+            </div>
+        </div> -->
+        <!-- <div class="col-md-6 col-sm-5 pb-2"></div>
+        <div class="col-md-3 col-sm-4 pb-2 text-right">
+            <div class="input-group position-relative">
+                <input class="form-control" name="search" placeholder="Search" style="padding-right: 25px;" type="text" [ngModelOptions]="{standalone: true}"
+                    [(ngModel)]="filterForm.searchText" name="search" (keyup)="doSearch()">
+                <span class="clear-search" *ngIf="isClear" (click)="clearSearch()">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-3">
+            <div class="input-group-btn">
+                <button class="btn btn-danger  mr-1" type="button" (click)="clearFilter()">Clear</button>
+                <button class="btn btn-primary mr-1" type="button" (click)="openAddLotTypeModal(addModal)">Add</button>
+            </div>
+        </div> -->
+    </div>
+</form>
+
+<div class="table-responsive mb-5">
+    <table class="table table-striped table-sm list_table" style="table-layout: fixed;">
+        <thead>
+            <tr>
+                <th width="180px" (click)="setOrder('project_name')">Project
+                    <span *ngIf="order != 'project_name'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'project_name'">▼</span>
+                    <span *ngIf="!reverse && order == 'project_name'">▲</span>
+                </th>
+                <th width="180px" (click)="setOrder('name')">Name
+                    <span *ngIf="order != 'name'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'name'">▼</span>
+                    <span *ngIf="!reverse && order == 'name'">▲</span>
+                </th>
+                <th width="180px" (click)="setOrder('width')">Width
+                    <span *ngIf="order != 'width'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'width'">▼</span>
+                    <span *ngIf="!reverse && order == 'width'">▲</span>
+                </th>
+                <th width="180px" (click)="setOrder('depth')">Depth
+                    <span *ngIf="order != 'depth'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'depth'">▼</span>
+                    <span *ngIf="!reverse && order == 'depth'">▲</span>
+                </th>
+                <th width="130px" (click)="setOrder('area')">Area ({{measureUnits[0]?.area}})
+                    <span *ngIf="order != 'area'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'area'">▼</span>
+                    <span *ngIf="!reverse && order == 'area'">▲</span>
+                </th>
+                <th width="180px">Irregular</th>
+                <th width="100px">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngIf="lotTypeList.length>0">
+                <tr *ngFor="let item of lotTypeList">
+                    <td>{{item.project_name}}</td>
+                    <td width="180px">{{item.lot_name}} </td>
+                    <td width="120px">{{item.width}}</td>
+                    <td width="120px">{{item.depth}} </td>
+                    <td width="180px">{{item?.lot_area}}</td>
+                    <td width="120px">{{item.is_irregular ?'Yes' :'No'}}</td>
+                    <td class="text-right">
+                        <button class="btn btn-primary btn-sm mr-2" type="button" (click)="openEditLotTypeModal(addModal,item)">
+                            <i class="fa fa-pencil-alt" aria-hidden="true"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" type="button" (click)="deleteLotType(item)">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>
+            </ng-container>
+            <ng-container *ngIf="lotTypeList.length==0">
+                <tr>
+                    <td colspan="7">No lot type found</td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+</div>
+<div class="row mt-3" *ngIf="paginationObj.total>=20">
+    <div class="col-md-6">
+        <div class="form-group">
+            <!-- <div class="col-sm-6"> -->
+            <span class="float-left" style="width:70px;margin-top: 6px;">Page Size:</span>
+            <span class="float-left" style="width:85px;">
+                <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="pageSize" (change)="setPageSize()">
+                    <option value="">-Select-</option>
+                                        <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </span>
+            <span class="float-left" style="margin-top: 6px !important;margin-left: 16px !important;">{{paginationObj.total}} Record(s) Found</span>
+            <!-- </div> -->
+        </div>
+    </div>
+    <div class="col-md-6">
+        <nav>
+            <ul class="pagination">
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.previousPage)">
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="page-item {{pagination == paginationObj.currentPage?'active':''}}" *ngFor="let pagination of paginationObj.items">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(pagination)">{{pagination}}</a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.nextPage)">
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<ng-template #addModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">{{isEdit?'Edit':'Add'}} Lot Type</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Project
+                                <span style="color:red">*</span>:</label>
+                            <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.project_id" [disabled]="builderSelected">
+                                <option value="">Select Project</option>
+                                <option *ngFor="let item of projectList" value={{item._id}}>{{item.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Name
+                                <span style="color:red">*</span>
+                                :</label>
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.lot_name" class="form-control">
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Width
+                                <!-- <span style="color:red">*</span> -->
+                                :</label>
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.width" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Depth
+                                <!-- <span style="color:red">*</span> -->
+                                :</label>
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.depth" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Area ({{measureUnits[0]?.area}})
+                                <!-- <span style="color:red">*</span> -->
+                                :</label>
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.lot_area" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group mt-4">
+                            <input type="checkbox" value="" id="isIrregular" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.is_irregular">
+                            <label class="form-check-label pl-2" for="isIrregular">
+                                Irregular
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" *ngIf="!isEdit" (click)="addLotType()">Add</button>
+            <button type="button" class="btn btn-primary" *ngIf="isEdit" (click)="editLotType()">Update</button>
+        </div>
+    </div>
+</ng-template>

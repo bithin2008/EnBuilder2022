@@ -1,0 +1,69 @@
+
+
+
+<% assign datasetId = 'crm_documents' %>
+
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% if en.params.is_active %>
+        <% if en.params.is_active == 'yes' %>
+            <% assign obj.$set.is_active = true %>
+        <% else %>
+          <% assign obj.$set.is_active = false %>
+        <% endif %>
+    <% endif %>
+    <% if en.params.name %>
+        <% assign obj.$set["document.name"] = en.params.name %>
+    <% endif %> 
+    <% en.data.update result datasetId query obj %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Doument updated successfully.' %>
+    <% assign returnData.result = result %>
+    <% return returnData %>
+<% else %> 
+    <% if en.params.project_id %>
+        <% assign obj.project_id = en.params.project_id %>
+    <% endif %>
+    <% if en.params.deal_id %>
+        <% assign obj.deal_id = en.params.deal_id %>
+    <% endif %>
+    <% if en.params.person_id %>
+        <% assign obj.person_id = en.params.person_id %>
+    <% endif %>
+    <% if en.params.contact_id %>
+        <% assign obj.contact_id = en.params.contact_id %>
+    <% endif %> 
+    <% if en.params.document_type %>
+        <% assign obj.document_type = en.params.document_type %>
+    <% endif %>
+    <% if en.params.type %>
+        <% assign obj.type = en.params.type %>
+    <% endif %>
+    <% if en.params.is_active == 'yes' %>
+        <% assign obj.is_active = true %> 
+    <% else %>
+      <% assign obj.is_active = false %>
+    <% endif %>
+    <% en.data.insert result datasetId obj %>
+    <% if en.req.hasFile %>
+        <% assign rowId = result.row._id %>
+        <% en.data.attachfile docresult datasetId 'document' rowId file_is_private %> 
+        <% assign returnData.result = docresult %>
+    <% else %>
+        <% assign returnData.result = result %>
+    <% endif %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Doument added successfully.' %>
+    <% assign returnData.result = result %>
+    <% return returnData %>
+<% endif %>
+
+ <% exit %>
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+
+

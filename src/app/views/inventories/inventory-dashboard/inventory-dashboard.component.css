@@ -1,0 +1,7 @@
+.dashboard-grid {
+    color: #fff !important;
+    overflow: auto;
+    -webkit-box-shadow: 3px 4px 5px 0px rgba(138, 138, 138, 1);
+    -moz-box-shadow: 3px 4px 5px 0px rgba(138, 138, 138, 1);
+    box-shadow: 3px 4px 5px 0px rgba(138, 138, 138, 1);
+    }

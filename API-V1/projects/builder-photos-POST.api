@@ -1,0 +1,32 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_builders' %>
+
+<% assign query._id = en.params.builder_id %>
+<% assign fileField = en.params.field_name %>
+<% en.data.findOne builder datasetId  query %>
+<% return 'builder' builder %>
+<% if builder %>
+    <% if en.req.hasFile %>
+        <% en.data.attachfile results datasetId fileField en.params.builder_id file_is_private %>
+        <% return 'uploadedFile' 'true' %>
+        <% assign returnData.status = 1 %>
+        <% assign returnData.message = 'Photo added successfully.' %>
+        <% assign returnData.result = result %>
+        <% return returnData %>
+    <% endif %>
+<% else %>
+    <% assign returnData.status = 0 %>
+    <% assign returnData.message = 'Builder id not found.' %>
+    <% assign returnData.result = null %>
+    <% return returnData %>
+<% endif %>
+
+
+
+

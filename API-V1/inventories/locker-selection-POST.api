@@ -1,0 +1,49 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_locker_selection' %>
+<% assign params = en.params %>
+
+//deal_id
+//unit_id
+//cost
+//price
+
+<% if params.unit_id %>
+    <% if params.deal_id %>
+        <% assign params.time = en.time.now %> 
+        <% en.data.insert result datasetId params %>
+        
+        // to change the parking lot status
+        <% assign squery._id = params.space_id %>
+        <% assign sdata.status = 'SALES HOLD' %>
+        <% assign sdata.deal_id = params.deal_id %>
+        <% assign sdata.unit_id = params.unit_id %>
+        <% assign sdata.unit_no = params.unit_no %>
+        <% en.data.update result "bldr_locker_units" squery sdata %>
+        
+        <% assign params.action = 'Locker selected'  %>
+        <% assign params.user_id = UserResult.user._id %>
+        <% assign params.user_name =  UserResult.user.firstName | append: ' ' | append: UserResult.user.lastName %>
+        <% en.data.insert result1 "bldr_portal_activity" params %>
+        <% assign returnData.status = 1 %>
+        <% assign returnData.result = result.row %>
+        <% assign returnData.message = 'Locker added successfully.' %>  
+        <% return returnData %>
+    <% else %>
+        <% assign returnData.status = 0 %>
+        <% assign returnData.message = 'Deal id is required' %>
+        <% return returnData %>
+    <% endif %>
+<% else %>
+    <% assign returnData.status = 0 %>
+    <% assign returnData.message = 'Unit id is required' %>
+    <% return returnData %>
+<% endif %>
+
+ 
+

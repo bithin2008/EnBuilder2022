@@ -1,0 +1,32 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_registrants' %> 
+
+
+<% assign params = en.params %>
+
+<% if params._id %>
+    <% assign query._id = en.params._id %>
+    <% en.data.update upResult datasetId query en.params %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Registrant updated successfully.' %>
+    <% assign returnData.result = upResult %>
+    <% return returnData %>
+    <% exit %>
+<% else %>
+    <% en.data.nextsequence results 'registrant-id' %>
+    <% assign id = results.value | int_to_string %>
+    <% assign params._id = id %> 
+    <% en.data.insert result datasetId params %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Registrant created successfully.' %>
+    <% assign returnData.result = result %>
+    <% return returnData %>
+<% end %>
+
+ 

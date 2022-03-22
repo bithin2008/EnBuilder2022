@@ -1,0 +1,39 @@
+.photo-holder {
+    padding: 5px;
+    position: relative;
+    display: block;
+    width: 250px;
+    border: 1px solid #ccc;
+    margin: 0 auto;
+}
+
+.photo-upload-btn {
+    cursor: pointer;
+    overflow: hidden;
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+}
+
+.photo-upload-btn input[type="file"] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+}
+
+.photo-holder img {
+    width: 100%;
+}
+
+.doc-img-container {
+    background: no-repeat;
+    background-size: contain;
+    width: 100px;
+    overflow: hidden;
+    position: relative;
+    height: 50px;
+    margin: 0 auto;
+    background-position: center;
+}

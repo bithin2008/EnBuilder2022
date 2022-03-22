@@ -1,0 +1,317 @@
+<form autocomplete="off">
+    <div class="row">
+        <div class="col-md-12">
+            <button type="button" style="float:right" class="btn btn-danger mr-2" (click)="clearFilter()">Clear</button>
+            <button class="btn btn-primary mr-2" style="float:right" type="button" (click)="openAddIncentivesModal(addEditModal)">Add</button>
+
+            <div class="form-group  mr-2" style="float:right">
+                <input class="form-control" name="search" placeholder="Type name" style="padding-right: 25px;" type="text" [ngModelOptions]="{standalone: true}"
+                    [(ngModel)]="filterForm.searchText" name="search" (keyup)="doSearch()">
+            </div>
+        </div>
+
+    </div>
+</form>
+
+<div class="table-responsive mt-2 mb-3">
+    <table class="table table-striped list_table" style="table-layout: fixed;">
+        <thead>
+            <tr>
+                <th width="180px" (click)="setOrder('name')">Name
+                    <span *ngIf="order != 'name'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'name'">▼</span>
+                    <span *ngIf="!reverse && order == 'name'">▲</span>
+                </th>
+                <th width="180px">Amount/Percentage</th>
+                <th width="100px" (click)="setOrder('start')">Start
+                    <span *ngIf="order != 'start'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'start'">▼</span>
+                    <span *ngIf="!reverse && order == 'start'">▲</span>
+                </th>
+                <th width="100px" (click)="setOrder('end')">End
+                    <span *ngIf="order != 'end'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'end'">▼</span>
+                    <span *ngIf="!reverse && order == 'end'">▲</span>
+                </th>
+                <th width="60px">Active</th>
+                <th width="90px">Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngIf="incentiveList.length>0">
+                <tr *ngFor="let item of incentiveList;let i=index">
+                    <td>{{item?.name}}</td>
+                    <td>
+                        <div *ngIf="item?.amount_type== 'PERCENT'">{{item?.percent}}%</div>
+                        <div *ngIf="item?.amount_type== 'AMOUNT'">{{item?.amount|currency:'USD'}}</div>
+                    </td>
+                    <td>{{item?.start |date:'yyyy-MM-dd'}}</td>
+                    <td>{{item?.end |date:'yyyy-MM-dd'}}</td>
+                    <td>{{item?.active ? 'Yes':'No'}}</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm mr-2" type="button" (click)="openEditIncentiveModal(addEditModal,item)">
+                            <i class="fa fa-pencil-alt" aria-hidden="true"></i>
+                        </button>
+                        <button class="btn btn-danger btn-sm" type="button" (click)="deleteIncentive(item)">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </button>
+
+                    </td>
+                </tr>
+            </ng-container>
+            <ng-container *ngIf="incentiveList.length == 0">
+                <tr>
+                    <td colspan="6" class="text-center">No incentive found</td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+</div>
+<div class="row mt-3" *ngIf="paginationObj.total>=20">
+    <div class="col-md-6">
+        <div class="form-group">
+            <!-- <div class="col-sm-6"> -->
+            <span class="float-left" style="width:70px;margin-top: 6px;">Page Size:</span>
+            <span class="float-left" style="width:85px;">
+                <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="pageSize" (change)="setPageSize()">
+                    <option value="">-Select-</option>
+                                        <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </span>
+            <span class="float-left" style="margin-top: 6px !important;margin-left: 16px !important;">{{paginationObj.total}} Record(s) Found</span>
+            <!-- </div> -->
+        </div>
+    </div>
+    <div class="col-md-6">
+        <nav>
+            <ul class="pagination">
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" (click)="doPaginationWise(paginationObj.previousPage)">
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(1)">
+                        First
+                    </a>
+                </li>
+                <li class="page-item {{pagination == paginationObj.currentPage?'active':''}}" *ngFor="let pagination of paginationObj.items">
+                    <a class="page-link" (click)="doPaginationWise(pagination)">{{pagination}}</a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.totalPages)">
+                        Last
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" (click)="doPaginationWise(paginationObj.nextPage)">
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<ng-template #addEditModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">{{ isEdit ? 'Edit' :'Add'}} Incentive</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Project
+                                <span style="color:red">*</span>:
+                            </label>
+                            <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.project_id">
+                                <option value="">Select Project</option>
+                                <option *ngFor="let item of projectList" value={{item._id}}>{{item.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Name
+                                <span style="color:red">*</span>:
+                            </label>
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.name" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mt-1">
+                        <div class="form-group">
+                            <label>
+                                Start Date
+                                <span style="color:red">*</span>:
+                            </label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="YYYY-MM-DD" #startDate="bsDatepicker" bsDatepicker [bsConfig]="{ containerClass: 'theme-dark-blue',showTodayButton: true, todayPosition: 'center',showClearButton: true, clearPosition: 'right',isAnimated: true,adaptivePosition: true,dateInputFormat: 'YYYY-MM-DD',  returnFocusToInput: true }"
+                                    [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.start">
+                                <span class=" input-group-prepend" (click)="startDate.toggle()" [attr.aria-expanded]="startDate.isOpen">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-1">
+                        <div class="form-group ">
+                            <label>
+                                End Date
+                                <span style="color:red">*</span>:
+                            </label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" [minDate]="minDate" placeholder="YYYY-MM-DD" #endDate="bsDatepicker" bsDatepicker
+                                    [bsConfig]="{ containerClass: 'theme-dark-blue',showTodayButton: true, todayPosition: 'center',showClearButton: true, clearPosition: 'right',isAnimated: true,adaptivePosition: true,dateInputFormat: 'YYYY-MM-DD',  returnFocusToInput: true }"
+                                    [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.end">
+                                <span class=" input-group-prepend" (click)="endDate.toggle()" [attr.aria-expanded]="endDate.isOpen">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mt-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="isEnable" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.active">
+                            <label class="custom-control-label" for="isEnable"> Is Active</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <h5>Type of Incentive
+                            <span style="color:red">*</span>
+                        </h5>
+                    </div>
+                    <div class="col-md-12">
+                        <div>
+                            <input [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.type_of_incentive" type="radio" value="MONETARY" id="monetary"
+                                name="incentive-type">
+                            <label for="monetary" class="mb-0">
+                                &nbsp;&nbsp; Monetary Value as discounted price
+                            </label>
+                            <div class="mb-1"> &nbsp;&nbsp;&nbsp; (Help:Monetary incentive will deduct unit price by the amount defined below.
+                                )
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div>
+                            <input [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.type_of_incentive" type="radio" value="DECORE-DOLLAR"
+                                id="decore" name="incentive-type">
+                            <label for="decore" class="mb-0">
+                                &nbsp;&nbsp; Decore Dollar
+                            </label>
+                            <div class="mb-1"> &nbsp;&nbsp;&nbsp; (Incentive towards purchaser portal upgrades)
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-8">
+                        <div>
+                            <input [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.type_of_incentive" type="radio" value="UPGRADE-PACKAGE-FREE"
+                                id="package-free" name="incentive-type">
+                            <label for="package-free">
+                                &nbsp;&nbsp; Specific upgrade package free
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6" *ngIf="formDetails.type_of_incentive=='UPGRADE-PACKAGE-FREE'">
+                        <div>
+                            <label>
+                                Package Name
+                                <span style="color:red">*</span>:
+                            </label>
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.package_name" class="form-control">
+                        </div>
+                    </div> -->
+                </div>
+
+
+                <div class="row" *ngIf="formDetails.type_of_incentive!='UPGRADE-PACKAGE-FREE'">
+                    <div class="col-md-12">
+                        <h5>Amount
+                            <span style="color:red">*</span>
+                        </h5>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <input [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.amount_type"
+                                    type="radio" value="PERCENT" id="percent" name="amount-type">
+                                <label for="percent">
+                                    &nbsp;&nbsp; Percentage of Unit Sale Price
+                                </label>
+                            </div>
+                            <div class="col-md-2 text-right" *ngIf="formDetails.amount_type=='PERCENT'">
+                                Percent
+                            </div>
+                            <div class="col-md-3" *ngIf="formDetails.amount_type=='PERCENT'">
+                                <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.percent" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <input [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.amount_type" type="radio" value="AMOUNT" id="fixed_amount"
+                                    name="amount-type">
+                                <label for="fixed_amount">
+                                    &nbsp;&nbsp; Fixed Amount
+                                </label>
+                            </div>
+                            <div class="col-md-2 text-right" *ngIf="formDetails.amount_type=='AMOUNT'">
+                                Value
+                            </div>
+                            <div class="col-md-3" *ngIf="formDetails.amount_type=='AMOUNT'">
+                                <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.amount" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>
+                                Description
+                            </label>
+                            <div [froalaEditor]="nonInlineEdit" [(froalaModel)]="formDetails.description">
+                                {{formDetails.description ? formDetails.description : ''}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" *ngIf="isEdit" (click)="editIncentive()">Update</button>
+            <button type="button" class="btn btn-primary" *ngIf="!isEdit" (click)="addIncentive()">Add</button>
+
+        </div>
+    </div>
+</ng-template>

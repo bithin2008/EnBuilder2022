@@ -1,0 +1,34 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+ // for searching contact matched with first name and last name
+    
+<% assign c1.first_name = en.params.first_name %> 
+<% assign c2.last_name = en.params.last_name %> 
+<% assign orQuery = [c1,c2] %>
+<% assign contactQuery1.$or = orQuery %>
+<% en.data.find contactResult1 "contacts" contactQuery1 "first_name,last_name,emails,phones" %>
+<% assign returnData.name_matched = contactResult1.rows %>
+
+// for searching contact matched with email
+<% if en.params.email %>
+   <% assign contactQuery2["emails.email"] = en.params.email %>
+    <% en.data.find contactResult2 "contacts" contactQuery2 "first_name,last_name,emails,phones" %>
+    <% assign returnData.email_matched = contactResult2.rows %>
+<% endif %>
+
+
+// for searching contact matched with mobile
+<% if en.params.mobile %>
+    <% assign contactQuery3["phones.number"] = en.params.mobile %>
+    <% en.data.find contactResult3 "contacts" contactQuery3 "first_name,last_name,emails,phones" %>
+    <% assign returnData.mobile_matched = contactResult3.rows %>
+<% endif %>
+
+<% assign returnData.status = 1 %>
+<% assign returnData.message = 'Potential matched details' %>
+<% return returnData %>

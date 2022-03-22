@@ -1,0 +1,52 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+
+<% assign datasetId = 'bldr_pc_models_units' %>
+
+<% assign pageSize = 200 %> 
+<% if en.params.pageSize %>
+    <% assign pageSize = en.params.pageSize %>
+<% endif %> 
+<% assign page = 1 %>
+<% if en.params.page %> 
+    <% assign page = en.params.page %>
+<% endif %> 
+
+<% assign orderBy.name = 1 %>
+
+<% assign params = en.params %>
+
+<% if params.purpose == 'add' %>
+    <% assign query.source_id = params._id %>
+    <% assign query.project_id = params.project_id %>
+    <% assign query.type = 'UNIT' %>
+    <% assign query.subtype = params.subtype %>
+    <% en.data.distinct results1 datasetId "unit_id" query %>
+    
+    <% assign query1.project_id = params.project_id %>
+    <% assign query1._id.$nin  = results1.values %>
+    <% en.data.find results 'bldr_units' query1 "" orderBy pageSize page %>
+    
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Unit lists' %>
+    <% assign returnData.result = results.rows %>
+    <% assign returnData.pagination = results.pagination %>
+    <% return returnData %>
+<% else %>
+    <% assign query.source_id = params._id %>
+    <% assign query.project_id = params.project_id %>
+    <% assign query.type = 'UNIT' %>
+    <% assign query.subtype = params.subtype %>
+    
+    <% en.data.find results datasetId query "" orderBy pageSize page %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Unit list' %>
+    <% assign returnData.results = results.rows %>
+    <% assign returnData.pagination = results.pagination %>
+    <% return returnData %>
+<% endif %> 

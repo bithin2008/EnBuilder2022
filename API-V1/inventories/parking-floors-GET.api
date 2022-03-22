@@ -1,0 +1,136 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_parking_floors' %>
+
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% en.data.findone result datasetId query %>
+    <% json cquery3 %>
+        {
+            "queries":[
+                {
+                    "$match":{
+                        
+                    }
+                },
+                {
+                    "$group":{
+                        "_id":null,
+                        "total":{"$sum":1},
+                        "available": { 
+                            "$sum": {
+                                "$cond": [
+                                    { '$eq': ['$status', "AVAILABLE"]},
+                                    1, 
+                                    0
+                                ]
+                            }
+                        },
+                        "sold": { 
+                            "$sum": {
+                                "$cond": [
+                                    { '$eq': ['$status', "SOLD"]}
+                                    1, 
+                                    0
+                                ]
+                            }
+                        },
+                    }
+                }
+            ]
+        }
+    <% endjson %>
+    <% assign cquery3.queries[0].$match.floor_id = result.row._id %>
+    <% en.data.aggregate result3 'bldr_parking_spaces' cquery3.queries %>
+    <% assign result.row.spaces = result3.rows[0] %>
+    
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Parking Floor details' %>
+    <% assign returnData.result = result.row %>
+    <% return returnData %>
+<% else %>
+    <% assign pageSize = 20 %> 
+    <% if en.params.pageSize %>
+        <% assign pageSize = en.params.pageSize %>
+    <% endif %>
+    <% assign page = 1 %> 
+    <% if en.params.page %> 
+        <% assign page = en.params.page %>
+    <% endif %> 
+    
+    <% if en.params.sortBy %>
+        <% if en.params.sortOrder =='ASC' %>
+            <% assign orderBy[en.params.sortBy] = 1 %>
+        <% else %>
+            <% assign orderBy[en.params.sortBy] = -1 %>
+        <% endif %>
+    <% else %>
+        <% assign orderBy.name = 1 %>
+    <% endif %>
+    <% if en.params.searchText %>
+        <% assign Name.name.$regex = en.params.searchText %> 
+        <% assign Name.name.$options = "i" %>
+        <% assign query.$or = [Name] %>
+    <% endif %>
+    <% assign query.project_id = en.params.project_id %>
+    <% en.data.find results datasetId query "" orderBy pageSize page %>
+    <% if results.rows %>
+        <% for item in results.rows %>
+            <% unassign cquery3 %>
+            <% unassign result3 %>
+            <% json cquery3 %>
+                {
+                    "queries":[
+                        {
+                            "$match":{
+                                
+                            }
+                        },
+                        {
+                            "$group":{
+                                "_id":null,
+                                "total":{"$sum":1},
+                                "available": { 
+                                    "$sum": {
+                                        "$cond": [
+                                            { '$eq': ['$status', "AVAILABLE"]},
+                                            1, 
+                                            0
+                                        ]
+                                    }
+                                },
+                                "sold": { 
+                                    "$sum": {
+                                        "$cond": [
+                                            { '$eq': ['$status', "SOLD"]}
+                                            1, 
+                                            0
+                                        ]
+                                    }
+                                },
+                            }
+                        }
+                    ]
+                }
+            <% endjson %>
+            <% assign cquery3.queries[0].$match.floor_id = item._id %>
+            <% en.data.aggregate result3 'bldr_parking_spaces' cquery3.queries %>
+            <% rem assign item.cquery3 = cquery3 %>
+            <% assign item.spaces = result3.rows[0] %>
+        <% endfor %>
+    <% endif %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Parking Floor list' %>
+    <% assign returnData.results = results.rows %>
+    <% assign returnData.pagination = results.pagination %>
+    <% return returnData %>
+<% endif %>
+
+
+
+

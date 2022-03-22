@@ -1,0 +1,1414 @@
+<form autocomplete="off">
+    <div class="row mb-3">
+        <!-- <div class="col-md-3 col-sm-3">
+            <div class="form-group row">
+                <div class="col-md-12">
+                    <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.project_id" (change)="onProjectChange($event.target.value)">
+                        <option value="{{item._id}}" *ngFor="let item of projectList">{{item.name}}</option>
+                    </select>
+                </div>
+            </div>
+        </div> -->
+        <div class="col-md-3">
+            <div class="form-group ">
+                <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.date_filter" (change)="onDateFlterChange()">
+                    <option value="">Select Type</option>
+                    <option *ngFor="let type of dateFilter" [value]="type?.key">{{type?.label}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group ">
+                <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.month" (change)="filterByDateControle()">
+                    <option value="">Life Time</option>
+                    <option value="today">Today</option>
+                    <option value="yesterday">Yesterday</option>
+                    <option value="currentWeek">This Week</option>
+                    <option value="nextWeek">Next Week</option>
+                    <option value="lastWeek">Last Week</option>
+                    <option value="currentMonth">This Month</option>
+                    <option value="nextMonth">Next Month</option>
+                    <option value="lastMonth">Last Month</option>
+                    <option value="currentYear">This Year</option>
+                    <option value="lastYear">Last Year</option>
+                    <option value="custom">Custom</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" [disabled]="isDisabled" class="form-control" placeholder="From Date" #startDate="bsDatepicker" bsDatepicker [bsConfig]="{ containerClass: 'theme-dark-blue',showTodayButton: true, todayPosition: 'center',showClearButton: true, clearPosition: 'right',isAnimated: true,adaptivePosition: true,dateInputFormat: 'YYYY-MM-DD',  returnFocusToInput: true }"
+                        [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.startDate">
+                    <span class=" input-group-prepend" (click)="startDate.toggle()" [attr.aria-expanded]="startDate.isOpen">
+                        <span class="input-group-text">
+                            <i class="fa fa-calendar"></i>
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group ">
+                <div class="input-group">
+                    <input type="text" [disabled]="isDisabled" class="form-control" [minDate]="minDate" placeholder="To Date" #endDate="bsDatepicker" bsDatepicker [bsConfig]="{ containerClass: 'theme-dark-blue',showTodayButton: true, todayPosition: 'center',showClearButton: true, clearPosition: 'right',isAnimated: true,adaptivePosition: true,dateInputFormat: 'YYYY-MM-DD',  returnFocusToInput: true }"
+                        [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.endDate">
+                    <span class=" input-group-prepend" (click)="endDate.toggle()" [attr.aria-expanded]="endDate.isOpen">
+                        <span class="input-group-text">
+                            <i class="fa fa-calendar"></i>
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-4 pb-2">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('status',$event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()" (onSelectAll)="onSelectAll('status',$event)" [placeholder]="'Select Status'" [ngModelOptions]="{standalone: true}" [data]="statusList"
+                    [(ngModel)]="filterForm.status" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-4 pb-2">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('tags',$event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()" (onSelectAll)="onSelectAll('tags',$event)" [placeholder]="'Select Tags'" [ngModelOptions]="{standalone: true}" [data]="tagsList"
+                    [(ngModel)]="filterForm.tags" [settings]="dropdownSettings2">
+                </ng-multiselect-dropdown>
+
+            </div>
+        </div>
+
+
+        <div class="col-md-3 col-sm-4 pb-2">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('priority',$event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()" (onSelectAll)="onSelectAll('priority',$event)" [placeholder]="'Select Priority'" [ngModelOptions]="{standalone: true}"
+                    [data]="priorityList" [(ngModel)]="filterForm.priority" [settings]="dropdownSettings2">
+                </ng-multiselect-dropdown>
+
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-4 pb-2">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('opened_by',$event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()" (onSelectAll)="onSelectAll('opened_by',$event)" [placeholder]="'Select Reported By'" [ngModelOptions]="{standalone: true}"
+                    [data]="reporterList" [(ngModel)]="filterForm.opened_by" [settings]="dropdownSettings3">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-4 pb-2">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('assignee_name',$event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()" (onSelectAll)="onSelectAll('assignee_name',$event)" [placeholder]="'Select Assignee'" [ngModelOptions]="{standalone: true}"
+                    [data]="assigneeList" [(ngModel)]="filterForm.assignee_name" [settings]="dropdownSettings3">
+                </ng-multiselect-dropdown>
+
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4 pb-2">
+            <div class="input-group position-relative">
+                <input class="form-control" name="search" placeholder="Search" style="padding-right: 25px;" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.searchText" name="search" (keyup)="doSearch()">
+                <span class="clear-search" *ngIf="isClear" (click)="clearSearch()">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-5">
+
+            <button class="btn btn-primary mr-2" type="button" *ngIf="filterForm.month=='custom'" [disabled]="(!filterForm.startDate && !filterForm.endDate) || (!filterForm.startDate && filterForm.endDate) " (click)="onApply()">Apply</button>
+            <button class="btn btn-danger  mr-2" type="button" (click)="clearFilter()">Clear</button>
+            <button class="btn btn-primary mr-2" type="button" *ngIf="isBulkAssign" (click)="openAssignModal(assignModal)">Assign</button>
+            <button class="btn btn-primary mr-2" type="button" (click)="openAddDeficiencyModal(addDeficiencyModal)">Add Deficiency</button>
+            <button type="button" class="btn btn-success mr-2" (click)="exportRecords(exportModal)">Export</button>
+            <button type="button" class="btn btn-primary mr-2" (click)="openSendEmail(emailModal)">Email</button>
+        </div>
+    </div>
+</form>
+
+<div class="table-responsive mb-5">
+    <table class="table table-striped list_table" style="table-layout: fixed;">
+        <thead>
+            <tr>
+                <th style="width: 50px;">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="th_chk_all" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedAll" (change)="selectAll()">
+                        <label class="custom-control-label" for="th_chk_all">&nbsp;</label>
+                    </div>
+                </th>
+                <th width="100px" (click)="setOrder('project_name')">Project
+                    <span *ngIf="order != 'project_name'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'project_name'">▼</span>
+                    <span *ngIf="!reverse && order == 'project_name'">▲</span>
+                </th>
+                <th width="60px" (click)="setOrder('unit_no')">Unit
+                    <span *ngIf="order != 'unit_no'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'unit_no'">▼</span>
+                    <span *ngIf="!reverse && order == 'unit_no'">▲</span>
+                </th>
+                <th width="80px" (click)="setOrder('status')">Status
+                    <span *ngIf="order != 'status'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'status'">▼</span>
+                    <span *ngIf="!reverse && order == 'status'">▲</span>
+                </th>
+                <th width="100px" (click)="setOrder('priority')">Priority
+                    <span *ngIf="order != 'priority'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'priority'">▼</span>
+                    <span *ngIf="!reverse && order == 'priority'">▲</span>
+                </th>
+                <th width="150px" (click)="setOrder('tags')">Tags
+                    <span *ngIf="order != 'tags'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'tags'">▼</span>
+                    <span *ngIf="!reverse && order == 'tags'">▲</span>
+                </th>
+                <th width="150px" (click)="setOrder('deficiency_type')">Deficiency Type
+                    <span *ngIf="order != 'deficiency_type'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'deficiency_type'">▼</span>
+                    <span *ngIf="!reverse && order == 'deficiency_type'">▲</span>
+                </th>
+                <th width="240px" (click)="setOrder('title')">Title
+                    <span *ngIf="order != 'title'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'title'">▼</span>
+                    <span *ngIf="!reverse && order == 'title'">▲</span>
+                </th>
+                <th width="150px" (click)="setOrder('opened_at')">Reported On
+                    <span *ngIf="order != 'opened_at'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'opened_at'">▼</span>
+                    <span *ngIf="!reverse && order == 'opened_at'">▲</span>
+                </th>
+                <th width="150px" (click)="setOrder('opened_by')">Reported By
+                    <span *ngIf="order != 'opened_by'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'opened_by'">▼</span>
+                    <span *ngIf="!reverse && order == 'opened_by'">▲</span>
+                </th>
+                <th width="130px" (click)="setOrder('due_date')">Due Date
+                    <span *ngIf="order != 'due_date'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'due_date'">▼</span>
+                    <span *ngIf="!reverse && order == 'due_date'">▲</span>
+                </th>
+                <th width="130px" (click)="setOrder('assignee_name')">Assignee
+                    <span *ngIf="order != 'assignee_name'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'assignee_name'">▼</span>
+                    <span *ngIf="!reverse && order == 'assignee_name'">▲</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngIf="deficiencyTypes?.length > 0">
+                <tr *ngFor="let item of deficiencyTypes;let i=index">
+                    <td style="width: 40px;">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" (change)="onChangeDeleteCheckbox()" class="custom-control-input" id="customCheck{{i}}" [(ngModel)]="item.selected">
+                            <label class="custom-control-label" for="customCheck{{i}}">&nbsp;</label>
+                        </div>
+                    </td>
+                    <td (click)="toggleActivitySlider(event)" (click)="openActivityDetails(item)">{{item?.project_name}}</td>
+                    <td (click)="toggleActivitySlider(event)" (click)="openActivityDetails(item)">{{item?.unit_no}}</td>
+                    <td (click)="toggleActivitySlider(event)" (click)="openActivityDetails(item)">{{item?.status}}</td>
+                    <td (click)="toggleActivitySlider(event)" (click)="openActivityDetails(item)">{{item?.priority}}</td>
+                    <td (click)="toggleActivitySlider(event)" (click)="openActivityDetails(item)">{{item?.tags}}</td>
+                    <td (click)="toggleActivitySlider(event)" (click)="openActivityDetails(item)">{{item?.deficiency_type}}</td>
+                    <td (click)="toggleActivitySlider(event)" (click)="openActivityDetails(item)">{{item?.title}}</td>
+                    <td (click)="toggleActivitySlider(event)" (click)="openActivityDetails(item)">{{item?.opened_at| date:'yyyy-MM-dd'}}</td>
+                    <td (click)="toggleActivitySlider(event)" (click)="openActivityDetails(item)">{{item?.opened_by}}</td>
+                    <td (click)="toggleActivitySlider(event)" (click)="openActivityDetails(item)">{{item?.due_date | date:'yyyy-MM-dd'}}</td>
+                    <td (click)="toggleActivitySlider(event)" (click)="openActivityDetails(item)">{{item?.assignee_name}}</td>
+                </tr>
+                <!-- <ng-container>
+                    <app-deficiency-details [dificiency]="item" [noteMenuState]="notesMenuState" page_name="constituent" [page_id]="" [@notesSlideInOut]="notesMenuState"></app-deficiency-details>
+                </ng-container> -->
+            </ng-container>
+            <ng-container *ngIf="deficiencyTypes?.length == 0">
+                <tr>
+                    <td colspan="4" class="text-center"> No Deficiency Found</td>
+                    <td colspan="8"></td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+</div>
+<div class="row mt-3" *ngIf="paginationObj.total>=20">
+    <div class="col-md-6">
+        <div class="form-group">
+            <span class="float-left" style="width:70px;margin-top: 6px;">Page Size:</span>
+            <span class="float-left" style="width:85px;">
+                <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="pageSize" (change)="setPageSize()">
+                    <option value="">-Select-</option>
+                                        <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </span>
+            <span class="float-left" style="margin-top: 6px !important;margin-left: 16px !important;">{{paginationObj.total}} Record(s) Found</span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <nav>
+            <ul class="pagination">
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" (click)="doPaginationWise(paginationObj.previousPage)">
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(1)">
+                        First
+                    </a>
+                </li>
+                <li class="page-item {{pagination == paginationObj.currentPage?'active':''}}" *ngFor="let pagination of paginationObj.items">
+                    <a class="page-link" (click)="doPaginationWise(pagination)">{{pagination}}</a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.totalPages)">
+                        Last
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" (click)="doPaginationWise(paginationObj.nextPage)">
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
+<ng-template #assignModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Assign Information</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form autocomplete="off">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="form-check">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="col-form-label"> Project :
+                                            <b>{{formDetails?.project_name}}</b>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div>Update</div>
+                                    <input type="checkbox" style="margin: 12px;" id="is_status" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.is_status">
+                                    <label for="is_status">
+                                        &nbsp;
+                                    </label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div>Status :</div>
+                                    <select class="form-select" [disabled]="!formDetails.is_status" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.status">
+                                        <option value="">Select Status</option>
+                                        <option *ngFor="let status of statusList" [value]="status">{{status}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="form-check">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div>&nbsp;</div>
+                                    <input type="checkbox" style="margin: 12px;" id="is_due_date" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.is_due_date">
+                                    <label for="is_due_date">
+                                        &nbsp;
+                                    </label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div>Due Date :
+                                        <!-- <span style="color:red">*</span> -->
+                                    </div>
+                                    <div class="input-group">
+                                        <input type="text" [minDate]="minDueDate" [disabled]="!formDetails.is_due_date" class="form-control" placeholder="YYYY-MM-DD" #duwDate="bsDatepicker" bsDatepicker [bsConfig]="{ containerClass: 'theme-dark-blue',showTodayButton: true, todayPosition: 'center',showClearButton: true, clearPosition: 'right',isAnimated: true,adaptivePosition: true,dateInputFormat: 'YYYY-MM-DD',  returnFocusToInput: true }"
+                                            [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.due_date">
+                                        <span class=" input-group-prepend" (click)="duwDate.toggle()" [attr.aria-expanded]="duwDate.isOpen">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="form-check">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div>&nbsp;</div>
+                                    <input type="checkbox" style="margin: 12px;" id="is_priority" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.is_priority">
+                                    <label for="is_priority">
+                                        &nbsp;
+                                    </label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div>Priority :</div>
+                                    <select class="form-select" [disabled]="!formDetails.is_priority" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.priority">
+                                        <option value="">Select Priority</option>
+                                        <option *ngFor="let priority of priorityList" [value]="priority?.name">{{priority?.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="form-check">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div>&nbsp;</div>
+                                    <input type="checkbox" style="margin: 12px;" id="is_tag" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.is_tag">
+                                    <label for="is_tag">
+                                        &nbsp;
+                                    </label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div>Tags :</div>
+                                    <!-- <select class="form-select" [disabled]="!formDetails.is_tag" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.tag">
+                                        <option value="">Select Tags</option>
+                                        <option value="{{item?.name}}" *ngFor="let item of tagList">{{item?.name}}</option>
+                                    </select> -->
+                                    <div [class]="!formDetails.is_tag ? 'p-fluid tag-box autobg-color' : 'p-fluid tag-box autobg-color'">
+                                        <p-autoComplete #autocomplete (onDropdownClick)="onDropdownClick()" [disabled]="!formDetails.is_tag" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.tags" [suggestions]="tagListSuggestions" [multiple]="true" (onBlur)="appendNewElement($event)"
+                                            (completeMethod)="filterModel($event)" field="name" [dropdown]="false">
+                                        </p-autoComplete>
+                                    </div>
+                                    <div class="error" *ngIf="tagList.length==0">
+                                        No tag available
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="form-check">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div>&nbsp;</div>
+                                    <input type="checkbox" style="margin: 12px;" id="is_deficiency_type" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.is_deficiency_type">
+                                    <label for="is_deficiency_type">
+                                        &nbsp;
+                                    </label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div>Type of Deficiency :</div>
+                                    <select class="form-select" [disabled]="!formDetails.is_deficiency_type" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.deficiency_type">
+                                        <option value="">Select Type of Deficiency</option>
+                                        <option value="{{item?.name}}" *ngFor="let item of typeOfDeficiencyList">{{item?.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="form-check">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div>&nbsp;</div>
+                                    <input type="checkbox" style="margin: 12px;" id="is_approver" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.is_approver">
+                                    <label for="is_approver">
+                                        &nbsp;
+                                    </label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div>Approver :</div>
+                                    <select class="form-select" [disabled]="!formDetails.is_approver" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.approver_id">
+                                        <option value="">Select Approver</option>
+                                        <option *ngFor="let approver of approverList" [value]="approver?.user_id">{{approver?.display_name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="form-check">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div>&nbsp;</div>
+                                    <input type="checkbox" style="margin: 12px;" id="is_assignee" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.is_assignee">
+                                    <label for="is_assignee">
+                                        &nbsp;
+                                    </label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div>Assignee(Trade) :</div>
+                                    <select class="form-select" [disabled]="!formDetails.is_assignee" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.assignee_id">
+                                        <option value="">Select Assignee</option>
+                                        <option *ngFor="let assignee of assigneeTradeList" [value]="assignee?.user_id">{{assignee?.display_name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="form-check">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div>&nbsp;</div>
+                                    <input type="checkbox" style="margin: 12px;" id="is_schedule_impacted" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.is_schedule_impacted">
+                                    <label for="is_schedule_impacted">
+                                        &nbsp;
+                                    </label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div>Schedule Impact :</div>
+                                    <select class="form-select" [disabled]="!formDetails.is_schedule_impacted" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.schedule_impacted">
+                                        <option value="">Select Schedule Impact</option>
+                                        <option *ngFor="let status of scheduleImpacted" [value]="status">{{status}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="form-check">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div>&nbsp;</div>
+                                    <input type="checkbox" style="margin: 12px;" id="is_cost_impacted" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.is_cost_impacted">
+                                    <label for="is_cost_impacted">
+                                        &nbsp;
+                                    </label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div>Cost Impact :</div>
+                                    <select class="form-select" [disabled]="!formDetails.is_cost_impacted" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.cost_impacted">
+                                        <option value="">Select Cost Impact</option>
+                                        <option *ngFor="let status of costImpacted" [value]="status">{{status}}</option>
+                                    </select>
+                                    <div *ngIf="formDetails.cost_impacted =='Yes'">
+                                        <div class="form-group">
+                                            <label class="col-form-label"> Cost :
+                                            </label>
+                                            <input type="number" min="0" class="form-control" id="cost" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.cost">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="form-check">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div>&nbsp;</div>
+                                    <input type="checkbox" style="margin: 12px;" id="is_cost_codes" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.is_cost_codes">
+                                    <label for="is_cost_codes">
+                                        &nbsp;
+                                    </label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div>Cost Codes :</div>
+                                    <input class="form-control" [disabled]="!formDetails.is_cost_codes" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.cost_codes">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modalRef.hide()">Close</button>
+        <button type="button" class="btn btn-primary" (click)="updateAssignInformation()">Update</button>
+    </div>
+</ng-template>
+
+<ng-template #addDeficiencyModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">{{isEdit ? 'Edit' :'Add'}} Deficiency</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form autocomplete="off">
+            <div class="row">
+                <div class="col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Project
+                            <span style="color:red">*</span>:
+                        </label>
+
+                        <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.project_id" (change)="onFormProjectChange($event.target.value)">
+                            <option value="{{item._id}}" *ngFor="let item of projectList">{{item.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-4">
+                    <div class="deficiency-unit-box form-group autocomplete-container">
+                        <label class="col-form-label"> Unit
+                            <span style="color:red">*</span>:
+                        </label>
+                        <p-autoComplete [ngModelOptions]="{standalone: true}"  [(ngModel)]="formDetails.unit" [suggestions]="unitList" (onKeyUp)="autocompleteNumber($event.target.value)" (completeMethod)="getUnits($event)" (onSelect)="unitSelection($event)" field="unit_no" [dropdown]="false" [disabled]="!formDetails.project_id">
+                        </p-autoComplete>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Inspection Type
+                            <span style="color:red">*</span>:
+                        </label>
+                        <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.inspection_type">
+                            <option value="">Select Inspection Type</option>
+                            <option value="{{item?.name}}" *ngFor="let item of inceptionTypeList">{{item?.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Location / Category :
+                            <!-- <span style="color:red">*</span>: -->
+                        </label>
+                        <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.location">
+                            <option value="">Select Location</option>
+                            <option value="{{item?.name}}" *ngFor="let item of locationList">{{item?.name}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Priority
+                            <span style="color:red">*</span>:
+                        </label>
+                        <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.priority">
+                            <option value="">Select Priority</option>
+                            <option value="{{item?.name}}" *ngFor="let item of priorityList">{{item?.name}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Due Date
+                            <span style="color:red">*</span>:
+                        </label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" [minDate]="minDueDate" placeholder="YYYY-MM-DD" #duwDate="bsDatepicker" bsDatepicker [bsConfig]="{ containerClass: 'theme-dark-blue',showTodayButton: true, todayPosition: 'center',showClearButton: true, clearPosition: 'right',isAnimated: true,adaptivePosition: true,dateInputFormat: 'YYYY-MM-DD',  returnFocusToInput: true }"
+                                [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.due_date">
+                            <span class=" input-group-prepend" (click)="duwDate.toggle()" [attr.aria-expanded]="duwDate.isOpen">
+                                <span class="input-group-text">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div class="col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Tags
+                            <span style="color:red">*</span>:
+                        </label>
+                        <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.tag">
+                            <option value="">Select Tags</option>
+                            <option value="{{item?.name}}" *ngFor="let item of tagList">{{item?.name}}</option>
+                        </select>
+                    </div>
+                </div> -->
+
+                <div class="col-md-6">
+                    <div class="form-group autocomplete-container">
+                        <label>Tags :
+                            <!-- <span style="color:red">*</span>: -->
+                        </label>
+                        <div class="p-fluid tag-box">
+                            <p-autoComplete [ngModelOptions]="{standalone: true}" (onDropdownClick)="onDropdownClick()" [(ngModel)]="formDetails.tags" [suggestions]="tagListSuggestions" [multiple]="true" (onBlur)="appendNewElement($event)" (completeMethod)="filterModel($event)"
+                                field="name" [dropdown]="false">
+                            </p-autoComplete>
+                        </div>
+                        <div class="error" *ngIf="tagList.length==0">
+                            No tag available
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Type of Deficiency
+                            <span style="color:red">*</span>:
+                        </label>
+                        <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.deficiency_type">
+                            <option value="">Select Type of Deficiency</option>
+                            <option value="{{item?.name}}" *ngFor="let item of typeOfDeficiencyList">{{item?.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-form-label"> Title
+                            <span style="color:red">*</span>:
+                        </label>
+                        <input id="title" class="form-control" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.title">
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12">
+                    <div class="form-group">
+                        <label class="col-form-label"> Description :
+                        </label>
+                        <textarea id="description" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.description" cols="30" rows="10"></textarea>
+                        <!-- <div [froalaEditor]="nonInlineEdit" [(froalaModel)]="formDetails.description">
+                            {{formDetails.description ? formDetails.description : ''}}
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    Attachments :
+                </div>
+                <div class="col-md-8">
+                    <div class="drag-and-drop-box">
+                        <div class="center">
+                            <ngx-file-drop accept="image/*" dropZoneLabel="Drag & Drop files to attach" multiple (onFileDrop)="dropped($event,showImageEditor)">
+
+                            </ngx-file-drop>
+                            <!-- <div class="upload-table pt-2">
+                                <div *ngFor="let item of attachments; let i=index">
+                                    {{i+1}}. {{ item?.name }}
+                                </div>
+                            </div> -->
+                            <div class="image-strip">
+                                <ul>
+                                    <ng-container *ngFor="let item of attachments; let i =index">
+                                        <li *ngIf="!item?._id" [ngStyle]="{'background-image': 'url(&quot;' + item.url + '&quot;)'}" (click)="editImage(i,item,showImageEditor)">
+                                            <div class="edit-image">
+                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                            </div>
+                                            <div class="img-close" (click)="removeImage($event,i,item)">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </div>
+
+                                        </li>
+
+                                        <!-- <li *ngIf="item?._id" [ngStyle]="{'background-image': 'url(&quot;'+ baseUrl + item.url + '&quot;)'}">
+                                        <div class="edit-image">
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="img-close" (click)="removeUploadedImage($event,i,item)">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </div>
+                                    </li> -->
+                                    </ng-container>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-sm btn-primary doc-img-up-btn" type="button">Add
+                        <input class="doc-img-upload" multiple accept="image/*" type="file" (change)="uploadImage($event.target,showImageEditor)">
+                    </button>
+                </div>
+                <ng-container *ngIf="formDetails.attachments && formDetails.attachments.length>0">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-10">
+                        <ul class="film-strip">
+                            <li class="photo" style="position: relative;" *ngFor="let item of formDetails.attachments;let j=index">
+                                <div class="icons-block">
+                                    <div class="delete-photo-icon" (click)="deletePhoto(item,j)">
+                                        <i class="fas fa-times"></i>
+                                    </div>
+                                </div>
+                                <div class="photo-container-div " [ngStyle]="{ 'background-image':
+                                                'url(&quot;' + baseUrl + item?.url + '&quot;)', 'background-size': 'cover',
+                                                'background-repeat': 'no-repeat', 'background-position': 'center' } ">
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </ng-container>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h4>Additional Information</h4>
+                </div>
+                <div class="col-md-6 col-sm-4">
+                    <div class="form-group">
+                        <input type="checkbox" id="is_private" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.is_private">
+                        <label class="col-form-label" for="is_private"> Private </label>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Schedule Impact :
+                        </label>
+                        <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.schedule_impacted">
+                            <option value="{{item}}" *ngFor="let item of scheduleImpacted">{{item}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Chargeback :
+                        </label>
+                        <input type="text" class="form-control" id="charge_back" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.charge_back">
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Cost Impact :
+                        </label>
+                        <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.cost_impacted">
+                            <option value="{{item}}" *ngFor="let item of costImpacted">{{item}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-4" *ngIf="formDetails.cost_impacted =='Yes'">
+                    <div class="form-group">
+                        <label class="col-form-label"> Cost :
+                        </label>
+                        <input type="number" min="0" class="form-control" id="cost" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.cost">
+
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Assignee (Trade):
+                        </label>
+                        <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.assignee_id">
+                            <option value="">Unassigned</option>
+                            <option *ngFor="let assignee of assigneeTradeList" [value]="assignee?.user_id">{{assignee?.display_name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Approver :
+                        </label>
+                        <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.approver_id">
+                            <option value="">Unassigned</option>
+                            <option *ngFor="let approver of approverList" [value]="approver?.user_id">{{approver?.display_name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Cost Codes :
+                        </label>
+                        <input class="form-control" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.cost_codes">
+
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modalRef.hide()">Close</button>
+        <button type="button" class="btn btn-primary" *ngIf="!isEdit" (click)="addDeficiency()">Add</button>
+        <button type="button" class="btn btn-primary" *ngIf="isEdit" (click)="editDeficiency()">Update</button>
+
+    </div>
+</ng-template>
+
+<div class="div_bx_hidd" #activitySlider id="activitySlider">
+    <div class="card border-primary box_side_card">
+        <div class="card-header">
+            <div class="hddr_smmd">
+                <div class="col-md-10" style="float: left;text-align: left;">
+                    <h4>Deficiency Details</h4>
+                </div>
+                <div class="col-md-2" style="float: right;text-align: right;">
+                    <button class="btn btn-sm btn_right pro_settng" (click)="toggleActivitySlider($event)" data-toggle="tooltip" data-placement="auto" title="Close">
+                        <i class="nav-icon icon-close crss_icn icn_clr_fd"></i>
+                        <span class="tl_tp">Close</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row pl-3 pb-2">
+            <div class="col-md-12 pt-2">
+                <button *ngIf="(activityDetails?.status=='Open' || activityDetails?.status=='Assigned') && (activityDetails?.status!='Closed')" (click)="openAssignStatusModal(assignStatus)" class="btn btn-sm btn-primary mr-2" type="button">
+                    Assign
+                </button>
+                <button *ngIf="(activityDetails?.status=='Open' || activityDetails?.status=='Assigned'|| activityDetails?.rejected ) && activityDetails?.status!= 'Completed'  &&  (activityDetails?.status!='Closed')" (click)="openCompleteStatusModal(completeStatus)" class="btn btn-sm btn-primary mr-2"
+                    type="button">
+                    Complete
+                </button>
+                <button *ngIf="(activityDetails?.status=='Open' || activityDetails?.status=='Assigned' || activityDetails?.status=='Completed') && (activityDetails?.status!='Closed') " (click)="openCloseStatusModal(closeStatus)" class="btn btn-sm btn-primary mr-2" type="button">
+                    Close
+                </button>
+                <button *ngIf="(activityDetails?.status=='Open' || activityDetails?.status=='Assigned' || activityDetails?.status=='Completed') && (activityDetails?.status!='Closed')" (click)="openRejectStatusModal(rejectStatus)" class="btn btn-sm btn-primary mr-2" type="button">
+                    Reject
+                </button>
+
+                <button style="float:right" (click)="deleteDeficiency()" class="btn btn-sm btn-danger mt-1 mr-2" type="button">
+                    <i class="fa fa-trash" style="font-size:12px;float: right;"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <form autocomplete="off">
+                <ngb-tabset>
+                    <ngb-tab id="detailsTab" title="Details">
+                        <ng-template ngbTabContent>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h4 class="mb-0">
+                                        <button style="float: right;" class="btn btn-sm btn-primary" type="button" (click)="openEditDeficiencyModal(addDeficiencyModal,activityDetails)">
+                                            <i class="fas fa-pencil-alt" style="font-size:12px;"></i>
+                                        </button>
+                                    </h4>
+                                </div>
+                            </div>
+                            <div class="h-300 pb-5">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label"> Project:
+                                                <b>{{activityDetails?.project_name}}</b>
+                                            </label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label"> Unit:
+                                                <b>{{activityDetails?.unit_no}}</b>
+                                            </label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label">Inspection Type:
+                                                <b>{{activityDetails?.inspection_type}}</b>
+                                            </label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label"> Title:
+                                                <b>{{activityDetails?.title}}</b>
+                                            </label>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label"> Status:
+                                                <b>{{activityDetails?.status}}</b>
+                                            </label>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label">Location / Category:
+                                                <b>{{activityDetails?.location}}</b>
+                                            </label>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label"> Priorites:
+                                                <b>{{activityDetails?.priority}}</b>
+                                            </label>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label"> Due Date:
+                                                <b>{{activityDetails?.due_date| date:'mediumDate'}}</b>
+                                            </label>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label"> Tags:
+                                                <b>{{activityDetails?.tags}}</b>
+                                            </label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label"> Deficiency Type:
+                                                <b>{{activityDetails?.deficiency_type}}</b>
+                                            </label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label"> Reported On:
+                                                <b>{{activityDetails?.opened_at| date:'mediumDate'}}</b>
+                                            </label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label"> Reported By:
+                                                <b>{{activityDetails?.opened_by}}</b>
+                                            </label>
+                                    </div>
+
+                                    <div class="col-sm-12">
+                                        <h5> Additional Information : </h5>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label">Is Private:
+                                                <b>{{activityDetails?.is_private ? 'Yes' :'No'}}</b>
+                                            </label>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label">Schedule Impacted:
+                                                <b>{{activityDetails?.schedule_impacted}}</b>
+                                            </label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label"> Chargeback:
+                                                <b>{{activityDetails?.charge_back}}</b>
+                                            </label>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label">Cost Impacted:
+                                                <b>{{activityDetails?.cost_impacted}}</b>
+                                            </label>
+                                    </div>
+
+                                    <div class="col-sm-6" *ngIf="formDetails.cost_impacted =='Yes'">
+                                        <label class="col-form-label">Cost:
+                                                <b>{{activityDetails?.cost | currency:'USD'}}</b>
+                                            </label>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label">Cost Codes:
+                                                <b>{{activityDetails?.cost_codes}}</b>
+                                            </label>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label"> Assignee:
+                                                <b>{{activityDetails?.assignee_name}}</b>
+                                            </label>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label"> Assigned By:
+                                                <b>{{activityDetails?.assigned_by}}</b>
+                                            </label>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label">Assigned  Date:
+                                                <b>{{activityDetails?.assigned_at| date:'mediumDate'}}</b>
+                                            </label>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label"> Completed By:
+                                                <b>{{activityDetails?.completed_by}}</b>
+                                            </label>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label"> Completed  Date:
+                                                <b>{{activityDetails?.completed_at| date:'mediumDate'}}</b>
+                                            </label>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label"> Open By:
+                                                <b>{{activityDetails?.opened_by}}</b>
+                                            </label>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label">Open  Date:
+                                                <b>{{activityDetails?.opened_at| date:'mediumDate'}}</b>
+                                            </label>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label"> Closed By:
+                                                <b>{{activityDetails?.closed_by}}</b>
+                                            </label>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label">Closed  Date:
+                                                <b>{{activityDetails?.closed_at| date:'mediumDate'}}</b>
+                                            </label>
+                                    </div>
+
+                                    <div class="col-sm-6" *ngIf="activityDetails?.updated_by">
+                                        <label class="col-form-label"> Updated By:
+                                                <b>{{activityDetails?.updated_by}}</b>
+                                        </label>
+                                    </div>
+
+                                    <div class="col-sm-6" *ngIf="activityDetails?.updated_at">
+                                        <label class="col-form-label">Updated  Date:
+                                                <b>{{activityDetails?.updated_at| date:'mediumDate'}}</b>
+                                        </label>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label">Rejected:
+                                                <b>{{activityDetails?.rejected ? 'Yes' :'No'}}</b>
+                                            </label>
+                                    </div>
+
+                                    <div class="col-sm-12">
+                                        <dl class="row">
+                                            <dd class="col-md-3">Description:</dd>
+                                            <dd class="col-md-7">
+                                                <div [innerHTML]="activityDetails?.description"></div>
+                                            </dd>
+                                        </dl>
+                                    </div>
+
+                                    <div class="col-sm-12">
+                                        <label class="col-form-label">Attachments :</label>
+                                        <div class="image-strip">
+                                            <ul>
+                                                <ng-container *ngFor="let item of activityDetails?.attachments; let i =index">
+                                                    <li *ngIf="item?._id" [ngStyle]="{'background-image': 'url(&quot;' + baseUrl+ item.url + '&quot;)'}">
+                                                        <!-- <div class="edit-image">
+                                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                        </div>
+                                                        <div class="img-close" (click)="removeImage($event,i,item)">
+                                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                                        </div> -->
+                                                    </li>
+                                                </ng-container>
+            
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab id="dashboardTab" title="Comments" class="pl-0 pr-0">
+                        <ng-template ngbTabContent>
+                            <ng-container>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="crd_cmnt" style="margin-left: -15px;">
+                                            <div class="file-attachment cmnt_padd">
+                                                <div class="cmnt_fm">
+                                                    <div class="form-group txt_cmnt mb-1">
+                                                        <textarea [ngModelOptions]="{standalone: true}" class="form-control" rows="4" [(ngModel)]="commentMsg.comment"></textarea>
+                                                    </div>
+                                                    <div class="text-right">
+                                                        <button class="btn btn-primary btn-sm ppr_pln" (click)="postComment()">
+                                                            <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="commentsList && commentsList.length>0">
+                                <div class="cmt-box h-300 pb-5">
+                                    <div class="history" *ngFor="let item of commentsList">
+                                        <p *ngIf="item?.message">
+                                            {{item?.message}}
+                                        </p>
+                                        <p>By: {{item?.by}} on {{item?._created | date:'medium'}} </p>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="commentsList && commentsList.length==0">
+                                No comment found
+                            </ng-container>
+
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab id="occupancydatesTab" title="History">
+                        <ng-template ngbTabContent>
+                            <ng-container *ngIf="historyList && historyList.length>0">
+                                <div class="cmt-box h-300 pb-5">
+                                    <div class="history" *ngFor="let item of historyList">
+                                        <div *ngFor="let history of item.history">
+                                            <p *ngIf="history?.change_type == 'added'">
+                                                {{history?.attribute_name}} added : {{history?.new_value}}
+                                            </p>
+                                            <p *ngIf="history?.change_type == 'edited'">
+                                                {{history?.attribute_name}} edited: {{history?.old_value}} -> {{history?.new_value}}
+                                            </p>
+                                            <p *ngIf="history?.change_type == 'deleted'">
+                                                {{history?.attribute_name}} deleted: {{history?.old_value}}
+                                            </p>
+                                        </div>
+                                        <p>By: {{item?.by}} on {{item?._created | date:'medium'}} </p>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="historyList && historyList.length==0">
+                                No history found
+                            </ng-container>
+                        </ng-template>
+                    </ngb-tab>
+                </ngb-tabset>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #assignStatus>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Assign Assignee</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form autocomplete="off">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-form-label"> Assignee (Trade):
+                        </label>
+                        <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.assignee_id">
+                            <option value="">Select Assignee</option>
+                            <option *ngFor="let assignee of assigneeTradeList" [value]="assignee?.user_id">{{assignee?.display_name}}</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modalRef.hide()">Close</button>
+        <button type="button" class="btn btn-primary" (click)="onAssign()">Update</button>
+    </div>
+</ng-template>
+
+<ng-template #completeStatus>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Add Comment</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form autocomplete="off">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-form-label"> Comment:
+                        </label>
+                        <textarea [ngModelOptions]="{standalone: true}" class="form-control" rows="4" [(ngModel)]="formDetails.comment"></textarea>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modalRef.hide()">Close</button>
+        <button type="button" class="btn btn-primary" (click)="onComplete()">Update</button>
+    </div>
+</ng-template>
+
+<ng-template #closeStatus>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Add Comment</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form autocomplete="off">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-form-label"> Comment:
+                        </label>
+                        <textarea [ngModelOptions]="{standalone: true}" class="form-control" rows="4" [(ngModel)]="formDetails.comment"></textarea>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modalRef.hide()">Close</button>
+        <button type="button" class="btn btn-primary" (click)="onClose()">Update</button>
+    </div>
+</ng-template>
+
+<ng-template #rejectStatus>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Add Comment</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form autocomplete="off">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-form-label"> Comment:
+                        </label>
+                        <textarea [ngModelOptions]="{standalone: true}" class="form-control" rows="4" [(ngModel)]="formDetails.comment"></textarea>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modalRef.hide()">Close</button>
+        <button type="button" class="btn btn-primary" (click)="onReject()">Update</button>
+    </div>
+</ng-template>
+
+
+<ng-template #exportModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Export Deficiencies</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <h5>Choose Column</h5>
+            </div>
+            <div class="col-md-6" *ngFor="let item of exportReportColumns">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="{{item.fieldNum}}" [(ngModel)]="item.isEnable" (change)="selectFields(item,i)">
+                    <label class="custom-control-label" for="{{item.fieldNum}}">{{item.name}}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" [disabled]="exoprtBtnDisable" class="btn btn-primary" (click)="exportDeficiencies()">Export</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #emailModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Send Email</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form autocomplete="off">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-form-label"> To
+                            <span style="color:red">*</span>:
+                        </label>
+                        <div> (Help : Use new line for multiple)</div>
+                        <!-- <input id="title" class="form-control" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.to"> -->
+                        <textarea type="text" cols="5" rows="5" [ngModelOptions]="{standalone: true}" name="notes" [(ngModel)]="formDetails.to" class="form-control"></textarea>
+
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-form-label"> Subject
+                            <span style="color:red">*</span>:
+                        </label>
+                        <input id="title" class="form-control" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.subject">
+                        <!-- <textarea type="text" cols="5" rows="2" [ngModelOptions]="{standalone: true}" name="notes" [(ngModel)]="formDetails.subject"
+                        class="form-control"></textarea> -->
+
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-form-label"> Body 
+                            <span style="color:red">*</span>:
+                        </label>
+                        <!-- <input id="title" class="form-control" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.body"> -->
+                        <textarea type="text" cols="5" rows="5" [ngModelOptions]="{standalone: true}" name="notes" [(ngModel)]="formDetails.body" class="form-control"></textarea>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modalRef.hide()">Close</button>
+        <button type="button" class="btn btn-primary" *ngIf="!isEdit" (click)="sendEmail()">Send</button>
+
+    </div>
+</ng-template>
+
+<ng-template #showImageEditor>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Image Editor</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="imageCanvasRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div id="canvas-area"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="imageCanvasRef.hide()">
+            Close
+        </button>
+        <button type="button" class="btn btn-primary" (click)="saveCanvas()">
+            {{isEditImage?'Update':'Add'}}
+        </button>
+    </div>
+
+</ng-template>

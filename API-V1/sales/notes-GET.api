@@ -1,0 +1,42 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'crm_notes' %>
+
+<% assign orderBy._updated = -1 %> 
+
+<% if en.params.project_id %>
+    <% assign query.project_id = en.params.project_id %>
+<% endif %>
+<% if en.params.model_id %>
+    <% assign query.model_id = en.params.model_id %>
+<% endif %>
+<% if en.params.unit_id %>
+    <% assign query.unit_id = en.params.unit_id %>
+<% endif %>
+<% if en.params.deal_id %>
+    <% assign query.deal_id = en.params.deal_id %>
+<% endif %>
+
+
+<% en.data.find results datasetId query "" orderBy 100 en.params.page %>
+<% assign returnData.status = 1 %>
+<% assign returnData.message = 'Note list' %>
+<% assign returnData.results = results %>
+
+<% return returnData %>
+
+ 
+
+
+
+
+
+
+
+
+

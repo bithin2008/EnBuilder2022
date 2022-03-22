@@ -1,0 +1,53 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_payments' %> 
+
+<% assign params = en.params %>
+<% if params.deal_id %> 
+    <% if params.payment_date %>
+        <% assign params.payment_date = params.payment_date | string_to_date: "yyyy-MM-dd" time-zone %>
+    <% endif %>
+    <% en.data.insert result datasetId params %>
+    
+    // for updating payment_received in deposit
+    <% if params.deposit_id %>
+        <% assign dQuery._id = params.deposit_id %>
+        <% en.data.findOne dResult "bldr_deposits" dQuery %>
+        <% assign depositDetails = dResult.row %>
+        <% if depositDetails.payment_received %>
+            <% assign dData.payment_received = depositDetails.payment_received | add: params.payment_amount %>
+        <% else %>
+            <% assign dData.payment_received = params.payment_amount %>
+        <% endif %>
+        <% if dData.payment_received >= depositDetails.amount  %>
+            <% assign dData.is_paid = true %>
+        <% endif %> 
+        <% en.data.update dUpresult "bldr_deposits" dQuery dData %>
+    <% endif %>
+    
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Payment added successfully.' %>
+    <% return returnData %>
+    <% exit %>
+<% else %>
+    <% assign returnData.status = 0 %>
+    <% assign returnData.message = 'Deal id is required.' %> 
+    <% return returnData %>
+<% endif %>
+
+
+
+
+
+
+
+
+
+
+
+

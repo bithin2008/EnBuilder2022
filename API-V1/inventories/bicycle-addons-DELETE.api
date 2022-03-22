@@ -1,0 +1,35 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_bicycle_addons' %>
+
+<% if en.params._id %>
+    // for checking already in use or not
+    <% assign chkQuery1["addons._id"] = en.params._id %>
+    <% assign chkQuery2["mandatory_addons._id"] = en.params._id %>
+    <% assign chkQuery.$or = [chkQuery1,chkQuery2] %>
+    <% en.data.findOne result "bldr_bicycle_units" chkQuery %>
+    <% if result.row %>
+        <% assign returnData.status = 0 %>
+        <% assign returnData.message = "Bicycle addons already in use. Can't delete." %>
+        <% assign returnData.result = null %>
+        <% return returnData %>
+    <% else %>
+        // deleting 
+        <% assign query._id = en.params._id %>
+        <% en.data.delete results datasetId query %>
+        <% assign returnData.status = 1 %>
+        <% assign returnData.message = 'Bicycle addons deleted successfully.' %>
+        <% assign returnData.result = results %>
+        <% return returnData %>
+    <% endif %>
+<% else %>
+    <% assign returnData.status = 0 %>
+    <% assign returnData.message = 'Bicycle addons id not found.' %>
+    <% assign returnData.result = null %>
+    <% return returnData %>
+<% endif %>

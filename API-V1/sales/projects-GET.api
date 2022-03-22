@@ -1,0 +1,62 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_projects' %>
+
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% en.data.findone result datasetId query "builder_id,builder_name,name,no_of_floors,no_of_lots,spaces,type,views,import_models,import_overwrite_prices,import_overwrite_unit_details,import_units,default_cooling_period,occupancy_dates,additional_info" %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Project details' %>
+    <% assign returnData.result = result.row %>
+    <% return returnData %>
+<% else %>
+    <% assign pageSize = 20 %> 
+    <% if en.params.pageSize %>
+        <% assign pageSize = en.params.pageSize %>
+    <% endif %>
+    <% assign page = 1 %>
+    <% if en.params.page %> 
+        <% assign page = en.params.page %>
+    <% endif %> 
+    
+    <% if en.params.sortBy %>
+        <% if en.params.sortOrder =='ASC' %>
+            <% assign orderBy[en.params.sortBy] = 1 %>
+        <% else %>
+            <% assign orderBy[en.params.sortBy] = -1 %>
+        <% endif %>
+    <% else %>
+        <% assign orderBy.name = 1 %>
+    <% endif %>
+    <% if en.params.searchText %>
+        <% assign q1.name.$regex = en.params.searchText %> 
+        <% assign q1.name.$options = "i" %>
+        <% assign q1.contact_name.$regex = en.params.searchText %> 
+        <% assign q1.contact_name.$options = "i" %>
+        <% assign q1.contact_email.$regex = en.params.searchText %> 
+        <% assign q1.contact_email.$options = "i" %>
+        <% assign query.$or = [q1,q2,q3] %>
+    <% endif %>
+    
+    <% if en.params.builder_id %>
+        <% assign query.builder_id = en.params.builder_id  %>
+    <% endif %>
+    <% if en.params.subdivision_id %>
+        <% assign query.subdivision_id = en.params.subdivision_id  %>
+    <% endif %>
+    
+    <% return 'orderBy' orderBy %>
+    <% en.data.find results datasetId query "builder_id,builder_name,name,no_of_floors,no_of_lots,spaces,type,views,import_models,import_overwrite_prices,import_overwrite_unit_details,import_units,default_cooling_period,occupancy_dates,additional_info" orderBy pageSize page %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Project list' %>
+    <% assign returnData.results = results.rows %>
+    <% assign returnData.pagination = results.pagination %>
+    <% return returnData %>
+<% endif %>
+
+

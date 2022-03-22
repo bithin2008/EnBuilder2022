@@ -1,0 +1,1324 @@
+<div class="animated fadeIn">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="const_hd">
+                    <button class="btn btn-primary btn-sm mr-2" (click)="goToSales()">
+                        <i class="fa fa-arrow-left" aria-hidden="true"></i> &nbsp; Back
+                    </button>Worksheet : {{worksheetDetailsObj?.first_name}} {{worksheetDetailsObj?.last_name}}
+                </div>
+            </div>
+            <div class="col-md-6 text-right">
+                <button class="btn btn-sm btn-primary mr-2" type="button" (click)="requestToCreateDeal()">
+                    Create deal
+                </button>
+                <!-- <button class="btn btn-sm btn-primary mr-2" type="button" (click)="openEditWorksheetModal(addModal)">
+                    <i class="fas fa-pencil-alt" style="font-size:12px;"></i>
+                </button> -->
+                <button class="btn btn-sm btn-danger" type="button" (click)="deleteWorksheet()">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+        <div class="content-wrap">
+            <div class="row">
+                <div class="col-lg-12 col-xs-12 mt-2">
+                    <div class="project-details">
+                        <div class="row">
+                            <div [class]="((i%2)==0) ? 'col-md-6 mb-2 padding-right-2' : 'col-md-6 mb-2 padding-left-1'" *ngFor="let item of worksheetDetailsObj.purchasers; let i=index">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4>Purchaser{{i+1}}
+                                                    <button *ngIf="i>0" style="float: right;" class="btn btn-sm btn-danger mr-2" type="button" (click)="deletePurchaser(i)">
+                                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                                    </button>
+                                                    <button style="float: right;" class="btn btn-sm btn-primary mr-2" type="button" (click)="openEditPurchaserModal(updatePurchaser,item,i)">
+                                                        <i class="fas fa-pencil-alt" style="font-size:12px;"></i>
+                                                    </button>
+                                                    <button style="float: right;" *ngIf="!item?.contact_id" class="btn btn-sm btn-primary mr-2" type="button" (click)="createContactForPurchaser(item)">
+                                                        Create Contact
+                                                    </button>
+                                                </h4>
+                                                <dl class="row">
+                                                    <dd class="col-md-5">Legal Name</dd>
+                                                    <dd class="col-md-7">: {{item?.legal_full_name}}</dd>
+                                                    <dd class="col-md-5">First Name</dd>
+                                                    <dd class="col-md-7">: {{item?.first_name}}</dd>
+                                                    <dd class="col-md-5">Middle Name</dd>
+                                                    <dd class="col-md-7">: {{item?.middle_name}}</dd>
+                                                    <dd class="col-md-5">Last Name</dd>
+                                                    <dd class="col-md-7">: {{item?.last_name}}</dd>
+                                                    <dd class="col-md-5">Sin</dd>
+                                                    <dd class="col-md-7">: {{item?.sin}}</dd>
+                                                    <dd class="col-md-5">DOB</dd>
+                                                    <dd class="col-md-7">: {{item?.dob | date:'yyyy-MM-dd'}}</dd>
+                                                    <dd class="col-md-5">Home Phone</dd>
+                                                    <dd class="col-md-7">: {{item?.home_phone?.number}}</dd>
+                                                    <dd class="col-md-5">Mobile</dd>
+                                                    <dd class="col-md-7">: {{item?.mobile?.number}}</dd>
+                                                    <dd class="col-md-5">Email</dd>
+                                                    <dd class="col-md-7">: {{item?.email}}</dd>
+                                                    <dd class="col-md-5">Office</dd>
+                                                    <dd class="col-md-7">: {{item?.office}}</dd>
+                                                    <dd class="col-md-5">Address</dd>
+                                                    <dd class="col-md-7">: {{item?.address1}}</dd>
+                                                    <dd class="col-md-5">Address 2</dd>
+                                                    <dd class="col-md-7">: {{item?.address2}}</dd>
+                                                    <dd class="col-md-5">City</dd>
+                                                    <dd class="col-md-7">: {{item?.city}}</dd>
+                                                    <dd class="col-md-5">Province</dd>
+                                                    <dd class="col-md-7">: {{item?.province}}</dd>
+                                                    <dd class="col-md-5">Zip</dd>
+                                                    <dd class="col-md-7">: {{item?.zip}}</dd>
+                                                    <dd class="col-md-5">Country</dd>
+                                                    <dd class="col-md-7">: {{item?.country}}</dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                        <ng-container *ngIf="!item?.contact_id && item?.email_matched && item?.email_matched.length>0">
+                                            <h5> Email Matched</h5>
+                                            <div class="row mb-1" *ngFor="let contact of item?.email_matched;let i=index">
+                                                <div class="col-md-10 link" (click)="navigateToContact(contact._id)">
+                                                    {{i+1}}. {{contact?.first_name}} {{contact?.last_name}};
+                                                    <span *ngFor="let  email of contact?.emails;let j=index"> {{email?.email}}
+                                                        <span *ngIf="j+1!=contact?.phones.length">,</span>
+                                                    </span>;
+                                                    <span *ngFor="let  phone of contact?.phones;let j=index">
+                                                        {{phone?.formatted}}
+                                                        <span *ngIf="j+1!=registrant?.phones.length">,</span>
+                                                    </span>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <button style="float: right;" class="btn btn-sm btn-primary mr-2" type="button" (click)="associateContact(contact,item)">
+                                                        Associate
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+
+                                        <ng-container *ngIf="!item?.contact_id && item?.mobile_matched&&  item?.mobile_matched.length>0">
+                                            <h5>Mobile Matched</h5>
+                                            <div class="row mb-1" *ngFor="let contact of item?.mobile_matched;let i=index">
+                                                <div class="col-md-10 link" (click)="navigateToContact(contact._id)">
+                                                    {{i+1}}. {{contact?.first_name}} {{contact?.last_name}};
+                                                    <span *ngFor="let  email of contact?.emails;let j=index"> {{email?.email}}
+                                                        <span *ngIf="j+1!=contact?.phones.length">,</span>
+                                                    </span>;
+                                                    <span *ngFor="let  phone of contact?.phones;let j=index">
+                                                        {{phone?.formatted}}
+                                                        <span *ngIf="j+1!=registrant?.phones.length">,</span>
+                                                    </span>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <button style="float: right;" class="btn btn-sm btn-primary mr-2" type="button" (click)="associateContact(contact,item)">
+                                                        Associate
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+
+                                        <ng-container *ngIf="!item?.contact_id && item?.name_matched && item?.name_matched.length>0">
+                                            <h5>Name Matched</h5>
+                                            <div class="row mb-1" *ngFor="let contact of item?.name_matched;let i=index">
+                                                <div class="col-md-10 link" (click)="navigateToContact(contact._id)">
+                                                    {{i+1}}. {{contact?.first_name}} {{contact?.last_name}};
+                                                    <span *ngFor="let  email of contact?.emails;let j=index"> {{email?.email}}
+                                                        <span *ngIf="j+1!=contact?.phones.length">,</span>
+                                                    </span>;
+                                                    <span *ngFor="let  phone of contact?.phones;let j=index">
+                                                        {{phone?.formatted}}
+                                                        <span *ngIf="j+1!=registrant?.phones.length">,</span>
+                                                    </span>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <button style="float: right;" class="btn btn-sm btn-primary mr-2" type="button" (click)="associateContact(contact,item)">
+                                                        Associate
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+
+                                        <ng-container *ngIf="item?.contact_id">
+                                            <h5>Associated Contact Record</h5>
+                                           
+                                            <div class="row mb-1">
+                                                <div class="col-md-8 link" (click)="navigateToContact(item.contact_id)">
+                                                    <ng-container *ngFor="let contact of item?.associated">
+                                                        <div *ngIf="contact?._id==item.contact_id">
+                                                           1. {{contact?.first_name}} {{contact?.last_name}}
+                                                        </div> 
+                                                    </ng-container>     
+                                                    <!--   <ng-container *ngIf="item?.mobile_matched">
+                                                            <ng-container *ngIf="item?.mobile_matched.length>0">
+                                                                <ng-container *ngFor="let contact of item?.mobile_matched">
+                                                                    <div *ngIf="contact?._id==item.contact_id">
+                                                                       1. {{contact?.first_name}} {{contact?.last_name}}
+                                                                    </div> 
+                                                                </ng-container>
+                                                            </ng-container>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="item?.email_matched">
+                                                            <ng-container *ngIf="item?.email_matched.length>0">
+                                                                <ng-container *ngFor="let contact of item?.email_matched">
+                                                                    <div *ngIf="contact?._id==item.contact_id">
+                                                                       1.  {{contact?.first_name}} {{contact?.last_name}}
+                                                                    </div> 
+                                                                </ng-container>
+                                                            </ng-container>
+                                                        </ng-container>
+                                                         <ng-container *ngIf="item?.name_matched">
+                                                            <ng-container *ngIf="item?.name_matched.length>0">
+                                                                <ng-container *ngFor="let contact of item?.name_matched">
+                                                                    <div *ngIf="contact?._id==item.contact_id">
+                                                                        1. {{contact?.first_name}} {{contact?.last_name}}
+                                                                    </div> 
+                                                                </ng-container>
+                                                            </ng-container>
+                                                        </ng-container>-->
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <button style="float: right;" class="btn btn-sm btn-primary mr-2" type="button" (click)="deAssociateContact(item)">
+                                                        De-Associate
+                                                    </button>
+                                                </div>
+                                            </div> 
+                                        </ng-container>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>
+                                                    <b>Upload id #1 </b>
+                                                </label>
+                                                <div class="photo-holder mt-1">
+                                                    <img class="component-icon" *ngIf="item?.layouts.length>0 && item?.layouts[0]?.url" [src]="item?.layouts[0]?.url+'/350'"
+                                                        alt="">
+                                                    <img class="component-icon" *ngIf="item?.layouts.length==0 || !item?.layouts[0]?.url" src="assets/img/no-image.jpg" alt="">
+
+                                                    <button *ngIf="item?.layouts.length==0 || !item?.layouts[0]?.url" class="btn btn-primary btn-sm photo-upload-btn">
+                                                        <i class="fa fa-upload"></i>
+                                                        <input type="file" id="uploadLogo1" accept="image/*" placeholder="Add Photo" (change)="uploadImage1($event.target.files,item)">
+                                                    </button>
+                                                    <button *ngIf="item?.layouts.length>0 && item?.layouts[0]?.url" (click)="deleteImage(item.layouts[0])" class="btn btn-danger btn-sm photo-upload-btn">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>
+                                                    <b>Upload id #2 </b>
+                                                </label>
+                                                <div class="photo-holder mt-1">
+                                                    <span>
+                                                        <img class="component-icon" *ngIf="item?.layouts.length>0 && item?.layouts[1]?.url" [src]="item?.layouts[1]?.url +'/350'"
+                                                            alt="">
+                                                        <img class="component-icon" *ngIf="item?.layouts.length==0 || !item?.layouts[1]?.url" src="assets/img/no-image.jpg" alt="">
+                                                    </span>
+                                                    <button *ngIf="item?.layouts.length==0 || !item?.layouts[1]?.url" class="btn btn-primary btn-sm photo-upload-btn">
+                                                        <i class="fa fa-upload"></i>
+                                                        <input type="file" id="uploadLogo2" accept="image/*" placeholder="Add Photo" (change)="uploadImage2($event.target.files,item)">
+                                                    </button>
+                                                    <button *ngIf="item?.layouts.length>0 && item?.layouts[1]?.url" (click)="deleteImage(item.layouts[1])" class="btn btn-danger btn-sm photo-upload-btn">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div [class]="((worksheetDetailsObj?.purchasers.length %2)==0) ? 'col-md-6 mb-2 padding-right-2' : 'col-md-6 mb-2 padding-left-1'">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4>Choice
+                                                    <button style="float: right;" class="btn btn-sm btn-primary" type="button" (click)="openEditChoiceModal(updateChoice)">
+                                                        <i class="fas fa-pencil-alt" style="font-size:12px;"></i>
+                                                    </button>
+                                                </h4>
+                                                <dl class="row">
+                                                    <dd class="col-md-5">How did you hear</dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.how_did_you_hear}}</dd>
+                                                    <dd class="col-md-5">Online Registration Date </dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.online_registration_date | date:'yyyy-MM-dd'}}</dd>
+                                                    <dd class="col-md-5">Parking Required </dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.parking_required ? 'Yes': 'No'}}</dd>
+                                                    <dd class="col-md-5">Locker Required</dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.locker_required ? 'Yes': 'No'}}</dd>
+                                                    <dd class="col-md-5">Bicycle Parking Required </dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.bicycle_required ? 'Yes': 'No'}}</dd>
+
+                                                </dl>
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped table-sm list_table" style="table-layout: fixed; margin-bottom: 0;">
+                                                        <thead>
+                                                            <tr>
+                                                                <th width="25"># </th>
+                                                                <th width="155">Project </th>
+                                                                <th width="155">Model </th>
+                                                                <th width="155">Level </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr *ngFor="let item of worksheetDetailsObj?.choices; let i=index">
+                                                                <ng-container *ngIf="item.project_name || item.model_name">
+                                                                    <td>{{i+1}}</td>
+                                                                    <td>
+                                                                        {{item?.project_name}}
+                                                                    </td>
+                                                                    <td>
+                                                                        <div [hidden]="i!=0">{{item.model_name}}</div>
+                                                                        <div [hidden]="i!=1">{{item.model_name}}</div>
+                                                                        <div [hidden]="i!=2">{{item.model_name}}</div>
+                                                                    </td>
+                                                                    <td>
+                                                                        {{item?.level}}
+                                                                    </td>
+                                                                </ng-container>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div [class]="((worksheetDetailsObj?.purchasers.length %2)==0) ? 'col-md-6 mb-2 padding-left-1' : 'col-md-6 mb-2 padding-right-2'">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4>Agent
+                                                    <button style="float: right;" class="btn btn-sm btn-primary" type="button" (click)="openEditAgentModal(updateAgent)">
+                                                        <i class="fas fa-pencil-alt" style="font-size:12px;"></i>
+                                                    </button>
+                                                    <button style="float: right;" *ngIf="!worksheetDetailsObj?.agent?.contact_id && worksheetDetailsObj?.agent?.first_name" class="btn btn-sm btn-primary mr-2" type="button" (click)="createContactForAgent()">
+                                                        Create Contact
+                                                    </button>
+                                                </h4>
+                                                <dl class="row">
+                                                    <dd class="col-md-5">First Name</dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.agent?.first_name}}</dd>
+                                                    <dd class="col-md-5">Middle Name </dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.agent?.middle_name}}</dd>
+                                                    <dd class="col-md-5">Last Name </dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.agent?.last_name}}</dd>
+                                                    <dd class="col-md-5">Brokerage </dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.agent?.brokerage}}</dd>
+                                                    <!-- <dd class="col-md-5">Home Phone</dd>
+                                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.agent?.home?.number}}</dd> -->
+                                                    <dd class="col-md-5">Email</dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.agent?.email}}</dd>
+                                                    <dd class="col-md-5">Mobile</dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.agent?.mobile?.number}}</dd>
+                                                    <!-- <dd class="col-md-5">Office</dd>
+                                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.agent?.office}}</dd> -->
+                                                    <dd class="col-md-5">Address 1</dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.agent?.address1}}</dd>
+                                                    <dd class="col-md-5">Address 2</dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.agent?.address2}}</dd>
+                                                    <dd class="col-md-5">City</dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.agent?.city}}</dd>
+                                                    <dd class="col-md-5">Province</dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.agent?.province}}</dd>
+                                                    <dd class="col-md-5">Zip </dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.agent?.zip}}</dd>
+                                                    <dd class="col-md-5">County</dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.agent?.country}}</dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                        <ng-container *ngIf="!worksheetDetailsObj?.agent?.contact_id && worksheetDetailsObj?.agent?.email_matched && worksheetDetailsObj?.agent?.email_matched.length>0">
+                                            <h5> Email Matched</h5>
+                                            <div class="row mb-1" *ngFor="let contact of worksheetDetailsObj?.agent?.email_matched;let i=index">
+                                                <div class="col-md-10 link" (click)="navigateToContact(contact._id)">
+                                                    {{i+1}}. {{contact?.first_name}} {{contact?.last_name}};
+                                                    <span *ngFor="let  email of contact?.emails;let j=index"> {{email?.email}}
+                                                        <span *ngIf="j+1!=contact?.phones.length">,</span>
+                                                    </span>;
+                                                    <span *ngFor="let  phone of contact?.phones;let j=index">
+                                                        {{phone?.formatted}}
+                                                        <span *ngIf="j+1!=registrant?.phones.length">,</span>
+                                                    </span>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <button style="float: right;" class="btn btn-sm btn-primary mr-2" type="button" (click)="associateAgentContact(contact,worksheetDetailsObj?.agent)">
+                                                        Associate
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+
+                                        <ng-container *ngIf="!worksheetDetailsObj?.agent?.contact_id && worksheetDetailsObj?.agent?.mobile_matched&&  worksheetDetailsObj?.agent?.mobile_matched.length>0">
+                                            <h5>Mobile Matched</h5>
+                                            <div class="row mb-1" *ngFor="let contact of worksheetDetailsObj?.agent?.mobile_matched;let i=index">
+                                                <div class="col-md-10 link" (click)="navigateToContact(contact._id)">
+                                                    {{i+1}}. {{contact?.first_name}} {{contact?.last_name}};
+                                                    <span *ngFor="let  email of contact?.emails;let j=index"> {{email?.email}}
+                                                        <span *ngIf="j+1!=contact?.phones.length">,</span>
+                                                    </span>;
+                                                    <span *ngFor="let  phone of contact?.phones;let j=index">
+                                                        {{phone?.formatted}}
+                                                        <span *ngIf="j+1!=registrant?.phones.length">,</span>
+                                                    </span>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <button style="float: right;" class="btn btn-sm btn-primary mr-2" type="button" (click)="associateAgentContact(contact,worksheetDetailsObj?.agent)">
+                                                        Associate
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+
+                                        <ng-container *ngIf="!worksheetDetailsObj?.agent?.contact_id && worksheetDetailsObj?.agent?.name_matched && worksheetDetailsObj?.agent?.name_matched.length>0">
+                                            <h5>Name Matched</h5>
+                                            <div class="row mb-1" *ngFor="let contact of worksheetDetailsObj?.agent?.name_matched;let i=index">
+                                                <div class="col-md-10 link" (click)="navigateToContact(contact._id)">
+                                                    {{i+1}}. {{contact?.first_name}} {{contact?.last_name}};
+                                                    <span *ngFor="let  email of contact?.emails;let j=index"> {{email?.email}}
+                                                        <span *ngIf="j+1!=contact?.phones.length">,</span>
+                                                    </span>;
+                                                    <span *ngFor="let  phone of contact?.phones;let j=index">
+                                                        {{phone?.formatted}}
+                                                        <span *ngIf="j+1!=registrant?.phones.length">,</span>
+                                                    </span>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <button style="float: right;" class="btn btn-sm btn-primary mr-2" type="button" (click)="associateAgentContact(contact,worksheetDetailsObj?.agent)">
+                                                        Associate
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+
+                                        <ng-container *ngIf="worksheetDetailsObj?.agent?.contact_id">
+                                            <h5>Associated Contact Record</h5>
+                                            <div class="row mb-1">
+                                               
+                                             <div class="col-md-8 link" (click)="navigateToContact(worksheetDetailsObj?.agent.contact_id)">
+                                                <ng-container *ngFor="let contact of worksheetDetailsObj?.agent?.associated">
+                                                    <div *ngIf="contact?._id==worksheetDetailsObj?.agent.contact_id">
+                                                        1. {{contact?.first_name}} {{contact?.last_name}}
+                                                    </div> 
+                                                </ng-container>
+
+                                                       <!-- <ng-container *ngIf="worksheetDetailsObj?.agent?.mobile_matched">
+                                                        <ng-container *ngIf="worksheetDetailsObj?.agent?.mobile_matched.length>0">
+                                                            <ng-container *ngFor="let contact of worksheetDetailsObj?.agent?.mobile_matched">
+                                                                <div *ngIf="contact?._id==worksheetDetailsObj?.agent.contact_id">
+                                                                   1. {{contact?.first_name}} {{contact?.last_name}}
+                                                                </div> 
+                                                            </ng-container>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="worksheetDetailsObj?.agent?.email_matched">
+                                                        <ng-container *ngIf="worksheetDetailsObj?.agent?.email_matched.length>0">
+                                                            <ng-container *ngFor="let contact of worksheetDetailsObj?.agent?.email_matched">
+                                                                <div *ngIf="contact?._id==worksheetDetailsObj?.agent.contact_id">
+                                                                   1.  {{contact?.first_name}} {{contact?.last_name}}
+                                                                </div> 
+                                                            </ng-container>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                     <ng-container *ngIf="worksheetDetailsObj?.agent?.name_matched">
+                                                        <ng-container *ngIf="worksheetDetailsObj?.agent?.name_matched.length>0">
+                                                            <ng-container *ngFor="let contact of worksheetDetailsObj?.agent?.name_matched">
+                                                                <div *ngIf="contact?._id==worksheetDetailsObj?.agent.contact_id">
+                                                                    1. {{contact?.first_name}} {{contact?.last_name}}
+                                                                </div> 
+                                                            </ng-container>
+                                                        </ng-container>
+                                                    </ng-container>-->
+                                                </div> 
+                                                <div class="col-md-4">
+                                                    <button style="float: right;" class="btn btn-sm btn-primary mr-2" type="button" (click)="deAssociateAgentContact(worksheetDetailsObj?.agent)">
+                                                        De-Associate
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                            <div [class]="((worksheetDetailsObj?.purchasers.length %2)==0) ? 'col-md-6 mb-2 padding-right-2' : 'col-md-6 mb-2 padding-left-1'">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4>Solicitor
+                                                    <button style="float: right;" class="btn btn-sm btn-primary" type="button" (click)="openEditSolicitorModal(updateSolicitor)">
+                                                        <i class="fas fa-pencil-alt" style="font-size:12px;"></i>
+                                                    </button>
+                                                    <button style="float: right;" *ngIf="!worksheetDetailsObj?.solicitor?.contact_id && worksheetDetailsObj?.solicitor?.first_name" class="btn btn-sm btn-primary mr-2" type="button" (click)="createContactForSolicitor()">
+                                                        Create Contact
+                                                    </button>
+                                                </h4>
+                                                <dl class="row">
+                                                    <dd class="col-md-5">First Name</dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.solicitor?.first_name}}</dd>
+                                                    <dd class="col-md-5">Middle Name </dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.solicitor?.middle_name}}</dd>
+                                                    <dd class="col-md-5">Last Name </dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.solicitor?.last_name}}</dd>
+                                                    <dd class="col-md-5">Email</dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.solicitor?.email}}</dd>
+                                                    <dd class="col-md-5">Mobile</dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.solicitor?.mobile?.number}}</dd>
+                                                    <dd class="col-md-5">Address 1</dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.solicitor?.address1}}</dd>
+                                                    <dd class="col-md-5">City</dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.solicitor?.city}}</dd>
+                                                    <dd class="col-md-5">Province</dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.solicitor?.province}}</dd>
+                                                    <dd class="col-md-5">Zip </dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.solicitor?.zip}}</dd>
+                                                    <dd class="col-md-5">County</dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.solicitor?.country}}</dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                        <ng-container *ngIf="!worksheetDetailsObj?.solicitor?.contact_id && worksheetDetailsObj?.solicitor?.email_matched && worksheetDetailsObj?.solicitor?.email_matched.length>0">
+                                            <h5> Email Matched</h5>
+                                            <div class="row mb-1" *ngFor="let contact of worksheetDetailsObj?.solicitor?.email_matched;let i=index">
+                                                <div class="col-md-10 link" (click)="navigateToContact(contact._id)">
+                                                    {{i+1}}. {{contact?.first_name}} {{contact?.last_name}};
+                                                    <span *ngFor="let  email of contact?.emails;let j=index"> {{email?.email}}
+                                                        <span *ngIf="j+1!=contact?.phones.length">,</span>
+                                                    </span>;
+                                                    <span *ngFor="let  phone of contact?.phones;let j=index">
+                                                        {{phone?.formatted}}
+                                                        <span *ngIf="j+1!=registrant?.phones.length">,</span>
+                                                    </span>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <button style="float: right;" class="btn btn-sm btn-primary mr-2" type="button" (click)="associateSolicitorContact(contact,worksheetDetailsObj?.solicitor)">
+                                                        Associate
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+
+                                        <ng-container *ngIf="!worksheetDetailsObj?.solicitor?.contact_id && worksheetDetailsObj?.solicitor?.mobile_matched&&  worksheetDetailsObj?.solicitor?.mobile_matched.length>0">
+                                            <h5>Mobile Matched</h5>
+                                            <div class="row mb-1" *ngFor="let contact of worksheetDetailsObj?.solicitor?.mobile_matched;let i=index">
+                                                <div class="col-md-10 link" (click)="navigateToContact(contact._id)">
+                                                    {{i+1}}. {{contact?.first_name}} {{contact?.last_name}};
+                                                    <span *ngFor="let  email of contact?.emails;let j=index"> {{email?.email}}
+                                                        <span *ngIf="j+1!=contact?.phones.length">,</span>
+                                                    </span>;
+                                                    <span *ngFor="let  phone of contact?.phones;let j=index">
+                                                        {{phone?.formatted}}
+                                                        <span *ngIf="j+1!=registrant?.phones.length">,</span>
+                                                    </span>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <button style="float: right;" class="btn btn-sm btn-primary mr-2" type="button" (click)="associateSolicitorContact(contact,worksheetDetailsObj?.solicitor)">
+                                                        Associate
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+
+                                        <ng-container *ngIf="!worksheetDetailsObj?.solicitor?.contact_id && worksheetDetailsObj?.solicitor?.name_matched && worksheetDetailsObj?.solicitor?.name_matched.length>0">
+                                            <h5>Name Matched</h5>
+                                            <div class="row mb-1" *ngFor="let contact of worksheetDetailsObj?.solicitor?.name_matched;let i=index">
+                                                <div class="col-md-10 link" (click)="navigateToContact(contact._id)">
+                                                    {{i+1}}. {{contact?.first_name}} {{contact?.last_name}};
+                                                    <span *ngFor="let  email of contact?.emails;let j=index"> {{email?.email}}
+                                                        <span *ngIf="j+1!=contact?.phones.length">,</span>
+                                                    </span>;
+                                                    <span *ngFor="let  phone of contact?.phones;let j=index">
+                                                        {{phone?.formatted}}
+                                                        <span *ngIf="j+1!=registrant?.phones.length">,</span>
+                                                    </span>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <button style="float: right;" class="btn btn-sm btn-primary mr-2" type="button" (click)="associateSolicitorContact(contact,worksheetDetailsObj?.solicitor)">
+                                                        Associate
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+
+                                        <ng-container *ngIf="worksheetDetailsObj?.solicitor?.contact_id">
+                                            <h5>Associated Contact Record</h5>
+                                            <div class="row mb-1">
+                                              <div class="col-md-8 link" (click)="navigateToContact(worksheetDetailsObj?.solicitor.contact_id)">
+                                                    <ng-container *ngFor="let contact of worksheetDetailsObj?.solicitor?.associated">
+                                                        <div *ngIf="contact?._id==worksheetDetailsObj?.solicitor.contact_id">
+                                                            1. {{contact?.first_name}} {{contact?.last_name}}
+                                                        </div> 
+                                                     </ng-container>
+                                                      <!-- <ng-container *ngIf="worksheetDetailsObj?.solicitor?.mobile_matched">
+                                                        <ng-container *ngIf="worksheetDetailsObj?.solicitor?.mobile_matched.length>0">
+                                                            <ng-container *ngFor="let contact of worksheetDetailsObj?.solicitor?.mobile_matched">
+                                                                <div *ngIf="contact?._id==worksheetDetailsObj?.solicitor.contact_id">
+                                                                   1. {{contact?.first_name}} {{contact?.last_name}}
+                                                                </div> 
+                                                            </ng-container>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="worksheetDetailsObj?.solicitor?.email_matched">
+                                                        <ng-container *ngIf="worksheetDetailsObj?.solicitor?.email_matched.length>0">
+                                                            <ng-container *ngFor="let contact of worksheetDetailsObj?.solicitor?.email_matched">
+                                                                <div *ngIf="contact?._id==worksheetDetailsObj?.solicitor.contact_id">
+                                                                   1.  {{contact?.first_name}} {{contact?.last_name}}
+                                                                </div> 
+                                                            </ng-container>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                     <ng-container *ngIf="worksheetDetailsObj?.solicitor?.name_matched">
+                                                        <ng-container *ngIf="worksheetDetailsObj?.solicitor?.name_matched.length>0">
+                                                            <ng-container *ngFor="let contact of worksheetDetailsObj?.solicitor?.name_matched">
+                                                                <div *ngIf="contact?._id==worksheetDetailsObj?.solicitor.contact_id">
+                                                                    1. {{contact?.first_name}} {{contact?.last_name}}
+                                                                </div> 
+                                                            </ng-container>
+                                                        </ng-container>
+                                                    </ng-container>-->
+                                                </div> 
+                                                <div class="col-md-4">
+                                                    <button style="float: right;" class="btn btn-sm btn-primary mr-2" type="button" (click)="deAssociateSolicitorContact(worksheetDetailsObj?.solicitor)">
+                                                        De-Associate
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                            <div [class]="((worksheetDetailsObj?.purchasers.length %2)==0) ? 'col-md-6 mb-2 padding-left-1' : 'col-md-6 mb-2 padding-right-2'">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4>Others
+                                                    <button style="float: right;" class="btn btn-sm btn-primary" type="button" (click)="openEditOtherModal(updateOtherInfo)">
+                                                        <i class="fas fa-pencil-alt" style="font-size:12px;"></i>
+                                                    </button>
+                                                </h4>
+                                                <dl class="row">
+                                                    <dd class="col-md-5">User Type</dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.user_type}}</dd>
+                                                    <dd class="col-md-5">Maritial Status </dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.maritial_status}}</dd>
+                                                    <dd class="col-md-5">Number of Dependants </dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.no_of_dependants}}</dd>
+                                                    <dd class="col-md-5">Rent/Own </dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.rent_or_own}}</dd>
+                                                    <dd class="col-md-5">Reason for Purchase</dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.reason_for_purchase}}</dd>
+                                                    <dd class="col-md-5">Deciding Factor</dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.deciding_factor}}</dd>
+                                                    <dd class="col-md-5">Comments</dd>
+                                                    <dd class="col-md-7">: {{worksheetDetailsObj?.comments}}</dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #updatePurchaser>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Purchaser</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form #purchaserForm="ngForm" [formGroup]="purchasersGroup">
+                <div formArrayName="purchasers">
+                    <div *ngFor="let purchaser of purchasersGroup.get('purchasers')?.controls; let i=index" [formGroupName]="i" [hidden]="i!=formDetails.index">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <b>Purchaser {{i+1}}</b>
+                            </div>
+                            <!-- <div class="col-md-4 text-right">
+                                <button type="button" class="btn btn-danger  btn-sm" *ngIf="i!=0" (click)="deletePurchaser(i)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </div> -->
+                            <div class="col-md-12">
+                                <hr class="mt-2 mb-2"> </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label">First Name
+                                        <span style="color:red">*</span>:</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" formControlName="first_name" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label">Middle Name :</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" formControlName="middle_name" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label">Last Name
+                                        <span style="color:red">*</span>:</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" formControlName="last_name" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label">Legal Name
+                                        <span style="color:red">*</span>:</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" formControlName="legal_full_name" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label">Date of Birth
+                                        <span style="color:red">*</span>:</label>
+                                    <div class="col-sm-12">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" #start="bsDatepicker" bsDatepicker [bsConfig]="{ containerClass: 'theme-dark-blue',showTodayButton: true, todayPosition: 'center',showClearButton: true, clearPosition: 'right',isAnimated: true,adaptivePosition: true,dateInputFormat: 'YYYY-MM-DD' }"
+                                                formControlName="dob" placeholder="YYYY-MM-DD">
+                                            <span class=" input-group-prepend" (click)="start.toggle()" [attr.aria-expanded]="start.isOpen">
+                                                <span class="input-group-text">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label">Address 1
+                                        <span style="color:red">*</span>:</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" formControlName="address1" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label">Address 2 :</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" formControlName="address2" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label">City
+                                        <span style="color:red">*</span>:</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" formControlName="city" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label">Province
+                                        <span style="color:red">*</span>:</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" formControlName="province" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label">Zip
+                                        <span style="color:red">*</span>:</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" formControlName="zip" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label">Country
+                                        <span style="color:red">*</span>:</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" formControlName="country" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label">Occupation
+                                        <span style="color:red">*</span>:</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" formControlName="occupation" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label">Office :</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" formControlName="office" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label">Mobile
+                                        <span style="color:red">*</span>:</label>
+                                    <div class="col-sm-12">
+                                        <!-- <input type="text" [(ngModel)]="mobile" class="form-control"> -->
+                                        <ngx-intl-tel-input [cssClass]="'custom'" [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="true" [enablePlaceholder]="true"
+                                            [searchCountryFlag]="true" [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                                            [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.Canada" [maxLength]="15"
+                                            [phoneValidation]="true" [separateDialCode]="separateDialCode" name="home-mobile"
+                                            formControlName="mobile">
+                                        </ngx-intl-tel-input>
+                                        <span *ngIf="purchaser.get('mobile').touched && purchaser.get('mobile').hasError('required')" style="color: red;">Mobile number is required.</span>
+                                        <span *ngIf="!purchaser.get('mobile').hasError('required') && purchaser.get('mobile').invalid" style="color: red;">Mobile number is not valid.</span>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label">Phone :</label>
+                                    <div class="col-sm-12">
+                                        <ngx-intl-tel-input [cssClass]="'custom'" [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="true" [enablePlaceholder]="true"
+                                            [searchCountryFlag]="true" [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                                            [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.Canada" [maxLength]="15"
+                                            [phoneValidation]="true" [separateDialCode]="separateDialCode" id="home-phone" formControlName="home_phone">
+                                        </ngx-intl-tel-input>
+                                        <span *ngIf="purchaser.get('home_phone').touched && purchaser.get('home_phone').value && purchaser.get('home_phone').invalid"
+                                            style="color: red;">Phone number is not valid.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label">Email
+                                        <span style="color:red">*</span>:</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" formControlName="email" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label">Residency :</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" formControlName="residency" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="editPurchaser()">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #updateChoice>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Choice</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">How did you hear</label>
+                        <div class="col-sm-12">
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.how_did_you_hear" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Online Registration Date</label>
+                        <div class="col-sm-12">
+                            <div class="input-group">
+                                <input type="text" class="form-control" #start="bsDatepicker" bsDatepicker [bsConfig]="{ containerClass: 'theme-dark-blue',showTodayButton: true, todayPosition: 'center',showClearButton: true, clearPosition: 'right',isAnimated: true,adaptivePosition: true,dateInputFormat: 'YYYY-MM-DD' }"
+                                    [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.online_registration_date"
+                                    placeholder="YYYY-MM-DD">
+                                <span class=" input-group-prepend" (click)="start.toggle()" [attr.aria-expanded]="start.isOpen">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 pb-2">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-sm list_table" style="table-layout: fixed; margin-bottom: 0;">
+                            <thead>
+                                <tr>
+                                    <th width="100"># </th>
+                                    <th width="180">Project </th>
+                                    <th width="180">Model </th>
+                                    <th width="170">Level </th>
+                                    <th width="50"> </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of formDetails.choices; let i=index">
+                                    <td>Choice #{{i+1}}</td>
+                                    <td>
+                                        <select class="form-select" (change)="onProjectChange(item,i)" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.project_id"
+                                            id="projectId{{i}}">
+                                            <option value="">Select Project</option>
+                                            <option *ngFor="let item of projectList" value={{item._id}}>{{item.name}}</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-select" [disabled]="!item.project_id" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.model_id"
+                                            id="modelId{{i}}">
+                                            <option value="">Select Model</option>
+                                            <option *ngFor="let item of modelList" [hidden]="i!=0" value={{item._id}}>{{item.name}}</option>
+                                            <option *ngFor="let item2 of modelListTwo" [hidden]="i!=1" value={{item2._id}}>{{item2.name}}</option>
+                                            <option *ngFor="let item3 of modelListThree" [hidden]="i!=2" value={{item3._id}}>{{item3.name}}</option>
+
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.level">
+                                            <option value="">Select level</option>
+                                            <option value="High">High</option>
+                                            <option value="Medium">Medium</option>
+                                            <option value="Low">Low</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <button type="button" *ngIf="i>2" class="btn btn-danger  btn-sm" (click)="deleteChoise(i)">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="parking_required" [(ngModel)]="formDetails.parking_required">
+                        <label class="custom-control-label" for="parking_required">
+                            Parking Required
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="locker_required" [(ngModel)]="formDetails.locker_required">
+                        <label class="custom-control-label" for="locker_required">
+                            Locker Required
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="bicycle_required" [(ngModel)]="formDetails.bicycle_required">
+                        <label class="custom-control-label" for="bicycle_required">
+                            Bicycle Parking Required
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="editChoice()">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #updateAgent>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Agent</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">First Name
+                                <span style="color:red">*</span>:</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.agent.first_name" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Middle Name
+                                <!-- <span style="color:red">*</span> -->
+                                :</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.agent.middle_name" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Last Name
+                                <span style="color:red">*</span>:</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.agent.last_name" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Mobile
+                                <span style="color:red">*</span>:</label>
+                            <div class="col-sm-12">
+                                <form #agentf="ngForm" [formGroup]="agent_mobile">
+                                    <ngx-intl-tel-input [cssClass]="'custom'" [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="true" [enablePlaceholder]="true"
+                                        [searchCountryFlag]="true" [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                                        [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.Canada" [maxLength]="15"
+                                        [phoneValidation]="true" [separateDialCode]="separateDialCode" id="agent_mobile" name="agent_mobile"
+                                        formControlName="mobile">
+                                    </ngx-intl-tel-input>
+                                </form>
+                            </div>
+                            <span *ngIf="agentf.form.controls['mobile'].touched && agentf.form.controls['mobile'].invalid" style="color: red;">Mobile number is not valid.</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Email
+                                <span style="color:red">*</span>:</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.agent.email" class="form-control" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Address1
+                                <span style="color:red">*</span>:</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.agent.address1" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Address2
+                                <!-- <span style="color:red">*</span> -->
+                                :</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.agent.address2" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">City
+                                <span style="color:red">*</span>:</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.agent.city" class="form-control" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Province
+                                <span style="color:red">*</span>:</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.agent.province" class="form-control" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Zip :
+                            </label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.agent.zip" class="form-control" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Country :
+                            </label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.agent.country" class="form-control" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Brokerage :
+                            </label>
+                            <div class="col-sm-12">
+                                <input type="number" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.agent.brokerage" class="form-control"
+                                    placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="editAgent()">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #updateSolicitor>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Solicitor</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">First Name
+                                <span style="color:red">*</span>:</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.solicitor.first_name" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Middle Name :</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.solicitor.middle_name" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Last Name
+                                <span style="color:red">*</span>:</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.solicitor.last_name" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Mobile
+                                <span style="color:red">*</span>:</label>
+                            <div class="col-sm-12">
+                                <form #solicitorf="ngForm" [formGroup]="solicitor_mobile">
+                                    <ngx-intl-tel-input [cssClass]="'custom'" [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="true" [enablePlaceholder]="true"
+                                        [searchCountryFlag]="true" [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                                        [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.Canada" [maxLength]="15"
+                                        [phoneValidation]="true" [separateDialCode]="separateDialCode" id="solicitor_mobile"
+                                        name="solicitor_mobile" formControlName="mobile">
+                                    </ngx-intl-tel-input>
+                                </form>
+                            </div>
+                            <span *ngIf="solicitorf.form.controls['mobile'].touched && solicitorf.form.controls['mobile'].invalid" style="color: red;">Mobile number is not valid.</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Email
+                                <span style="color:red">*</span>:</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.solicitor.email" class="form-control" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Address1
+                                <span style="color:red">*</span>:</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.solicitor.address1" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Address2 :</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.solicitor.address2" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">City
+                                <span style="color:red">*</span>:</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.solicitor.city" class="form-control" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Province
+                                <span style="color:red">*</span>:</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.solicitor.province" class="form-control"
+                                    placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Zip
+                                <!-- <span style="color:red">*</span> -->
+                                :</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.solicitor.zip" class="form-control" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Country
+                                <!-- <span style="color:red">*</span> -->
+                                :</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.solicitor.country" class="form-control"
+                                    placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="editSolicitor()">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #updateOtherInfo>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Other Info</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <div class="row">
+                    <div class="col-md-4 col-sm-12 mt-3">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" [(ngModel)]="formDetails.user_type" id="inlineRadio1"
+                                value="Investor">
+                            <label class="form-check-label" for="inlineRadio1">Investment</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12 mt-3">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" [(ngModel)]="formDetails.user_type" id="inlineRadio2"
+                                value="End User">
+                            <label class="form-check-label" for="inlineRadio2">Rental</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Maritial Status</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.maritial_status" class="form-control" placeholder="Maritial Status">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Number of Dependants</label>
+                            <div class="col-sm-12">
+                                <input type="number" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.no_of_dependants" class="form-control"
+                                    placeholder="Number of Dependants">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Rent/Own</label>
+                            <div class="col-sm-12">
+                                <select class="form-select" id="exampleFormControlSelect1" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.rent_or_own">
+                                    <option value="Rent">Rent</option>
+                                    <option value="Own">Own</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Reason for Purchase</label>
+                            <div class="col-sm-12">
+                                <textarea class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.reason_for_purchase" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Deciding Factor</label>
+                            <div class="col-sm-12">
+                                <textarea class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.deciding_factor" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Comments</label>
+                            <div class="col-sm-12">
+                                <textarea class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.comments" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="editOtherInfo()">Update</button>
+        </div>
+    </div>
+</ng-template>

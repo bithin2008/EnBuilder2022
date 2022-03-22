@@ -1,0 +1,250 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+// for Units and Deficiencies count
+<% unassign queryJson %>
+<% json queryJson %>
+{
+    "queries":[
+        {
+  		    "$match": {}
+  	    },
+  	    {
+            "$group": {
+                "_id": {
+                    project_name:"$project_name",
+                    unit_no:"$unit_no"
+                },
+                "total_count": {
+                    "$sum": 1
+                }
+            }
+        },
+        {
+            "$sort": {
+                "_id.project_name": 1,
+                "_id.unit_no": 1
+            }
+        },
+        {
+            "$project":{
+                "_id":0,
+                "project_name":"$_id.project_name",
+                "unit_no":"$_id.unit_no",
+                "total_count":1
+            }
+        }
+    ]
+}
+<% endjson %>
+<% if en.params.project_id %>
+    <% assign queryJson.queries[0].$match.project_id = en.params.project_id %>
+<% endif %> 
+<% en.data.aggregate results 'bldr_deficiencies' queryJson.queries %>
+<% if results %>
+    <% assign returnData.results.units_deficiency_counts =  results.rows %>
+<% else %>
+    <% assign returnData.results.units_deficiency_counts =  [] %>
+<% endif %>
+
+
+// for Number of deficiencies per day
+<% unassign queryJson %>
+<% unassign results %>
+<% json queryJson %>
+{
+    "queries":[
+        {
+  		    "$match": {}
+  	    },
+  	    {
+  	        $project: {
+                yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$opened_at" } },
+                time: { $dateToString: { format: "%H:%M:%S:%L", date: "$opened_at" } }
+            }
+        },
+        { 
+            $group: {
+                _id:"$yearMonthDay", 
+                total_count:{$sum:1} 
+            }
+        },
+        {
+            $sort:{
+                _id:1
+            }
+        }
+    ]
+}
+<% endjson %>
+<% if en.params.project_id %>
+    <% assign queryJson.queries[0].$match.project_id = en.params.project_id %>
+<% endif %> 
+<% en.data.aggregate results 'bldr_deficiencies' queryJson.queries %>
+<% if results %>
+    <% assign returnData.results.deficiencies_per_day =  results.rows %>
+<% else %>
+    <% assign returnData.results.deficiencies_per_day =  [] %>
+<% endif %>
+
+// for Number of deficiencies per day per unit
+<% unassign queryJson %>
+<% unassign results %>
+<% json queryJson %>
+{
+    "queries":[
+        {
+  		    "$match": {}
+  	    },
+  	    {
+  	        $project: {
+                yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$opened_at" } },
+                time: { $dateToString: { format: "%H:%M:%S:%L", date: "$opened_at" } },
+                unit_no:"$unit_no"
+            }
+        },
+        { 
+            $group: {
+                _id:{"yearMonthDay":"$yearMonthDay","unit_no":"$unit_no"} , 
+                total_count:{$sum:1} ,
+            }
+        },
+        { 
+            $group: {
+                _id:"$_id.unit_no" , 
+                avg_count: { $avg: "$total_count" },
+            }
+        },
+        {
+            $sort:{
+                "_id":1
+            }
+        }
+    ]
+}
+<% endjson %>
+<% if en.params.project_id %>
+    <% assign queryJson.queries[0].$match.project_id = en.params.project_id %>
+<% endif %> 
+<% en.data.aggregate results 'bldr_deficiencies' queryJson.queries %>
+<% if results %>
+    <% assign returnData.results.deficiencies_per_day_per_unit =  results.rows %>
+<% else %>
+    <% assign returnData.results.deficiencies_per_day_per_unit =  [] %>
+<% endif %>
+
+
+// Number of deficiencies per day per staff
+<% unassign queryJson %>
+<% unassign results %>
+<% json queryJson %>
+{
+    "queries":[
+        {
+  		    "$match": {}
+  	    },
+  	    {
+  	        $project: {
+                yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$opened_at" } },
+                time: { $dateToString: { format: "%H:%M:%S:%L", date: "$opened_at" } },
+                opened_by : "$opened_by"
+            }
+        },
+        { 
+            $group: {
+                _id:{"yearMonthDay":"$yearMonthDay","opened_by":"$opened_by"} , 
+                total_count:{$sum:1} 
+            }
+        },
+        {
+            $sort:{
+                "_id.yearMonthDay":1,
+                "_id.opened_by":1
+            }
+        },
+        {
+            $project:{
+                "_id":0,
+                date:"$_id.yearMonthDay",
+                opened_by:"$_id.opened_by",
+                total_count:1
+            }
+        }
+    ]
+}
+<% endjson %>
+<% if en.params.project_id %>
+    <% assign queryJson.queries[0].$match.project_id = en.params.project_id %>
+<% endif %> 
+<% en.data.aggregate results 'bldr_deficiencies' queryJson.queries %>
+<% if results %>
+    <% assign returnData.results.staffwise_deficiencies_per_day =  results.rows %>
+<% else %>
+    <% assign returnData.results.staffwise_deficiencies_per_day =  [] %>
+<% endif %>
+
+// for getting opened_by wise count
+<% unassign queryJson %>
+<% json queryJson %>
+{
+    "queries":[
+        {
+  		    "$match": {}
+  	    },
+        {
+           "$group":
+             {
+               "_id": "$opened_by",
+               total_count: { $sum: 1 },
+            }
+         },
+         {
+            $sort:{ _id: 1}
+        }
+    ]
+}
+<% endjson %>
+<% if en.params.project_id %> 
+    <% assign queryJson.queries[0].$match.project_id = en.params.project_id %>
+<% endif %> 
+<% en.data.aggregate openedResult 'bldr_deficiencies' queryJson.queries %>
+<% if openedResult.rows %>
+    <% assign returnData.results.reported_by_data =  openedResult.rows %>
+<% else %>
+    <% assign returnData.results.reported_by_data =  [] %>
+<% endif %>
+
+<% return returnData %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

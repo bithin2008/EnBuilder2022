@@ -1,0 +1,27 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_occupancy' %>
+
+<% assign params = en.params %>
+<% if params.units %>
+    <% for item in params.units %>
+        <% unassign query %>
+        <% unassign data %>
+        <% assign query.unit_id =  item.unit_id %>
+        <% assign data = item %>
+        <% assign data[params.date_type] = params.date | string_to_date: "yyyy-MM-dd" time-zone %>
+        <% en.data.upsert result datasetId query data %>
+    <% endfor %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Updated successfully' %>
+    <% return returnData %>
+<% else %>
+    <% assign returnData.status = 0 %>
+    <% assign returnData.message = 'Nothing to update' %> 
+    <% return returnData %>
+<% endif %>

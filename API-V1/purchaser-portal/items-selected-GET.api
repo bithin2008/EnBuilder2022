@@ -1,0 +1,35 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_color_selection' %>
+<% assign params = en.params %>
+
+<% if params.deal_id %>
+    <% assign query.deal_id = params.deal_id %>
+<% endif %>
+<% if params.unit_id %>
+    <% assign query.unit_id = params.unit_id %>
+<% endif %> 
+
+// for type=PERSONALIZATION_OPTION
+<% assign query.type = 'PERSONALIZATION_OPTION' %>
+<% en.data.find optionsResults datasetId query %>
+<% assign returnData.result.personalization_options = optionsResults.rows %>
+
+// for type=PACKAGE
+<% assign query.type = 'PACKAGE' %>
+<% en.data.find packagesResults datasetId query %>
+<% assign returnData.result.packages = packagesResults.rows %>
+
+// for type=COLOR_COLLECTION
+<% assign query.type = 'COLOR_COLLECTION' %>
+<% en.data.find colorSelectionResults datasetId query %>
+<% assign returnData.result.color_collections = colorSelectionResults.rows %>
+
+<% assign returnData.status = 1 %>
+<% assign returnData.message = 'Selected Item list.' %> 
+<% return returnData %>

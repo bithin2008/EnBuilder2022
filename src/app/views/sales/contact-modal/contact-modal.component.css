@@ -1,0 +1,19 @@
+
+/* ::ng-deep .p-fluid {
+    display: flex !important;
+} */
+::ng-deep .p-fluid .p-autocomplete{
+    display: flex !important;
+}
+::ng-deep .deal-box .ui-autocomplete {
+    display: grid !important;
+}
+
+::ng-deep .deal-box .p-autocomplete {
+    display: grid !important;
+    min-height: 35px !important;
+}
+/* ::ng-deep .deal-box .p-autocomplete ul li input {
+    display: grid !important;
+    height: 20px !important;
+} */

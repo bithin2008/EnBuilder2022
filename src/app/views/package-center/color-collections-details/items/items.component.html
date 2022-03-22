@@ -1,0 +1,148 @@
+<div class="row mb-3">
+    <div class="col-md-10">
+    </div>
+    <!-- <div class="col-md-3">
+                <div class="form-group">
+                    <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedProject" (change)="onProjectChange()">
+                        <option *ngFor="let item of projectList" value="{{item._id}}">{{item.name}}</option>
+                    </select>
+                </div>
+            </div> -->
+    <div class="col-md-2 col-sm-2">
+        <button style="float:right" class="btn btn-primary" type="button" (click)="openAddCategoryModal(addCategoryModal)">Add Category</button>
+    </div>
+</div>
+<div class="card mb-3" *ngFor="let category of collectionDetails?.item_categories;let i=index">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h5>{{category.name}}</h5>
+            </div>
+            <div class="col-md-6 text-right">
+                <button class="btn btn-primary mr-2" type="button" (click)="openAddItemModal(addItemModal ,i)"> Add Item</button>
+                <button class="btn btn-danger" type="button" (click)="deleteCategory(category,i)">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                </button>
+
+            </div>
+        </div>
+        <div class="table-responsive mt-2 mb-3">
+            <table class="table table-striped list_table" style="table-layout: fixed;">
+                <thead>
+                    <tr>
+                        <th width="180px">Name</th>
+                        <th width="180px">Type</th>
+                        <th width="180px">Selection</th>
+                        <th width="100px">Actions</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngIf="category?.items.length>0">
+                        <tr *ngFor="let item of category.items; let j=index">
+                            <td>{{item.name}}</td>
+                            <td>{{item.type}}</td>
+                            <td>{{item.selection}}</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm mr-2" type="button" (click)="openEditItemModal(addItemModal,i,item,j)">
+                                    <i class="fa fa-pencil-alt" aria-hidden="true"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" type="button" (click)="deleteCategoryItem(item ,i,j)">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </ng-container>
+                    <ng-container *ngIf="category?.items.length == 0">
+                        <tr>
+                            <td colspan="4" class="text-center">No category item found</td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<ng-container *ngIf="collectionDetails && collectionDetails?.item_categories && collectionDetails?.item_categories.length == 0">
+    <div colspan="4" class="text-center">No category found
+    </div>
+</ng-container>
+
+<ng-template #addCategoryModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">Add category</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Category Name
+                                <span style="color:red">*</span>:</label>
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.name" class="form-control">
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="addCategory()">Add</button>
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-template #addItemModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">{{isEdit ? 'Edit' : 'Add'}} Category Item</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Name
+                                <span style="color:red">*</span>:</label>
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.name" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 ">
+                        <div class="form-group">
+                            <label>Type
+                                <span style="color:red">*</span>:</label>
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.type" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Selection :
+                            </label>
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.selection" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" *ngIf="!isEdit" (click)="addItemByCategory()">Add</button>
+            <button type="button" class="btn btn-primary" *ngIf="isEdit" (click)="editItemByCategory()">Update</button>
+        </div>
+    </div>
+</ng-template>

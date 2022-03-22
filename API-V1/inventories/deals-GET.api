@@ -1,0 +1,40 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_deals' %>
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% en.data.findone result datasetId query %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Deal details' %>
+    <% assign returnData.result = result.row %>
+    
+    // for getting bicycle selected
+    <% assign bquery.deal_id = en.params._id %>
+    <% en.data.find bResults 'bldr_bicycle_selection' bquery  %>
+    <% assign returnData.result.assigned_bicycle = bResults.rows %>
+    // for getting locker selected
+    <% assign lquery.deal_id = en.params._id %>
+    <% en.data.find lResults 'bldr_locker_selection' bquery  %>
+    <% assign returnData.result.assigned_locker = lResults.rows %>
+    // for getting parking selected
+    <% assign pquery.deal_id = en.params._id %>
+    <% en.data.find pResults 'bldr_parking_selection' bquery  %>
+    <% assign returnData.result.assigned_parking = pResults.rows %>
+    
+    <% return returnData %>
+<% else %>
+    <% assign returnData.status = 0 %>
+    <% assign returnData.message = 'Deal id not there' %>
+    <% return returnData %>
+<% endif %>
+
+
+
+
+
+

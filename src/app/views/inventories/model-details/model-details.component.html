@@ -1,0 +1,1119 @@
+<div class="animated fadeIn">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="const_hd">
+                    <button class="btn btn-primary btn-sm mr-2" (click)="goToInventory()">
+                        <i class="fa fa-arrow-left" aria-hidden="true"></i> &nbsp; Back
+                    </button> Model Collection: {{modelDetailsObj?.collection}}
+                    <button style="float: right;" class="btn btn-sm btn-danger mt-2" type="button" (click)="deleteModel()">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="content-wrap">
+            <div class="row">
+                <div class="col-lg-12 col-xs-12">
+                    <div class="project-details">
+                        <div class="row">
+                            <div class="col-md-12 mb-2">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4>Model Name : {{modelDetailsObj?.name}}
+                                                    <button style="float: right;" class="btn btn-sm btn-primary" type="button" (click)="openEditModelModal(addModal, 'modelTab')">
+                                                        <i class="fas fa-pencil-alt" style="font-size:12px;"></i>
+                                                    </button>
+                                                </h4>
+                                                <dl class="row">
+                                                    <ng-container *ngIf="modelDetailsObj?.bed">
+                                                        <dd class="col-md-5">Bedroom</dd>
+                                                        <dd class="col-md-7">: {{modelDetailsObj?.bed}}</dd>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="modelDetailsObj?.bath">
+                                                        <dd class="col-md-5">Bathroom</dd>
+                                                        <dd class="col-md-7">: {{modelDetailsObj?.bath}}</dd>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="modelDetailsObj?.den">
+                                                        <dd class="col-md-5">Den</dd>
+                                                        <dd class="col-md-7">: {{modelDetailsObj?.den}}</dd>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="modelDetailsObj?.media">
+                                                        <dd class="col-md-5">Media</dd>
+                                                        <dd class="col-md-7">: {{modelDetailsObj?.media}}</dd>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="modelDetailsObj?.flex">
+                                                        <dd class="col-md-5">Flex</dd>
+                                                        <dd class="col-md-7">: {{modelDetailsObj?.flex}}</dd>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="modelDetailsObj?.area">
+                                                        <dd class="col-md-5">Area ({{measureUnits[0]?.area}})</dd>
+                                                        <dd class="col-md-7">: {{modelDetailsObj?.area}}</dd>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="modelDetailsObj?.outdoor_type">
+                                                        <dd class="col-md-5">Outdoor Type</dd>
+                                                        <dd class="col-md-7">: {{modelDetailsObj?.outdoor_type}}</dd>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="modelDetailsObj?.outdoor_area">
+                                                        <dd class="col-md-5">Outdoor Size ({{measureUnits[0]?.area}})</dd>
+                                                        <dd class="col-md-7">: {{modelDetailsObj?.outdoor_area}}</dd>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="modelDetailsObj?.ceiling">
+                                                        <dd class="col-md-5">Ceiling ({{measureUnits[0]?.length}})</dd>
+                                                        <dd class="col-md-7">: {{modelDetailsObj?.ceiling}}</dd>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="modelDetailsObj?.type">
+                                                        <dd class="col-md-5">Type</dd>
+                                                        <dd class="col-md-7">: {{modelDetailsObj?.type}}</dd>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="modelDetailsObj?.collection">
+                                                        <dd class="col-md-5">Collection</dd>
+                                                        <dd class="col-md-7">: {{modelDetailsObj?.collection}}</dd>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="modelDetailsObj?.building_type">
+                                                        <dd class="col-md-5">Building Type</dd>
+                                                        <dd class="col-md-7">: {{modelDetailsObj?.building_type}}</dd>
+                                                    </ng-container>
+
+                                                    <ng-container *ngIf="modelDetailsObj?.is_parking_eligible || modelDetailsObj?.is_locker_eligible || modelDetailsObj?.is_bicycle_eligible ">
+                                                        <dd class="col-md-5">Eligible for Parking</dd>
+                                                        <dd class="col-md-7">: {{modelDetailsObj?.is_parking_eligible?'Yes':'No'}}</dd>
+                                                        <dd class="col-md-5" *ngIf="modelDetailsObj?.is_parking_eligible">Max # of Parkings</dd>
+                                                        <dd class="col-md-7" *ngIf="modelDetailsObj?.is_parking_eligible">: {{modelDetailsObj?.max_parking}}</dd>
+                                                        <dd class="col-md-5">Eligible for Locker</dd>
+                                                        <dd class="col-md-7">: {{modelDetailsObj?.is_locker_eligible?'Yes':'No'}}</dd>
+                                                        <dd class="col-md-5" *ngIf="modelDetailsObj?.is_locker_eligible">Max # of Lockers</dd>
+                                                        <dd class="col-md-7" *ngIf="modelDetailsObj?.is_locker_eligible">: {{modelDetailsObj?.max_lockers}}</dd>
+                                                        <dd class="col-md-5">Eligible for Bicycle</dd>
+                                                        <dd class="col-md-7">: {{modelDetailsObj?.is_bicycle_eligible?'Yes':'No'}}</dd>
+                                                        <dd class="col-md-5" *ngIf="modelDetailsObj?.is_bicycle_eligible">Max # of Bicycles</dd>
+                                                        <dd class="col-md-7" *ngIf="modelDetailsObj?.is_bicycle_eligible">: {{modelDetailsObj?.max_bicycle}}</dd>
+                                                    </ng-container>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-2 pr-1">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4>Views
+                                                    <button style="float: right;" class="btn btn-sm btn-primary" type="button" (click)="openEditModelModal(editModalViews,'viewsTab')">
+                                                        <i class="fas fa-pencil-alt" style="font-size:12px;"></i>
+                                                    </button>
+                                                </h4>
+                                                <span *ngFor="let item of modelDetailsObj?.views; let i=index">
+                                                    <ng-container *ngIf="item">
+                                                        <p> {{i+1}}. {{item}}</p>
+                                                    </ng-container>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-2 pl-1">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4>Spaces
+                                                    <button style="float: right;" class="btn btn-sm btn-primary text-right" type="button" (click)="openEditModelModal(editModalSpaces,'spacesTab')">
+                                                        <i class="fas fa-pencil-alt" style="font-size:12px;"></i>
+                                                    </button>
+                                                </h4>
+                                                <span *ngFor="let item of modelDetailsObj?.spaces; let i=index">
+                                                    <!-- <p> {{i+1}}. {{item.name}}
+                                                        </p> -->
+                                                    <dl class="row" *ngIf="item?.name">
+                                                        <dd class="col-md-5">{{i+1}}. {{item?.name}}</dd>
+                                                        <dd class="col-md-5">{{item?.size}} ({{measureUnits[0]?.area}})</dd>
+
+                                                    </dl>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-2 pr-1">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4>Notes
+                                                    <button style="float: right;" class="btn btn-sm btn-primary doc-img-up-btn" type="button" (click)="openAddNotesModal(noteModal)">
+                                                        Add
+                                                    </button>
+                                                </h4>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="table-responsive tableFixHead ng-tns-c2-3 ng-star-inserted">
+                                                            <table class="table table-sm table-borderless" style="table-layout: fixed;">
+                                                                <thead>
+
+                                                                </thead>
+                                                                <tbody *ngIf="noteList.length>0">
+                                                                    <ng-container *ngFor="let item of noteList">
+                                                                        <tr>
+                                                                            <td style="text-align: left;" [innerHtml]="item?.body">
+                                                                            </td>
+
+                                                                            <td class="text-right" style="width:90px">
+                                                                                <button class="btn btn-sm btn-primary mr-2" type="button" (click)="editNotesModal(noteModal ,item)">
+                                                                                    <i class="fa fa-pencil-alt" aria-hidden="true"></i>
+                                                                                </button>
+                                                                                <button class="btn btn-sm btn-danger" type="button" (click)="deleteNote(item)">
+                                                                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                                                                </button>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="text-left no-td-top-boder" colspan="2">
+                                                                                 By {{item?.created_by}}&nbsp;&nbsp;  On {{item?._created | date:'mediumDate'}} {{item?._created | date:'shortTime'}}
+                                                                            </td>
+                                                                        </tr>
+                                                                    </ng-container>
+                                                                </tbody>
+                                                                <tbody *ngIf="noteList.length==0">
+                                                                    <tr>
+                                                                        <td class="text-center" colspan="2"> No note found</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-2 pr-1 pl-1">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4>Documents
+                                                    <button style="float: right;" class="btn btn-sm btn-primary doc-img-up-btn" type="button"> Add
+                                                        <input class="doc-img-upload"  accept=".pdf, .doc, .docx" type="file" (change)="uploadModelDocument($event.target.files)">
+                                                    </button>
+                                                </h4>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="table-responsive tableFixHead ng-tns-c2-3 ng-star-inserted">
+                                                            <table class="table table-sm table-borderless" style="table-layout: fixed;">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th style="text-align: left;" width="100px">Name</th>
+                                                                        <th width="120px"></th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <ng-container *ngIf="documentList.length>0">
+                                                                        <tr *ngFor="let item of documentList">
+                                                                            <td style="text-align: left;"> {{item?.document?.name}}</td>
+                                                                            <td class="text-right">
+                                                                                <button class="btn btn-sm btn-primary mr-2" type="button" (click)="downloadDocument(item)">
+                                                                                    <i class="fa fa-download" aria-hidden="true"></i>
+                                                                                </button>
+                                                                                <button class="btn btn-sm btn-danger" type="button" (click)="deleteDocument(item)">
+                                                                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                                                                </button>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </ng-container>
+                                                                    <ng-container *ngIf="documentList.length==0">
+                                                                        <tr>
+                                                                            <td class="text-center" colspan="2"> No document found</td>
+                                                                        </tr>
+                                                                    </ng-container>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-2 pr-1">
+                                <div class="card">
+                                    <div class="card-body details-container">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4>Custom Attributes
+                                                    <button style="float:right" class="btn btn-sm btn-primary mr-2" type="button" (click)="openCustomAttributesModal(customAttributesModal)">
+                                                        <i class="fa fa-pencil-alt" aria-hidden="true"></i>
+                                                    </button>
+                                                </h4>
+                                                <div class="row">
+                                                    <div class="col-md-12 pt-2">
+                                                        <ng-container *ngIf="customAttributes && customAttributes?.length>0">
+                                                            <dl class="row mb-0" *ngFor="let att of customAttributes">
+                                                                <ng-container *ngIf="att?.ui_type !='CHECKBOX'">
+                                                                    <dd class="col-md-5">{{att?.attribute_name}}</dd>
+                                                                    <dd class="col-md-5">: {{modelDetailsObj[att?.attribute_id]}}</dd>
+                                                                </ng-container>
+                                                                <ng-container *ngIf="att?.ui_type =='CHECKBOX'">
+                                                                    <dd class="col-md-5">{{att?.attribute_name}}</dd>
+                                                                    <dd class="col-md-5">: {{modelDetailsObj[att?.attribute_id] ? 'Yes' :'No'}}</dd>
+                                                                </ng-container>
+                                                            </dl>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="!customAttributes || (customAttributes && customAttributes?.length==0)">
+                                                            <p class="text-center">No custom attribute found.</p>
+                                                        </ng-container>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-2 pr-1 pl-1">
+                                <div class="card">
+                                    <div class="card-body details-container">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4>Floor Layout
+                                                    <button class="btn btn-sm btn-primary doc-img-up-btn" style="float: right;" type="button"> Add
+                                                        <input class="doc-img-upload" multiple accept="image/*, .pdf" type="file" (change)="uploadFloorLayout($event.target.files)">
+                                                    </button>
+                                                </h4>
+                                                <div class="row">
+                                                    <div class="col-md-12 pt-2">
+                                                        <ng-container *ngIf="floorLayoutList?.length>0">
+                                                            <ul class="film-strip">
+                                                                <li style="position: relative;" *ngFor="let item of floorLayoutList">
+                                                                    <div class="delete-photo-icon" (click)="deleteFloorLayout(item)">
+                                                                        <i class="fas fa-times"></i>
+                                                                    </div>
+                                                                    <div class="photo-container-div" [ngStyle]="{'background-image': 'url(&quot;' + item?.thumbnailUrl + '/350&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }"
+                                                                        (click)="openImageViewerBox('Floor Layout',item?.thumbnailUrl,imageViwerModal,item?.file_type)">
+                                                                        <i *ngIf="item?.file_type=='pdf'" class="far fa-file-pdf pdf-icon"></i>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="floorLayoutList?.length==0">
+                                                            <p class="text-center">No layout found.</p>
+                                                        </ng-container>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-2 pr-1">
+                                <div class="card">
+                                    <div class="card-body details-container">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4>Electrical Layout
+                                                    <button class="btn btn-sm btn-primary doc-img-up-btn" style="float: right;" type="button"> Add
+                                                        <input class="doc-img-upload" multiple accept="image/*,.pdf" type="file" (change)="uploadElectricalLayout($event.target.files)">
+                                                    </button>
+                                                </h4>
+                                                <div class="row">
+                                                    <div class="col-md-12 pt-2">
+                                                        <ng-container *ngIf="electricalLayoutList?.length>0">
+                                                            <ul class="film-strip">
+                                                                <li style="position: relative;" *ngFor="let item of electricalLayoutList">
+                                                                    <div class="delete-photo-icon" (click)="deleteElectricalLayout(item)">
+                                                                        <i class="fas fa-times"></i>
+                                                                    </div>
+                                                                    <div class="photo-container-div" [ngStyle]="{'background-image': 'url(&quot;' + item?.thumbnailUrl + '/350&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }"
+                                                                        (click)="openImageViewerBox('Electrical Layout',item?.thumbnailUrl,imageViwerModal,item?.file_type)">
+                                                                        <i *ngIf="item?.file_type=='pdf'" class="far fa-file-pdf pdf-icon"></i>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="electricalLayoutList?.length==0">
+                                                            <p class="text-center">No layout found.</p>
+                                                        </ng-container>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-2 pr-1 pl-1">
+                                <div class="card">
+                                    <div class=" card-body details-container">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4>Suite Customization Layout
+                                                    <button class="btn btn-sm btn-primary doc-img-up-btn" style="float: right;" type="button">
+                                                        Add
+                                                        <input class="doc-img-upload" multiple accept="image/*,.pdf" type="file" (change)="uploadSuiteLayout($event.target.files)">
+                                                    </button>
+                                                </h4>
+                                                <div class="row">
+                                                    <div class="col-md-12 pt-2">
+                                                        <ng-container *ngIf="suiteLayoutList?.length>0">
+                                                            <ul class="film-strip-list">
+                                                                <li class="photo" style="position: relative;" *ngFor="let item of suiteLayoutList">
+                                                                  <div class="icons-block">
+                                                                    <div class="delete-icon" (click)="deleteSuiteLayout(item)">
+                                                                        <i class="fas fa-times"></i>
+                                                                    </div>
+                                                                    <div class="delete-icon mr-1" (click)="openImageTileModal(updateTitleModal,item)">
+                                                                      <i class="fa fa-info-circle"></i>
+                                                                    </div>
+                                                                  </div>
+                                                                    <div class="photo-gallery-div" [ngStyle]="{'background-image': 'url(&quot;' + item?.thumbnailUrl + '/350&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }"
+                                                                        (click)="openImageViewerBox('Suite Customization Layout',item?.thumbnailUrl,imageViwerModal,item?.file_type)">
+                                                                        <i *ngIf="item?.file_type=='pdf'" class="far fa-file-pdf pdf-icon"></i>
+                                                                    </div>
+                                                                    <div class="photo-description">
+                                                                      <div [innerHtml]="item?.title ? item?.title :' '"></div>
+                                                                  </div>
+                                                                </li>
+                                                            </ul>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="suiteLayoutList?.length==0">
+                                                            <p class="text-center">No layout found.</p>
+                                                        </ng-container>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-2 pr-1 ">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4>Photo Gallery
+                                                    <button class="btn btn-sm btn-primary doc-img-up-btn" style="float: right;" type="button"> Add
+                                                        <input class="doc-img-upload" accept="image/*" type="file" multiple (change)="uploadModelPhoto($event.target.files)">
+                                                    </button>
+                                                </h4>
+                                                <br>
+                                                <ng-container *ngIf="mediaPhotoList?.length>0">
+                                                    <ul class="film-strip-list">
+                                                        <li class="photo" style="position: relative;" *ngFor="let item of mediaPhotoList;let j=index">
+                                                            <div class="icons-block">
+
+                                                                <div class="delete-icon" (click)="deletePhoto(item,$event)">
+                                                                    <i class="fas fa-times"></i>
+                                                                </div>
+                                                                <div class="delete-icon mr-1" (click)="openPhotoDescription(photoDescriptionModal,item)">
+                                                                    <i class="fa fa-info-circle"></i>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="photo-gallery-div" [ngStyle]="{ 'background-image':
+                                                                        'url(&quot;' + baseUrl + item?.file?.url + '/350&quot;)', 'background-size': 'cover',
+                                                                        'background-repeat': 'no-repeat', 'background-position': 'center' } "
+                                                                (click)="openPhotoBox(photoViewModal, baseUrl + item?.file?.url, item)">
+                                                            </div>
+
+                                                            <div class="photo-description">
+                                                                <div [innerHtml]="item?.description ? item?.description :' '"></div>
+                                                            </div>
+                                                        </li>
+
+                                                    </ul>
+                                                </ng-container>
+                                                <ng-container *ngIf="mediaPhotoList.length==0">
+                                                    <p class="text-center">No photo found.</p>
+                                                </ng-container>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-2 pr-1">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4>Video Gallery
+                                                    <button class="btn btn-sm btn-primary doc-img-up-btn" style="float: right;" type="button" (click)="openAddVideoModal(videoModal)">
+                                                        Add
+                                                    </button>
+                                                </h4>
+                                                <br>
+                                                <ng-container *ngIf="mediaVideoList?.length>0">
+                                                    <ul class="film-strip-list">
+                                                        <li class="photo" style="position: relative;" *ngFor="let item of mediaVideoList">
+                                                            <div class="video-delete-photo-icon" (click)="deleteVideo(item,$event)">
+                                                                <i class="fas fa-times"></i>
+                                                            </div>
+                                                            <div *ngIf="item.video_type == 'YOUTUBE'" class="photo-gallery-div" [ngStyle]="{'background-image': 'url(&quot;https://img.youtube.com/vi/'+ item?.video_id +'/mqdefault.jpg&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }"
+                                                                (click)="openVideoViewer(videoViewerModal,item)">
+                                                            </div>
+                                                            <div *ngIf="item.video_type == 'VIMEO'" class="photo-gallery-div" [ngStyle]="{'background-image': 'url(&quot;https://i.vimeocdn.com/video/'+ item?.video_id +'_400.jpg&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }"
+                                                                (click)="openVideoViewer(videoViewerModal,item)">
+                                                            </div>
+                                                            <div *ngIf="item.video_type == 'MP4'" class="photo-gallery-div" [ngStyle]="{'background-image': 'url(&quot;/assets/img/mp4-icon.jpg&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }"
+                                                                (click)="openVideoViewer(videoViewerModal,item)">
+                                                            </div>
+                                                            <div class="photo-description">
+                                                                <div [innerHtml]="item?.title ? item?.title :' '"></div>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </ng-container>
+                                                <ng-container *ngIf="mediaVideoList.length==0">
+                                                    <p class="text-center">No video found.</p>
+                                                </ng-container>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #addModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Models</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <!-- <ngb-tabset [activeId]="defaultActiveTab"> -->
+                <!-- <ngb-tab id="modelTab" title="Model"> -->
+                <!-- <ng-template ngbTabContent> -->
+                <form autocomplete="off">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Project:
+                                    <b> {{formDetails.project_name}}</b>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Model Name:
+                                    <b> {{formDetails.name}}</b>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Beds
+                                    <span style="color:red">*</span>:</label>
+                                <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.bed" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Bath
+                                    <span style="color:red">*</span>:</label>
+                                <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.bath" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Den
+                                    <!-- <span style="color:red">*</span> -->
+                                    :
+                                </label>
+                                <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.den" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Flex
+                                    <!-- <span style="color:red">*</span> -->
+                                    :</label>
+                                <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.flex" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Media
+                                    <!-- <span style="color:red">*</span> -->
+                                    :</label>
+                                <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.media" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Ceiling ({{measureUnits[0]?.length}})
+                                    <!-- <span style="color:red">*</span> -->
+                                    :</label>
+                                <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.ceiling" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Area ({{measureUnits[0]?.area}})
+                                    <!-- <span style="color:red">*</span> -->
+                                    :</label>
+                                <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.area" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Outdoor Type
+                                    <!-- <span style="color:red">*</span> -->
+                                    :</label>
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.outdoor_type" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Outdoor Area ({{measureUnits[0]?.area}})
+                                    <!-- <span style="color:red">*</span> -->
+                                    :</label>
+                                <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.outdoor_area" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label> Type:</label>
+                                <!-- <span style="color:red">*</span>:</label> -->
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.type" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Collection:</label>
+                                <!-- <span style="color:red">*</span>:</label> -->
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.collection" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label> Building Type:</label>
+                                <select class="form-select" [ngModelOptions]="{standalone: true}"
+                                    [(ngModel)]="formDetails.building_type">
+                                    <option value="">Select Type</option>
+                                    <option value="condominium">Condominium</option>
+                                    <option value="townhouse">Townhouse</option>
+                                    <option value="semi-detached">Semi-Detached</option>
+                                    <option value="detached">Detached</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Eligible to Buy:</label>
+                                <!-- <div class="form-check mb-2" *ngFor=" let item of formDetails?.spaces; let i =index">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <input class="form-check-input" type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.is_enable" id="spaces{{i}}">
+                                                            <label class="form-check-label" for="spaces{{i}}">
+                                                                {{item.name}}
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <input type="number" min="0" step="0.1" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.size"
+                                                                placeholder="Size">
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+                                <div class="form-check">
+                                    <div class="row">
+                                        <div class="col-md-4" style="padding-top: 15px;">
+                                            <input class="form-check-input" type="checkbox" value="" id="parking" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.is_parking_eligible">
+                                            <label class="form-check-label" for="parking">
+                                                Parking
+                                            </label>
+                                        </div>
+                                        <div class="col-sm-12 col-md-4" *ngIf="formDetails.is_parking_eligible">
+                                            <div>Max # of Parkings</div>
+                                            <input type="number" min="1" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.max_parking">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-check">
+                                    <div class="row">
+                                        <div class="col-md-4" style="padding-top: 15px;">
+                                            <input class="form-check-input" type="checkbox" value="" id="locker" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.is_locker_eligible">
+                                            <label class="form-check-label" for="locker">
+                                                Locker
+                                            </label>
+                                        </div>
+                                        <div class="col-sm-12 col-md-4" *ngIf="formDetails.is_locker_eligible">
+                                            <div>Max # of Lockers</div>
+                                            <input type="number" min="1" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.max_lockers">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-check">
+                                    <div class="row">
+                                        <div class="col-md-4" style="padding-top: 15px;">
+                                            <input class="form-check-input" type="checkbox" value="" id="bicycle" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.is_bicycle_eligible">
+                                            <label class="form-check-label" for="bicycle">
+                                                Bicycle Parking
+                                            </label>
+                                        </div>
+                                        <div class="col-sm-12 col-md-4" *ngIf="formDetails.is_bicycle_eligible">
+                                            <div>Max # of Bicycle Parkings</div>
+                                            <input type="number" min="1" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.max_bicycle">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label id="notes">Notes :</label>
+                                <textarea class="form-control" id="notes" rows="3" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.notes"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- </ng-template> -->
+                <!-- </ngb-tab> -->
+                <!-- </ngb-tabset> -->
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" *ngIf="isEdit" (click)="editModel()">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #editModalViews>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Views</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body ">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <!-- <ngb-tabset [activeId]="defaultActiveTab">
+                    <ngb-tab id="viewsTab" title="Views">
+                        <ng-template ngbTabContent> -->
+                    <h6 class="mb-3">Select Views apply to this model : {{formDetails.name}}</h6>
+                    <div class="list-scroll mb-4 pl-1 pr-1" *ngIf="formDetails?.views?.length>0">
+                        <div class="form-check mb-2" *ngFor=" let item of formDetails?.views; let i =index">
+                            <input class="form-check-input" type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.is_enable" id="views{{i}}">
+                            <label class="form-check-label" for="views{{i}}">
+                                {{item.name}}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="mb-5" *ngIf="formDetails?.views?.length==0">
+                        <p> No views added</p>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-8 pr-1">
+                            <input type="text" (keyup.enter)="addViews()" (focusout)="checkExistViewName()" class="form-control" placeholder="Views"
+                                [ngModelOptions]="{standalone: true}" [(ngModel)]="viewName">
+                        </div>
+                        <div class="col pl-1">
+                            <button type="button" class="btn btn-primary" (click)="addViews()">Add</button>
+                        </div>
+                    </div>
+                <!-- </ng-template>
+                    </ngb-tab>
+                </ngb-tabset> -->
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" *ngIf="isEdit" (click)="editModelViews()">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-template #editModalSpaces>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Spaces</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form autocomplete="off">
+        <div class="container-fluid">
+                <!-- <ngb-tabset [activeId]="defaultActiveTab">
+                    <ngb-tab id="spacesTab" title="Spaces">
+                        <ng-template ngbTabContent> -->
+                    <h6 class="mb-3">Select Spaces apply to this mode : {{formDetails.name}}</h6>
+                    <div class="list-scroll mb-4 pl-1 pr-1" *ngIf="formDetails?.spaces?.length>0">
+                        <div class="row">
+                            <div class="col-md-4">
+                                Name
+                            </div>
+                            <div class="col-md-3 text-center">
+                                Size ({{measureUnits[0]?.area}})
+                            </div>
+                        </div>
+                        <div class="form-check mb-2" *ngFor=" let item of formDetails?.spaces; let i =index">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <input class="form-check-input" type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.is_enable" id="spaces{{i}}">
+                                    <label class="form-check-label" for="spaces{{i}}">
+                                        {{item.name}}
+                                    </label>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="number" id="space{{i}}" min="0" *ngIf="item.is_enable" step="0.1" class="form-control" [ngModelOptions]="{standalone: true}"
+                                        [(ngModel)]="item.size" placeholder="Size">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-5" *ngIf="formDetails?.spaces?.length==0">
+                        <p> No spaces added</p>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-8 pr-1">
+                            <input type="text" (keyup.enter)="addSpaces()" (focusout)="checkExistSpacesName()" class="form-control" placeholder="Spaces"
+                                [ngModelOptions]="{standalone: true}" [(ngModel)]="spaceName">
+                        </div>
+                        <div class="col pl-1">
+                            <button type="button" class="btn btn-primary" (click)="addSpaces()">Add</button>
+                        </div>
+                    </div>
+                <!-- </ng-template>
+                    </ngb-tab>
+                </ngb-tabset> -->
+            </div>
+        </form>
+        </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" *ngIf="isEdit" (click)="editModelSpaces()">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #imageViwerModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left"> {{currentModalData?.name}} </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body text-center custom-media-body">
+        <div class="container-fluid">
+            <div class="pdf-container" *ngIf="currentModalData?.file_type=='pdf'">
+                <pdf-viewer [src]="currentModalData?.path" [original-size]="false"></pdf-viewer>
+            </div>
+            <div class="col-md-12" *ngIf="currentModalData?.file_type!='pdf'">
+                <img style="max-width:100%" [src]="currentModalData?.path" alt="{{currentModalData?.name}}">
+            </div>
+            <div *ngIf="!currentModalData?.path">
+                Image is not available
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #noteModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">{{isEdit ?'Edit' :'Add'}} Notes</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Note :
+                            </label>
+                            <div [froalaEditor]="nonInlineEdit" [(froalaModel)]="formDetails.body">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" *ngIf="isEdit" (click)="editNotes()">Update</button>
+            <button type="button" class="btn btn-primary" *ngIf="!isEdit" (click)="addNotes()">Add</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #customAttributesModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Add Custom Attributes</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <div class="row">
+                    <div class="col-md-12" *ngFor="let attribute of formDetails.atrributes;">
+                        <ng-container [ngSwitch]="attribute.ui_type">
+
+                            <ng-container *ngSwitchCase="'TEXTBOX'">
+                                <div class="form-group">
+                                    <label [attr.for]="attribute.attribute_id">{{attribute?.attribute_name}}
+                                        <span style="color:red" *ngIf="attribute?.required">*</span>
+                                    </label>
+                                    <input class="form-control" *ngIf="attribute.data_type!='DATE'" [ngModelOptions]="{standalone: true}" [(ngModel)]="attribute.value"
+                                        [id]="attribute.attribute_id" [name]="attribute.attribute_id" [type]="attribute.input_type">
+                                    <div class="input-group" *ngIf="attribute.data_type=='DATE'">
+                                        <input [type]="attribute.input_type" class="form-control" placeholder="YYYY-MM-DD" #customDate="bsDatepicker" bsDatepicker
+                                            [bsConfig]="{ containerClass: 'theme-dark-blue',showTodayButton: true, todayPosition: 'center',showClearButton: true, clearPosition: 'right',isAnimated: true,adaptivePosition: true,dateInputFormat: 'YYYY-MM-DD',  returnFocusToInput: true }"
+                                            [ngModelOptions]="{standalone: true}" [(ngModel)]="attribute.value">
+                                        <span class=" input-group-prepend" (click)="customDate.toggle()" [attr.aria-expanded]="customDate.isOpen">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </span>
+                                    </div>
+
+                                </div>
+
+                            </ng-container>
+
+                            <ng-container *ngSwitchCase="'DROPDOWN'">
+                                <div class="form-group">
+                                    <label [attr.for]="attribute.attribute_id">{{attribute?.attribute_name}}
+                                        <span style="color:red" *ngIf="attribute?.required">*</span>
+                                    </label>
+                                    <select class="custom-select" [id]="attribute.attribute_id" [ngModelOptions]="{standalone: true}" [(ngModel)]="attribute.value"
+                                        [name]="attribute.attribute_id">
+                                        <option value="">Select {{attribute?.attribute_name}}</option>
+                                        <option *ngFor="let opt of attribute.options" [value]="opt.value">{{opt.label}}</option>
+                                    </select>
+                                </div>
+                            </ng-container>
+
+
+                            <ng-container *ngSwitchCase="'CHECKBOX'">
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="attribute.value" [name]="attribute.attribute_id"
+                                            [id]="attribute.attribute_id">
+                                        <label class="form-check-label" [attr.for]="attribute.attribute_id">{{attribute?.attribute_name}}
+                                            <span style="color:red" *ngIf="attribute?.required">*</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </ng-container>
+
+                            <!-- <ng-container *ngSwitchCase="'RADIO'">
+                                <div class="form-group">
+                                    <div class="form-check form-check-inline" *ngFor="let opt of attribute.options">
+                                        <input class="form-check-input" type="radio" [ngModelOptions]="{standalone: true}" [(ngModel)]="attribute.value" [name]="attribute.attribute_id"
+                                            [id]="opt.key" [value]="opt.value">
+                                        <label class="form-check-label" [attr.for]="opt.key"> {{ opt.value }} </label>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'TEXTAREA'">
+                                <div class="form-group">
+                                    <label [attr.for]="attribute.attribute_id">{{attribute?.attribute_name}}</label>
+                                    <textarea class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="attribute.value" [name]="attribute.attribute_id"
+                                        [id]="attribute.attribute_id" rows="5"></textarea>
+                                </div>
+                            </ng-container> -->
+                        </ng-container>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updateCustomAttributes()">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #photoViewModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left"> {{selectedPhotoPath?.name ? selectedPhotoPath?.name :'Image is not available'}} </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body text-center custom-media-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12" *ngIf="selectedPhotoPath?.path">
+                    <img style="max-width:100%" [src]="selectedPhotoPath?.path" alt="{{selectedPhotoPath?.name}}">
+                </div>
+                <div class="col-md-12 text-center pt-2">
+                    <div [innerHtml]="selectedPhotoPath?.description ? selectedPhotoPath?.description :' '"></div>
+                </div>
+                <div *ngIf="!selectedPhotoPath?.path">
+                    Image is not available
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<ng-template #videoViewerModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left"> {{selectedVideoPath.name? selectedVideoPath?.name :''}} </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body text-center custom-media-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- <img [src]="selectedPhotoPath?.path" alt="{{selectedPhotoPath?.name}}"> -->
+                    <iframe [src]="selectedVideoPath?.path" frameborder="0" width="100%" height="500px" webkitallowfullscreen mozallowfullscreen
+                        allowfullscreen>
+                    </iframe>
+
+                    <div class="col-md-12 text-center pt-2" *ngIf="selectedVideoPath?.body">
+                        <div [innerHtml]="selectedVideoPath?.body ? selectedVideoPath?.body :' '"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<ng-template #videoModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Add Video</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="name">Video Type</label>
+                                <select class="form-select" [(ngModel)]="videoDetails.video_type">
+                                    <option value="">Select Video Type</option>
+                                    <option value="YOUTUBE">Youtube</option>
+                                    <option value="VIMEO">Vimeo</option>
+                                    <option value="MP4">MP4</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="name">Video Url</label>
+                                <input type="text" class="form-control" [(ngModel)]="videoDetails.url" name="url" placeholder="Video url">
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="name">Title :</label>
+                                <input type="text" class="form-control" [(ngModel)]="videoDetails.title" name="url" placeholder="Title">
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <label for="name">Body :</label>
+                            <div [froalaEditor]="nonInlineEdit" [(froalaModel)]="videoDetails.body">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="addModelVideos()">Add</button>
+        </div>
+    </div>
+</ng-template>
+<ng-template #photoDescriptionModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">Photo Description</h5>
+        <button type="button " class="close pull-right " aria-label="Close " (click)="modalRef.hide() ">
+            <span aria-hidden="true ">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body ">
+        <div class="container-fluid ">
+            <form autocomplete="off ">
+                <div class="row ">
+                    <div class="col-md-12 ">
+                        <div class="form-group ">
+                            <label>Description :
+                            </label>
+                            <div [froalaEditor]="nonInlineEdit" [(froalaModel)]="formDetails.description">
+                            </div>
+                            <!-- <textarea type="text" rows="4" cols="4" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.description" class="form-control"></textarea> -->
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer ">
+        <div class="col-md-12 text-right ">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updatePhotoDescription()">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #updateTitleModal>
+  <div class="modal-header">
+      <h5 class="modal-title pull-left">Suite Customization Layout Title</h5>
+      <button type="button " class="close pull-right " aria-label="Close " (click)="modalRef.hide() ">
+          <span aria-hidden="true ">&times;</span>
+      </button>
+  </div>
+  <div class="modal-body ">
+    <div class="container-fluid ">
+        <form autocomplete="off">
+            <div class="row ">
+                <div class="col-md-12 ">
+                    <div class="form-group ">
+                      <label for="name">Title :</label>
+                      <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.title" class="form-control col-md-12" name="url" placeholder="Title">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+  </div>
+  <div class="modal-footer ">
+    <div class="col-md-12 text-right ">
+        <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="updateImageTitle()">Update</button>
+    </div>
+</div>
+</ng-template>

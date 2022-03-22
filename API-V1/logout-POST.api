@@ -1,0 +1,8 @@
+
+<% include "_base.api" %>
+
+<% en.users.logout results %>
+
+<% assign returnData.status = 1 %>
+<% assign returnData.message = 'Your are logged out successfully' %>
+<% return returnData %>

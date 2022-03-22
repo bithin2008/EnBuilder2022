@@ -1,0 +1,501 @@
+<form autocomplete="off">
+    <div class="row mb-1">
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <select class="form-select" (change)="projectFilterChange()" [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.project_id">
+                    <option value="">All Project</option>
+                    <option *ngFor="let item of allProjectList" value={{item._id}}>{{item.name}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4" *ngIf="collectionOptions.length>0">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('collection', $event)" (onDeSelect)="onItemSelect('collection')"
+                    (onSelect)="onItemSelect('collection')" (onSelectAll)="onSelectAll('collection', $event)" [placeholder]="'Select Model Collection'"
+                    [ngModelOptions]="{standalone: true}" [data]="collectionOptions" [(ngModel)]="filterForm.collection" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-4" *ngIf="typeOptions.length>0">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('type', $event)" (onDeSelect)="onItemSelect('type')" (onSelect)="onItemSelect('type')"
+                    (onSelectAll)="onSelectAll('type', $event)" [placeholder]="'Select Type'" [ngModelOptions]="{standalone: true}"
+                    [data]="typeOptions" [(ngModel)]="filterForm.type" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4" *ngIf="filterForm.project_id && filterModelList.length>0">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('model_id', $event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()"
+                    (onSelectAll)="onSelectAll('model_id', $event)" [placeholder]="'Select Model'" [ngModelOptions]="{standalone: true}"
+                    [data]="filterModelList" [(ngModel)]="filterForm.model_id" [settings]="modelDropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('floor_legal', $event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()"
+                    (onSelectAll)="onSelectAll('floor_legal', $event)" [placeholder]="'Select Floor'" [ngModelOptions]="{standalone: true}"
+                    [data]="floorList" [(ngModel)]="filterForm.floor_legal" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('beds',$event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()"
+                    (onSelectAll)="onSelectAll('beds',$event)" [placeholder]="'Select Beds'" [ngModelOptions]="{standalone: true}"
+                    [data]="numberFields" [(ngModel)]="filterForm.beds" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('baths',$event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()"
+                    (onSelectAll)="onSelectAll('baths',$event)" [placeholder]="'Select Baths'" [ngModelOptions]="{standalone: true}"
+                    [data]="numberFields" [(ngModel)]="filterForm.baths" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('media',$event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()"
+                    (onSelectAll)="onSelectAll('media',$event)" [placeholder]="'Select Media'" [ngModelOptions]="{standalone: true}"
+                    [data]="numberFields" [(ngModel)]="filterForm.media" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('flex',$event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()"
+                    (onSelectAll)="onSelectAll('flex',$event)" [placeholder]="'Select Flex'" [ngModelOptions]="{standalone: true}"
+                    [data]="numberFields" [(ngModel)]="filterForm.flex" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('ceiling',$event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()"
+                    (onSelectAll)="onSelectAll('ceiling',$event)" [placeholder]="'Select Ceiling'" [ngModelOptions]="{standalone: true}"
+                    [data]="ceilingFields" [(ngModel)]="filterForm.ceiling" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4" *ngIf="this.filterForm.project_id">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('views',$event)" (onSelectAll)="onSelectAll('views',$event)" (onDeSelect)="onItemSelect()"
+                    (onSelect)="onItemSelect()" [placeholder]="'Select Views'" [ngModelOptions]="{standalone: true}" [data]="filterViewsList"
+                    [(ngModel)]="filterForm.views" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('status', $event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()"
+                    (onSelectAll)="onSelectAll('status', $event)" [placeholder]="'Select Status'" [ngModelOptions]="{standalone: true}"
+                    [data]="unitStatus" [(ngModel)]="filterForm.status" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('status', $event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()"
+                    (onSelectAll)="onSelectAll('design_studio', $event)" [placeholder]="'Select Design Studio'" [ngModelOptions]="{standalone: true}"
+                    [data]="statusList" [(ngModel)]="filterForm.design_studio" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('status', $event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()"
+                    (onSelectAll)="onSelectAll('parking_selection', $event)" [placeholder]="'Select Parking Status'" [ngModelOptions]="{standalone: true}"
+                    [data]="statusList" [(ngModel)]="filterForm.parking_selection" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('status', $event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()"
+                    (onSelectAll)="onSelectAll('bicycle_selection', $event)" [placeholder]="'Select Bicycle Status'" [ngModelOptions]="{standalone: true}"
+                    [data]="statusList" [(ngModel)]="filterForm.bicycle_selection" [settings]="statusDropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('status', $event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()"
+                    (onSelectAll)="onSelectAll('locker_selection', $event)" [placeholder]="'Select Locker Status'" [ngModelOptions]="{standalone: true}"
+                    [data]="statusList" [(ngModel)]="filterForm.locker_selection" [settings]="statusDropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4 pb-2">
+            <div class="input-group position-relative">
+                <input class="form-control" name="search" placeholder="Search" style="padding-right: 25px;" type="text" [ngModelOptions]="{standalone: true}"
+                    [(ngModel)]="filterForm.searchText" name="search" (keyup)="doSearch()">
+                <span class="clear-search" *ngIf="isClear" (click)="clearSearch()">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4">
+            <div class="input-group-btn">
+                <button class="btn btn-danger  mr-2" type="button" (click)="clearFilter()">Clear</button>
+                <button class="btn btn-primary mr-2" type="button" *ngIf="isBulkAssign" (click)="openAssignDetailModal(assignModal)">Assign</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9 col-sm-8">
+
+        </div>
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAllCols('cols',$event)" (onSelectAll)="onSelectAllCols('cols',$event)"
+                    (onDeSelect)="onItemSelectCol()" (onSelect)="onItemSelectCol()" [placeholder]="'Select Columns'" [ngModelOptions]="{standalone: true}"
+                    [data]="allUnitColumns" [(ngModel)]="filterForm.cols" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+
+            </div>
+        </div>
+    </div>
+</form>
+<div class="table-responsive mb-5">
+    <table class="table table-striped list_table" style="table-layout: fixed;">
+        <thead>
+            <tr>
+                <th style="width: 50px;">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="th_chk_all" [(ngModel)]="selectedAll"
+                            (change)="selectAll();">
+                        <label class="custom-control-label" for="th_chk_all">&nbsp;</label>
+                    </div>
+                </th>
+                <th width="200px" (click)="setOrder('project_name')">Project
+                    <span *ngIf="order != 'project_name'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'project_name'">▼</span>
+                    <span *ngIf="!reverse && order == 'project_name'">▲</span>
+                </th>
+                <th width="200px" (click)="setOrder('collection')">Model Collection
+                    <span *ngIf="order != 'collection'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'collection'">▼</span>
+                    <span *ngIf="!reverse && order == 'collection'">▲</span>
+                </th>
+                <th width="180px" (click)="setOrder('model')">Model Name
+                    <span *ngIf="order != 'model'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'model'">▼</span>
+                    <span *ngIf="!reverse && order == 'model'">▲</span>
+                </th>
+                <th width="120px" (click)="setOrder('type')">Type
+                    <span *ngIf="order != 'type'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'type'">▼</span>
+                    <span *ngIf="!reverse && order == 'type'">▲</span>
+
+                </th>
+                <th width="130px" (click)="setOrder('unit_no')">Unit#
+                    <span *ngIf="order != 'unit_no'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'unit_no'">▼</span>
+                    <span *ngIf="!reverse && order == 'unit_no'">▲</span>
+                </th>
+
+                <th width="140px" (click)="setOrder('status')">Status
+                    <span *ngIf="order != 'status'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'status'">▼</span>
+                    <span *ngIf="!reverse && order == 'status'">▲</span>
+                </th>
+                <th width="180px">Deal </th>
+                <th width="180px">Deal Status </th>
+                <th width="180px">Color Collection</th>
+                <th width="130px">Packages</th>
+                <th width="130px">Options</th>
+                <th width="150px">Design Studio</th>
+                <th width="150px">Parking Selection</th>
+                <th width="150px">Bicycle Selection</th>
+                <th width="150px">Locker Selection</th>
+                <th width="180px">Layout  Customization</th>
+
+                <th width="140px" *ngFor="let type of unitColumns">{{type?.value}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngIf="unitList.length>0">
+                <tr *ngFor="let item of unitList; let i=index">
+                    <td style="width: 50px;">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" id="is_select{{i}}" [disabled]="!item?.deal_id" class="custom-control-input" (change)="onChangeAssignCheckbox($event)"
+                                [ngModelOptions]="{standalone: true}" [(ngModel)]="item.is_select">
+                            <label class="custom-control-label" for="is_select{{i}}">&nbsp;</label>
+                        </div>
+                    </td>
+                    <td (click)="openUnitDetailsPage(item)">{{item?.project_name}}</td>
+                    <td (click)="openUnitDetailsPage(item)">{{item?.collection}}</td>
+                    <td (click)="openUnitDetailsPage(item)" width="180px">{{item?.model_name}} </td>
+                    <td (click)="openUnitDetailsPage(item)" width="180px">{{item?.type}} </td>
+                    <td (click)="openUnitDetailsPage(item)" width="180px">{{item?.unit_no}}</td>
+                    <td (click)="openUnitDetailsPage(item)" width="180px">
+                        <div *ngIf="item?.status=='AVAILABLE'" class="badge badge-success">{{item?.status}} </div>
+                        <div *ngIf="item?.status=='SOLD'" class="badge badge-danger">{{item?.status}} </div>
+                        <div *ngIf="item?.status !='AVAILABLE' && item?.status !='SOLD'" class="badge badge-warning">{{item?.status ? item?.status :'NA'}} </div>
+                    </td>
+                    <td width="180px">
+                        <ng-container *ngIf="item?.deal && item?.deal.length>0 && item?.deal[0].purchasers.length>0">
+                            <div class="link" (click)="navigateToDealDetails(purchaser?._id)" *ngFor="let purchaser of item?.deal[0].purchasers">
+                                {{purchaser?.display_name}}
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="!item?.deal_id || (item?.deal && (item?.deal.length==0 || item?.deal[0].purchasers.length==0))">
+                            <div (click)="openUnitDetailsPage(item)">-</div>
+                        </ng-container>
+                    </td>
+                    <td (click)="openUnitDetailsPage(item)" width="180px">
+                        <ng-container *ngIf="item?.deal_id && item?.deal && item?.deal.length>0 && item?.deal[0]?.stage">
+                            <div>{{item?.deal[0]?.stage}}</div>
+                        </ng-container>
+                        <ng-container *ngIf="!item?.deal_id || (item?.deal && (item?.deal.length==0 || !item?.deal[0]?.stage))">
+                            <div>-</div>
+                        </ng-container>
+                    </td>
+                    <td (click)="openUnitDetailsPage(item)" width="180px">
+                        <ng-container *ngIf="item?.color_collections && item?.color_collections.length>0">
+                            <div *ngFor="let collection of item?.color_collections">
+                                {{collection?.item_name}}
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="!item?.color_collections || item?.color_collections.length==0">
+                            <div>-</div>
+                        </ng-container>
+                    </td>
+                    <td (click)="openUnitDetailsPage(item)" width="180px">
+                        <ng-container *ngIf="item?.packages && item?.packages.length>0">
+                            <div>
+                                {{item?.packages.length +'/'+( item.total_package_price | currency:'USD')}}
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="!item?.packages || item?.packages.length==0">
+                            <div>-</div>
+                        </ng-container>
+                    </td>
+                    <td (click)="openUnitDetailsPage(item)" width="180px">
+                        <ng-container *ngIf="item?.personalization_options && item?.personalization_options.length>0">
+                            <div>
+                                {{item?.personalization_options.length +'/'+( item.total_option_price | currency:'USD')}}
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="!item?.personalization_options || item?.personalization_options.length==0">
+                            <div>-</div>
+                        </ng-container>
+                    </td>
+                    <td>
+                        <div class="form-check form-switch pl-5">
+                            <input class="form-check-input" (click)="onDesignStudioChange(item,$event)" [disabled]="!item?.deal_id" [checked]="item.enable_design_studio"
+                                type="checkbox" id="enable_design_studio{{i}}" name="design_studio">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-check form-switch pl-5">
+                            <input class="form-check-input" (click)="onEnableParkingChange(item,$event)" [disabled]="!item?.deal_id" [checked]="item.enable_parking_selection"
+                                type="checkbox" id="enable_parking_selection{{i}}" name="enable_parking_selection">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-check form-switch pl-5">
+                            <input class="form-check-input" (click)="onEnableBicycleChange(item,$event)" [disabled]="!item?.deal_id" [checked]="item.enable_bicycle_selection"
+                                type="checkbox" id="enable_bicycle_selection{{i}}" name="enable_bicycle_selection">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-check form-switch pl-5">
+                            <input class="form-check-input" (click)="onEnableLockerChange(item,$event)" [disabled]="!item?.deal_id" [checked]="item.enable_locker_selection"
+                                type="checkbox" id="enable_locker_selection{{i}}" name="enable_locker_selection">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-check form-switch pl-5">
+                            <input class="form-check-input" (click)="onEnableLayoutCustomizationChange(item,$event)" [disabled]="!item?.deal_id" [checked]="item.enable_layout_customization"
+                                type="checkbox" id="enable_layout_customization{{i}}" name="enable_layout_customization">
+                        </div>
+                    </td>
+                    
+
+                    <td *ngFor="let type of unitColumns">
+                        <span *ngIf="type?._id !='sales_price' && (type?._id =='is_parking_eligible' || type?._id  == 'is_locker_eligible' || type?._id  =='is_bicycle_eligible')">{{type?._id ?( item[type?._id] ?'Yes':'No' ): ''}} </span>
+                        <span *ngIf="type?._id !='sales_price' && type?._id !='is_parking_eligible' && type?._id  != 'is_locker_eligible' && type?._id  !='is_bicycle_eligible'">{{type?._id ? item[type?._id] : ''}} </span>
+                        <span *ngIf="type?._id =='sales_price'">{{type?._id ? (item[type?._id] | currency:'USD' ): ''}} </span>
+                    </td>
+
+                </tr>
+            </ng-container>
+            <ng-container *ngIf="unitList.length==0">
+                <tr>
+                    <td colspan="4" class="text-center">No unit found</td>
+                    <td [attr.colspan]="colspanVal"></td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+</div>
+<div class="row mt-3" *ngIf="paginationObj.total>=20">
+    <div class="col-md-6">
+        <div class="form-group">
+            <span class="float-left" style="width:70px;margin-top: 6px;">Page Size:</span>
+            <span class="float-left" style="width:85px;">
+                <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="pageSize" (change)="setPageSize()">
+                    <option value="">-Select-</option>
+                                        <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </span>
+            <span class="float-left" style="margin-top: 6px !important;margin-left: 16px !important;">{{paginationObj.total}} Record(s) Found</span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <nav>
+            <ul class="pagination">
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.previousPage)">
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(1)">
+                        First
+                    </a>
+                </li>
+                <li class="page-item {{pagination == paginationObj.currentPage?'active':''}}" *ngFor="let pagination of paginationObj.items">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(pagination)">{{pagination}}</a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.totalPages)">
+                        Last
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.nextPage)">
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<ng-template #assignModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Assign</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+
+                <div class="row">
+                    <!-- <div class="col-md-6">
+                        <div class="form-group mt-4">
+                            <input type="checkbox" value="" id="color_collection" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.enable_color_collection">
+                            <label class="form-check-label pl-2" for="color_collection">
+                                Enable Color Collection
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group mt-4">
+                            <input type="checkbox" value="" id="package_selection" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.enable_package_selection">
+                            <label class="form-check-label pl-2" for="package_selection">
+                                Enable Package Selection
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group mt-4">
+                            <input type="checkbox" value="" id="personalization" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.enable_personalization">
+                            <label class="form-check-label pl-2" for="personalization">
+                                Enable Personalization
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group mt-4">
+                            <input type="checkbox" value="" id="customization" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.enable_customization">
+                            <label class="form-check-label pl-2" for="customization">
+                                Enable Customization
+                            </label>
+                        </div>
+                    </div> -->
+
+                    <div class="col-md-6">
+                        <div class="form-group mt-4">
+                            <input type="checkbox" value="" id="design_studio" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.enable_design_studio">
+                            <label class="form-check-label pl-2" for="design_studio">
+                                Design Studio
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group mt-4">
+                            <input type="checkbox" value="" id="parking_selection" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.enable_parking_selection">
+                            <label class="form-check-label pl-2" for="parking_selection">
+                                Enable Parking Selection
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group mt-4">
+                            <input type="checkbox" value="" id="locker_selection" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.enable_locker_selection">
+                            <label class="form-check-label pl-2" for="locker_selection">
+                                Enable Locker Selection
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group mt-4">
+                            <input type="checkbox" value="" id="bicycle_selection" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.enable_bicycle_selection">
+                            <label class="form-check-label pl-2" for="bicycle_selection">
+                                Enable Bicycle Selection
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group mt-4">
+                            <input type="checkbox" value="" id="enable_layout_customization" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.enable_layout_customization">
+                            <label class="form-check-label pl-2" for="enable_layout_customization">
+                                Enable Layout Customization
+                            </label>
+                        </div>
+                    </div>
+
+                    
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updateUnit()">Update</button>
+        </div>
+    </div>
+</ng-template>

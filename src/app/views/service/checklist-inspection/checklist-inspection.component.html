@@ -1,0 +1,804 @@
+<form autocomplete="off">
+    <div class="row mb-3">
+        <div class="col-md-6"></div>
+        <!-- <div class="col-md-3 col-sm-3">
+            <div class="form-group row">
+                <div class="col-md-12">
+                    <select class="form-select" (change)="onProjectChange()" [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.project_id">
+                        <option value="{{item._id}}" *ngFor="let item of projectList">{{item.name}}</option>
+                    </select>
+                </div>
+            </div>
+        </div> -->
+        <div class="col-md-3 col-sm-3">
+            <div class="input-group position-relative">
+                <input class="form-control" name="search" placeholder="Search" style="padding-right: 25px;" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.searchText" name="search" (keyup)="doSearch()">
+                <span class="clear-search" *ngIf="isClear" (click)="clearSearch()">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </span>
+            </div>
+
+        </div>
+
+        <div class="col-md-3 col-sm-5">
+            <!-- <button class="btn btn-primary mr-2" type="button">Assign</button> -->
+            <button class="btn btn-primary " [disabled]="!filterForm.project_id" type="button" (click)="openChecklistWalkthroughModal(checklistInspectionModal)">Checklist Walkthrough</button>
+            <!-- <button class="btn btn-primary " type="button" (click)="openCopyUser(AddUserModal)">Copy</button> -->
+            <!-- <button class="btn btn-primary" (click)="openModal(addDeficiencyModal)">Save</button> -->
+
+        </div>
+    </div>
+</form>
+
+<div class="table-responsive mb-5">
+    <table class="table table-striped list_table" style="table-layout: fixed;">
+        <thead>
+            <tr>
+                <th width="150px" (click)="setOrder('project_name')">Project
+                    <span *ngIf="order != 'project_name'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'project_name'">▼</span>
+                    <span *ngIf="!reverse && order == 'project_name'">▲</span>
+                </th>
+                <th width="150px" (click)="setOrder('unit_no')">Unit
+                    <span *ngIf="order != 'unit_no'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'unit_no'">▼</span>
+                    <span *ngIf="!reverse && order == 'unit_no'">▲</span>
+                </th>
+                <th width="150px" (click)="setOrder('date')">Inspection Date
+                    <span *ngIf="order != 'date'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'date'">▼</span>
+                    <span *ngIf="!reverse && order == 'date'">▲</span>
+                </th>
+                <th width="100px">Status</th>
+                <th width="100px">Passed</th>
+                <th width="100px">Failed</th>
+                <!-- <th width="200px" *ngFor="let type of occupancyDates">{{type?.label}}</th> -->
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngIf="checkList?.length > 0">
+                <tr *ngFor="let item of checkList;let i=index" (click)="toggleInspectionSlider($event); openInspectionDetails(item)">
+                    <td>{{item?.project_name}}</td>
+                    <td>{{item?.unit_no}}</td>
+                    <td>{{item?.date | date:'yyyy-MM-dd'}}</td>
+                    <td>{{item?.status}}</td>
+                    <td>{{item?.passedcount}}</td>
+                    <td>{{item?.failedcount}}</td>
+                    <!-- <td *ngFor="let type of occupancyDates"> {{type?.id ? (item[type?.id] | date:'yyyy-MM-dd') : ''}}</td> -->
+                </tr>
+            </ng-container>
+            <ng-container *ngIf="checkList?.length == 0">
+                <tr>
+                    <td colspan="6" class="text-center"> No Checklist Found</td>
+                    <!-- <td colspan="20" *ngIf="occupancyDates.length>0" class="text-center"> No Units Found</td> -->
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+</div>
+<div class="row mt-3" *ngIf="paginationObj.total>=20">
+    <div class="col-md-6">
+        <div class="form-group">
+            <span class="float-left" style="width:70px;margin-top: 6px;">Page Size:</span>
+            <span class="float-left" style="width:85px;">
+                <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="pageSize" (change)="setPageSize()">
+                    <option value="">-Select-</option>
+                                        <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </span>
+            <span class="float-left" style="margin-top: 6px !important;margin-left: 16px !important;">{{paginationObj.total}} Record(s) Found</span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <nav>
+            <ul class="pagination">
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" (click)="doPaginationWise(paginationObj.previousPage)">
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(1)">
+                        First
+                    </a>
+                </li>
+                <li class="page-item {{pagination == paginationObj.currentPage?'active':''}}" *ngFor="let pagination of paginationObj.items">
+                    <a class="page-link" (click)="doPaginationWise(pagination)">{{pagination}}</a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.totalPages)">
+                        Last
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" (click)="doPaginationWise(paginationObj.nextPage)">
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<ng-template #checklistInspectionModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Checklist Inspection</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form autocomplete="off" *ngIf="!isNext">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-form-label"> Project :
+                            <!-- <b>{{formDetails?.project_name}}</b> -->
+                            <span style="color:red">*</span>:
+                        </label>
+                         <select class="form-select" (change)="onFormProjectChange()" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.project_id">
+                            <option value="">Select Project</option>
+                            <option value="{{item._id}}" *ngFor="let item of projectList">{{item.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-form-label"> Building Type:
+                        </label>
+                        <select (change)="onBuildingTypeChange()" class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.building_type">
+                            <option value="">Select Type</option>
+                            <option value="condominium">Condominium</option>
+                            <option value="townhouse">Townhouse</option>
+                            <option value="semi-detached">Semi-Detached</option>
+                            <option value="detached">Detached</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6" *ngIf="formDetails.building_type=='condominium'">
+                    <div class="form-group">
+                        <label class="col-form-label"> Level
+                            <span style="color:red">*</span>:
+                        </label>
+                        <select class="form-select" (change)="onLevelChange()" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.level">
+                            <option value="">Select Level</option>
+                            <option value="{{item}}" *ngFor="let item of levelList">{{item}}</option>
+                        </select>
+                    </div>
+                </div> -->
+                <div class="col-md-6">
+                    <div class="checklist-inspections-box form-group autocomplete-container">
+                        <label class="col-form-label"> Unit
+                            <span style="color:red">*</span>:
+                        </label>
+                        <!-- <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.unit_id">
+                            <option value="">Select Unit</option>
+                            <option value="{{item._id}}" *ngFor="let item of unitList">{{item.unit_no}}</option>
+                        </select> -->
+                        <p-autoComplete [ngModelOptions]="{standalone: true}"  [(ngModel)]="formDetails.unit" [suggestions]="unitList" (onKeyUp)="autocompleteNumber($event.target.value)" (completeMethod)="getUnits($event)" (onSelect)="unitSelection($event)" field="unit_no" [dropdown]="false" [disabled]="!formDetails?.project_id">
+                        </p-autoComplete>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-form-label"> Date
+                            <span style="color:red">*</span> : </label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="YYYY-MM-DD" #Date="bsDatepicker" bsDatepicker [bsConfig]="{ containerClass: 'theme-dark-blue',showTodayButton: true, todayPosition: 'center',showClearButton: true, clearPosition: 'right',isAnimated: true,adaptivePosition: true,dateInputFormat: 'YYYY-MM-DD',  returnFocusToInput: true }"
+                                [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.date">
+                            <span class=" input-group-prepend" (click)="Date.toggle()" [attr.aria-expanded]="Date.isOpen">
+                                <span class="input-group-text">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-form-label"> Start Time
+                            <span style="color:red">*</span>:</label>
+                        <timepicker [showMeridian]="true" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.start_time"></timepicker>
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-form-label"> Check list 
+                            <span style="color:red">*</span>:
+                        </label>
+                        <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.checklist_id">
+                            <option value="">Select Checklist</option>
+                            <option value="{{item._id}}" *ngFor="let item of checkListCategory">{{item.name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <form autocomplete="off" *ngIf="isNext">
+            <div class="row">
+                <!-- <div class="col-md-6 col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Location / Category 
+                            <span style="color:red">*</span>:
+                        </label>
+                        <select class="form-select" (change)="onLocationChange()" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.location">
+                            <option value="{{item.name}}" *ngFor="let item of locationList">{{item.name}}</option>
+                        </select>
+                    </div>
+                </div> -->
+                <div class="col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Suite :
+                            <b>{{formDetails?.unit_no}}</b>
+                        </label>
+
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Inspection Date :
+                            <b>{{formDetails?.date | date:'yyyy-MM-dd'}} </b>
+                        </label>
+
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Start Time :
+                            <b>{{formDetails?.start_time |date:'shortTime'}}</b>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Check list :
+                            <b>{{formDetails?.checklist_name}}</b>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- <div class="row">
+                <div class="col-md-12" *ngIf="settingsCheckList?.length > 0">
+                    <h5>
+                        Checklist Items
+                    </h5>
+                </div>
+                <div class="col-md-12" *ngIf="settingsCheckList?.length > 0">
+                    <div class="table-responsive mb-1">
+                        <table class="table table-striped list_table" style="table-layout: fixed;">
+                            <thead>
+
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of settingsCheckList;let i=index">
+                                    <td>{{item?.title}}</td>
+                                    <td style="width:150px">
+                                        <div *ngIf="item?.status" [class]="item?.status=='FAILED' ? 'text-danger' :'text-success'">
+                                            <b>{{item?.status}}</b>
+                                        </div>
+                                        <button *ngIf="!item?.status" class="btn btn-sm btn-primary mr-2" type="button" (click)="onPassAction(item)">
+                                            Pass
+                                        </button>
+                                        <button *ngIf="!item?.status" class="btn btn-sm btn-danger" type="button" (click)="openFailedModal(failedItemModal,item)">
+                                            Failed
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <p class="col-md-12 text-center" *ngIf="settingsCheckList?.length == 0">
+                    No Record found
+                </p>
+            </div> -->
+
+            <div class="row">
+                <ng-container *ngFor="let item of checkListCategory">
+                    <div class="col-md-12" *ngIf="item?._id == formDetails.checklist_id">
+                        <p>{{item?.description}}</p>
+                    </div>
+                    <ng-container *ngIf="item.categories && item?._id == formDetails.checklist_id">
+                        <div class="p-2">
+                            <div class="col-md-12 pb-2 mb-2 border border-radius" *ngFor="let category of item.categories">
+                                <div class="p-1">
+                                    <div class="header-section">
+                                        <div class="name-block">
+                                            <h5>{{category?.name}} </h5>
+                                        </div>
+                                        <div class="count-block">
+                                            <h5>
+                                                <span class='text-success mr-2'>
+                                                        Passed:{{category?.passed ? category?.passed: '0'}}
+                                                    </span>
+                                                <span class='text-danger mr-2'>
+                                                        Failed:{{category?.failed ? category?.failed: '0'}}
+                                                    </span>
+                                                <span class='text-secondary mr-2'>
+                                                        NA:{{category?.na ? category?.na: '0'}}
+                                                    </span> Total:{{category?.total ? category?.total: '0'}}
+                                            </h5>
+                                        </div>
+                                    </div>
+                                    <div class="border border-radius p-2 mb-2" *ngFor="let item of category.items">
+                                        <p class="text-center">
+                                            {{item?.value}}
+                                        </p>
+                                        <div class="text-center">
+                                            <span *ngIf="item?.status =='PASSED'" [class]="item?.status=='PASSED' ? 'text-success mr-2' :''">
+                                                <b>{{item?.status}}</b>
+                                            </span>
+                                            <button *ngIf="item?.status!='PASSED'" type="button" class="btn btn-success mr-2" (click)="onPassAction(category,item)">PASSED</button>
+                                            <span *ngIf="item?.status =='FAILED'" [class]="item?.status=='FAILED' ? 'text-danger mr-2' :''">
+                                                <b>{{item?.status}}</b>
+                                            </span>
+                                            <button *ngIf="item?.status!='FAILED'" type="button" class="btn btn-danger mr-2" (click)="onFailedAction(category,item)">FAILED</button>
+                                            <button *ngIf="item?.status!='N/A'" type="button" class="btn btn-secondary mr-2" (click)="onNAAction(category,item)">N/A</button>
+                                            <span *ngIf="item?.status =='N/A'" [class]="item?.status=='N/A' ? 'text-secondary mr-2' :''">
+                                                <b>{{item?.status}}</b>
+                                            </span>
+                                            <button type="button" class="btn btn-secondary mr-2" (click)="onAddDeficiencyAction(category,item,addDeficiencyModal)">+ DEFICIENCY</button>
+                                            <!-- <button  type="button" class="btn btn-secondary mr-2">DEFICIENCIES</button>
+                                            <button  type="button" class="btn btn-secondary mr-2">+ COMMENTS</button>
+                                            <button  type="button" class="btn btn-secondary mr-2">PHOTO</button> -->
+                                        </div>
+                                    </div>
+                                    <p *ngIf="category.items.length==0" class="text-center">No item found</p>
+                                </div>
+                            </div>
+                            <p *ngIf="item.categories.length==0" class="text-center">No category found</p>
+
+                        </div>
+                    </ng-container>
+                </ng-container>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> End Time :
+                        </label>
+                        <timepicker [showMeridian]="true" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.end_time"></timepicker>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button *ngIf="!isNext" type="button" class="btn btn-secondary" (click)="modalRef.hide()">Cancel</button>
+
+        <button *ngIf="!isNext" type="button" class="btn btn-primary" (click)="onNextAction()">Next</button>
+
+        <button *ngIf="isNext" type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Close</button>
+        <!-- <button *ngIf="isNext" type="button" class="btn btn-primary" (click)="isNext=!isNext">Back</button> -->
+        <!-- <button *ngIf="isNext && (formDetails.location != locationList[locationList.length -1]?.name)" class="btn btn-primary" type="button"
+            (click)="nextLocation()">Next Location / Category</button> -->
+        <button *ngIf="isNext" class="btn btn-primary" type="button" (click)="onCompleteAction()">Complete</button>
+
+        <!-- <button *ngIf="isNext && settingsCheckList.length>0" class="btn btn-primary" type="button" (click)="onPassAll()">Pass All</button> -->
+
+    </div>
+</ng-template>
+
+<ng-template #failedItemModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Add issues for failed </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="failedmodalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="col-form-label"> Title :
+                        <b> {{selectedItem?.title}}</b>
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="col-form-label"> Potential Issues
+                        <span style="color:red">*</span>:
+                    </label>
+                    <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedItem.potential_issue">
+                        <option value="{{item}}" *ngFor="let item of selectedItem.potential_issues">{{item}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="col-form-label"> Note :
+                    </label>
+                    <textarea class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedItem.note" name="note" id="note" cols="30" rows="10"></textarea>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary mr-2" (click)="failedmodalRef.hide()">Close</button>
+        <button *ngIf="!selectedItem?.template_id" type="button" class="btn btn-primary" (click)="onFailedAction(addDeficiencyModal)">Save</button>
+        <button *ngIf="selectedItem?.template_id" type="button" class="btn btn-primary" (click)="onPassToFailedChangeAction(addDeficiencyModal)">Save</button>
+
+    </div>
+</ng-template>
+
+<ng-template #addDeficiencyModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Add Deficiency</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="deficiencyModalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form autocomplete="off">
+            <div class="row">
+                <div class="col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Project :
+                            <span style="color:red">*</span>:
+                        </label>
+
+                        <select class="form-select" disabled [ngModelOptions]="{standalone: true}" [(ngModel)]="deficiencyData.project_id">
+                            <option value="{{item._id}}" *ngFor="let item of projectList">{{item.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Unit
+                            <span style="color:red">*</span>:
+                        </label>
+                        <select class="form-select" disabled [ngModelOptions]="{standalone: true}" [(ngModel)]="deficiencyData.unit_id">
+                            <option value="{{item._id}}" *ngFor="let item of unitList">{{item.unit_no}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Inspection Type
+                            <span style="color:red">*</span>:
+                        </label>
+                        <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="deficiencyData.inspection_type">
+                            <option value="{{item?.name}}" *ngFor="let item of inceptionTypeList">{{item?.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Location / Category
+                            <span style="color:red">*</span>:
+                        </label>
+                        <select class="form-select" disabled [ngModelOptions]="{standalone: true}" [(ngModel)]="deficiencyData.location">
+                            <option value="{{item?.name}}" *ngFor="let item of locationList">{{item?.name}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Priority
+                            <span style="color:red">*</span>:
+                        </label>
+                        <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="deficiencyData.priority">
+                            <option value="{{item?.name}}" *ngFor="let item of priorityList">{{item?.name}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Due Date
+                            <span style="color:red">*</span>:
+                        </label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" [minDate]="minDueDate" placeholder="YYYY-MM-DD" #duwDate="bsDatepicker" bsDatepicker [bsConfig]="{ containerClass: 'theme-dark-blue',showTodayButton: true, todayPosition: 'center',showClearButton: true, clearPosition: 'right',isAnimated: true,adaptivePosition: true,dateInputFormat: 'YYYY-MM-DD',  returnFocusToInput: true }"
+                                [ngModelOptions]="{standalone: true}" [(ngModel)]="deficiencyData.due_date">
+                            <span class=" input-group-prepend" (click)="duwDate.toggle()" [attr.aria-expanded]="duwDate.isOpen">
+                                <span class="input-group-text">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group autocomplete-container">
+                        <label>Tags :
+                            <!-- <span style="color:red">*</span>: -->
+                        </label>
+                        <div class="p-fluid tag-box">
+                            <p-autoComplete [ngModelOptions]="{standalone: true}" (onDropdownClick)="onDropdownClick()" [(ngModel)]="deficiencyData.tags" [suggestions]="tagListSuggestions" [multiple]="true" (onBlur)="appendNewElement($event)" (completeMethod)="filterTags($event)"
+                                field="name" [dropdown]="false">
+                            </p-autoComplete>
+                        </div>
+                        <div class="error" *ngIf="tagList.length==0">
+                            No tag available
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Type of Deficiency
+                            <span style="color:red">*</span>:
+                        </label>
+                        <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="deficiencyData.deficiency_type">
+                            <option value="">Select Type of Deficiency</option>
+                            <option value="{{item?.name}}" *ngFor="let item of typeOfDeficiencyList">{{item?.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-form-label"> Title
+                            <span style="color:red">*</span>:
+                        </label>
+                        <input id="title" class="form-control" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="deficiencyData.title">
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12">
+                    <div class="form-group">
+                        <label class="col-form-label"> Description :
+                        </label>
+                        <textarea id="description" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="deficiencyData.description" cols="30" rows="10"></textarea>
+                        <!-- <div [froalaEditor]="nonInlineEdit" [(froalaModel)]="deficiencyData.description">
+                            {{deficiencyData.description ? deficiencyData.description : ''}}
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2">
+                    Attachments :
+                </div>
+                <div class="col-md-8">
+                    <div class="drag-and-drop-box">
+                        <div class="center">
+                            <ngx-file-drop accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" dropZoneLabel="Drag & Drop files to attach" multiple (onFileDrop)="dropped($event,showImageEditor)">
+
+                            </ngx-file-drop>
+                            <!-- <div class="upload-table pt-2">
+                                <div *ngFor="let item of attachments; let i=index">
+                                    {{i+1}}. {{ item?.name }}
+                                </div>
+                            </div> -->
+                            <div class="image-strip">
+                                <ul>
+                                    <li *ngFor="let item of attachments; let i =index" [ngStyle]="{'background-image': 'url(&quot;' + item.url + '&quot;)'}" (click)="editImage(i,item,showImageEditor)">
+                                        <div class="edit-image">
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="img-close" (click)="removeImage($event,i,item)">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </div>
+
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-sm btn-primary doc-img-up-btn" type="button">Add
+                        <!-- <input class="doc-img-upload" multiple accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" type="file" (change)="addAttachment($event.target.files)"> -->
+                        <input #inputImg class="doc-img-upload" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" type="file" (change)="uploadImage($event.target,showImageEditor)">
+
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h4>Additional Information</h4>
+                </div>
+                <div class="col-md-6 col-sm-4">
+                    <div class="form-group">
+                        <input type="checkbox" id="is_private" [ngModelOptions]="{standalone: true}" [(ngModel)]="deficiencyData.is_private">
+                        <label class="col-form-label" for="is_private"> Private </label>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Schedule Impact :
+                        </label>
+                        <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="deficiencyData.schedule_impacted">
+                            <option value="{{item}}" *ngFor="let item of scheduleImpacted">{{item}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Chargeback :
+                        </label>
+                        <input type="text" class="form-control" id="charge_back" [ngModelOptions]="{standalone: true}" [(ngModel)]="deficiencyData.charge_back">
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Cost Impact :
+                        </label>
+                        <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="deficiencyData.cost_impacted">
+                            <option value="{{item}}" *ngFor="let item of costImpacted">{{item}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-4" *ngIf="deficiencyData.cost_impacted =='Yes'">
+                    <div class="form-group">
+                        <label class="col-form-label"> Cost :
+                        </label>
+                        <input type="number" min="0" class="form-control" id="cost" [ngModelOptions]="{standalone: true}" [(ngModel)]="deficiencyData.cost">
+
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Assignee (Trade):
+                        </label>
+                        <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="deficiencyData.assignee_id">
+                            <option value="">Unassigned</option>
+                            <option *ngFor="let assignee of assigneeTradeList" [value]="assignee?.user_id">{{assignee?.display_name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Approver :
+                        </label>
+                        <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="deficiencyData.approver_id">
+                            <option value="">Unassigned</option>
+                            <option *ngFor="let approver of approverList" [value]="approver?.user_id">{{approver?.display_name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label"> Cost Codes :
+                        </label>
+                        <input class="form-control" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="deficiencyData.cost_codes">
+
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="deficiencyModalRef.hide()">Close</button>
+        <button type="button" class="btn btn-primary" (click)="addDeficiency()">Save</button>
+        <!-- <button type="button" class="btn btn-primary">Save & Add New</button> -->
+
+    </div>
+</ng-template>
+
+<div class="div_bx_hidd" #inspectionSlider id="activitySlider">
+    <div class="card border-primary box_side_card">
+        <div class="card-header">
+            <div class="hddr_smmd">
+                <div class="col-md-10" style="float: left;text-align: left;">
+                    <h5 style="padding-left:10px;padding-top: 5px;">Checklist Inspection</h5>
+                </div>
+                <div class="col-md-2" style="float: right;text-align: right;">
+                    <button class="btn btn-md btn_right pro_settng" (click)="toggleInspectionSlider($event)" data-toggle="tooltip" data-placement="auto" title="Close">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                        <span class="tl_tp">Close</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body p-3 pb-2" style="overflow-y: auto;">
+            <div class="row mb-2">
+                <div class="col-md-6">
+                    <b> {{inspectionData?.project_name}}</b>
+                </div>
+                <div class="col-md-6">
+                    <b> Suite/Lot:{{inspectionData?.unit_no}}</b>
+                </div>
+                <div class="col-md-12">
+                    <p class="mb-0"> Inspection Date: {{inspectionData?.date |date:'yyyy-MM-dd'}}</p>
+                    <p class="mb-0"> Start Time : {{inspectionData?.start_time}} </p>
+                    <p class="mb-0"> End Time : {{inspectionData?.end_time}}</p>
+                </div>
+                <div class="col-md-12">
+                    <div class="help-block small">
+                        Help<br>
+                        <p class="mb-0">*Click on the checklist item to find issues associated </p>
+                        <p class="mb-0">*Click on the PASSED/FAILED to change status</p>
+                    </div>
+                </div>
+                <div clas='col-md-12 pt-1'>
+                    <h5>Checklist : {{inspectionData?.checklist_name}}</h5>
+                </div>
+            </div>
+
+            <ng-container *ngFor="let item of inspectionDetails; let i=index">
+                <div class="row">
+
+                    <div clas='col-md-12'>
+                        <h5>Category : {{item?.category}}</h5>
+                    </div>
+                </div>
+                <div class="inner-crad">
+                    <div class="table-responsive ">
+                        <table class="table table-striped list_table mb-0" style="table-layout: fixed;">
+                            <thead></thead>
+                            <tbody style="border-top: 0;">
+                                <ng-container *ngIf="item?.inspections.length > 0">
+                                    <ng-container *ngFor="let inspection of item?.inspections;let i=index">
+                                        <tr *ngIf="inspection?.status">
+                                            <td colspan="3" class="text-left">
+                                                <div>{{inspection?.item_name}}</div>
+                                                <!-- <div *ngIf="inspection?.status=='FAILED'"><small>{{inspection?.potential_issue}}</small></div>
+                                            <div><small>{{inspection?.notes}}</small></div> -->
+                                            </td>
+                                            <td colspan="1" class="text-right">
+                                                <div (click)="changeToFail($event,inspection)" *ngIf="inspection?.status=='PASSED'" class="passed">
+                                                    <b>{{inspection?.status}}</b></div>
+                                                <div (click)="changeToPass($event,inspection)" *ngIf="inspection?.status=='FAILED'" class="failed">
+                                                    <b>{{inspection?.status}}</b>
+                                                </div>
+                                                <div *ngIf="inspection?.status=='N/A'" class="text-secondary">
+                                                    <b>{{inspection?.status}}</b>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </ng-container>
+
+                                </ng-container>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>
+
+<ng-template #showImageEditor>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Image Editor</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="imageCanvasRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div id="canvas-area"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="imageCanvasRef.hide()">
+            Close
+        </button>
+        <button type="button" class="btn btn-primary" (click)="saveCanvas()">
+            {{isEditImage?'Update':'Add'}}
+        </button>
+    </div>
+
+</ng-template>

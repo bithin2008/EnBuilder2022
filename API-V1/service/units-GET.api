@@ -1,0 +1,180 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_units' %>
+
+
+<% assign pageSize = 20 %> 
+<% if en.params.pageSize %>
+    <% assign pageSize = en.params.pageSize %>
+<% endif %>
+<% assign page = 1 %>
+<% if en.params.page %> 
+    <% assign page = en.params.page %>
+<% endif %> 
+<% assign skip = page | minus:1 | multiply: pageSize %>
+
+<% if en.params.sortBy %>
+    <% if en.params.sortOrder =='ASC' %>
+        <% assign orderBy[en.params.sortBy] = 1 %>
+    <% else %>
+        <% assign orderBy[en.params.sortBy] = -1 %>
+    <% endif %>
+<% else %>
+    <% assign orderBy.unit_no = 1 %>
+<% endif %>
+<% if en.params.searchText %>
+    <% assign Name.unit_no.$regex = en.params.searchText %> 
+    <% assign Name.unit_no.$options = "i" %>
+    <% assign query.$or = [Name] %>
+<% endif %>
+<% if en.params.project_id %>
+    <% assign query.project_id = en.params.project_id %> 
+<% endif %>
+<% if en.params.model_id %>
+    <% assign query.model_id.$in = en.params.model_id | split:"," %>  
+<% endif %>
+<% if en.params.status %>
+    <% assign query.status = en.params.status %> 
+<% endif %>
+<% if en.params.building_type %>
+    <% assign query.building_type = en.params.building_type %> 
+<% endif %>
+<% if en.params.floor %>
+    <% assign query.floor_legal = en.params.floor %>
+<% endif %>
+<% if en.params.bed %>
+    <% assign query.bed.$in = en.params.bed | splittoint:"," %> 
+<% endif %>
+<% if en.params.den %>
+    <% assign query.den.$in = en.params.den | splittoint:"," %>
+<% endif %>  
+
+<% en.data.find results datasetId query "_id" orderBy pageSize page %>
+<% assign returnData.status = 1 %>
+<% assign returnData.message = 'Unit list' %>
+<% assign returnData.pagination = results.pagination %>
+
+<% json cquery1 %>
+{
+    "queries":[
+        {
+            "$match":{}
+        },
+        {
+            $skip:<<skip>>
+        },
+        {
+            $limit:<<pageSize>>
+        },
+        {
+            "$project":{
+                _id:1,
+                builder_id:1,
+                builder_name:1,
+                project_id:1,
+                project_name:1,
+                unit_no:1,
+                status:1,
+                model_name:1,
+                model_id:1,
+                deal_id:1
+            }
+        },
+        {
+            "$lookup":{
+                from: "bldr_deals",
+                as: "deal",
+                let: { 
+                    deal_id: "$deal_id"
+                },
+                pipeline:[
+                    { 
+                        $match : { 
+                            $expr : {
+                                $and : [
+                                    { $eq : [ '$_id', '$$deal_id' ] }
+                                ]
+                            }
+                            
+                        } 
+                    },
+                    { 
+                        $project : {
+                            stage: 1,
+                            purchasers:1
+                        } 
+                    }
+                ]
+            }
+        },
+        {
+            $replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: [ "$deal", 0 ] }, "$$ROOT" ] } } 
+        },
+        {   $project: { deal: 0 } },
+        {
+            "$lookup":{
+                from: "bldr_occupancy",
+                as: "occupancy",
+                let: { 
+                    unit_id: "$_id"
+                },
+                pipeline:[
+                    { 
+                        $match : { 
+                            $expr : {
+                                $and : [
+                                    { $eq : [ '$unit_id', '$$unit_id' ] }
+                                ]
+                            } 
+                            
+                        } 
+                    },
+                    { 
+                        $project : {
+                            builder_id: 0,
+                            builder_name:0,
+                            deal_id:0,
+                            model_id:0,
+                            model_name:0,
+                            project_id:0,
+                            project_name:0,
+                            unit_id:0,
+                            unit_no:0,
+                            _id:0,
+                            _created:0,
+                            _created_:0,
+                            _updated:0,
+                            _updated_:0,
+                            _createdBy:0,
+                            _updatedBy:0,
+                            _t:0
+                        } 
+                    }
+                ]
+            }
+        },
+        {
+            $replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: [ "$occupancy", 0 ] }, "$$ROOT" ] } } 
+        },
+        {   $project: { occupancy: 0 } },
+    ]
+} 
+<% endjson %>
+<% if query %>
+    <% assign cquery1.queries[0].$match = query %>
+<% endif %>
+<% rem return 'query' cquery1.queries %>
+<% en.data.aggregate result1 datasetId cquery1.queries %> 
+
+<% assign returnData.results = result1.rows %>
+<% return returnData %>
+
+
+
+
+

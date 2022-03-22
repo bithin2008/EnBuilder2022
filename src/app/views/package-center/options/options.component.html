@@ -1,0 +1,17 @@
+<div class="row">
+    <div class="col-md-12">
+        <ngb-tabset class="inner-tabset" (tabChange)="doTabFunctions($event)" [activeId]="defaultActiveTab">
+            <ngb-tab id="categoriesTab" title="Categories">
+                <ng-template ngbTabContent>
+                    <app-categories [events]="eventsSubject.asObservable()"></app-categories>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab id="optionsTab" title="Options">
+                <ng-template ngbTabContent>
+                    <app-options-list [events]="eventsSubject.asObservable()"></app-options-list>
+                </ng-template>
+            </ngb-tab>
+        </ngb-tabset>
+
+    </div>
+</div>

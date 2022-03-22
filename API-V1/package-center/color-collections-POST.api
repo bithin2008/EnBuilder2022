@@ -1,0 +1,49 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_color_collections' %>
+
+<% if en.params._id %>
+    <% if en.params.update_type == 'hero_image' %>
+        <% assign query._id = en.params._id %>
+        <% en.data.findOne result datasetId query %>
+        <% if en.req.hasFile %>
+            <% assign rowId = en.params._id %>
+            <% if result.row.hero_image %>
+                <% assign imageObj = result.row.hero_image %>
+                <% en.data.deleteFile imageDeleteResult datasetId 'hero_image' rowId imageObj._id  %>
+            <% endif %>
+            <% en.data.attachfile imgresult datasetId 'hero_image' rowId false %> 
+            <% assign returnData.result = imgresult %>
+        <% else %>
+            <% assign returnData.result = result %>
+        <% endif %>
+        <% assign returnData.status = 1 %>
+        <% assign returnData.message = 'Color collections hero image successfully.' %>
+        <% return returnData %>
+    
+    <% else %>
+        <% assign query._id = en.params._id %>
+        <% en.data.update upResult datasetId query en.params %>
+        
+        <% assign returnData.status = 1 %> 
+        <% assign returnData.message = 'Color collection updated successfully.' %>
+        <% assign returnData.result = upResult %>
+        <% return returnData %>
+    <% endif %>
+<% else %>
+    <% assign params = en.params %>
+    <% en.data.insert result datasetId params %>
+    <% assign returnData.result = result.row %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Color collection added successfully.' %>
+    <% return returnData %>
+<% endif %>
+
+
+
+

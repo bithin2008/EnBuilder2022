@@ -1,0 +1,89 @@
+
+//bldr_layout_customizations 
+//old_layout_personalization
+//old_units
+
+<% assign projectQ._id = en.params.project_id %>
+<% en.data.findOne projectResult "bldr_projects" projectQ %>
+<% assign proectDetails = projectResult.row %>
+
+<% assign queryArray = [] %> 
+<% en.data.find results "old_layout_personalization" query "" sortBy 1000 1 %> 
+<% rem return 'results' results %>
+<% for personalization in results.rows %>
+    <% if personalization.notes %>
+        <% for notes in personalization.notes %>
+            <% assign dataToInsert.project_id = en.params.project_id %>
+            <% assign dataToInsert.project_name = proectDetails.name %> 
+            
+            //for getting unit no from old units dataset
+            <% unassign uquery %>
+            <% assign uquery._id =  personalization.unitId %>
+            <% en.data.findOne oldUnitDetails "old_units" uquery "" %>
+            <% assign oldUnitDetails = oldUnitDetails.row %>
+            
+            // for getting unit id from bldr_units dataset using old unit no 
+            <% unassign nuquery %>
+            <% assign nuquery.project_id = en.params.project_id %>
+            <% assign nuquery.unit_no = oldUnitDetails.suiteNo | to_string %>
+            <% en.data.findOne unitDetails "bldr_units" nuquery "" %>
+            <% assign unitDetails =unitDetails.row %>
+            
+            <% assign dataToInsert.unit_id = unitDetails._id %>
+            <% assign dataToInsert.unit_no = unitDetails.unit_no %>
+            <% assign dataToInsert.unit_no = unitDetails.unit_no %>
+            <% assign dataToInsert.model_id = unitDetails.model_id %>
+            <% assign dataToInsert.model_name = unitDetails.model_name %>
+            <% assign dataToInsert.layout_index = 0 %>
+            <% assign dataToInsert.posX = notes.circles[0].posX %>
+            <% assign dataToInsert.posY = notes.circles[0].posY %>
+            <% assign dataToInsert.message = notes.noteObj.noteTitle | append:'. ' | append: notes.noteObj.noteDescription %>
+            <% assign dataToInsert.author_name = notes.createdBy[0]  %>
+            <% assign dataToInsert.author_id = '' %>
+            <% assign dataToInsert.author_email = notes.userEmail[0] %>
+            <% assign dataToInsert.created_at = notes.createdTime | string_to_date  %>
+            <% assign dataToInsert.replies = [] %>
+            <% if notes.reply %>
+                <% assign dataToInsert.price = notes.reply[0].price %>
+                <% assign dataToInsert.cost = notes.reply[0].cost %>
+                <% assign dataToInsert.status = notes.reply[0].status %>
+                
+                <% assign dataToInsert.locations = notes.reply[0].location | splittrim:","  %> 
+                <% assign dataToInsert.construction_locations = notes.reply[0].location | splittrim:"," %>
+                <% assign dataToInsert.trades = notes.reply[0].category | splittrim:"," %>
+                <% assign dataToInsert.model_numbers = notes.reply[0].modelNumber | splittrim:"," %>
+                
+                <% assign dataToInsert.construction_notes = notes.reply[0].constructionNotes %> 
+                
+                <% unassign replyObj %> 
+                <% assign replyObj.message = notes.reply[0].message %>
+                <% assign replyObj.author_name = notes.reply[0].replyedBy %>
+                <% assign replyObj.author_id =  '' %>
+                <% assign replyObj.created_at = notes.reply[0].replyedAt | string_to_date %>
+                <% en.arrayUtils.add dataToInsert.replies replyObj %>
+            <% endif %>
+            
+            <% en.data.insert insertResult "bldr_layout_customizations" dataToInsert %>
+            <% unassign dataToInsert %>
+            
+        <% endfor %>
+    <% endif %>
+<% endfor %>
+
+<% return 'message' 'import done' %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

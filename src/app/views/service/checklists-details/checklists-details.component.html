@@ -1,0 +1,239 @@
+<div class="animated fadeIn">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="const_hd">
+                    <button class="btn btn-primary btn-sm mr-2" (click)="goToCheckList()">
+                        <i class="fa fa-arrow-left" aria-hidden="true"></i> &nbsp; Back
+                    </button>{{checkListDetailsObj?.name}}
+                    <!-- <button style="float: right;" class="btn btn-danger mt-2" type="button" (click)="deleteBuilder()">
+                        <i class="fa fa-trash" style="font-size:12px;float: right;"></i>
+                    </button> -->
+                    
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div style="float: right;">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" disabled [ngModelOptions]="{standalone: true}" class="custom-control-input" id="enabled1" [(ngModel)]="checkListDetailsObj.enabled">
+                                        <label style="font-size: large;vertical-align: top;"
+                                        class="custom-control-label" for="enabled1">Enabled</label>
+                                    </div>    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-10">
+                                <p>{{checkListDetailsObj?.description}}</p>
+                            </div>
+                            <div class="col-md-2">
+                                <button style="float: right;"  class="btn btn-sm btn-danger mr-2" type="button" (click)="deleteCheckItem()">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </button>
+
+                                <button style="float: right;" type="button" class="btn btn-primary mr-2" (click)="openEditChecklist(addChecklistModal)">
+                                    <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">
+                            <div class="col-md-12">
+                                <!-- <button style="float: right;" class="btn btn-primary mt-2" type="button" (click)="addCategory(addCategoryModal)"> -->
+                                <button style="float: right;" class="btn btn-primary mt-2" type="button" (click)="addCategory()">
+                                    Add Category
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="row pt-3">
+                            <div class="col-md-12">
+                                <form autocomplete="off">
+                                    <div class="card" *ngFor="let category of categoryList;let j=index">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    Category / Location / Group: 
+                                                </div>     
+                                                <div class="col-md-8">
+                                                     <input class="form-control" (focusout)="onCategoryChange(j,category)" name="name" placeholder="name" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="category.name">
+                                                </div>  
+                                                <div class="col-md-2 text-right">
+                                                    <button class="btn btn-primary btn-sm mr-2" type="button" [disabled]="j==0" (click)="reArrangeCategoryStep('up',j)">
+                                                        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                                                    </button>
+                                                    <button class="btn btn-primary btn-sm mr-2" type="button" [disabled]="(j+1)==categoryList.length" (click)="reArrangeCategoryStep('down',j)">
+                                                        <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                                                    </button>
+                            
+                                                    <button style="float: right;" class="btn btn-sm btn-danger mr-2" type="button" (click)="deleteChecklistItem(category,j)">
+                                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                                    </button>
+                                                </div>                                      
+                                            </div>
+                                            <br>
+                                            <label for="">
+                                                Check items :
+                                            </label>
+                                            <div class="inner-crad">
+                                                <table class="table table-striped list_table mb-0" style="table-layout: fixed;">
+                                                    <thead></thead>
+                                                    <tbody style="border-top: 0;">
+                                                        <ng-container *ngIf="category?.items.length > 0">
+                                                            <tr *ngFor="let issue of category?.items;let i=index">
+
+                                                                <td colspan="10" class="text-left">
+                                                                    <input class="form-control" (focusout)="onCategoryItemChange($event.target.value,j,i)" (keyup)="IssueInputChanged($event.target.value,j,i)"   name="type" placeholder="type" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="issue.value">
+                                                                </td>
+                                                                <td colspan="2" class="text-center">
+                                                                    <button class="btn btn-primary btn-sm mr-2" *ngIf="category?.items.length !=(i+1)" type="button" [disabled]="i==0" (click)="reArrangeCategoryItemStep('up',j,i)">
+                                                                        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                                                                    </button>
+                                                                    <button class="btn btn-primary btn-sm mr-2"  *ngIf="category?.items.length !=(i+1)" type="button" [disabled]="(i+1)==(category?.items.length-1)" (click)="reArrangeCategoryItemStep('down',j,i)">
+                                                                        <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                                                                    </button>
+                
+                                                                    <button class="btn btn-danger btn-sm mr-2" type="button"  *ngIf="issue?.value || category?.items.length !=(i+1) " (click)="removeIssue(i,j)" >
+                                                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                        </ng-container>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<ng-template #addCategoryModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">{{isEdit ?'Edit' :'Add'}} a Checklist item
+        </h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <form autocomplete="off">
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <div class="form-group">
+                        <label class="col-form-label"> Project :
+                            <b>{{checkListDetailsObj?.project_name}}</b>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12">
+                    <div class="form-group">
+                        <label class="col-form-label">Name
+                            <span style="color:red">*</span>:</label>
+                        <input class="form-control" name="name" placeholder="name" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.name">
+                    </div>
+                </div>
+
+                <div class="col-md-12 col-sm-12">
+                    <div class="form-group">
+                        <label class="col-form-label"> Checklist Item :
+                        </label>
+                        <input class="form-control" name="type" placeholder="type" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.type">
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" *ngIf="!isEdit">Add</button>
+            <button type="button" class="btn btn-primary" *ngIf="isEdit" (click)="updateChecklist()">Update</button>
+
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #addChecklistModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">{{isEdit ?'Edit' :'Add'}} a Checklist
+        </h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <form autocomplete="off">
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <div class="form-group">
+                        <label class="col-form-label"> Project :
+                            <b>{{formDetails?.project_name}}</b>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12">
+                    <div class="form-group">
+                        <label class="col-form-label">Name
+                            <span style="color:red">*</span>:</label>
+                        <input class="form-control" name="name" placeholder="name" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.name">
+                    </div>
+                </div>
+
+                <div class="col-md-12 col-sm-12">
+                    <div class="form-group">
+                        <label class="col-form-label"> Description :
+                        </label>
+                    </div>                    
+                    <textarea class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.description" name="description" id="description"
+                    cols="30" rows="10"></textarea>
+                </div>
+
+                <div class="col-md-12 col-sm-12">
+                    <div class="form-group">
+                        <label class="col-form-label"> Type :
+                        </label>
+                        <input class="form-control" name="type" placeholder="type" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.type">
+                    </div>
+                </div>
+
+                <div class="col-md-12 col-sm-12">
+                    <!-- <div class="form-group">
+                        <input type="checkbox" id="enabled" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.enabled">
+                        <label class="col-form-label" for="enabled"> Enabled </label>
+                    </div> -->
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox"  [ngModelOptions]="{standalone: true}" class="custom-control-input" id="enabled" [(ngModel)]="formDetails.enabled">
+                        <label class="custom-control-label" for="enabled">Enabled</label>
+                    </div>
+                </div>
+               
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" *ngIf="!isEdit" (click)="addCheklist()">Add</button>
+            <button type="button" class="btn btn-primary" *ngIf="isEdit" (click)="updateChecklist()">Update</button>
+
+        </div>
+    </div>
+</ng-template>

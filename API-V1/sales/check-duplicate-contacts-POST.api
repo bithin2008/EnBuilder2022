@@ -1,0 +1,27 @@
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% if en.params.unique_field == 'email' %>
+    <% assign query.emails.$elemMatch.email.$in = en.params.records  %>
+<% endif %>
+<% if en.params.unique_field == 'display_name' %>
+    <% assign query.display_name.$in = en.params.records  %>
+<% endif %>
+
+<% en.data.find results "contacts" query "emails,display_name" orderBy %>
+<% if results.rows %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = "Contact already exist " %>
+    <% assign returnData.exist = true %>
+    <% assign returnData.results = results.rows %>
+    <% return returnData %>
+    <% exit %>
+<% else %> 
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = "Contact not exist " %>
+    <% assign returnData.exist = false %>
+    <% return returnData %> 
+<% endif %>  

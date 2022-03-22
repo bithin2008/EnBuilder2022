@@ -1,0 +1,8 @@
+{
+    "/api/*": {
+        "target": "https://buildcrmdev.apps.deeccus.com/apps/builder",
+        "secure": true,
+        "logLevel": "debug",
+        "changeOrigin": true
+    }
+}

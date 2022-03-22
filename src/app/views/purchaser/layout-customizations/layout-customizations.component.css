@@ -1,0 +1,21 @@
+/* .layout .p-autocomplete {
+    display: block !important;
+    position: relative;
+}
+
+.layout .p-inputtext {
+    width: 100% !important;
+    margin-top: 8px !important;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    padding-top: 0 !important;
+    background: transparent;
+} */
+::ng-deep .layout .p-autocomplete {
+    width: 100%;
+    height: 35px;
+} 
+
+::ng-deep .layout .p-autocomplete input{
+    width: inherit;
+}

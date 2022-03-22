@@ -1,0 +1,29 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+
+<% assign datasetId = 'bldr_deficiencies' %>
+<% assign rowid = en.params.deficiency_id %>
+<% assign attachmentId = en.params.photo_id %>
+<% assign fieldId = 'attachments' %>
+<% if rowid %>
+    <% en.data.deletefile results datasetId fieldId rowid attachmentId %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Photo deleted successfully.' %>
+    <% assign returnData.result = results %>
+    <% return returnData %>
+<% else %>
+    <% assign returnData.status = 0 %>
+    <% assign returnData.message = 'Photo id not found.' %>
+    <% assign returnData.result = null %>
+    <% return returnData %> 
+<% endif %>
+
+
+
+
+

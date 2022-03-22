@@ -1,0 +1,257 @@
+<!-- <div class="contact-modal"> -->
+<div class="modal-header">
+    <h4 class="modal-title pull-left">Add Contact</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="activeModal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body" style="position:relative;">
+    <div class="container-fluid">
+        <form autocomplete="off">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Contact Type:
+                            <!-- <span style="color:red">*</span>: -->
+                        </label>
+                        <div class="col-md-12">
+                            <span class="p-fluid">
+                                <p-autoComplete [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.contact_type" [suggestions]="contactTypeSuggestions"
+                                    (completeMethod)="filterContactTypes($event)" field="name" [multiple]="true" [dropdown]="true">
+                                </p-autoComplete>
+                            </span>
+                            <!-- <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.contact_type"> 
+                                            <option value="" >Select contact type</option>
+                                            <option value="{{item.value}}" *ngFor="let item of contactTypes">{{item.value}}</option>
+                                        </select> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Prefix:</label>
+                        <div class="col-sm-12">
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.prefix" class="form-control" placeholder="" (keyup)="populateDisplayName()">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Last Name
+                            <!-- <span style="color:red">*</span> -->
+                            :</label>
+                        <div class="col-sm-12">
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.last_name" class="form-control" placeholder="" (keyup)="populateDisplayName()">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Middle Name:</label>
+                        <div class="col-sm-12">
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.middle_name" class="form-control" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">First Name
+                            <!-- <span *ngIf="formDetails.contact_type == 'Individual'" style="color:red">*</span>:</label> -->
+                        <!-- <span style="color:red">*</span> -->
+                        :</label>
+                        <div class="col-sm-12">
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.first_name" class="form-control" placeholder="" (keyup)="populateDisplayName()">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Suffix:</label>
+                        <div class="col-sm-12">
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.suffix" class="form-control" placeholder="" (keyup)="populateDisplayName()">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Display Name
+                            <span style="color:red">*</span>:</label>
+                        <div class="col-sm-12">
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.display_name" class="form-control" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Salutation:</label>
+                        <div class="col-sm-12">
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.salutation" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Family Salutation:</label>
+                        <div class="col-sm-12">
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.family_salutation" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Home Phone:</label>
+                        <div class="col-sm-12">
+                            <form #f="ngForm" [formGroup]="homePhone">
+                                <ngx-intl-tel-input [cssClass]="'custom'" [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true" [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]" [selectFirstCountry]="false"
+                                    [selectedCountryISO]="CountryISO.Canada" [maxLength]="15" [phoneValidation]="true" [separateDialCode]="separateDialCode" name="phone" id="phone" formControlName="home_phone">
+                                </ngx-intl-tel-input>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- <form #f="ngForm" [formGroup]="phoneForm"> -->
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Mobile Phone:</label>
+                        <div class="col-sm-12">
+                            <form #f="ngForm" [formGroup]="mobilePhone">
+                                <ngx-intl-tel-input [cssClass]="'custom'" [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true" [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]" [selectFirstCountry]="false"
+                                    [selectedCountryISO]="CountryISO.Canada" [maxLength]="15" [phoneValidation]="true" [separateDialCode]="separateDialCode" name="mphone" id="mphone" formControlName="mobile_phone">
+                                </ngx-intl-tel-input>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- </form> -->
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Work Phone:</label>
+                        <div class="col-sm-12">
+                            <form #f="ngForm" [formGroup]="workPhone">
+                                <ngx-intl-tel-input [cssClass]="'custom'" [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true" [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]" [selectFirstCountry]="false"
+                                    [selectedCountryISO]="CountryISO.Canada" [maxLength]="15" [phoneValidation]="true" [separateDialCode]="separateDialCode" name="wphone" id="wphone" formControlName="work_phone">
+                                </ngx-intl-tel-input>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Personal Email:
+                            <!-- <span style="color:red">*</span>: -->
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="email" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.personal_email" class="form-control" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Work Email:</label>
+                        <div class="col-sm-12">
+                            <input type="email" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.work_email" class="form-control" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Street1:</label>
+                        <div class="col-sm-12">
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.street1" class="form-control" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Street2:</label>
+                        <div class="col-sm-12">
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.street2" class="form-control" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Street3:</label>
+                        <div class="col-sm-12">
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.street3" class="form-control" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">City:</label>
+                        <div class="col-sm-12">
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.city" class="form-control" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">ZIP/Postal Code:</label>
+                        <div class="col-sm-12">
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.zip" class="form-control" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Region:
+                        </label>
+                        <div class="col-sm-12">
+                            <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.geography.region" (change)="getCountries(formDetails.geography.region)">
+                                <option value="">Select</option>
+                                <option value="{{item.name}}" *ngFor="let item of regions">{{item.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div> -->
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Country:
+                            <!-- <span style="color:red">*</span>: -->
+                        </label>
+                        <div class="col-sm-12">
+                            <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.geography.country" (change)="getStates(formDetails.geography.country)">
+                                <option value="">Select</option>
+                                <option value="{{item.name}}" *ngFor="let item of countries">{{item.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">State/Province:
+                            <!-- <span style="color:red">*</span>: -->
+                        </label>
+                        <div class="col-sm-12">
+                            <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.geography.state" *ngIf="states.length > 0">
+                                <option value="">Select</option>
+                                <option value="{{item.name}}" *ngFor="let item of states">{{item.name}}</option>
+                            </select>
+                            <input type="text" placeholder="Type State" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.geography.state" class="form-control" *ngIf="states.length == 0">
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Territory:
+                        </label>
+                        <div class="col-sm-12">
+                            <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.territory">
+                                <option value="">Select</option>
+                                <option value="{{item.name}}" *ngFor="let item of territories">{{item.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="col-md-12 text-right">
+        <button type="button" class="btn btn-secondary mr-2" (click)="activeModal.dismiss()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="addContact()">Add</button>
+    </div>
+</div>
+<!-- </div> -->

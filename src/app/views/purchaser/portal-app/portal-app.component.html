@@ -1,0 +1,1576 @@
+<div class="project-details">
+    <div class="card">
+        <div class="row mt-2 ml-2">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label> Font :</label>
+                    <select class="form-select" (change)="onFontChange($event.target.value)" [(ngModel)]="themeData.font_family">
+                        <!-- <option value="">Select Font</option> -->
+                        <option *ngFor="let item of fontList" value={{item}}>{{item}}</option>
+                    </select>
+                </div>
+            </div>
+            <!-- <div class="col-md-4">
+                        <div class="form-group">
+                            <label> Theme Color : </label>
+                            <select class="form-select" (change)="onThemeColorChange($event.target.value)" [(ngModel)]="theme_color">
+                                <option value="">Select Theme color</option>
+                       _         <option *ngFor="let item of themeColorList" value={{item.name}}>{{item.name}}</option>
+                            </select>
+                        </div>
+                    </div> -->
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Color :</label>
+                    <div #colorTab class="dropdown-title-container select-icon" (click)="toggleColorDropDown()">
+                        <div class="dropdown-title">
+                            <div class="selected-item">
+                                <!-- ngif :selected color -->
+                                <span [class]="'theme-color '" [ngStyle]="{'background-color':themeData?.color_code}" [hidden]="!themeData?.color_code">
+                                </span>
+                                <div [class]="themeData?.color_code ? 'item-name title-text' : 'title-text input-placeholder'">
+                                    <span>{{themeData?.color_code? themeData?.color_code : 'Select Color'}}</span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dropdown-content" *ngIf="openColorDD && Colors.length>0">
+                        <div class="dropdown-list">
+                            <ul class="dropdown-item">
+                                <li class="item" *ngFor="let color of Colors; let j=index" (click)="selectColor(color)">
+                                    <span class="action">
+                                        <label [ngStyle]="{'background-color':color?.code}" [class]="'item-color'"></label>
+                                    </span>
+                                    <div class="item-name">
+                                        <span>{{color?.code}}</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <!-- header logo  image -->
+        <div class="col-md-4 mb-4 padding-right-2">
+            <h5> Header Logo </h5>
+            <div class="card">
+                <div class="card-body text-center" style="height: 300px;">
+                    <div class="thumb-img" *ngIf="headerLogoData?.image" [ngStyle]="{'background-image': 'url(&quot;'+ baseUrl+ headerLogoData.image.url +'/400&quot;)'}">
+                        <button type="button" class="btn btn-sm btn-primary logo-upload-btn">
+                            <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                            <input type="file" accept="image/*" (change)="uploadLogo($event.target.files , 'PURCHASER_PORTAL_HEADER_LOGO' ,headerLogoData)">
+                        </button>
+                    </div>
+                    <div class="thumb-img" *ngIf="!headerLogoData?.image" [ngStyle]="{'background-image': 'url(&quot;assets/img/no-image.jpg&quot;)'}">
+                        <button type="button" class="btn btn-sm btn-primary logo-upload-btn">
+                            <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                            <input type="file" accept="image/*" (change)="uploadLogo($event.target.files , 'PURCHASER_PORTAL_HEADER_LOGO' ,headerLogoData)">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--  home logo image -->
+        <div class="col-md-4 mb-4 padding-left-1 padding-right-2">
+            <h5> Home Page Logo </h5>
+            <div class="card">
+                <div class="card-body text-center" style="height: 300px;">
+                    <div class="thumb-img" *ngIf="homeLogoData?.image" [ngStyle]="{'background-image': 'url(&quot;'+ baseUrl+ homeLogoData.image.url +'/400&quot;)'}">
+                        <button type="button" class="btn btn-sm btn-primary logo-upload-btn">
+                            <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                            <input type="file" accept="image/*" (change)="uploadLogo($event.target.files , 'PURCHASER_PORTAL_HOME_LOGO' ,homeLogoData)">
+                        </button>
+                    </div>
+                    <div class="thumb-img" *ngIf="!homeLogoData?.image" [ngStyle]="{'background-image': 'url(&quot;assets/img/no-image.jpg&quot;)'}">
+                        <button type="button" class="btn btn-sm btn-primary logo-upload-btn">
+                            <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                            <input type="file" accept="image/*" (change)="uploadLogo($event.target.files , 'PURCHASER_PORTAL_HOME_LOGO' ,homeLogoData)">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- hero image -->
+        <div class="col-md-4 mb-4 padding-left-1">
+            <h5> Home Page Hero Image </h5>
+            <div class="card">
+                <div class="card-body text-center" style="height: 300px;">
+                    <div class="thumb-img" *ngIf="heroImageLogoData?.image" [ngStyle]="{'background-image': 'url(&quot;'+ baseUrl+ heroImageLogoData.image.url +'/400&quot;)'}">
+                        <button type="button" class="btn btn-sm btn-primary logo-upload-btn">
+                            <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                            <input type="file" accept="image/*" (change)="uploadLogo($event.target.files , 'PURCHASER_PORTAL_HERO_IMAGE' ,heroImageLogoData)">
+                        </button>
+                    </div>
+                    <div class="thumb-img" *ngIf="!heroImageLogoData?.image" [ngStyle]="{'background-image': 'url(&quot;assets/img/no-image.jpg&quot;)'}">
+                        <button type="button" class="btn btn-sm btn-primary logo-upload-btn">
+                            <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                            <input type="file" accept="image/*" (change)="uploadLogo($event.target.files , 'PURCHASER_PORTAL_HERO_IMAGE' ,heroImageLogoData)">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Intro Screen Settings -->
+    <div class="mt-2">
+        <h5> Intro Screen Settings
+            <button type="button" (click)="openSettingsModal(settingsModal)" style="float:right" class="btn btn-md btn-primary">
+                <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+            </button>
+        </h5>
+        <div class="row pt-1">
+            <div class="col-md-4 padding-right-2">
+                <div class="card">
+                    <div class="card-body text-center" style="height: 300px;">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4> Banner Image </h4>
+                                <div class="thumb-img" *ngIf="introScreenDetails?.layout" [ngStyle]="{'background-image': 'url(&quot;'+ introScreenDetails.layout +'/400&quot;)'}">
+                                </div>
+                                <div class="thumb-img" *ngIf="!introScreenDetails?.layout" [ngStyle]="{'background-image': 'url(&quot;assets/img/no-image.jpg&quot;)'}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 pl-1">
+                <div class="card">
+                    <div class="card-body" style="height: 300px;">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>Extra Information </h4>
+                                <dl class="row">
+                                    <dd class="col-md-2">Title</dd>
+                                    <dd class="col-md-10">: {{introScreenDetails?.title}}</dd>
+                                    <dd class="col-md-2">Body</dd>
+                                    <dd class="col-md-10">
+                                        <span>:</span>
+                                        <div style="display: inline-block;" [innerHtml]="introScreenDetails.body ? introScreenDetails?.body :' '"></div>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+      <!-- Purchaser Portal Help Text -->
+      <div class="mt-2">
+        <h5> Purchaser Portal Help Text
+            <button type="button" (click)="openPurchaserHelpTextModal(purchserHelpTextModal)" style="float:right" class="btn btn-md btn-primary">
+                <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+            </button>
+        </h5>
+        <div class="row pt-1">
+            <div class="col-md-12 pl-1">
+                <div class="card">
+                    <div class="card-body" style="height: 300px;">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div style="display: inline-block;" [innerHtml]="purchaserHelpTextDetails.value ? purchaserHelpTextDetails?.value :' '"></div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Unit Display Attribute -->
+    <div class="mt-2">
+        <h5> Unit Display Attribute
+            <button type="button" (click)="openUnitAttributeEdit(editUnitAttributes)" style="float:right" class="btn btn-md btn-primary">
+                <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+            </button>
+        </h5>
+        <div class="row pt-1">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="model" [(ngModel)]="unitAttributes.model">
+                                        <label class="custom-control-label" for="model">
+                                            Model
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="collection" [(ngModel)]="unitAttributes.collection">
+                                        <label class="custom-control-label" for="collection">
+                                            Collection
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="type" [(ngModel)]="unitAttributes.unit_type">
+                                        <label class="custom-control-label" for="type">
+                                            Type
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="bathroom" [(ngModel)]="unitAttributes.bathroom">
+                                        <label class="custom-control-label" for="bathroom">
+                                            Bathroom
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="bedroom" [(ngModel)]="unitAttributes.bedroom">
+                                        <label class="custom-control-label" for="bedroom">
+                                            Bedroom
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="den" [(ngModel)]="unitAttributes.den">
+                                        <label class="custom-control-label" for="den">
+                                            Den
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="media" [(ngModel)]="unitAttributes.media">
+                                        <label class="custom-control-label" for="media">
+                                            Media
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="flex" [(ngModel)]="unitAttributes.flex">
+                                        <label class="custom-control-label" for="flex">
+                                            Flex
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="area" [(ngModel)]="unitAttributes.area">
+                                        <label class="custom-control-label" for="area">
+                                            Area
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="ceiling" [(ngModel)]="unitAttributes.ceiling">
+                                        <label class="custom-control-label" for="ceiling">
+                                            Ceiling
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="outdoor_area" [(ngModel)]="unitAttributes.outdoor_area">
+                                        <label class="custom-control-label" for="outdoor_area">
+                                            Outdoor Area
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="outdoor_type" [(ngModel)]="unitAttributes.outdoor_type">
+                                        <label class="custom-control-label" for="outdoor_type">
+                                            Outdoor Type
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Unit Display Options -->
+    <div class="mt-2">
+        <h5> Unit Display Options
+            <button type="button" (click)="openUnitDisplayOptionEdit(editUnitDisplayOption)" style="float:right" class="btn btn-md btn-primary">
+                <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+            </button>
+        </h5>
+        <div class="row pt-1">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="floor_layout" [(ngModel)]="unitDisplayOptions.floor_layout">
+                                        <label class="custom-control-label" for="model">
+                                            Floor Layout
+
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="key_map" [(ngModel)]="unitDisplayOptions.key_map">
+                                        <label class="custom-control-label" for="key_map">
+                                            Key Map
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="electrical_layout" [(ngModel)]="unitDisplayOptions.electrical_layout">
+                                        <label class="custom-control-label" for="electrical_layout">
+                                            Electrical Layout
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="suite_layout" [(ngModel)]="unitDisplayOptions.suite_layout">
+                                        <label class="custom-control-label" for="suite_layout">
+                                            Suite Layout
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="photo" [(ngModel)]="unitDisplayOptions.photo">
+                                        <label class="custom-control-label" for="photo">
+                                            Photos
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Incentives -->
+    <div class="mt-2">
+        <h5> Incentives / Promotions
+            <button type="button" (click)="openUnitIncentivesEdit(editUnitIncentives)" style="float:right" class="btn btn-md btn-primary">
+                <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+            </button>
+        </h5>
+        <div class="row pt-1">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="display_incentive_on_home" [(ngModel)]="incentivesData.display_incentive_on_home">
+                                        <label class="custom-control-label" for="display_incentive_on_home">
+                                            Display Incentives on Home Page
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="display_incentive_on_details" [(ngModel)]="incentivesData.display_incentive_on_details">
+                                        <label class="custom-control-label" for="display_incentive_on_details">
+                                            Display Incentives on Unit Details
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="title">
+                                        Incentive Title : {{incentivesData?.incentive_title}}
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <dl class="row">
+                                        <dd class="col-md-2">Incentive Body :</dd>
+                                        <dd class="col-md-10">
+                                            <div [innerHtml]="incentivesData.incentive_body"></div>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="title">Image :</label>
+                                <div class="thumb-img" *ngIf="incentivesData?.image" [ngStyle]="{'background-image': 'url(&quot;'+ incentivesData.imageUrl +'/400&quot;)'}">
+                                </div>
+                                <div class="thumb-img" *ngIf="!incentivesData?.image" [ngStyle]="{'background-image': 'url(&quot;assets/img/no-image.jpg&quot;)'}">
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Display Unit Attributes in Summary Page -->
+    <div class="mt-2">
+        <h5> Display Unit Attributes in Summary Page
+            <button type="button" (click)="openUnitAttributeSummaryEdit(editUnitAttributesSummary)" style="float:right" class="btn btn-md btn-primary">
+                <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+            </button>
+        </h5>
+        <div class="row pt-1">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="model" [(ngModel)]="unitAttributesSummary.model">
+                                        <label class="custom-control-label" for="model">
+                                            Model
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="collection" [(ngModel)]="unitAttributesSummary.collection">
+                                        <label class="custom-control-label" for="collection">
+                                            Collection
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="type" [(ngModel)]="unitAttributesSummary.unit_type">
+                                        <label class="custom-control-label" for="type">
+                                            Type
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="bathroom" [(ngModel)]="unitAttributesSummary.bathroom">
+                                        <label class="custom-control-label" for="bathroom">
+                                            Bathroom
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="bedroom" [(ngModel)]="unitAttributesSummary.bedroom">
+                                        <label class="custom-control-label" for="bedroom">
+                                            Bedroom
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="den" [(ngModel)]="unitAttributesSummary.den">
+                                        <label class="custom-control-label" for="den">
+                                            Den
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="media" [(ngModel)]="unitAttributesSummary.media">
+                                        <label class="custom-control-label" for="media">
+                                            Media
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="flex" [(ngModel)]="unitAttributesSummary.flex">
+                                        <label class="custom-control-label" for="flex">
+                                            Flex
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="area" [(ngModel)]="unitAttributesSummary.area">
+                                        <label class="custom-control-label" for="area">
+                                            Area
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="ceiling" [(ngModel)]="unitAttributesSummary.ceiling">
+                                        <label class="custom-control-label" for="ceiling">
+                                            Ceiling
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="outdoor_area" [(ngModel)]="unitAttributesSummary.outdoor_area">
+                                        <label class="custom-control-label" for="outdoor_area">
+                                            Outdoor Area
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="outdoor_type" [(ngModel)]="unitAttributesSummary.outdoor_type">
+                                        <label class="custom-control-label" for="outdoor_type">
+                                            Outdoor Type
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="floor_marketing" [(ngModel)]="unitAttributesSummary.floor_marketing">
+                                        <label class="custom-control-label" for="floor_marketing">
+                                            Floor Marketing
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="views" [(ngModel)]="unitAttributesSummary.views">
+                                        <label class="custom-control-label" for="views">
+                                            Views
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Instructions -->
+    <div class="mt-2">
+        <h5> Payment Instructions
+            <button type="button" (click)="openPaymentInstructions(editPaymentInstructions)" style="float:right" class="btn btn-md btn-primary">
+                <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+            </button>
+        </h5>
+        <div class="row pt-1">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="show_payment_instruction" [(ngModel)]="paymentInstructions.show_payment_instruction">
+                                        <label class="custom-control-label" for="show_payment_instruction">
+                                            Show Payment Instructions
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <dl class="row">
+                                        <dd class="col-md-2">Instructions :</dd>
+                                        <dd class="col-md-10">
+                                            <div [innerHtml]="paymentInstructions.instruction"></div>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!--Terms and Conditions -->
+    <div class="mt-2">
+        <h5>Terms and Conditions
+            <button type="button" (click)="openTermsConditions(editTermsConditions)" style="float:right" class="btn btn-md btn-primary">
+                <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+            </button>
+        </h5>
+        <div class="row pt-1">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="show_terms_and_conditions" [(ngModel)]="termsConditions.show_terms_and_conditions">
+                                        <label class="custom-control-label" for="show_terms_and_conditions">
+                                            Show Terms and Conditions
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <dl class="row">
+                                        <dd class="col-md-2">Content :</dd>
+                                        <dd class="col-md-10">
+                                            <div [innerHtml]="termsConditions.content"></div>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Privacy-->
+    <div class="mt-2">
+        <h5> Privacy
+            <button type="button" (click)="openPrivacyModal(editPrivacy)" style="float:right" class="btn btn-md btn-primary">
+                <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+            </button>
+        </h5>
+        <div class="row pt-1">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="show_privacy" [(ngModel)]="privacyData.show_privacy">
+                                        <label class="custom-control-label" for="show_privacy">
+                                            Show Privacy
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <dl class="row">
+                                        <dd class="col-md-2">Content :</dd>
+                                        <dd class="col-md-10">
+                                            <div [innerHtml]="privacyData.content"></div>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Design Studio Submit Instructions -->
+    <div class="mt-2">
+        <h5> Design Studio Submit Instructions
+            <button type="button" (click)="openDesignStudioInstructions(editDesignStudioInstructions)" style="float:right" class="btn btn-md btn-primary">
+                <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+            </button>
+        </h5>
+        <div class="row pt-1">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="show_submit_instruction" [(ngModel)]="designStudioInstructions.show_submit_instruction">
+                                        <label class="custom-control-label" for="show_submit_instruction">
+                                            Show Submit Instructions
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <dl class="row">
+                                        <dd class="col-md-2">Instructions :</dd>
+                                        <dd class="col-md-10">
+                                            <div [innerHtml]="designStudioInstructions.instruction"></div>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+      <!-- Layout Customization Instructions -->
+      <div class="mt-2">
+        <h5>Layout Customization Instructions
+            <button type="button" (click)="openLayoutCustomizationInstructions(editLayoutCustomizationInstructions)" style="float:right" class="btn btn-md btn-primary">
+                <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+            </button>
+        </h5>
+        <div class="row pt-1">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" [disabled]="true" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="show_instruction" [(ngModel)]="layoutCustomizationInstructions.show_instruction">
+                                        <label class="custom-control-label" for="show_instruction">
+                                            Show Submit Instructions
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <dl class="row">
+                                        <dd class="col-md-2">Instructions :</dd>
+                                        <dd class="col-md-10">
+                                            <div [innerHtml]="layoutCustomizationInstructions.instruction"></div>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<ng-template #settingsModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left"> Intro Screen Settings </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Title :</label>
+                        <div class="col-sm-12">
+                            <input type="text" name="title" [(ngModel)]="formDetails.title" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Body :</label>
+                        <div class="col-sm-12">
+                            <div [froalaEditor]="nonInlineEdit" [(froalaModel)]="formDetails.body">
+                                {{formDetails.body ? formDetails.body : ''}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label> Banner Image :</label>
+                    <div class="photo-holder mt-3">
+                        <span>
+                            <img *ngIf="formDetails?.layout" [src]="formDetails?.layout" alt="">
+                            <img *ngIf="!formDetails?.layout" src="assets/img/no-image.jpg" alt="">
+                        </span>
+                        <button class="btn btn-primary btn-sm photo-upload-btn">
+                            <i class="fa fa-upload"></i>
+                            <input type="file" id="uploadLogo" accept="image/*" placeholder="Add Photo" (change)="uploadBannerImage($event.target.files)">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updateSettings()">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #purchserHelpTextModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left"> Purchser Help Text Modal </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Body :</label>
+                        <div class="col-sm-12">
+                            <div [froalaEditor]="nonInlineEdit" [(froalaModel)]="formDetails.value">
+                                {{formDetails.value ? formDetails.value : ''}}
+                            </div>
+                        </div>
+                    </div>
+                </div>               
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updatePurchaserHelpText()">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #editUnitAttributes>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Unit Display Attributes</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" name='is_model' [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_model" [(ngModel)]="formDetails.model">
+                            <label class="custom-control-label" for="is_model">
+                                Model
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_collection" name='is_collection' [(ngModel)]="formDetails.collection">
+                            <label class="custom-control-label" for="is_collection">
+                                Collection
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_type" [(ngModel)]="formDetails.unit_type">
+                            <label class="custom-control-label" for="is_type">
+                                Type
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_bathroom" [(ngModel)]="formDetails.bathroom">
+                            <label class="custom-control-label" for="is_bathroom">
+                                Bathroom
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_bedroom" [(ngModel)]="formDetails.bedroom">
+                            <label class="custom-control-label" for="is_bedroom">
+                                Bedroom
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_den" [(ngModel)]="formDetails.den">
+                            <label class="custom-control-label" for="is_den">
+                                Den
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_media" [(ngModel)]="formDetails.media">
+                            <label class="custom-control-label" for="is_media">
+                                Media
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_flex" [(ngModel)]="formDetails.flex">
+                            <label class="custom-control-label" for="is_flex">
+                                Flex
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_area" [(ngModel)]="formDetails.area">
+                            <label class="custom-control-label" for="is_area">
+                                Area
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_ceiling" [(ngModel)]="formDetails.ceiling">
+                            <label class="custom-control-label" for="is_ceiling">
+                                Ceiling
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_outdoor_area" [(ngModel)]="formDetails.outdoor_area">
+                            <label class="custom-control-label" for="is_outdoor_area">
+                                Outdoor Area
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_outdoor_type" [(ngModel)]="formDetails.outdoor_type">
+                            <label class="custom-control-label" for="is_outdoor_type">
+                                Outdoor Type
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updateUnitAttributes()">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #editUnitDisplayOption>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Unit Display Options</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_floor_layout" [(ngModel)]="formDetails.floor_layout">
+                            <label class="custom-control-label" for="is_floor_layout">
+                                Floor Layout
+
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_key_map" [(ngModel)]="formDetails.key_map">
+                            <label class="custom-control-label" for="is_key_map">
+                                Key Map
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_electrical_layout" [(ngModel)]="formDetails.electrical_layout">
+                            <label class="custom-control-label" for="is_electrical_layout">
+                                Electrical Layout
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_suite_layout" [(ngModel)]="formDetails.suite_layout">
+                            <label class="custom-control-label" for="is_suite_layout">
+                                Suite Layout
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_photo" [(ngModel)]="formDetails.photo">
+                            <label class="custom-control-label" for="is_photo">
+                                Photos
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updateUnitDisplayOption()">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #editUnitIncentives>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Incentives</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="display_incentive_on_home1" [(ngModel)]="formDetails.display_incentive_on_home">
+                            <label class="custom-control-label" for="display_incentive_on_home1">
+                                Display Incentives on Home Page
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="display_incentive_on_details1" [(ngModel)]="formDetails.display_incentive_on_details">
+                            <label class="custom-control-label" for="display_incentive_on_details1">
+                                Display Incentives on Unit Details
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Incentive Title </label>
+                        <input type="text" [ngModelOptions]="{standalone: true}" class="form-control" id="incentive_title" [(ngModel)]="formDetails.incentive_title">
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group ">
+                        <label>Incentive Body :</label>
+                        <div [froalaEditor]="nonInlineEdit" [(froalaModel)]="formDetails.incentive_body">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <label> Image :</label>
+                    <div class="photo-holder mt-3">
+                        <button style="float: right;" *ngIf="formDetails?.imageData?._id" class="photo-delete-icon btn btn-danger mt-2" type="button" (click)="deleteIncentiveImage(formDetails?.imageData)">
+                            <i class="fa fa-trash" style="font-size:12px;float: right;"></i>
+                        </button>
+                        <span>
+                            <img *ngIf="formDetails?.image" [src]="formDetails?.image" alt="">
+                            <img *ngIf="!formDetails?.image" src="assets/img/no-image.jpg" alt="">
+                        </span>
+                        <button class="btn btn-primary btn-sm photo-upload-btn">
+                            <i class="fa fa-upload"></i>
+                            <input type="file" id="uploadLogo" accept="image/*" placeholder="Add Photo" (change)="uploadIncentiveImage($event.target.files)">
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updateUnitIncentive()">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #editUnitAttributesSummary>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Unit Display Attributes Summary</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" name='is_model' [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_model" [(ngModel)]="formDetails.model">
+                            <label class="custom-control-label" for="is_model">
+                                Model
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_collection" name='is_collection' [(ngModel)]="formDetails.collection">
+                            <label class="custom-control-label" for="is_collection">
+                                Collection
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_type" [(ngModel)]="formDetails.unit_type">
+                            <label class="custom-control-label" for="is_type">
+                                Type
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_bathroom" [(ngModel)]="formDetails.bathroom">
+                            <label class="custom-control-label" for="is_bathroom">
+                                Bathroom
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_bedroom" [(ngModel)]="formDetails.bedroom">
+                            <label class="custom-control-label" for="is_bedroom">
+                                Bedroom
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_den" [(ngModel)]="formDetails.den">
+                            <label class="custom-control-label" for="is_den">
+                                Den
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_media" [(ngModel)]="formDetails.media">
+                            <label class="custom-control-label" for="is_media">
+                                Media
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_flex" [(ngModel)]="formDetails.flex">
+                            <label class="custom-control-label" for="is_flex">
+                                Flex
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_area" [(ngModel)]="formDetails.area">
+                            <label class="custom-control-label" for="is_area">
+                                Area
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_ceiling" [(ngModel)]="formDetails.ceiling">
+                            <label class="custom-control-label" for="is_ceiling">
+                                Ceiling
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_outdoor_area" [(ngModel)]="formDetails.outdoor_area">
+                            <label class="custom-control-label" for="is_outdoor_area">
+                                Outdoor Area
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_outdoor_type" [(ngModel)]="formDetails.outdoor_type">
+                            <label class="custom-control-label" for="is_outdoor_type">
+                                Outdoor Type
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_floor_marketing" [(ngModel)]="formDetails.floor_marketing">
+                            <label class="custom-control-label" for="is_floor_marketing">
+                                Floor Marketing
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_views" [(ngModel)]="formDetails.views">
+                            <label class="custom-control-label" for="is_views">
+                                Views
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updateAttributeSummary()">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #editTermsConditions>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Terms Conditions</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_show_terms_and_conditions" [(ngModel)]="formDetails.show_terms_and_conditions">
+                            <label class="custom-control-label" for="is_show_terms_and_conditions">
+                                Show Terms & Conditions
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group ">
+                        <label>Content :</label>
+                        <div [froalaEditor]="nonInlineEdit" [(froalaModel)]="formDetails.content">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updateTermsConditions()">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #editPrivacy>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Privacy</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_show_privacy" [(ngModel)]="formDetails.show_privacy">
+                            <label class="custom-control-label" for="is_show_privacy">
+                                Show Privacy
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group ">
+                        <label>Content :</label>
+                        <div [froalaEditor]="nonInlineEdit" [(froalaModel)]="formDetails.content">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updatePrivacy()">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-template #editPaymentInstructions>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Payment Instructions</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_show_payment_instruction" [(ngModel)]="formDetails.show_payment_instruction">
+                            <label class="custom-control-label" for="is_show_payment_instruction">
+                                Show Payment Instructions
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group ">
+                        <label>Instructions :</label>
+                        <div [froalaEditor]="nonInlineEdit" [(froalaModel)]="formDetails.instruction">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updatePaymentInstrcution()">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #editDesignStudioInstructions>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Design Studio Submit Instructions</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_show_submit_instruction" [(ngModel)]="formDetails.show_submit_instruction">
+                            <label class="custom-control-label" for="is_show_submit_instruction">
+                                Show Submit Instructions
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group ">
+                        <label>Instructions :</label>
+                        <div [froalaEditor]="nonInlineEdit" [(froalaModel)]="formDetails.instruction">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updateDesignStudioInstructions()">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-template #editLayoutCustomizationInstructions>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Layout Customization Instructions</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" class="custom-control-input" id="is_show_instruction" [(ngModel)]="formDetails.show_instruction">
+                            <label class="custom-control-label" for="is_show_instruction">
+                                Show Submit Instructions
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group ">
+                        <label>Instructions :</label>
+                        <div [froalaEditor]="nonInlineEdit" [(froalaModel)]="formDetails.instruction">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updateLayoutCustomizationInstructions()">Update</button>
+        </div>
+    </div>
+</ng-template>
+

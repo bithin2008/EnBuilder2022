@@ -1,0 +1,49 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'crm_media' %>
+<% assign fieldId = 'file' %>
+
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% en.data.update upResult datasetId query en.params %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.result = upResult %>
+    <% assign returnData.message = 'Photo updated successfully.' %>
+    <% return returnData %>
+<% else %>
+    <% if en.params.builder_id %>
+        <% assign obj.builder_id = en.params.builder_id %>
+    <% endif %>
+    <% if en.params.project_id %>
+        <% assign obj.project_id = en.params.project_id %>
+    <% endif %>
+    <% if en.params.model_id %>
+        <% assign obj.model_id = en.params.model_id %>
+    <% endif %>
+    <% if en.params.type %> 
+        <% assign obj.type = en.params.type %>
+    <% endif %>
+    <% if en.params.source %>
+        <% assign obj.source = en.params.source %>
+    <% endif %>
+    
+    <% if en.req.hasFile %>
+        <% en.data.insert result datasetId obj %>
+        <% assign rowId = result.row._id %>
+        <% en.data.attachfile docresult datasetId fieldId rowId file_is_private %> 
+        <% assign returnData.status = 1 %>
+        <% assign returnData.result = docresult %>
+        <% assign returnData.message = 'Photo added successfully.' %>
+        <% return returnData %>
+    <% else %>
+        <% assign returnData.status = 0 %>
+        <% assign returnData.result = null %>
+        <% assign returnData.message = 'No Photo selected' %>
+        <% return returnData %>
+    <% endif %>  
+<% endif %>  

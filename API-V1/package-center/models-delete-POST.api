@@ -1,0 +1,26 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+
+<% assign datasetId = 'bldr_pc_models_units' %>
+
+<% if en.params.ids %>
+    <% assign ids = en.params.ids %>
+    <% for id in ids %>
+        <% assign query._id = id %>
+        <% en.data.delete results datasetId query %>
+    <% endfor %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Model deleted successfully.' %>
+    <% assign returnData.result = results %>
+    <% return returnData %>
+<% else %>
+    <% assign returnData.status = 0 %>
+    <% assign returnData.message = 'Model id not found.' %>
+    <% assign returnData.result = null %>
+    <% return returnData %>
+<% endif %>  

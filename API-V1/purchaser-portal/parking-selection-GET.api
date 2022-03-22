@@ -1,0 +1,18 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_parking_selection' %>
+<% assign params = en.params %>
+
+<% assign query.deal_id = params.deal_id %>
+
+<% en.data.find results datasetId query %>
+<% assign returnData.results = results.rows %>
+
+<% assign returnData.status = 1 %>
+<% assign returnData.message = 'Selected parking list.' %> 
+<% return returnData %>

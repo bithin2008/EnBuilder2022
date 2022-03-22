@@ -1,0 +1,1419 @@
+<div class="animated fadeIn">
+    <div class="container-fluid">
+        <div class="const_hd row">
+            <div class="col-md-10">
+                <button class="btn btn-primary btn-sm mr-2" (click)="goToPurchaser()">
+                    <i class="fa fa-arrow-left" aria-hidden="true"></i> &nbsp; Back
+                </button>{{unitDetailsObj?.project_name}} - Unit : {{unitDetailsObj?.unit_no}} , {{unitDetailsObj?.status}}
+                &nbsp; {{unitDetailsObj.deal?.stage}}
+            </div>
+            <!-- <div class="col-md-2 text-right mb-2">
+                <button class="btn btn-sm btn-danger" type="button" (click)="archiveDeal()">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                </button>
+            </div> -->
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <ngb-tabset (tabChange)="doTabFunctions($event)" [activeId]="defaultActiveTab">
+
+                    <ngb-tab id="availableSelectionTab" title="Available Selections">
+                        <ng-template ngbTabContent>
+                            <div class="content-wrap">
+                                <div class="row">
+                                    <div class="col-lg-12 col-xs-12 mt-2">
+                                        <div class="project-details">
+                                            <div class="row">
+                                                <div class="col-md-12 mb-4">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <h4>Color Collection
+                                                                    </h4>
+                                                                    <table class="table table-striped list_table" style="table-layout: fixed;">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Name</th>
+                                                                                <th>Cost</th>
+                                                                                <th>Price</th>
+                                                                                <th>Info</th>
+                                                                                <th> Action</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr *ngFor="let item of availColorCollection?.records;let i=index">
+                                                                                <td>
+                                                                                    {{item?.source?.name}}
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{item?.cost | currency:'USD'}}
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{item?.price | currency:'USD'}}
+                                                                                </td>
+                                                                                <td>
+                                                                                    <button class="btn btn-primary btn-sm" type="button" (click)="openEditDescriptionNotesModal(viewDescriptionNotes,item)">
+                                                                                        <i class="fas fa-info" aria-hidden="true"></i>
+                                                                                    </button>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <button *ngIf="colorCollection?.records.length==0 || (colorCollection?.records.length>0  && (item?.source?._id != colorCollection?.records[0]?.item_id))"
+                                                                                        (click)="addItem(item,'COLOR_COLLECTION')"
+                                                                                        class="btn btn-primary" container="body"
+                                                                                        placement="bottom" type="button">
+                                                                                        Add
+                                                                                    </button>
+                                                                                    <button *ngIf="(colorCollection && colorCollection?.records.length>0 ) && item?.source?._id==colorCollection?.records[0].item_id"
+                                                                                        class="btn btn-primary" container="body"
+                                                                                        placement="bottom" type="button">
+                                                                                        Selected
+                                                                                    </button>
+
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr *ngIf="availColorCollection?.records.length>0">
+                                                                                <td>Total</td>
+                                                                                <td>{{availColorCollection?.total_cost | currency:'USD'}}</td>
+                                                                                <td>{{availColorCollection?.total_price | currency:'USD'}}</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row" *ngIf="availColorCollection?.records.length==0">
+                                                                <div class="col-md-12 text-center">
+                                                                    No Record Found
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 mb-4">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="const_hd">
+                                                                        Package
+                                                                        <div class="col-md-3 col-sm-5 mt-1" style="float: right;">
+                                                                            <div class="form-group mb-0 text-right">
+                                                                                <select class="form-select" (change)="onPackageLocationChange($event.target.value)" [(ngModel)]="package_location">
+                                                                                    <option value="">All Location</option>
+                                                                                    <option *ngFor="let location of packageLocations" value={{location}}>{{location}}</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <table class="table table-striped list_table" style="table-layout: fixed;">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Location</th>
+                                                                                <th>Name</th>
+                                                                                <th>Cost</th>
+                                                                                <th>Price</th>
+                                                                                <th>Info</th>
+                                                                                <th> Action</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr *ngFor="let item of availablePackages?.records">
+                                                                                <td>
+                                                                                    {{item?.source?.location}}
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{item?.source?.name}}
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{item?.cost | currency:'USD'}}
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{item?.price | currency:'USD'}}
+                                                                                </td>
+                                                                                <td>
+                                                                                    <button class="btn btn-primary btn-sm" type="button" (click)="openEditDescriptionNotesModal(viewDescriptionNotes,item)">
+                                                                                        <i class="fas fa-info" aria-hidden="true"></i>
+                                                                                    </button>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <button *ngIf="!item.isSelected" (click)="addItem(item,'PACKAGE')" class="btn btn-primary" container="body" placement="bottom"
+                                                                                        type="button">
+                                                                                        Add
+                                                                                    </button>
+                                                                                    <button *ngIf="item.isSelected" class="btn btn-primary" container="body" placement="bottom" type="button">
+                                                                                        Selected
+                                                                                    </button>
+
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr *ngIf="availablePackages?.records.length>0">
+                                                                                <td>Total</td>
+                                                                                <td></td>
+                                                                                <td>{{availablePackages?.total_cost | currency:'USD'}}</td>
+                                                                                <td>{{availablePackages?.total_price | currency:'USD'}}</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row" *ngIf="availablePackages?.records.length==0">
+                                                                <div class="col-md-12 text-center">
+                                                                    No Record Found
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 mb-4">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="const_hd">
+                                                                        Options
+                                                                        <div class="col-md-3 col-sm-5 mt-1" style="float: right;">
+                                                                            <div class="form-group mb-0 text-right">
+                                                                                <select class="form-select" (change)="onOptionLocationChange($event.target.value)" [(ngModel)]="option_location">
+                                                                                    <option value="">All Location</option>
+                                                                                    <option *ngFor="let location of optionsLocations" value={{location}}>{{location}}</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <table class="table table-striped list_table" style="table-layout: fixed;">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Location</th>
+                                                                                <th>Name</th>
+                                                                                <th>Cost</th>
+                                                                                <th>Price</th>
+                                                                                <th>Info</th>
+                                                                                <th> Action</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr *ngFor="let item of availableOptions?.records">
+                                                                                <td>
+                                                                                    {{item?.source?.location}}
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{item?.source?.name}}
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{item?.cost | currency:'USD'}}
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{item?.price | currency:'USD'}}
+                                                                                </td>
+                                                                                <td>
+                                                                                    <button class="btn btn-primary btn-sm" type="button" (click)="openEditDescriptionNotesModal(viewDescriptionNotes,item)">
+                                                                                        <i class="fas fa-info" aria-hidden="true"></i>
+                                                                                    </button>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <button *ngIf="!item.isSelected" (click)="addItem(item,'PERSONALIZATION_OPTION')" class="btn btn-primary" container="body"
+                                                                                        placement="bottom" type="button">
+                                                                                        Add
+                                                                                    </button>
+                                                                                    <button *ngIf="item.isSelected" class="btn btn-primary" container="body" placement="bottom" type="button">
+                                                                                        Selected
+                                                                                    </button>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr *ngIf="availableOptions?.records.length>0">
+                                                                                <td>Total</td>
+                                                                                <td></td>
+                                                                                <td>{{availableOptions?.total_cost | currency:'USD'}}</td>
+                                                                                <td>{{availableOptions?.total_price | currency:'USD'}}</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row" *ngIf="availableOptions?.records.length==0">
+                                                                <div class="col-md-12 text-center">
+                                                                    No Record Found
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab id="userSelectionsTab" title="Design Studio">
+                        <ng-template ngbTabContent>
+                            <div class="content-wrap">
+                                <div class="row" *ngIf="unitDetailsObj?.deal_id">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="card-body" style="overflow: auto;">
+                                                <div class="stage-container mb-2">
+                                                    <div id="crumbs">
+                                                        <ul>
+                                                            <ng-container>
+                                                                <!-- <li>
+                                                                    <a class="{{(!unitDetailsObj?.deal?.portal?.enable_design_studio  && !unitDetailsObj?.deal?.design_studio_status )? 'active':''}}"
+                                                                        placement="auto" (click)="selectDesignStudioStage({value:'NOT STARTED'})"
+                                                                        [ngbTooltip]="tipContent" container="body">
+                                                                        <ng-template #tipContent>
+                                                                            <div></div>
+                                                                        </ng-template>
+                                                                        NOT STARTED
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="{{(unitDetailsObj?.deal?.portal?.enable_design_studio && !unitDetailsObj?.deal?.design_studio_status) ?'active':''}}"
+                                                                        placement="auto" (click)="selectDesignStudioStage({value:'OPEN'})"
+                                                                        [ngbTooltip]="tipContent" container="body">
+                                                                        <ng-template #tipContent>
+                                                                            <div></div>
+                                                                        </ng-template>
+                                                                        OPEN
+                                                                    </a>
+                                                                </li> -->
+                                                                <li *ngFor="let item of designStatus">
+                                                                    <a class="{{item?.value == (unitDetailsObj?.deal?.design_studio?.status) ? 'active':''}}" [ngbTooltip]="tipContent" container="body"
+                                                                        placement="auto" (click)="selectDesignStudioStage(item)">
+                                                                        <ng-template #tipContent>
+                                                                            <div [innerHtml]="item.description"></div>
+                                                                        </ng-template>
+                                                                        {{item.value}}
+                                                                    </a>
+                                                                </li>
+                                                            </ng-container>
+
+                                                        </ul>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row" *ngIf="unitDetailsObj?.deal?.design_studio?.status =='SELECTION FINAL'">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="const_hd">
+                                                            Invoices
+                                                            <div class="mt-1" style="float: right;">
+                                                                <button *ngIf="unitDetailsObj?.deal?.design_studio?.status =='SELECTION FINAL'" class="btn btn-sm btn-primary mr-2 mb-2"
+                                                                type="button">
+                                                                    Generate Invoice
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        <table class="table table-striped list_table" style="table-layout: fixed;">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Name</th>
+                                                                    <th>Action</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr *ngFor="let item of invoicesList;let i=index">
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        <div class="row" *ngIf="invoicesList.length==0">
+                                                            <div class="col-md-12 text-center">
+                                                                No Record Found
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>    
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-12 col-xs-12 mt-2">
+                                        <div class="project-details">
+                                            <div class="row">
+                                                <div class="col-md-12 mb-4">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <h4>Color Collections
+                                                                    </h4>
+                                                                    <table class="table table-striped list_table" style="table-layout: fixed;">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Name</th>
+                                                                                <th>Cost</th>
+                                                                                <th>Price</th>
+                                                                                <th>Info</th>
+                                                                                <th> Action</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr *ngFor="let item of colorCollection?.records;let i=index">
+                                                                                <td>
+                                                                                    {{item?.item_name}}
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{item?.cost | currency:'USD'}}
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{item?.price | currency:'USD'}}
+                                                                                </td>
+                                                                                <td>
+                                                                                    <button class="btn btn-primary btn-sm" type="button" (click)="openEditDescriptionNotesModal(viewDescriptionNotes,item)">
+                                                                                        <i class="fas fa-info" aria-hidden="true"></i>
+                                                                                    </button>
+                                                                                </td>
+
+                                                                                <td>
+                                                                                    <button class="btn btn-danger" (click)="removeUserItems(item, 'COLOR_COLLECTION')" ngbTooltip="Delete collection" container="body"
+                                                                                        placement="bottom" type="button">
+                                                                                        <i class="fa fa-trash"></i>
+                                                                                    </button>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr *ngIf="colorCollection?.records.length>0">
+                                                                                <td>Total</td>
+                                                                                <td>{{colorCollection?.total_cost | currency:'USD'}}</td>
+                                                                                <td>{{colorCollection?.total_price | currency:'USD'}}</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row" *ngIf="colorCollection?.records.length==0">
+                                                                <div class="col-md-12 text-center">
+                                                                    No Record Found
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 mb-4">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="const_hd">
+                                                                        Package
+                                                                        <div class="col-md-3 col-sm-5 mt-1" style="float: right;">
+                                                                            <div class="form-group mb-0 text-right">
+                                                                                <select class="form-select" (change)="onSelectedPackageLocationChange($event.target.value)" [(ngModel)]="selected_package_location">
+                                                                                    <option value="">All Location</option>
+                                                                                    <option *ngFor="let location of packageLocations" value={{location}}>{{location}}</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <table class="table table-striped list_table" style="table-layout: fixed;">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Location</th>
+                                                                                <th>Name</th>
+                                                                                <th>Cost</th>
+                                                                                <th>Price</th>
+                                                                                <th>Info</th>
+                                                                                <th> Action</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr *ngFor="let item of packagesList?.records;let i=index">
+                                                                                <td>
+                                                                                    {{item?.location}}
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{item?.item_name}}
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{item?.cost | currency:'USD'}}
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{item?.price | currency:'USD'}}
+                                                                                </td>
+                                                                                <td>
+                                                                                    <button class="btn btn-primary btn-sm" type="button" (click)="openEditDescriptionNotesModal(viewDescriptionNotes,item)">
+                                                                                        <i class="fas fa-info" aria-hidden="true"></i>
+                                                                                    </button>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <button class="btn btn-danger" (click)="removeUserItems(item, 'PACKAGE')" ngbTooltip="Delete package" container="body" placement="bottom"
+                                                                                        type="button">
+                                                                                        <i class="fa fa-trash"></i>
+                                                                                    </button>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr *ngIf="packagesList?.records.length>0">
+                                                                                <td>Total</td>
+                                                                                <td></td>
+                                                                                <td>{{packagesList?.total_cost | currency:'USD'
+                                                                                    }}
+                                                                                </td>
+                                                                                <td>{{packagesList?.total_price | currency:'USD'}}</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row" *ngIf="packagesList?.records.length==0">
+                                                                <div class="col-md-12 text-center">
+                                                                    No Record Found
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 mb-4">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="const_hd">
+                                                                        Options
+                                                                        <div class="col-md-3 col-sm-5 mt-1" style="float: right;">
+                                                                            <div class="form-group mb-0 text-right">
+                                                                                <select class="form-select" (change)="onSelectedOptionLocationChange($event.target.value)" [(ngModel)]="selected_option_location">
+                                                                                    <option value="">All Location</option>
+                                                                                    <option *ngFor="let location of optionsLocations" value={{location}}>{{location}}</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <table class="table table-striped list_table" style="table-layout: fixed;">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Location</th>
+                                                                                <th>Name</th>
+                                                                                <th>Cost</th>
+                                                                                <th>Price</th>
+                                                                                <th>Info</th>
+                                                                                <th> Action</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr *ngFor="let item of optionsList?.records;let i=index">
+                                                                                <td>
+                                                                                    {{item?.location}}
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{item?.item_name}}
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{item?.cost | currency:'USD'}}
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{item?.price | currency:'USD'}}
+                                                                                </td>
+                                                                                <td>
+                                                                                    <button class="btn btn-primary btn-sm" type="button" (click)="openEditDescriptionNotesModal(viewDescriptionNotes,item)">
+                                                                                        <i class="fas fa-info" aria-hidden="true"></i>
+                                                                                    </button>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <button class="btn btn-danger" (click)="removeUserItems(item, 'PERSONALIZATION_OPTION')" ngbTooltip="Delete option" container="body"
+                                                                                        placement="bottom" type="button">
+                                                                                        <i class="fa fa-trash"></i>
+                                                                                    </button>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr *ngIf="optionsList?.records.length>0">
+                                                                                <td>Total</td>
+                                                                                <td></td>
+                                                                                <td>{{optionsList?.total_cost | currency:'USD'}}</td>
+                                                                                <td>{{optionsList?.total_price | currency:'USD'}}</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                            </tr>
+
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row" *ngIf="optionsList?.records.length==0">
+                                                                <div class="col-md-12 text-center">
+                                                                    No Record Found
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab id="parkingSelectionsTab" title="Parking Selection">
+                        <ng-template ngbTabContent>
+                            <div class="content-wrap">
+                                <div class="row" *ngIf="unitDetailsObj?.deal_id">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="card-body" style="overflow: auto;">
+                                                <div class="stage-container mb-2">
+                                                    <div id="crumbs">
+                                                        <ul>
+                                                            <ng-container>
+                                                                <li *ngFor="let item of designStatus">
+                                                                    <a class="{{item?.value == (unitDetailsObj?.deal?.parking_selection?.status) ? 'active':''}}" [ngbTooltip]="tipContent" container="body"
+                                                                        placement="auto" (click)="selectParkingStage(item)">
+                                                                        <ng-template #tipContent>
+                                                                            <div [innerHtml]="item.description"></div>
+                                                                        </ng-template>
+                                                                        {{item.value}}
+                                                                    </a>
+                                                                </li>
+                                                            </ng-container>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row" *ngIf="unitDetailsObj?.deal?.parking_selection?.status =='SELECTION FINAL'">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="card-body" style="overflow: auto;">
+                                                <button *ngIf="unitDetailsObj?.deal?.parking_selection?.status =='SELECTION FINAL'" class="btn btn-sm btn-primary mr-2 mb-2"
+                                                    type="button">
+                                                    Generate Invoice
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-lg-12 col-xs-12 mt-2">
+                                        <div class="project-details">
+                                            <div class="row">
+                                                <div class="col-md-12 mb-4">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <h4>Parking Allocated</h4>
+                                                                    <ng-container *ngIf="unitDetailsObj?.deal?.allocate_parking">
+                                                                        <dl class="row mb-0" *ngFor="let item of unitDetailsObj?.deal?.allocate_parking">
+                                                                            <dd class="col-md-5 col-sm-6">
+                                                                                {{item?.type}}
+                                                                            </dd>
+                                                                            <dd class="col-md-7 col-sm-6">: {{item?.eligible_no ?item?.eligible_no :'0'
+                                                                                }}
+                                                                            </dd>
+                                                                        </dl>
+                                                                    </ng-container>
+                                                                    <ng-container *ngIf="!unitDetailsObj?.deal?.allocate_parking  ||unitDetailsObj?.deal?.allocate_parking.length==0">
+                                                                        No records found
+                                                                    </ng-container>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <h4>Parking Selected</h4>
+                                                                    <ng-container *ngIf="unitDetailsObj?.deal?.allocate_parking">
+                                                                        <dl class="row mb-0" *ngFor="let item of unitDetailsObj?.deal?.allocate_parking">
+                                                                            <dd class="col-md-5 col-sm-6">
+                                                                                {{item?.type}}
+                                                                            </dd>
+                                                                            <dd class="col-md-7 col-sm-6">: {{item?.totalItem ?item?.totalItem :'0'}}</dd>
+                                                                        </dl>
+                                                                    </ng-container>
+                                                                    <ng-container *ngIf="!unitDetailsObj?.deal?.allocate_parking  ||unitDetailsObj?.deal?.allocate_parking.length==0">
+                                                                        No records found
+                                                                    </ng-container>
+                                                                </div>
+                                                            </div>
+                                                            <div class="pt-2">
+                                                                <h4>Selected parking</h4>
+                                                                <div class="row ">
+                                                                    <div class="col-md-12">
+                                                                        <div class="table-responsive mb-5">
+                                                                            <table class="table table-striped list_table" style="table-layout: fixed;">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th width="200px"> Floor </th>
+                                                                                        <th width="100px"> Space No</th>
+                                                                                        <th width="200px"> Type </th>
+                                                                                        <th width="150px"> Status </th>
+                                                                                        <th width="150px"> Cost </th>
+                                                                                        <th width="150px"> Price </th>
+                                                                                        <th width="150px"> Addons </th>
+                                                                                        <th width="150px"> Add-ons Cost </th>
+                                                                                        <th width="150px"> Add-ons Price </th>
+                                                                                        <th width="150px"> Selected By </th>
+                                                                                        <th width="150px"> Selected At </th>
+                                                                                        <!-- <th width="150px"> Is Premium</th> -->
+                                                                                        <th width="150px">Action</th>
+
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    <ng-container *ngIf="selectedParkingSelection.length>0">
+                                                                                        <tr *ngFor="let item of selectedParkingSelection; let i=index">
+                                                                                            <td width="200px">{{item?.floor_name}} </td>
+                                                                                            <td width="100px">{{item?.number}}</td>
+                                                                                            <td width="200px">{{item?.type}} </td>
+                                                                                            <td width="150px">{{item?.status }}</td>
+                                                                                            <td width="150px">{{item?.cost | currency:'USD'}}</td>
+                                                                                            <td width="150px">{{item?.price | currency:'USD'}}</td>
+                                                                                            <td width="150px">
+                                                                                                <div *ngFor="let addon of item?.addons;let j=index">
+                                                                                                    {{addon?.name}}
+                                                                                                </div>
+                                                                                            </td>
+                                                                                            <td width="150px">{{item?.cost }}</td>
+                                                                                            <td width="150px">{{item?.price }}</td>
+                                                                                            <td width="150px">{{item?.selected_by_name }}</td>
+                                                                                            <td width="150px">{{item?._created | date:'mediumDate'}}</td>
+                                                                                            <!-- <td width="150px">{{item?.is_premium ?'Yes' :'No'}}</td> -->
+                                                                                            <td width="150px">
+                                                                                                <button class="btn btn-sm btn-primary mr-2" *ngIf="item.unit_no" (click)="releaseParkingSpace(item)">Release</button>
+
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </ng-container>
+                                                                                    <ng-container *ngIf="selectedParkingSelection.length==0">
+                                                                                        <tr>
+                                                                                            <td colspan="12">No records found</td>
+                                                                                        </tr>
+                                                                                    </ng-container>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab id="bicycleSelectionsTab" title="Bicycle Parking Selection">
+                        <ng-template ngbTabContent>
+                            <div class="content-wrap">
+                                <div class="row" *ngIf="unitDetailsObj?.deal_id">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="card-body" style="overflow: auto;">
+                                                <div class="stage-container mb-2">
+                                                    <div id="crumbs">
+                                                        <ul>
+                                                            <ng-container>
+                                                                <li *ngFor="let item of designStatus">
+                                                                    <a class="{{item?.value == (unitDetailsObj?.deal?.bicycle_selection?.status) ? 'active':''}}" [ngbTooltip]="tipContent" container="body"
+                                                                        placement="auto" (click)="selectBicycleParkingStage(item)">
+                                                                        <ng-template #tipContent>
+                                                                            <div [innerHtml]="item.description"></div>
+                                                                        </ng-template>
+                                                                        {{item.value}}
+                                                                    </a>
+                                                                </li>
+                                                            </ng-container>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row" *ngIf="unitDetailsObj?.deal?.bicycle_selection?.status =='SELECTION FINAL'">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="card-body" style="overflow: auto;">
+                                                <button *ngIf="unitDetailsObj?.deal?.bicycle_selection?.status =='SELECTION FINAL'" class="btn btn-sm btn-primary mr-2 mb-2"
+                                                    type="button">
+                                                    Generate Invoice
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12 col-xs-12 mt-2">
+                                        <div class="project-details">
+                                            <div class="row">
+                                                <div class="col-md-12 mb-4">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <h4>Bicycle Allocated</h4>
+                                                                    <ng-container *ngIf="unitDetailsObj?.deal?.allocate_bicycle">
+                                                                        <dl class="row mb-0" *ngFor="let item of unitDetailsObj?.deal?.allocate_bicycle">
+                                                                            <dd class="col-md-5 col-sm-6">
+                                                                                {{item?.type}}
+                                                                            </dd>
+                                                                            <dd class="col-md-7 col-sm-6">: {{item?.eligible_no ?item?.eligible_no :'0'
+                                                                                }}
+                                                                            </dd>
+                                                                        </dl>
+                                                                    </ng-container>
+                                                                    <ng-container *ngIf="!unitDetailsObj?.deal?.allocate_bicycle  ||unitDetailsObj?.deal?.allocate_bicycle.length==0">
+                                                                        No records found
+                                                                    </ng-container>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <h4>Bicycle Selected</h4>
+                                                                    <ng-container *ngIf="unitDetailsObj?.deal?.allocate_bicycle">
+                                                                        <dl class="row mb-0" *ngFor="let item of unitDetailsObj?.deal?.allocate_bicycle">
+                                                                            <dd class="col-md-5 col-sm-6">
+                                                                                {{item?.type}}
+                                                                            </dd>
+                                                                            <dd class="col-md-7 col-sm-6">: {{item?.totalItem ?item?.totalItem :'0'}}</dd>
+                                                                        </dl>
+                                                                    </ng-container>
+                                                                    <ng-container *ngIf="!unitDetailsObj?.deal?.allocate_bicycle  ||unitDetailsObj?.deal?.allocate_bicycle.length==0">
+                                                                        No records found
+                                                                    </ng-container>
+                                                                </div>
+                                                            </div>
+                                                            <div class="pt-2">
+                                                                <h4>Selected Bicycle</h4>
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="table-responsive mb-5">
+                                                                            <table class="table table-striped list_table" style="table-layout: fixed;">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th width="200px"> Floor </th>
+                                                                                        <th width="100px"> Space No</th>
+                                                                                        <th width="200px"> Type </th>
+                                                                                        <th width="150px"> Status </th>
+                                                                                        <th width="150px"> Cost </th>
+                                                                                        <th width="150px"> Price </th>
+                                                                                        <th width="150px"> Addons </th>
+                                                                                        <th width="150px"> Add-ons Cost </th>
+                                                                                        <th width="150px"> Add-ons Price </th>
+                                                                                        <th width="150px"> Selected By </th>
+                                                                                        <th width="150px"> Selected At </th>
+                                                                                        <!-- <th width="150px"> Is Premium</th> -->
+                                                                                        <th width="150px">Action</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    <ng-container *ngIf="selectedBicycleSelection.length>0">
+                                                                                        <tr *ngFor="let item of selectedBicycleSelection; let i=index">
+                                                                                            <td width="200px">{{item?.floor_name}} </td>
+                                                                                            <td width="100px">{{item?.number}}</td>
+                                                                                            <td width="200px">{{item?.type}} </td>
+                                                                                            <td width="150px">{{item?.status }}</td>
+                                                                                            <td width="150px">{{item?.cost | currency:'USD'}}</td>
+                                                                                            <td width="150px">{{item?.price | currency:'USD'}}</td>
+                                                                                            <td width="150px">
+                                                                                                <div *ngFor="let addon of item?.addons;let j=index">
+                                                                                                    {{addon?.name}}
+                                                                                                </div>
+                                                                                            </td>
+                                                                                            <td width="150px">{{item?.cost }}</td>
+                                                                                            <td width="150px">{{item?.price }}</td>
+                                                                                            <td width="150px">{{item?.selected_by_name }}</td>
+                                                                                            <td width="150px">{{item?._created | date:'mediumDate'}}</td>
+                                                                                            <!-- <td width="150px">{{item?.is_premium ?'Yes' :'No'}}</td> -->
+                                                                                            <td width="150px">
+                                                                                                <button class="btn btn-sm btn-primary mr-2" *ngIf="item.unit_no" (click)="releaseBicycleSpace(item)">Release</button>
+
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </ng-container>
+                                                                                    <ng-container *ngIf="selectedBicycleSelection.length==0">
+                                                                                        <tr>
+                                                                                            <td colspan="12">No records found</td>
+                                                                                        </tr>
+                                                                                    </ng-container>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab id="lockerSelectionsTab" title="Locker Selection">
+                        <ng-template ngbTabContent>
+                            <div class="content-wrap">
+                                <div class="row" *ngIf="unitDetailsObj?.deal_id">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="card-body" style="overflow: auto;">
+                                                <div class="stage-container mb-2">
+                                                    <div id="crumbs">
+                                                        <ul>
+                                                            <ng-container>
+                                                                <li *ngFor="let item of designStatus">
+                                                                    <a class="{{item?.value == (unitDetailsObj?.deal?.locker_selection?.status) ? 'active':''}}" [ngbTooltip]="tipContent" container="body"
+                                                                        placement="auto" (click)="selectLockerSelectionStage(item)">
+                                                                        <ng-template #tipContent>
+                                                                            <div [innerHtml]="item.description"></div>
+                                                                        </ng-template>
+                                                                        {{item.value}}
+                                                                    </a>
+                                                                </li>
+                                                            </ng-container>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row" *ngIf="unitDetailsObj?.deal?.locker_selection?.status =='SELECTION FINAL'">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="card-body" style="overflow: auto;">
+                                                <button *ngIf="unitDetailsObj?.deal?.locker_selection?.status =='SELECTION FINAL'" class="btn btn-sm btn-primary mr-2 mb-2"
+                                                    type="button">
+                                                    Generate Invoice
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-lg-12 col-xs-12 mt-2">
+                                        <div class="project-details">
+                                            <div class="row">
+                                                <div class="col-md-12 mb-4">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <h4>Locker Allocated</h4>
+                                                                    <ng-container *ngIf="unitDetailsObj?.deal?.allocate_locker">
+                                                                        <dl class="row mb-0" *ngFor="let item of unitDetailsObj?.deal?.allocate_locker">
+                                                                            <dd class="col-md-5 col-sm-6">
+                                                                                {{item?.type}}
+                                                                            </dd>
+                                                                            <dd class="col-md-7 col-sm-6">: {{item?.eligible_no ?item?.eligible_no :'0'
+                                                                                }}
+                                                                            </dd>
+                                                                        </dl>
+                                                                    </ng-container>
+                                                                    <ng-container *ngIf="!unitDetailsObj?.deal?.allocate_locker  ||unitDetailsObj?.deal?.allocate_locker.length==0">
+                                                                        No records found
+                                                                    </ng-container>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <h4>Locker Selected</h4>
+                                                                    <ng-container *ngIf="unitDetailsObj?.deal?.allocate_locker">
+                                                                        <dl class="row mb-0" *ngFor="let item of unitDetailsObj?.deal?.allocate_locker">
+                                                                            <dd class="col-md-5 col-sm-6">
+                                                                                {{item?.type}}
+                                                                            </dd>
+                                                                            <dd class="col-md-7 col-sm-6">: {{item?.totalItem ?item?.totalItem :'0'}}</dd>
+                                                                        </dl>
+                                                                    </ng-container>
+                                                                    <ng-container *ngIf="!unitDetailsObj?.deal?.allocate_locker  ||unitDetailsObj?.deal?.allocate_locker.length==0">
+                                                                        No records found
+                                                                    </ng-container>
+                                                                </div>
+                                                            </div>
+                                                            <div class="pt-2">
+                                                                <h4>Selected Lockers</h4>
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="table-responsive mb-5">
+                                                                            <table class="table table-striped list_table" style="table-layout: fixed;">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th width="200px"> Floor </th>
+                                                                                        <th width="100px"> Space No</th>
+                                                                                        <th width="200px"> Type </th>
+                                                                                        <th width="150px"> Status </th>
+                                                                                        <th width="150px"> Cost </th>
+                                                                                        <th width="150px"> Price </th>
+                                                                                        <th width="150px"> Addons </th>
+                                                                                        <th width="150px"> Add-ons Cost </th>
+                                                                                        <th width="150px"> Add-ons Price </th>
+                                                                                        <th width="150px"> Selected By </th>
+                                                                                        <th width="150px"> Selected At </th>
+                                                                                        <!-- <th width="150px"> Is Premium</th> -->
+                                                                                        <th width="150px">Action</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    <ng-container *ngIf="selectedLockerSelection.length>0">
+                                                                                        <tr *ngFor="let item of selectedLockerSelection; let i=index">
+                                                                                            <td width="200px">{{item?.floor_name}} </td>
+                                                                                            <td width="100px">{{item?.number}}</td>
+                                                                                            <td width="200px">{{item?.type}} </td>
+                                                                                            <td width="150px">{{item?.status }}</td>
+                                                                                            <td width="150px">{{item?.cost }}</td>
+                                                                                            <td width="150px">{{item?.price }}</td>
+                                                                                            <td width="150px">
+                                                                                                <div *ngFor="let addon of item?.addons;let j=index">
+                                                                                                    {{addon?.name}}
+                                                                                                </div>
+                                                                                            </td>
+                                                                                            <td width="150px">{{item?.cost | currency:'USD'}}</td>
+                                                                                            <td width="150px">{{item?.price | currency:'USD'}}</td>
+                                                                                            <td width="150px">{{item?.selected_by_name }}</td>
+                                                                                            <td width="150px">{{item?._created | date:'mediumDate'}}</td>
+                                                                                            <!-- <td width="150px">{{item?.is_premium ?'Yes' :'No'}}</td> -->
+                                                                                            <td width="150px">
+                                                                                                <button class="btn btn-sm btn-primary mr-2" *ngIf="item.unit_no" (click)="releaseLockerSpace(item)">Release</button>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </ng-container>
+                                                                                    <ng-container *ngIf="selectedLockerSelection.length==0">
+                                                                                        <tr>
+                                                                                            <td colspan="12">No records found</td>
+                                                                                        </tr>
+                                                                                    </ng-container>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab id="layoutCustomizationTab" title="Layout Customizations">
+                        <ng-template ngbTabContent>
+                            <ngb-tabset (tabChange)="doLayoutTabFunctions($event)" [activeId]="defaultLayoutActiveTab">
+                               <ng-container *ngFor="let layout of layoutList;let j=index" >
+                                <ngb-tab [id]="layout?.id" [title]="layout?.title" >
+                                    <ng-template ngbTabContent>
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-12 col-xs-12" >
+                                                <div *ngIf="!logsData?.file" class="text-center">No layout found </div>
+                                                <div class="floor-plan-img" [hidden]="!logsData?.file">
+                                                    <div  class="canvas-overlay"></div>
+                                                    <canvas id="layoutCanvas" #canvas>
+                                                    Your browser does not support the canvas element.
+                                                    </canvas>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8 col-sm-12 col-xs-12" >
+                                                <div class="row">
+                                                <div class="col-md-12 col-sm-12 col-xs-12 msg-block" *ngFor="let item of logsData?.replies; let j=index" >
+                                                    <div class="main-block">
+                                                    <span class="number-block">{{j+1}} </span>
+                                                    <span class="mr-2">
+                                                        <img src="assets/img/user-icon.jpg">
+                                                    </span>
+                                                    <div>
+                                                        <h5> <b>{{item?.author_name}}&nbsp;&nbsp; <span *ngIf="item?.created_at"> ({{item?.created_at | date:'yyyy-MM-dd'}}&nbsp;{{item?.created_at | date:'shortTime'}})</span></b>  <button class="btn btn-primary btn-sm" (click)="openReplyModal(replyModal,item)"> Reply</button></h5>
+                                                        <p class="mb-1">{{item?.locations}}</p>
+                                                        <p class="mb-1">{{item?.message}}</p>
+                                                    </div>
+                                                    </div>
+                                                    <ng-container  *ngFor="let reply of item?.replies">
+                                                    <div class="main-block pl-5">
+                                                        <span>&nbsp; </span>
+                                                        <span class="ion-margin-start  mr-2">
+                                                        <img *ngIf="reply?.is_admin" src="assets/img/admin-icon.jpg">
+                                                        <img *ngIf="!reply?.is_admin" src="assets/img/user-icon.jpg">
+                                                        </span>
+                                                        <div style="flex: auto;">
+                                                        <h5> <b>{{reply?.author_name}}&nbsp;&nbsp; <span *ngIf="reply?.created_at"> ({{reply?.created_at | date:'yyyy-MM-dd'}}&nbsp;{{reply?.created_at | date:'shortTime'}})</span></b></h5>
+                                                        <p class="mb-1">{{reply?.message ? reply?.message :' '}}</p>
+                                                        <p class="mb-0 yellow-badge text-right">{{item?.status}}</p>
+                                                        </div>
+                                                        <!-- <ion-button size="small" color="warning" slot="end">{{item?.status}}</ion-button> -->
+                                                    </div>
+                                                    <!-- <ion-badge color="warning" >{{item?.status}}</ion-badge> -->
+                                                    </ng-container>
+                                                    </div>
+                                                    </div>
+                                                    <div class="col-md-12 col-sm-12 col-xs-12" *ngIf="layout.replies.length==0">
+                                                    <div class="text-center">No records found </div>
+                                                    </div>
+                                                </div>
+                                        </div>      
+                                    </ng-template>
+                                </ngb-tab>
+                               </ng-container>
+                            </ngb-tabset>
+                            <ng-container *ngIf="!layoutList || layoutList.length==0">
+                                         <div class="text-center">No layout found </div>
+                           </ng-container>
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab id="summaryTab" title="Summary">
+                        <ng-template ngbTabContent>
+                            <div class="content-wrap">
+                                <div class="row">
+                                    <div class="col-lg-12 col-xs-12 mt-2">
+                                        <div class="project-details">
+                                            <div class="row">
+                                                <div class="col-md-12 mb-4">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-md-12 text-center">
+                                                                    <div class="thumbnail-img" *ngIf="selectedColorCollection?.source?.hero_image?.url" [ngStyle]="{'background-image': 'url(&quot; '+ baseUrl+ selectedColorCollection?.source?.hero_image?.url+'/400&quot;)'}">
+                                                                        <!-- <img style="height:300px;" [src]="baseUrl + selectedColorCollection?.source?.hero_image?.url"
+                                                                            alt=""> -->
+                                                                    </div>
+
+                                                                    <div class="thumbnail-img" *ngIf="!selectedColorCollection?.source?.hero_image?.url" [ngStyle]="{'background-image': 'url(&quot;assets/img/no-image.jpg&quot;)'}">
+
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 ">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="row mb-2">
+                                                                <div class="col-md-12">
+                                                                    <table class="table list_table" style="table-layout: fixed;">
+                                                                        <thead> </thead>
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <div>Model</div>
+                                                                                    <div>{{unitDetailsObj?.model_name}}</div>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div>Type</div>
+                                                                                    <div>{{unitDetailsObj?.type}}</div>
+
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div> Floor No</div>
+                                                                                    <div>{{unitDetailsObj?.floor_legal}}</div>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div>Bathrooms</div>
+                                                                                    <div>{{unitDetailsObj?.bath}}</div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <div> Bedrooms</div>
+                                                                                    <div>{{unitDetailsObj?.bed}}</div>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div> Den</div>
+                                                                                    <div>{{unitDetailsObj?.den}}</div>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div> Views</div>
+                                                                                    <div>{{unitDetailsObj?.views}}</div>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div> Ceiling</div>
+                                                                                    <div>{{unitDetailsObj?.ceiling}} </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="block-sections">
+                                                                <h4 class="pt-1">Color Collection</h4>
+                                                                <div class="row" *ngFor="let collection of colorCollection?.records;let j=index">
+                                                                    <div class="col-md-10">
+                                                                        {{collection?.item_name}}
+                                                                    </div>
+                                                                    <div class="col-md-2 text-right">
+                                                                        {{colorCollection?.total_price | currency:'USD'}}
+                                                                    </div>
+                                                                </div>
+                                                                <div *ngIf="colorCollection?.records.length==0"> No record found</div>
+                                                            </div>
+                                                            <ng-container *ngIf="locationWiseList && locationWiseList.length>0">
+                                                                <div class="block-sections">
+                                                                    <div class="horizontal-line" *ngFor="let location of locationWiseList;let i=index">
+                                                                        <h4 class="pt-1">{{location?.name}}</h4>
+                                                                        <ng-container *ngIf="location && location.packages && location.packages.length>0">
+                                                                            <div>Packages</div>
+                                                                            <div class="row" *ngFor="let package of location.packages">
+                                                                                <div class="col-md-10">
+                                                                                    <b>{{package?.item_name}}</b>
+                                                                                </div>
+                                                                                <div class="col-md-2 text-right">
+                                                                                    <b>{{package?.price | currency:'USD' }}</b>
+                                                                                </div>
+                                                                            </div>
+                                                                        </ng-container>
+                                                                        <ng-container *ngIf="location && location.options && location.options.length>0">
+                                                                            <div class="pt-2">Personalization Options</div>
+                                                                            <div class="row" *ngFor="let option of location.options">
+                                                                                <div class="col-md-10">
+                                                                                    <b>{{option?.item_name}}</b>
+                                                                                </div>
+                                                                                <div class="col-md-2 text-right">
+                                                                                    <b>{{option?.price | currency:'USD' }}
+                                                                                    </b>
+                                                                                </div>
+                                                                            </div>
+                                                                        </ng-container>
+                                                                    </div>
+                                                                </div>
+                                                            </ng-container>
+
+                                                            <div class="horizontal-line">
+                                                                <div class="pt-1">
+                                                                    <dl class="row mb-0">
+                                                                        <dd class="col-md-10 col-sm-6 text-right">
+                                                                            <b>Sub Total :</b>
+                                                                        </dd>
+                                                                        <dd class="col-md-2 col-sm-6 text-right">{{totalObj?.subTotal | currency:'USD'}}</dd>
+                                                                    </dl>
+                                                                    <dl class="row mb-0">
+                                                                        <dd class="col-md-10 col-sm-6 text-right">
+                                                                            <b>HST[13%] :</b>
+                                                                        </dd>
+                                                                        <dd class="col-md-2 col-sm-6 text-right">{{totalObj?.hst | currency:'USD'}}</dd>
+                                                                    </dl>
+                                                                    <dl class="row mb-0">
+                                                                        <dd class="col-md-10 col-sm-6 text-right">
+                                                                            <b>Total :</b>
+                                                                        </dd>
+                                                                        <dd class="col-md-2 col-sm-6 text-right">{{totalObj?.total | currency:'USD'}}</dd>
+                                                                    </dl>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngb-tab>
+                </ngb-tabset>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #viewDescriptionNotes>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">Add Information </h5>
+        <button type="button " class="close pull-right " aria-label="Close " (click)="modalRef.hide() ">
+            <span aria-hidden="true ">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body ">
+        <div class="container-fluid ">
+            <form autocomplete="off ">
+                <div class="row ">
+                    <div class="col-md-12 ">
+                        <div class="form-group ">
+                            <label>Description :
+                            </label>
+                            <p [innerHtml]="formDetails.description"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-12 ">
+                        <div class="form-group ">
+                            <label>Construction Notes :
+                            </label>
+                            <p [innerHtml]="formDetails.construction_notes"></p>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer ">
+        <div class="col-md-12 text-right ">
+            <button type="button" class="btn btn-secondary" (click)="modalRef.hide()">Cancel</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #replyModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">Reply</h5>
+        <button type="button " class="close pull-right " aria-label="Close " (click)="modalRef.hide() ">
+            <span aria-hidden="true ">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body ">
+        <div class="container-fluid ">
+            <form autocomplete="off ">
+                <div class="row ">
+                    <div class="col-md-12 ">
+                        <div class="form-group ">
+                            <label>Message 
+                                <span style="color:red">*</span>: 
+                            </label>
+                            <textarea rows="5" cols="7" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.message"
+                             name="message"></textarea>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group ">
+                            <label>Status 
+                                <span style="color:red">*</span>: 
+                            </label>
+                            <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.status">
+                                <option value="">Select Status</option>
+                                <option *ngFor="let status of statusList" [value]="status.value">{{status.name}}</option>
+                            </select>
+                            <!-- <input type="text" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.status"
+                            name="status"> -->
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group ">
+                            <label>Price : </label>
+                            <input type="number" min="0" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.price"
+                             name="price">
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group ">
+                            <label>Cost : </label>
+                            <input type="number" min="0" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.cost"
+                             name="cost">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group ">
+                            <label>Item Modal Number : </label>
+                            <input type="text" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.item_model_number"
+                            name="item_model_number">
+                            
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group ">
+                            <label>Category : </label>
+                            <input type="text"  class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.category"
+                            name="category">
+                           
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group ">
+                            <label>Location : </label>
+                            <input type="text" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.location"
+                            name="location">
+                            
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group ">
+                            <label>Construction Notes : </label>
+                            <textarea rows="5" cols="7" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.construction_notes"
+                             name="construction_notes"></textarea>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer ">
+        <div class="col-md-12 text-right ">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary mr-2" (click)="updateReply()">Update</button>
+            <!-- <button type="button" class="btn btn-primary" (click)="sendEmail()">Send Email</button> -->
+        </div>
+    </div>
+</ng-template>
+
+
+
+<!-- <ng-template #addItmesModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">Add Item </h5>
+        <button type="button " class="close pull-right " aria-label="Close " (click)="modalRef.hide() ">
+            <span aria-hidden="true ">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body ">
+        <div class="container-fluid ">
+            <form autocomplete="off ">
+                <div class="row ">
+                    <div class="col-md-12 ">
+                        <div class="form-group ">
+                            <label>Cost :
+                            </label>
+                            <input type="number" min="0" class="form-control form-control-sm" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.unit_cost"
+                            class="form-control form-control-sm" name="unit_cost">
+
+                        </div>
+                    </div>
+                    <div class="col-md-12 ">
+                        <div class="form-group ">
+                            <label>Price :
+                            </label>
+                            <p [innerHtml]="formDetails.construction_notes"></p>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer ">
+        <div class="col-md-12 text-right ">
+            <button type="button" class="btn btn-secondary" (click)="modalRef.hide()">Cancel</button>
+        </div>
+    </div>
+</ng-template> -->

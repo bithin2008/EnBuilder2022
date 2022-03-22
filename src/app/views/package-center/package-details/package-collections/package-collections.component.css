@@ -1,0 +1,3 @@
+::ng-deep .custom-size.modal-xl {
+    max-width: calc(100vw - 100px) !important;
+}

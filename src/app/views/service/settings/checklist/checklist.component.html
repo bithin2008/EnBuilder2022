@@ -1,0 +1,178 @@
+<form autocomplete="off">
+    <div class="row mb-3">
+        <div class="col-md-8"></div>
+        <!-- <div class="col-md-3 col-sm-3">
+            <div class="form-group row">
+                <div class="col-md-12">
+                    <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.project_id" (change)="onProjectChange()">
+                        <option value="{{item._id}}" *ngFor="let item of projectList">{{item.name}}</option>
+                    </select>
+                </div>
+            </div>
+        </div> -->
+        <div class="col-md-3 col-sm-3">
+            <div class="form-group row">
+                <div class="col-md-12">
+                    <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.location" (change)="onLocationChange()">
+                        <option value="">All Locations</option>
+                        <option value="{{item.name}}" *ngFor="let item of locationList">{{item.name}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-1 col-sm-5">
+            <button class="btn btn-primary " type="button" [disabled]="!filterForm.project_id || !filterForm.location" (click)="openAddIssue(addIssueModal)">Add</button>
+            <!-- <button class="btn btn-primary " type="button" (click)="openCopyUser(AddUserModal)">Copy</button> -->
+
+        </div>
+    </div>
+</form>
+
+<div class="table-responsive mb-5">
+    <table class="table table-striped list_table" style="table-layout: fixed;">
+        <thead>
+            <tr>
+                <th width="200px">Item Title</th>
+                <th width="150px">Potential Issues</th>
+                <th width="100px">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngIf="checkList?.length > 0">
+                <tr *ngFor="let item of checkList;let i=index">
+                    <td>{{item?.title}}</td>
+                    <td>
+                        <div *ngFor="let issue of item?.potential_issues">
+                            {{issue}}
+                        </div>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary btn-sm mr-2" type="button" (click)="editIssue(addIssueModal,item)">
+                            <i class="fa fa-pencil-alt" aria-hidden="true"></i>
+                        </button>
+
+                        <button class="btn btn-sm btn-danger" type="button" (click)="deleteCheckItem(item)">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>
+            </ng-container>
+            <ng-container *ngIf="checkList?.length == 0">
+                <tr>
+                    <td colspan="3" class="text-center"> No Item Found</td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+</div>
+<div class="row mt-3" *ngIf="paginationObj.total>=20">
+    <div class="col-md-6">
+        <div class="form-group">
+            <span class="float-left" style="width:70px;margin-top: 6px;">Page Size:</span>
+            <span class="float-left" style="width:85px;">
+                <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="pageSize" (change)="setPageSize()">
+                    <option value="">-Select-</option>
+                                        <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </span>
+            <span class="float-left" style="margin-top: 6px !important;margin-left: 16px !important;">{{paginationObj.total}} Record(s) Found</span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <nav>
+            <ul class="pagination">
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" (click)="doPaginationWise(paginationObj.previousPage)">
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(1)">
+                        First
+                    </a>
+                </li>
+                <li class="page-item {{pagination == paginationObj.currentPage?'active':''}}" *ngFor="let pagination of paginationObj.items">
+                    <a class="page-link" (click)="doPaginationWise(pagination)">{{pagination}}</a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.totalPages)">
+                        Last
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" (click)="doPaginationWise(paginationObj.nextPage)">
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<ng-template #addIssueModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">{{isEdit ?'Edit' :'Add'}} a Checklist item
+        </h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <form autocomplete="off">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-form-label"> Project :
+                            <b>{{formDetails?.project_name}}</b>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-form-label">Title
+                            <span style="color:red">*</span>:</label>
+                        <input class="form-control" name="title" placeholder="title" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.title">
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <label class="col-form-label">Potential Issues :</label>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <ng-container *ngFor="let item of potentialIssues;let i=index">
+                            <div class="col-md-1 pt-1">
+                                {{i+1}}.
+                            </div>
+                            <div class="col-md-9 mb-1">
+                                <input class="form-control" name="potential_issue{{i}}" placeholder="Potential Issue {{i+1}}" type="text" [ngModelOptions]="{standalone: true}"
+                                    [(ngModel)]="item.potential_issue">
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" *ngIf="i>2" class="btn btn-sm btn-danger" (click)="deleteIssue(i)">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-primary" (click)="addIssue()">Add Issue</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" *ngIf="!isEdit" (click)="addIssues()">Add</button>
+            <button type="button" class="btn btn-primary" *ngIf="isEdit" (click)="editIssues()">Update</button>
+
+        </div>
+    </div>
+</ng-template>

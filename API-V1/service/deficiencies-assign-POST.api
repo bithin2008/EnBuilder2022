@@ -1,0 +1,67 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_deficiencies' %>
+<% assign params = en.params %>
+<% if params.deficiency_ids %>
+    <% for id in params.deficiency_ids %>
+        <% unassign query %>
+        <% unassign data %>
+        <% unassign itemResult %>
+        <% assign query._id = id %>
+        <% assign data = params.data_to_update %>
+        <% if data.assignee_id %>
+            <% en.data.findOne itemResult datasetId query "status" %>
+            <% assign itemResult = itemResult.row %>
+            <% if itemResult.status == 'Open' %>
+                <% assign data.status = 'Assigned' %> 
+            <% endif %>
+        <% endif %>
+        <% if data.due_date %>
+            <% assign data.due_date = data.due_date | string_to_date: "yyyy-MM-dd" time-zone %>
+        <% endif %>
+        <% if data.status == 'Open' %>
+            <% assign data.opened_at = en.time.now %>
+            <% assign data.opened_by = UserResult.user.firstName | append: ' ' | append: UserResult.user.lastName %>
+        <% endif %>
+        <% if data.status == 'Assigned' %>
+            <% assign data.assigned_at = en.time.now %>
+            <% assign data.assigned_by = UserResult.user.firstName | append: ' ' | append: UserResult.user.lastName %>
+        <% endif %>
+        <% if data.status == 'Accepted' %>
+            <% assign data.accepted_at = en.time.now %>
+            <% assign data.accepted_by = UserResult.user.firstName | append: ' ' | append: UserResult.user.lastName %>
+        <% endif %>
+        <% if data.status == 'Not Accepted' %>
+            <% assign data.not_accepted_at = en.time.now %>
+            <% assign data.not_accepted_by = UserResult.user.firstName | append: ' ' | append: UserResult.user.lastName %>
+        <% endif %>
+        <% if data.status == 'Completed' %>
+            <% assign data.completed_at = en.time.now %>
+            <% assign data.completed_by = UserResult.user.firstName | append: ' ' | append: UserResult.user.lastName %>
+        <% endif %>
+        <% if data.status == 'Closed' %>
+            <% assign data.closed_at = en.time.now %>
+            <% assign data.closed_by = UserResult.user.firstName | append: ' ' | append: UserResult.user.lastName %>
+        <% endif %>
+        <% en.data.update upResult datasetId query data %>
+    <% endfor %>
+    <% assign returnData.status = 1 %> 
+    <% assign returnData.message = 'Deficiency updated successfully.' %>
+    <% assign returnData.result = upResult %>
+    <% return returnData %>
+<% else %>
+    <% assign returnData.status = 0 %>
+    <% assign returnData.message = 'Deficiency id not found.' %>
+    <% return returnData %>
+<% endif %>
+ 
+
+ 
+
+
+

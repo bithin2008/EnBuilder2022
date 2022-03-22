@@ -1,0 +1,95 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'crm_settings' %>
+
+<% assign datasetId = 'crm_settings' %>
+<% assign query._id = en.params._id %>
+<% en.data.findOne result datasetId query %>
+<% if en.req.hasFile %>
+    <% assign rowId = en.params._id %>
+    <% if result.row.image %>
+        <% assign imageObj = result.row.image %>
+        <% en.data.deleteFile imageDeleteResult datasetId 'image' rowId imageObj._id  %>
+    <% endif %>
+    <% en.data.attachfile imgresult datasetId 'image' rowId false %> 
+    <% assign returnData.result = imgresult %>
+<% else %>
+    <% assign returnData.result = result %>
+<% endif %>
+<% assign returnData.status = 1 %>
+<% assign returnData.message = 'Updated' %>
+<% return returnData %> 
+
+<% exit %>
+
+
+<% include "common/single-cors-header.html" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'crm_settings' %>
+
+<% assign datasetId = 'crm_settings' %>
+<% assign query._id = en.params._id %>
+<% en.data.upsert upResult datasetId query en.params %> 
+<% assign returnData.status = 1 %>
+<% assign returnData.message = 'Updated' %>
+<% assign returnData.result = upResult %>
+<% return returnData %>
+
+<% exit %>
+
+
+
+<% assign data = en.params.data %>
+<% for item in data %>
+    <% unassign dataToUpdate %>
+    <% unassign query %>
+    <% assign query._id = item._id %>
+    <% assign dataToUpdate.display_order= item.display_order %>
+    <% en.data.update upResult datasetId query dataToUpdate %> 
+<% endfor %>
+<% assign returnData.status = 1 %>
+<% assign returnData.message = 'Updated successfully' %>
+<% return returnData %>
+
+<% exit %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<% assign datasetId = 'crm_settings' %>
+<% assign query.type = en.params._id %>
+<% en.data.find orgresults datasetId query "" orderBy 1000 1  %>
+<% assign orgItem = orgresults.rows %>
+<% for item in orgItem %>
+    <% unassign dataToUpdate %>
+    <% unassign query %>
+    <% assign query._id = item._id %>
+    <% assign dataToUpdate.type = en.params.type %>
+    <% en.data.update upResult datasetId query dataToUpdate %> 
+<% endfor %>
+<% assign returnData.status = 1 %>
+<% assign returnData.message = 'CRM Settings updated successfully' %>
+<% return returnData %>
+
+<% exit %>
+
+  

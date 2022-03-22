@@ -1,0 +1,17 @@
+
+<% en.users.login results en.params.email en.params.password %>
+<% return 'result1' results %>
+<% if results.error %>
+    <% assign returnData.status = 0 %>
+    <% assign returnData.message = 'Invalid credentials' %>
+    <% assign returnData.result.token = null %>
+    <% assign returnData.result.user_name = null %>
+    <% return returnData %>
+<% else %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'success' %>
+    <% assign returnData.result = results %>
+    <% rem assign returnData.result.token = results.session._id %>
+    <% rem assign returnData.result.user_name = results.user.userName %>
+    <% return returnData %>
+<% endif %>

@@ -1,0 +1,62 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'contacts' %>
+
+<% assign pageSize = 20 %> 
+<% if en.params.pageSize %>
+    <% assign pageSize = en.params.pageSize %>
+<% endif %>
+<% assign page = 1 %>
+<% if en.params.page %> 
+    <% assign page = en.params.page %>
+<% endif %> 
+
+<% if en.params.sortBy %>
+    <% if en.params.sortOrder =='ASC' %>
+        <% assign orderBy[en.params.sortBy] = 1 %>
+    <% else %>
+        <% assign orderBy[en.params.sortBy] = -1 %>
+    <% endif %>
+<% else %>
+    <% assign orderBy.name = 1 %>
+<% endif %>
+
+<% if en.params.project_id %> 
+    <% assign query1.project_id = en.params.project_id %>
+    <% assign query1.type = 'SERVICE-USER' %>
+    <% en.data.distinct results1 "bldr_project_settings" "user_id" query1 %>
+    <% assign query._id.$nin  = results1.values %>
+<% endif %>
+
+<% if en.params.searchText %>
+    <% assign q1.first_name.$regex = en.params.searchText %> 
+    <% assign q1.first_name.$options = "i" %>
+    <% assign q2.last_name.$regex = en.params.searchText %> 
+    <% assign q2.last_name.$options = "i" %>
+    <% assign q3.display_name.$regex = en.params.searchText %> 
+    <% assign q3.display_name.$options = "i" %>
+    <% assign q4["emails.email"].$regex = en.params.searchText %> 
+    <% assign q4["emails.email"].$options = "i" %>
+    <% assign q5["phones.number"].$regex = en.params.searchText %> 
+    <% assign q5["phones.number"].$options = "i" %>
+    <% assign query.$or = [q1,q2,q3,q4,q5] %>
+<% endif %>
+
+<% en.data.find results datasetId query "first_name,last_name,display_name,emails" orderBy pageSize page %>
+<% assign returnData.status = 1 %>
+<% assign returnData.message = 'Contact list' %>
+<% assign returnData.results = results.rows %>
+<% assign returnData.pagination = results.pagination %>
+<% return returnData %>
+
+
+
+
+
+
+

@@ -1,0 +1,30 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+
+<% assign datasetId = 'bldr_pc_models_units' %>
+
+<% assign params = en.params %>
+<% if params.models %>
+    <% for item in params.models %>
+    
+        <% assign query.source_id = params._id %>
+        <% assign query.model_id = item.model_id %>
+        <% assign item.source_id = params._id %>
+        <% assign item.project_id = params.project_id %>
+        <% assign item.type = 'MODEL' %>
+        <% assign item.subtype = params.subtype %>
+        <% en.data.upsert upResult datasetId query item %> 
+    <% endfor %>
+    <% assign returnData.status = 1 %> 
+    <% assign returnData.message = 'Updated successfully.' %>
+    <% return returnData %>
+<% else %>
+    <% assign returnData.status = 0 %> 
+    <% assign returnData.message = 'Nothing to update.' %>
+    <% return returnData %>
+<% endif %> 

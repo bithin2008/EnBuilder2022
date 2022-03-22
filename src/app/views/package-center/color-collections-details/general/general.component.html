@@ -1,0 +1,204 @@
+<div class="collection-details">
+    <div class="row">
+        <div class="col-md-4 mb-2 padding-right-2">
+            <div class="card">
+                <div class="card-body text-center" style="height: 300px;">
+                    <div class="thumb-img" *ngIf="collectionDetails?.hero_image" [ngStyle]="{'background-image': 'url(&quot;'+ baseUrl+ collectionDetails?.hero_image?.url +'/400&quot;)'}">
+                        <button type="button" class="btn btn-sm btn-primary logo-upload-btn">
+                            <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                            <input type="file" accept="image/*" (change)="uploadHeroImage($event)">
+                        </button>
+                    </div>
+                    <div class="thumb-img" *ngIf="!collectionDetails?.hero_image" [ngStyle]="{'background-image': 'url(&quot;assets/img/no-image.jpg&quot;)'}">
+                        <button type="button" class="btn btn-sm btn-primary logo-upload-btn">
+                            <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                            <input type="file" accept="image/*" (change)="uploadHeroImage($event)">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8 mb-2 padding-left-1">
+            <div class="card">
+                <div class="card-body" style="height: 300px;">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>Basic Information
+                                <button style="float: right;" type="button" class="btn btn-primary" (click)="openEditBasicModal(basicModal)">
+                                    <i class="fas fa-pencil-alt" style="font-size:12px;float: right;"></i>
+                                </button>
+                            </h4>
+
+                            <dl class="row">
+                                <dd class="col-md-5">Name</dd>
+                                <dd class="col-md-7">: {{collectionDetails?.name}}</dd>
+                                <dd class="col-md-5">Active</dd>
+                                <dd class="col-md-7">: {{collectionDetails?.is_active ?'Yes':'No'}}</dd>
+                                <!-- <dd class="col-md-5">Cost</dd>
+                                <dd class="col-md-7">: {{collectionDetails?.cost | currency:'USD'}}</dd>
+                                <dd class="col-md-5">Price</dd>
+                                <dd class="col-md-7">: {{collectionDetails?.price | currency:'USD'}}</dd> -->
+                                <dd class="col-md-5">Description</dd>
+                                <dd class="col-md-7" [innerHtml]="collectionDetails?.description">: </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 mb-2">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>Photos
+                                <button class="btn btn-sm btn-primary doc-img-up-btn" style="float: right;" type="button"> Add
+                                    <input class="doc-img-upload" accept="image/*" type="file" multiple (change)="uploadPhotos($event.target.files)">
+                                </button>
+                            </h4>
+                            <br>
+                            <ng-container *ngIf="collectionDetails?.photos?.length>0">
+                                <ul class="film-strip">
+                                    <li style="position: relative;" *ngFor="let item of collectionDetails?.photos;let j=index">
+                                        <!-- <li style="position: relative;"> -->
+                                        <div class="icons-block">
+
+                                            <div class="delete-photo-icon" (click)="deletePhoto(item,$event)">
+                                                <i class="fas fa-trash "></i>
+                                            </div>
+                                            <div class="delete-photo-icon mr-1" (click)="openPhotoDescription(photoDescriptionModal,item)">
+                                                <i class="fa fa-info-circle"></i>
+                                            </div>
+                                            <div class="delete-photo-icon mr-1" *ngIf="(j+1)<collectionDetails?.photos?.length" (click)="reArrangePhotos('right',j)">
+                                                <i class="fa fa-arrow-right"></i>
+                                            </div>
+
+                                            <div class="delete-photo-icon mr-1" *ngIf="j>0" (click)="reArrangePhotos('left',j)">
+                                                <i class="fa fa-arrow-left"></i>
+                                            </div>
+                                        </div>
+                                        <div class="photo-container-div " [ngStyle]="{ 'background-image':
+                                            'url(&quot;' + baseUrl + item?.url + '/350&quot;)', 'background-size': 'cover',
+                                            'background-repeat': 'no-repeat', 'background-position': 'center' } ">
+                                        </div>
+
+                                        <div class="photo-description">
+                                            {{item?.description ? item?.description :' ' }}
+                                        </div>
+                                    </li>
+
+                                </ul>
+                            </ng-container>
+                            <ng-container *ngIf="collectionDetails?.photos?.length==0">
+                                <p class="text-center ">No photo found.</p>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #basicModal>
+    <div class="modal-header ">
+        <h5 class="modal-title pull-left ">Edit Collection</h5>
+        <button type="button " class="close pull-right " aria-label="Close " (click)="modalRef.hide() ">
+            <span aria-hidden="true ">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body ">
+        <div class="container-fluid ">
+            <form autocomplete="off ">
+                <div class="row ">
+
+                    <div class="col-md-12 ">
+                        <div class="form-group ">
+                            <label>Name
+                                <span style="color:red ">*</span>:</label>
+                            <input type="text " [ngModelOptions]="{standalone: true} " [(ngModel)]="formDetails.name
+                                            " class="form-control ">
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Cost
+                                <span style="color:red">*</span>
+                                :</label>
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.cost" class="form-control">
+                        </div>
+                    </div> -->
+                    <!-- <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Price
+                                <span style="color:red">*</span> :
+                            </label>
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.price" class="form-control">
+                        </div>
+                    </div> -->
+                    <div class="col-md-12 ">
+                        <div class="form-group mt-2 ">
+                            <div class="custom-control custom-checkbox">
+                                <input id="is_active" type="checkbox" class="custom-control-input" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.is_active">&nbsp;
+                                <label class="custom-control-label" for="is_active">Active</label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-12 ">
+                        <div class="form-group ">
+                            <label>Description :
+                            </label>
+                            <div [froalaEditor]="nonInlineEdit" [(froalaModel)]="formDetails.description">
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Description :</label>
+                            <div class="col-sm-12">
+                                <div [froalaEditor]="nonInlineEdit" [(froalaModel)]="formDetails.description">
+                                    {{formDetails.description ? formDetails.description : ''}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer ">
+        <div class="col-md-12 text-right ">
+            <button type="button " class="btn btn-secondary mr-2 " (click)="modalRef.hide() ">Cancel</button>
+            <button type="button " class="btn btn-primary " (click)="updateColorCollection() ">Update</button>
+        </div>
+    </div>
+</ng-template>
+<ng-template #photoDescriptionModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">Photo Description</h5>
+        <button type="button " class="close pull-right " aria-label="Close " (click)="modalRef.hide() ">
+            <span aria-hidden="true ">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body ">
+        <div class="container-fluid ">
+            <form autocomplete="off ">
+                <div class="row ">
+                    <div class="col-md-12 ">
+                        <div class="form-group ">
+                            <label>Description :
+                            </label>
+                            <textarea type="text" rows="4" cols="4" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.description" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer ">
+        <div class="col-md-12 text-right ">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updatePhotoDescription()">Update</button>
+        </div>
+    </div>
+</ng-template>

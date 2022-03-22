@@ -1,0 +1,7 @@
+.clear-search {
+    position: absolute;
+    right: 15px;
+    top: 7px;
+    opacity: 0.5;
+    z-index: 999;
+}

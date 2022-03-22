@@ -1,0 +1,138 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+
+<% assign datasetId = 'bldr_pc_models_units' %>
+
+<% assign pageSize = 200 %> 
+<% if en.params.pageSize %>
+    <% assign pageSize = en.params.pageSize %>
+<% endif %> 
+<% assign page = 1 %>
+<% if en.params.page %> 
+    <% assign page = en.params.page %>
+<% endif %> 
+
+<% if en.params.sortBy %>
+    <% if en.params.sortOrder =='ASC' %>
+        <% assign orderBy[en.params.sortBy] = 1 %>
+    <% else %>
+        <% assign orderBy[en.params.sortBy] = -1 %>
+    <% endif %>
+<% else %>
+    <% assign orderBy.model_name = 1 %>
+<% endif %> 
+
+<% assign params = en.params %>
+
+<% if params.purpose == 'add' %>
+    <% assign query.source_id = params._id %>
+    <% assign query.project_id = params.project_id %>
+    <% assign query.type = 'MODEL' %>
+    <% assign query.subtype = params.subtype %>
+    <% en.data.distinct results1 datasetId "model_id" query %>
+    
+    <% assign query1.project_id = params.project_id %>
+    <% assign query1._id.$nin  = results1.values %>
+    <% if en.params.bed %>
+        <% assign query1.bed.$in = en.params.bed | splittoint:","  %>
+    <% endif %>
+    <% if en.params.bath %>
+        <% assign query1.bath.$in = en.params.bath | splittoint:","  %>
+    <% endif %>
+    <% if en.params.media %>
+        <% assign query1.media.$in = en.params.media | splittoint:","  %>
+    <% endif %>
+    <% if en.params.flex %>
+        <% assign query1.flex.$in = en.params.flex | splittoint:","  %>
+    <% endif %>
+    <% if en.params.ceiling %>
+        <% assign query1.ceiling.$in = en.params.ceiling | splittoint:","  %>
+    <% endif %>
+    <% if en.params.den %>
+        <% assign query1.den.$in = en.params.den | splittoint:"," %>
+    <% endif %>
+    <% if en.params.collection %>
+        <% assign query1.collection.$in = en.params.collection | splittrim:"," %>
+    <% endif %>
+    <% if en.params.type %>
+        <% assign query1.type.$in = en.params.type | splittrim:"," %>
+    <% endif %>
+    <% if en.params.views %>
+        <% assign query1.views.$in = en.params.views | splittrim:"," %>
+    <% endif %>
+    <% if en.params.spaces %>
+        <% assign query1.spaces.$elemMatch.name.$in = en.params.spaces | splittrim:"," %>
+    <% endif %>
+    <% en.data.find results 'bldr_models' query1 "" orderBy pageSize page %>
+    
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Model lists' %>
+    <% assign returnData.result = results.rows %>
+    <% assign returnData.pagination = results.pagination %>
+    <% return returnData %>
+<% else %>
+
+    <% assign query1.project_id = params.project_id %>
+    <% if en.params.bed %>
+        <% assign query1.bed.$in = en.params.bed | splittoint:","  %>
+    <% endif %>
+    <% if en.params.bath %>
+        <% assign query1.bath.$in = en.params.bath | splittoint:","  %>
+    <% endif %>
+    <% if en.params.media %>
+        <% assign query1.media.$in = en.params.media | splittoint:","  %>
+    <% endif %>
+    <% if en.params.flex %>
+        <% assign query1.flex.$in = en.params.flex | splittoint:","  %>
+    <% endif %>
+    <% if en.params.ceiling %>
+        <% assign query1.ceiling.$in = en.params.ceiling | splittoint:","  %> 
+    <% endif %>
+    <% if en.params.den %>
+        <% assign query1.den.$in = en.params.den | splittoint:"," %>
+    <% endif %>
+    <% if en.params.collection %>
+        <% assign query1.collection.$in = en.params.collection | splittrim:"," %>
+    <% endif %>
+    <% if en.params.type %>
+        <% assign query1.type.$in = en.params.type | splittrim:"," %>
+    <% endif %>
+    <% if en.params.views %>
+        <% assign query1.views.$in = en.params.views | splittrim:"," %>
+    <% endif %>
+    <% if en.params.spaces %>
+        <% assign query1.spaces.$elemMatch.name.$in = en.params.spaces | splittrim:"," %>
+    <% endif %>
+    <% en.data.distinct results1 'bldr_models' "_id" query1 %>
+    
+    <% assign query.model_id.$in  = results1.values %>
+    <% assign query.source_id = params._id %>
+    <% assign query.project_id = params.project_id %>
+    <% assign query.type = 'MODEL' %> 
+    <% assign query.subtype = params.subtype %>
+    
+    <% en.data.find results datasetId query "" orderBy pageSize page %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Model list' %>
+    <% assign returnData.results = results.rows %>
+    <% assign returnData.pagination = results.pagination %>
+    <% return returnData %>
+<% endif %> 
+
+
+
+
+
+
+
+
+
+
+
+
+

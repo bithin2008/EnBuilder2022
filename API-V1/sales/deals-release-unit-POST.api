@@ -1,0 +1,95 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_deals' %> 
+
+<% assign params = en.params %>
+<% if params.deal_id %>
+    <% assign dealQuery._id = params.deal_id %>
+    <% en.data.findOne dealResult datasetId dealQuery %>
+    <% assign dealDetail = dealResult.row %>
+    <% if dealDetail %>
+        <% if dealDetail.unit %>
+            <% assign unitData = dealDetail.unit %>
+            // for updating unit status 
+            <% assign unitQuery._id = unitData._id %>
+            <% assign unitUpData.status = 'AVAILABLE' %>
+            <% assign unitUpData.deal_id = null %>
+            <% en.data.update unitUpResult "bldr_units" unitQuery unitUpData %>
+            
+            // for saving notes
+            <% if params.notes %>
+                <% assign user = UserResult.user %>
+                <% assign noteData.created_by = user.firstName | append: ' ' | append: user.lastName  %>
+                <% assign noteData.create_date = en.time.now %> 
+                <% assign noteData.body = params.notes %> 
+                <% assign noteData.deal_id = params.deal_id %> 
+                
+                <% en.data.insert result "crm_notes" noteData %> 
+                
+                <% unassign params.notes %>
+            <% endif %>
+            
+            // for updating deals
+            <% assign dealUpData.stage = 'UNIT RELEASED' %>
+            <% assign dealUpData.unit = null %>
+            <% assign dealUpData.deposit_structure_id = null %> 
+            <% assign dealUpData.deposit_structure_def = null %>
+            <% assign dealUpData.allocate_bicycle = null %>
+            <% assign dealUpData.allocate_parking = null %>
+            <% assign dealUpData.allocate_bicycle = null %> 
+            <% assign dealUpData.discounts = null %> 
+
+            <% en.data.update dealUpResult datasetId dealQuery dealUpData %>
+            
+            // for deleting all deposits entry
+            <% assign dquery.deal_id = dealDetail._id %>
+            <% en.data.find depositResults "bldr_deposits" dquery %>
+            <% if depositResults.rows %>
+                <% en.data.delete result "bldr_deposits" dquery %>  
+            <% endif %>
+            
+            // for making entry in crm_history
+            <% assign historyData.type = 'DEAL' %>
+            <% assign historyData.deal_id = dealDetail._id %> 
+            <% assign historyData.unit_id = dealDetail.unit._id %>
+            <% assign historyData.unit_no = dealDetail.unit.unit_no %>
+            <% assign user = UserResult.user %>
+            <% assign historyData.created_by = user.firstName | append: ' ' | append: user.lastName  %>
+            <% assign historyData.create_date = en.time.now %> 
+            
+            <% en.data.insert result "crm_history" historyData %> 
+            
+            <% assign returnData.status = 1 %>
+            <% assign returnData.message = 'Unit released successfully' %>
+            <% return returnData %>
+            <% exit %> 
+            
+        <% else %>
+            <% assign returnData.status = 0 %>
+            <% assign returnData.message = 'There is no unit assigned to the deal' %>
+            <% return returnData %>
+            <% exit %> 
+        <% endif %>
+    <% else %>
+        <% assign returnData.status = 0 %>
+        <% assign returnData.message = 'Deal not found' %>
+        <% return returnData %>
+        <% exit %> 
+    <% endif %>
+<% else %>
+    <% assign returnData.status = 0 %>
+    <% assign returnData.message = 'Deal id is required' %>
+    <% return returnData %>
+    <% exit %> 
+<% endif %>
+
+
+
+
+
+

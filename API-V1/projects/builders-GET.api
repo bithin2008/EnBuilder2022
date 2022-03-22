@@ -1,0 +1,64 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_builders' %>
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% en.data.findone result datasetId query %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Builder details' %>
+    <% assign returnData.result = result.row %>
+    <% return returnData %>
+<% else %>
+    <% assign pageSize = 20 %> 
+    <% if en.params.pageSize %>
+        <% assign pageSize = en.params.pageSize %>
+    <% endif %>
+    <% assign page = 1 %>
+    <% if en.params.page %> 
+        <% assign page = en.params.page %>
+    <% endif %> 
+    
+    <% if en.params.sortBy %>
+        <% if en.params.sortOrder =='ASC' %>
+            <% assign orderBy[en.params.sortBy] = 1 %>
+        <% else %>
+            <% assign orderBy[en.params.sortBy] = -1 %>
+        <% endif %>
+    <% else %>
+        <% assign orderBy.name = 1 %>
+    <% endif %>
+    <% if en.params.searchText %>
+        <% assign q1.name.$regex = en.params.searchText %> 
+        <% assign q1.name.$options = "i" %>
+        <% assign q2.contact_email.$regex = en.params.searchText %> 
+        <% assign q2.contact_email.$options = "i" %>
+        <% assign q3.contact_phone.$regex = en.params.searchText %> 
+        <% assign q3.contact_phone.$options = "i" %>
+        <% assign query.$or = [q1,q2,q3] %>
+    <% endif %>
+    
+    <% if en.params.type=='list' %>
+        <% en.data.find results datasetId query "_id,name" orderBy pageSize page %>
+        <% assign returnData.status = 1 %>
+        <% assign returnData.message = 'Builder list' %>
+        <% assign returnData.results = results.rows %>
+        <% assign returnData.pagination = results.pagination %>
+        <% return returnData %>
+        <% exit %>
+    <% endif %>
+    <% en.data.find results datasetId query "" orderBy pageSize page %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Builder list' %>
+    <% assign returnData.results = results.rows %>
+    <% assign returnData.pagination = results.pagination %>
+    <% return returnData %>
+<% endif %>
+
+
+
+

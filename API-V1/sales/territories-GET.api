@@ -1,0 +1,21 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'crm_territories' %>
+<% assign orderBy.name = 1 %>
+<% if en.params.searchText %>
+    <% assign Name.name.$regex = en.params.searchText %> 
+    <% assign Name.name.$options = "i" %>
+    
+    <% assign query.$or = [Name] %>
+<% endif %>
+<% en.data.find results datasetId query "" orderBy en.params.pageSize en.params.page %>
+<% assign returnData.status = 1 %>
+<% assign returnData.message = 'Territories list' %>
+<% assign returnData.results = results.rows %>
+<% assign returnData.pagination = results.pagination %>
+<% return returnData %>

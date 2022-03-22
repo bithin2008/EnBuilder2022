@@ -1,0 +1,112 @@
+.collection-details .row {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+
+.collection-details .card {
+    border: 0;
+    height: 100%;
+}
+
+.thumb-img {
+    background: #fff;
+    min-height: 255px;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+.doc-img-up-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.doc-img-upload {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    left: 0;
+    top: 0;
+}
+.delete-photo-icon {
+    /* position: absolute; */
+    width: 30px;
+    height: 30px;
+    /* top: -8px; */
+    padding-top: 0px;
+    text-align: center;
+    font-size: 20px;
+    background-color: black;
+    color: #e4dddd;
+    z-index: 1;
+    border-radius: 50%;
+    right: -8px;
+    float: right;
+}
+/* height: 150px; */
+.photo-container-div {
+    /* border: 5px solid #ccc; */
+    border-radius: 5px;
+    height: 82%; 
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    width: 250px;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.logo-upload-btn {
+    cursor: pointer;
+    overflow: hidden;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.logo-upload-btn input[type="file"] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+}
+
+.film-strip {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.film-strip li {
+    display: inline-block;
+    margin-right: 10px;
+    height: 200px;
+    position: relative;
+    padding: 10px;
+    background: #ccc;
+    margin-bottom: 10px;
+
+    /* overflow: hidden; */
+}
+
+.photo-description{
+    padding:5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 250px;
+    height: 30px;
+}
+
+.icons-block{
+    width: 250px;
+    position: absolute;
+    padding: 5px;
+}

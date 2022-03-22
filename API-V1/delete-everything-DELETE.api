@@ -1,0 +1,50 @@
+<% json deleteJson %>
+  {  
+    "query":{} 
+  }
+<% endjson %>  
+<% exit %>
+<% en.data.delete results 'bldr_bicycle_area' deleteJson.query %>
+<% en.data.delete results 'bldr_bicycle_types' deleteJson.query %>
+<% en.data.delete results 'bldr_bicycle_units' deleteJson.query %>
+<% en.data.delete results 'bldr_builders' deleteJson.query %>
+<% en.data.delete results 'bldr_color_collections' deleteJson.query %>
+<% en.data.delete results 'bldr_color_selection' deleteJson.query %>
+<% en.data.delete results 'bldr_deals' deleteJson.query %>
+<% en.data.delete results 'bldr_deficiencies' deleteJson.query %>
+<% en.data.delete results 'bldr_deposits' deleteJson.query %>
+<% en.data.delete results 'bldr_homeowners_guides' deleteJson.query %>
+<% en.data.delete results 'bldr_inspection_items' deleteJson.query %>
+<% en.data.delete results 'bldr_inspections' deleteJson.query %>
+<% en.data.delete results 'bldr_locker_area' deleteJson.query %>
+<% en.data.delete results 'bldr_locker_types' deleteJson.query %>
+<% en.data.delete results 'bldr_locker_units' deleteJson.query %>
+<% en.data.delete results 'bldr_lot_types' deleteJson.query %>
+<% en.data.delete results 'bldr_models' deleteJson.query %>
+<% en.data.delete results 'bldr_occupancy' deleteJson.query %>
+<% en.data.delete results 'bldr_packages' deleteJson.query %>
+<% en.data.delete results 'bldr_parking_addons' deleteJson.query %>
+<% en.data.delete results 'bldr_parking_floors' deleteJson.query %>
+<% en.data.delete results 'bldr_parking_spaces' deleteJson.query %>
+<% en.data.delete results 'bldr_parking_types' deleteJson.query %>
+<% en.data.delete results 'bldr_pc_models_units' deleteJson.query %>
+<% en.data.delete results 'bldr_personalization_options' deleteJson.query %>
+<% en.data.delete results 'bldr_portal_activity' deleteJson.query %>
+<% en.data.delete results 'bldr_project_progress' deleteJson.query %>
+<% en.data.delete results 'bldr_project_settings' deleteJson.query %>
+<% en.data.delete results 'bldr_projects' deleteJson.query %>
+<% en.data.delete results 'bldr_subdivisions' deleteJson.query %>
+<% en.data.delete results 'bldr_units' deleteJson.query %>
+<% en.data.delete results 'crm_documents' deleteJson.query %>
+<% en.data.delete results 'crm_history' deleteJson.query %>
+<% en.data.delete results 'crm_media' deleteJson.query %>
+<% en.data.delete results 'crm_notes' deleteJson.query %>
+
+<% return 'message' 'All data cleared' %>
+
+
+
+<% exit %>
+<% en.data.delete results 'bldr_worksheets' deleteJson.query %>
+<% en.data.delete results 'bldr_registrants' deleteJson.query %>
+<% en.data.delete results 'contacts' deleteJson.query %>

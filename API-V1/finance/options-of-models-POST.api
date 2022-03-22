@@ -1,0 +1,27 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+
+<% assign datasetId = 'bldr_models' %>
+
+<% assign orderBy.name = 1 %>
+
+<% assign params = en.params %>
+
+<% assign query.project_id = params.project_id %>
+<% if params.type %>
+    <% assign query.type.$in = params.type | splittrim:"," %>
+<% endif %>
+<% if en.params.collection %>
+    <% assign query.collection.$in = en.params.collection | splittrim:"," %>
+<% endif %>
+<% return 'query' query %>
+<% en.data.find results1 datasetId query "name" orderBy 1000 1 %>
+<% assign returnData.status = 1 %>
+<% assign returnData.message = 'Models' %>
+<% assign returnData.results = results1.rows %>
+<% return returnData %>

@@ -1,0 +1,301 @@
+<form autocomplete="off">
+    <div class="row mb-3">
+        <!-- <div class="col-md-3 col-sm-3">
+            <div class="form-group row">
+                <div class="col-md-12">
+                    <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.project_id" (change)="onProjectChange()">
+                        <option value="{{item._id}}" *ngFor="let item of projectList">{{item.name}}</option>
+                    </select>
+                </div>
+            </div>
+        </div> -->
+
+        <div class="col-md-3">
+            <div class="form-group ">
+                <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.dateType" (change)="onDateFlterChange()">
+                    <option value="">All Date Type</option>
+                    <option *ngFor="let type of occupancyDates" [value]="type?.id">{{type?.label}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" [disabled]="!filterForm.dateType" class="form-control" placeholder="From Date" #startDate="bsDatepicker"
+                        bsDatepicker [bsConfig]="{ containerClass: 'theme-dark-blue',showTodayButton: true, todayPosition: 'center',showClearButton: true, clearPosition: 'right',isAnimated: true,adaptivePosition: true,dateInputFormat: 'YYYY-MM-DD',  returnFocusToInput: true }"
+                        [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.startDate">
+                    <span class=" input-group-prepend" (click)="startDate.toggle()" [attr.aria-expanded]="startDate.isOpen">
+                        <span class="input-group-text">
+                            <i class="fa fa-calendar"></i>
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group ">
+                <div class="input-group">
+                    <input type="text" [disabled]="!filterForm.dateType" class="form-control" [minDate]="minDate" placeholder="To Date" #endDate="bsDatepicker"
+                        bsDatepicker [bsConfig]="{ containerClass: 'theme-dark-blue',showTodayButton: true, todayPosition: 'center',showClearButton: true, clearPosition: 'right',isAnimated: true,adaptivePosition: true,dateInputFormat: 'YYYY-MM-DD',  returnFocusToInput: true }"
+                        [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.endDate">
+                    <span class=" input-group-prepend" (click)="endDate.toggle()" [attr.aria-expanded]="endDate.isOpen">
+                        <span class="input-group-text">
+                            <i class="fa fa-calendar"></i>
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4 pb-2">
+            <div class="input-group position-relative">
+                <input class="form-control" name="search" placeholder="Search" style="padding-right: 25px;" type="text" [ngModelOptions]="{standalone: true}"
+                    [(ngModel)]="filterForm.searchText" name="search" (keyup)="doSearch()">
+                <span class="clear-search" *ngIf="isClear" (click)="clearSearch()">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-12 col-sm-12 text-right">
+            <button class="btn btn-primary mr-2" type="button" *ngIf="isProcessBtnShow" (click)="openAssignDatesModal(assignModal)">Assign Dates</button>
+            <button class="btn btn-primary mr-2 " type="button" (click)="openAddDateModal(addDateModal)">Add Date</button>
+            <button type="button" class="btn btn-success mr-2" (click)="exportRecords(exportModal)">Export</button>
+            <button class="btn btn-primary mr-2" type="button" [disabled]="!filterForm.startDate || !filterForm.endDate" (click)="onApply()">Apply</button>
+        </div>
+    </div>
+</form>
+
+<div class="table-responsive mb-5">
+    <table class="table table-striped list_table" style="table-layout: fixed;">
+        <thead>
+            <tr>
+                <th style="width: 50px;">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" [ngModelOptions]="{standalone: true}" id="th_chk_all" [(ngModel)]="selectedAll"
+                            (change)="selectAll()">
+                        <label class="custom-control-label" for="th_chk_all">&nbsp;</label>
+                    </div>
+                </th>
+                <th width="150px" (click)="setOrder('project_name')">Project
+                    <span *ngIf="order != 'project_name'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'project_name'">▼</span>
+                    <span *ngIf="!reverse && order == 'project_name'">▲</span>
+                </th>
+                <th width="150px" (click)="setOrder('unit_no')">Unit
+                    <span *ngIf="order != 'unit_no'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'unit_no'">▼</span>
+                    <span *ngIf="!reverse && order == 'unit_no'">▲</span>
+                </th>
+                <th width="100px">Has Deal
+                </th>
+                <th width="200px" (click)="setOrder('purchasers.display_name')">Name
+                    <span *ngIf="order != 'purchasers.display_name'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'purchasers.display_name'">▼</span>
+                    <span *ngIf="!reverse && order == 'purchasers.display_name'">▲</span>
+                </th>
+                <th width="200px" *ngFor="let type of occupancyDates">{{type?.label}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngIf="unitList?.length > 0">
+                <tr *ngFor="let item of unitList;let i=index">
+                    <td style="width: 50px;">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" (change)="showProcessBtn()" class="custom-control-input" id="customCheck{{i}}" [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="item.selected">
+                            <label class="custom-control-label" for="customCheck{{i}}">&nbsp;</label>
+                        </div>
+
+                    </td>
+                    <td>{{item?.project_name}}</td>
+                    <td>{{item?.unit_no}}</td>
+                    <td>{{item?.deal_id ? 'Yes':'No'}}</td>
+                    <td>
+                        <div class="link" (click)="navigateToContact(purchaser?._id)" *ngFor="let purchaser of item?.purchasers"> {{purchaser?.display_name}}</div>
+                    </td>
+
+                    <td *ngFor="let type of occupancyDates"> {{type?.id ? (item[type?.id] | date:'yyyy-MM-dd') : ''}}</td>
+                </tr>
+            </ng-container>
+            <ng-container *ngIf="unitList?.length == 0">
+                <tr>
+                    <td colspan="5" *ngIf="occupancyDates.length==0" class="text-center"> No Units Found</td>
+                    <td colspan="20" *ngIf="occupancyDates.length>0" class="text-center"> No Units Found</td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+</div>
+<div class="row mt-3" *ngIf="paginationObj.total>=20">
+    <div class="col-md-6">
+        <div class="form-group">
+            <span class="float-left" style="width:70px;margin-top: 6px;">Page Size:</span>
+            <span class="float-left" style="width:85px;">
+                <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="pageSize" (change)="setPageSize()">
+                    <option value="">-Select-</option>
+                                        <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </span>
+            <span class="float-left" style="margin-top: 6px !important;margin-left: 16px !important;">{{paginationObj.total}} Record(s) Found</span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <nav>
+            <ul class="pagination">
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" (click)="doPaginationWise(paginationObj.previousPage)">
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(1)">
+                        First
+                    </a>
+                </li>
+                <li class="page-item {{pagination == paginationObj.currentPage?'active':''}}" *ngFor="let pagination of paginationObj.items">
+                    <a class="page-link" (click)="doPaginationWise(pagination)">{{pagination}}</a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.totalPages)">
+                        Last
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" (click)="doPaginationWise(paginationObj.nextPage)">
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
+<ng-template #assignModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Assign Dates</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form autocomplete="off">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-form-label"> Project :
+                            <b>{{formDetails?.project_name}}</b>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-form-label"> Select the type of date you want to set for the selected units
+                            <span style="color:red">*</span>:
+                        </label>
+                        <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.date_type">
+                            <option value="">Select Date Type</option>
+                            <option *ngFor="let type of occupancyDates" [value]="type?.id">{{type?.label}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-form-label">Date
+                            <span style="color:red">*</span>:</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" (bsValueChange)="onDateChanged($event)" placeholder="YYYY-MM-DD" #typeDate="bsDatepicker"
+                                bsDatepicker [bsConfig]="{ containerClass: 'theme-dark-blue',showTodayButton: true, todayPosition: 'center',showClearButton: true, clearPosition: 'right',isAnimated: true,adaptivePosition: true,dateInputFormat: 'YYYY-MM-DD',  returnFocusToInput: true }"
+                                [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.date">
+                            <span class=" input-group-prepend" (click)="typeDate.toggle()" [attr.aria-expanded]="typeDate.isOpen">
+                                <span class="input-group-text">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modalRef.hide()">Close</button>
+        <button type="button" class="btn btn-primary" (click)="updateAssignDate()">Update</button>
+    </div>
+</ng-template>
+
+<ng-template #addDateModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Add Date</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form autocomplete="off">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-form-label"> Project :
+                            <b>{{formDetails?.project_name}}</b>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-form-label"> Select the type of date you want to add to the units
+                            <span style="color:red">*</span>:
+                        </label>
+                        <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.date_type">
+                            <option value="">Select Date Type</option>
+                            <option *ngFor="let type of occupancyDateTypes" [value]="type?.value">{{type?.label}}</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modalRef.hide()">Close</button>
+        <button type="button" class="btn btn-primary" (click)="addDateType()">Update</button>
+    </div>
+</ng-template>
+
+<ng-template #exportModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Export Occupancy dates</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <h5>Choose Column</h5>
+            </div>
+            <div class="col-md-6" *ngFor="let item of exportReportColumns">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="{{item.fieldNum}}" [(ngModel)]="item.isEnable" (change)="selectFields(item,i)">
+                    <label class="custom-control-label" for="{{item.fieldNum}}">{{item.name}}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" [disabled]="exoprtBtnDisable" class="btn btn-primary" (click)="exportContribution()">Export</button>
+        </div>
+    </div>
+</ng-template>

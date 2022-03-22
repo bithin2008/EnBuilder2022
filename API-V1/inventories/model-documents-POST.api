@@ -1,0 +1,28 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'crm_documents' %>
+
+<% assign obj.model_id = en.params.model_id %>
+<% assign obj.type = en.params.type %>
+<% en.data.insert result datasetId obj %>
+    <% if en.req.hasFile %>
+        <% assign rowId = result.row._id %>
+        <% en.data.attachfile docresult datasetId 'document' rowId file_is_private %> 
+        <% assign returnData.result = docresult %>
+    <% else %>
+        <% assign returnData.result = result %>
+    <% endif %>
+<% assign returnData.status = 1 %>
+<% assign returnData.message = 'Doument added successfully.' %>
+<% assign returnData.result = result %>
+<% return returnData %>
+
+
+
+
+

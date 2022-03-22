@@ -1,0 +1,27 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_project_settings' %>
+
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% en.data.update upResult datasetId query en.params %> 
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Project Settings updated successfully' %>
+    <% assign returnData.result = upResult %>
+    <% return returnData %>
+<% else %>
+    <% assign dataToInsert = en.params %>
+    <% en.data.insert upResult datasetId dataToInsert %> 
+    
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Project Settings added successfully' %>
+    <% return returnData %>
+<% endif %>
+
+
+

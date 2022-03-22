@@ -1,0 +1,28 @@
+
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_packages' %>
+
+<% if en.params.data %>
+    <% assign data = en.params.data %>
+    <% for item in data %>
+        <% unassign query %>
+        <% unassign updateData %>
+        <% assign query._id = item._id %>
+        <% assign updateData.order = item.order %>
+        <% en.data.update upResult datasetId query updateData %>
+        
+    <% endfor %>
+    <% assign returnData.status = 1 %> 
+    <% assign returnData.message = 'Packages order updated successfully.' %>
+    <% return returnData %>
+<% else %>
+    <% assign returnData.status = 0 %> 
+    <% assign returnData.message = 'Nothing to update.' %>
+    <% return returnData %>
+<% endif %> 

@@ -1,0 +1,179 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_registrants' %>
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% en.data.findone result datasetId query %>
+    <% assign registrant = result.row %>
+    
+    // for searching deal matched 
+
+    <% assign d1["purchasers.first_name"] = registrant.first_name %> 
+    <% assign d2["purchasers.last_name"] = registrant.last_name %> 
+    <% assign orQuery = [d1,d2] %>
+    <% assign dealQuery.$or = orQuery %>
+    <% en.data.find dealResult1 "bldr_deals" dealQuery "unit" %>
+    <% assign returnData.deal_found.name_matched = dealResult1.rows %>
+    
+    <% unassign orQuery %>
+    <% unassign dealQuery %>
+    <% if registrant.emails %>
+        <% for item in registrant.emails %>
+            <% unassign qObj %>
+            <% assign qObj["emails.email"] = item.email %>
+            <% en.arrayUtils.add orQuery qObj %>
+        <% endfor %>
+        <% assign dealQuery.$or = orQuery %>
+        <% en.data.find dealResult2 "bldr_deals" dealQuery "unit" %>
+        <% assign returnData.deal_found.email_matched = dealResult2.rows %>
+    <% endif %>
+    
+    
+    <% unassign orQuery %>
+    <% unassign dealQuery %>
+    <% if registrant.phones %>
+        <% for item in registrant.phones %>
+            <% unassign qObj %>
+            <% assign qObj["phones.number"] = item.number %>
+            <% en.arrayUtils.add orQuery qObj %>
+        <% endfor %>
+        <% assign dealQuery.$or = orQuery %>
+        <% en.data.find dealResult3 "bldr_deals" dealQuery "unit" %>
+        <% assign returnData.deal_found.mobile_matched = dealResult3.rows %>
+    <% endif %>
+    
+    // for searching contact matched 
+    <% unassign orQuery %>
+    <% unassign contactQuery %>
+    <% assign c1.first_name = registrant.first_name %> 
+    <% assign c2.last_name = registrant.last_name %> 
+    <% assign orQuery = [c1,c2] %>
+    <% assign contactQuery.$or = orQuery %>
+    <% en.data.find contactResult1 "contacts" contactQuery "first_name,last_name,emails,phones" %>
+    <% assign returnData.contact_found.name_matched = contactResult1.rows %>
+    
+    <% unassign orQuery %>
+    <% unassign contactQuery %>
+    <% if registrant.emails %>
+        <% for item in registrant.emails %>
+            <% unassign qObj %>
+            <% assign qObj["emails.email"] = item.email %>
+            <% en.arrayUtils.add orQuery qObj %>
+        <% endfor %>
+        
+        <% assign contactQuery.$or = orQuery %>
+        <% en.data.find contactResult2 "contacts" contactQuery "first_name,last_name,emails,phones" %>
+        <% assign returnData.contact_found.email_matched = contactResult2.rows %>
+    <% endif %>
+    
+    <% unassign orQuery %>
+    <% unassign contactQuery %>
+    <% if registrant.phones %>
+        <% for item in registrant.phones %>
+            <% unassign qObj %>
+            <% assign qObj["phones.number"] = item.number %>
+            <% en.arrayUtils.add orQuery qObj %>
+        <% endfor %>
+        <% assign contactQuery.$or = orQuery %>
+        <% en.data.find contactResult3 "contacts" contactQuery "first_name,last_name,emails,phones" %>
+        <% assign returnData.contact_found.mobile_matched = contactResult3.rows %>
+    <% endif %>
+    
+    // for searching registrant matched 
+    <% unassign orQuery %>
+    <% unassign registrantQuery %>
+    <% assign registrantQuery._id.$ne = registrant._id %>
+    <% assign r1.first_name = registrant.first_name %> 
+    <% assign r2.last_name = registrant.last_name %> 
+    <% assign orQuery = [r1,r2] %>
+    <% assign registrantQuery.$or = orQuery %>
+    <% en.data.find registrantResult1 "bldr_registrants" registrantQuery "first_name,last_name,emails,phones" %>
+    <% assign returnData.registrant_found.name_matched = registrantResult1.rows %>
+    
+    <% unassign orQuery %>
+    <% unassign registrantQuery %>
+    <% assign registrantQuery._id.$ne = registrant._id %>
+    <% if registrant.emails %>
+        <% for item in registrant.emails %>
+            <% unassign qObj %>
+            <% assign qObj["emails.email"] = item.email %>
+            <% en.arrayUtils.add orQuery qObj %>
+        <% endfor %>
+        <% assign registrantQuery.$or = orQuery %>
+        <% en.data.find registrantResult2 "bldr_registrants" registrantQuery "first_name,last_name,emails,phones" %>
+        <% assign returnData.registrant_found.email_matched = registrantResult2.rows %>
+    <% endif %>
+    
+    <% unassign orQuery %>
+    <% unassign registrantQuery %>
+    <% assign registrantQuery._id.$ne = registrant._id %>
+    <% if registrant.phones %>
+        <% for item in registrant.phones %>
+            <% unassign qObj %>
+            <% assign qObj["phones.number"] = item.number %>
+            <% en.arrayUtils.add orQuery qObj %>
+        <% endfor %>
+        <% assign registrantQuery.$or = orQuery %>
+        <% en.data.find registrantResult3 "bldr_registrants" registrantQuery "first_name,last_name,emails,phones" %>
+        <% assign returnData.registrant_found.mobile_matched = registrantResult3.rows %>
+    <% endif %>
+     
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Registrant details' %>
+    <% assign returnData.result = registrant %>
+    <% return returnData %>
+<% else %>
+    <% assign pageSize = 20 %> 
+    <% if en.params.pageSize %>
+        <% assign pageSize = en.params.pageSize %>
+    <% endif %>
+    <% assign page = 1 %>
+    <% if en.params.page %> 
+        <% assign page = en.params.page %>
+    <% endif %> 
+    
+    <% if en.params.sortBy %>
+        <% if en.params.sortOrder =='ASC' %>
+            <% assign orderBy[en.params.sortBy] = 1 %>
+        <% else %>
+            <% assign orderBy[en.params.sortBy] = -1 %>
+        <% endif %>
+    <% else %>
+        <% assign orderBy._created = -1 %>
+    <% endif %>
+    
+    <% if en.params.start_date %>
+        <% assign start = en.params.start_date | string_to_date: "yyyy-MM-dd" time-zone %>
+        <% assign start = start  | midnight: time-zone  %>
+        <% assign query._created.$gte = start %>
+    <% endif %>
+    <% if en.params.end_date %>
+        <% assign end = en.params.end_date | string_to_date: "yyyy-MM-dd" time-zone %>
+        <% assign end = end | add: 30 'hours' %>
+        <% assign end = end | midnight: time-zone %>
+        <% assign query._created.$lt = end %>
+    <% endif %>
+    
+    <% if en.params.searchText %>
+        <% assign userFName.first_name.$regex = en.params.searchText %> 
+        <% assign userFName.first_name.$options = "i" %>
+        <% assign userLName.last_name.$regex = en.params.searchText %> 
+        <% assign userLName.last_name.$options = "i" %>
+        <% assign userEmail.email.$regex = en.params.searchText %> 
+        <% assign userEmail.email.$options = "i" %>
+        <% assign userPhone["mobile.number"].$regex = en.params.searchText %> 
+        <% assign userPhone["mobile.number"].$options = "i" %>
+        <% assign query.$or = [userFName,userLName,userEmail,userPhone] %>
+    <% endif %>
+    <% en.data.find results datasetId query "" orderBy pageSize page %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Registrant list' %>
+    <% assign returnData.results = results.rows %>
+    <% assign returnData.pagination = results.pagination %>
+    <% return returnData %>
+<% endif %>

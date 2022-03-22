@@ -1,0 +1,37 @@
+
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'pages_pages' %>
+<% assign orderBy._created = -1 %>
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% en.data.findone result datasetId query "" %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Page list' %>
+    <% assign returnData.result = result.row %>
+    <% return returnData %>
+<% else %>
+   <% if en.params.collection_id %>
+       <% assign query.collection_id = en.params.collection_id %>
+   <% endif %>
+    <% if en.params.searchText %>
+        <% assign Name.name.$regex = en.params.searchText %> 
+        <% assign Name.name.$options = "i" %>
+        <% assign Slug.slug.$regex = en.params.searchText %> 
+        <% assign Slug.slug.$options = "i" %>
+        
+        <% assign query.$or = [Name,Slug] %>
+    <% endif %>
+    <% en.data.find results datasetId query "" orderBy en.params.pageSize en.params.page %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Page list' %>
+    <% assign returnData.results = results %>
+    <% return returnData %>
+<% endif %>
+
+

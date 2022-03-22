@@ -1,0 +1,89 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'contacts' %>
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% en.data.findone result datasetId query %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Contact details' %>
+    <% assign returnData.result = result.row %>
+    <% return returnData %>
+<% else %>
+    <% assign pageSize = 20 %> 
+    <% if en.params.pageSize %>
+        <% assign pageSize = en.params.pageSize %>
+    <% endif %>
+    <% assign page = 1 %>
+    <% if en.params.page %> 
+        <% assign page = en.params.page %>
+    <% endif %> 
+    
+    <% if en.params.sortBy %>
+        <% if en.params.sortOrder =='ASC' %>
+            <% assign orderBy[en.params.sortBy] = 1 %>
+        <% else %>
+            <% assign orderBy[en.params.sortBy] = -1 %>
+        <% endif %>
+    <% else %>
+        <% assign orderBy.name = 1 %>
+    <% endif %>
+    
+    <% if en.params.list %>
+        <% assign query.lists = en.params.list %>
+    <% endif %>
+    <% if en.params.contact_type %>
+        <% assign query.contact_type = en.params.contact_type %>
+    <% endif %>
+    <% if en.params.region %>
+        <% assign query["geography.region"] = en.params.region %>
+    <% endif %>
+    <% if en.params.country %>
+        <% assign query["geography.country"] = en.params.country %>
+    <% endif %>
+    <% if en.params.state %>
+        <% assign query["geography.state"] = en.params.state %>
+    <% endif %>
+    
+    <% if en.params.start_date %>
+        <% assign start = en.params.start_date | string_to_date: "yyyy-MM-dd" time-zone %>
+        <% assign start = start  | midnight: time-zone  %>
+        <% assign query._created.$gte = start %>
+    <% endif %>
+    <% if en.params.end_date %>
+        <% assign end = en.params.end_date | string_to_date: "yyyy-MM-dd" time-zone %>
+        <% assign end = end | add: 30 'hours' %>
+        <% assign end = end | midnight: time-zone %>
+        <% assign query._created.$lt = end %>
+    <% endif %>
+    
+    <% if en.params.searchText %>
+        <% assign q1.first_name.$regex = en.params.searchText %> 
+        <% assign q1.first_name.$options = "i" %>
+        <% assign q2.last_name.$regex = en.params.searchText %> 
+        <% assign q2.last_name.$options = "i" %>
+        <% assign q3.display_name.$regex = en.params.searchText %> 
+        <% assign q3.display_name.$options = "i" %>
+        <% assign q4["emails.email"].$regex = en.params.searchText %> 
+        <% assign q4["emails.email"].$options = "i" %>
+        <% assign q5["phones.number"].$regex = en.params.searchText %> 
+        <% assign q5["phones.number"].$options = "i" %>
+        <% assign query.$or = [q1,q2,q3,q4,q5] %>
+    <% endif %>
+    <% en.data.find results datasetId query "" orderBy pageSize page %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Contact list' %>
+    <% assign returnData.results = results.rows %>
+    <% assign returnData.pagination = results.pagination %>
+    <% return returnData %>
+<% endif %>
+
+
+
+
+
+

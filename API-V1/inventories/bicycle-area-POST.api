@@ -1,0 +1,61 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_bicycle_area' %> 
+
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% if en.params.project_id %> 
+        <% assign obj.project_id = en.params.project_id %>
+    <% endif %>
+    <% if en.params.project_name %>
+        <% assign obj.project_name = en.params.project_name %>
+    <% endif %>
+    <% if en.params.name %>
+        <% assign obj.name = en.params.name %>
+    <% endif %>
+    <% en.data.update upResult datasetId query obj %>
+    <% if en.req.hasFile %>
+        <% assign rowId = en.params._id %>
+        <% if upResult.row.layout %>
+            <% assign imageObj = upResult.row.layout %>
+            <% en.data.deleteFile imageDeleteResult datasetId 'layout' rowId imageObj._id  %>
+        <% endif %>
+        <% en.data.attachfile imgresult datasetId 'layout' rowId file_is_private %> 
+        <% assign returnData.result = imgresult %>
+    <% else %>
+        <% assign returnData.result = result %>
+    <% endif %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Bicycle area updated successfully.' %>
+    <% assign returnData.result = upResult %>
+    <% return returnData %>
+<% else %>
+    <% if en.params.project_id %> 
+        <% assign obj.project_id = en.params.project_id %>
+    <% endif %>
+    <% if en.params.project_name %>
+        <% assign obj.project_name = en.params.project_name %>
+    <% endif %>
+    <% if en.params.name %>
+        <% assign obj.name = en.params.name %>
+    <% endif %>
+    <% en.data.insert result datasetId obj %>
+    <% if en.req.hasFile %>
+        <% assign rowId = result.row._id %>
+        <% en.data.attachfile imgresult datasetId 'layout' rowId file_is_private %> 
+        <% assign returnData.result = imgresult %>
+    <% else %>
+        <% assign returnData.result = result %>
+    <% endif %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Bicycle area added successfully.' %>
+    <% assign returnData.result = result %>
+    <% return returnData %>
+<% endif %>
+
+

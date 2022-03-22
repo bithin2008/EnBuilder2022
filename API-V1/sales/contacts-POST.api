@@ -1,0 +1,29 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'contacts' %> 
+
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% en.data.update upResult datasetId query en.params %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Contact updated successfully.' %>
+    <% assign returnData.result = upResult %>
+    <% return returnData %>
+<% else %>
+    <% assign params = en.params %>
+    <% rem en.data.setsequence results 'contact-id' 2000 %>
+    <% en.data.nextsequence results 'contact-id' %>
+    <% assign id = results.value | int_to_string %>
+    <% assign params._id = id %> 
+    <% en.data.insert result datasetId params %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Contact added successfully.' %>
+    <% assign returnData.result = result %>
+    <% return returnData %>
+<% endif %>
+

@@ -1,0 +1,25 @@
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_checklist_categories' %> 
+
+<% if en.params.project_id %>
+    <% assign query.project_id = en.params.project_id %>
+<% endif %>
+<% if en.params.checklist_id %>
+    <% assign query.checklist_id = en.params.checklist_id %>
+<% endif %>
+<% assign orderBy.order = -1 %>
+
+<% en.data.find results datasetId query "" orderBy %>
+
+<% assign returnData.status = 1 %>
+<% assign returnData.results = results.rows %>
+<% assign returnData.pagination = results.pagination %>
+<% assign returnData.message = 'Checklist category list.' %>
+<% return returnData %>
+
+ 

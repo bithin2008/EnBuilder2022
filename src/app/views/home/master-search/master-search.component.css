@@ -1,0 +1,24 @@
+.search_sec .input-group {
+    width: 50%;
+    float: right;
+    margin-bottom: 15px;
+}
+
+.search_btn {
+    padding: 6px 10px;
+    background-color: #30374c;
+    border: 1px solid #30374c;
+    color: #fff;
+}
+
+.position-relative {
+    position: relative;
+}
+
+.clear-search {
+    position: absolute;
+    right: 15px;
+    top: 7px;
+    opacity: 0.5;
+    z-index: 999;
+}

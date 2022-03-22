@@ -1,0 +1,118 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_deficiencies' %>
+
+<% if en.params._id %>
+    <% if en.params.update_type == 'attachments' %>
+        <% assign query._id = en.params._id %>
+        <% en.data.findOne result datasetId query %>
+        <% if en.req.hasFile %>
+            <% assign rowId = en.params._id %>
+            <% en.data.attachfile imgresult datasetId 'attachments' rowId false %> 
+            <% assign returnData.result = imgresult %>
+        <% else %>
+            <% assign returnData.result = result %>
+        <% endif %>
+        <% assign returnData.status = 1 %>
+        <% assign returnData.message = 'Deficiency attachment successfully.' %>
+        <% return returnData %>
+    <% else %>
+        <% assign query._id = en.params._id %>
+        <% assign params = en.params %>
+        <% if params.due_date %>
+            <% assign params.due_date = params.due_date | string_to_date: "yyyy-MM-dd" time-zone %>
+        <% endif %>
+        <% rem if params.status == 'Open' %>
+            <% assign params.updated_at = en.time.now %>
+            <% assign params.updated_by = UserResult.user.firstName | append: ' ' | append: UserResult.user.lastName %>
+            <% assign params.updated_by_id = UserResult.user._id %>
+        <% rem endif %>
+        <% if params.status == 'Assigned' %>
+            <% assign params.assigned_at = en.time.now %>
+            <% assign params.assigned_by = UserResult.user.firstName | append: ' ' | append: UserResult.user.lastName %>
+            <% assign params.assigned_by_id = UserResult.user._id %>
+        <% endif %>
+        <% if params.status == 'Accepted' %>
+            <% assign params.accepted_at = en.time.now %>
+            <% assign params.accepted_by = UserResult.user.firstName | append: ' ' | append: UserResult.user.lastName %>
+            <% assign params.accepted_by_id = UserResult.user._id %>
+        <% endif %>
+        <% if params.status == 'Not Accepted' %>
+            <% assign params.not_accepted_at = en.time.now %>
+            <% assign params.not_accepted_by = UserResult.user.firstName | append: ' ' | append: UserResult.user.lastName %>
+            <% assign params.not_accepted_by_id = UserResult.user._id %>
+        <% endif %>
+        <% if params.status == 'Completed' %>
+            <% assign params.completed_at = en.time.now %>
+            <% assign params.completed_by = UserResult.user.firstName | append: ' ' | append: UserResult.user.lastName %>
+            <% assign params.completed_by_id = UserResult.user._id %>
+        <% endif %>
+        <% if params.status == 'Closed' %>
+            <% assign params.closed_at = en.time.now %>
+            <% assign params.closed_by = UserResult.user.firstName | append: ' ' | append: UserResult.user.lastName %>
+            <% assign params.closed_by_id = UserResult.user._id %>
+        <% endif %>
+        <% en.data.update upResult datasetId query params %>
+        <% assign returnData.status = 1 %> 
+        <% assign returnData.message = 'Deficiency updated successfully.' %>
+        <% assign returnData.result = upResult.row %>
+        <% return returnData %>
+    <% endif %>
+<% else %>
+    <% assign params = en.params %>
+    <% rem en.data.setsequence results 'deficiency-id' 1000 %>
+    <% en.data.nextsequence results 'deficiency-id' %>
+    <% assign id = results.value | int_to_string %>
+    <% assign params.id = id %> 
+    <% if params.due_date %>
+        <% assign params.due_date = params.due_date | string_to_date: "yyyy-MM-dd" time-zone %>
+    <% endif %>
+    
+    <% if params.status == 'Open' %>
+        <% assign params.opened_at = en.time.now %>
+        <% assign params.opened_by = UserResult.user.firstName | append: ' ' | append: UserResult.user.lastName %>
+        <% assign params.opened_by_id = UserResult.user._id %>
+    <% endif %>
+    <% if params.status == 'Assigned' %>
+        <% assign params.assigned_at = en.time.now %>
+        <% assign params.assigned_by = UserResult.user.firstName | append: ' ' | append: UserResult.user.lastName %>
+        <% assign params.assigned_by_id = UserResult.user._id %>
+    <% endif %>
+    <% if params.status == 'Accepted' %>
+        <% assign params.accepted_at = en.time.now %>
+        <% assign params.accepted_by = UserResult.user.firstName | append: ' ' | append: UserResult.user.lastName %>
+        <% assign params.accepted_by_id = UserResult.user._id %>
+    <% endif %>
+    <% if params.status == 'Not Accepted' %>
+        <% assign params.not_accepted_at = en.time.now %>
+        <% assign params.not_accepted_by = UserResult.user.firstName | append: ' ' | append: UserResult.user.lastName %>
+        <% assign params.not_accepted_by_id = UserResult.user._id %>
+    <% endif %>
+    <% if params.status == 'Completed' %>
+        <% assign params.completed_at = en.time.now %>
+        <% assign params.completed_by = UserResult.user.firstName | append: ' ' | append: UserResult.user.lastName %>
+        <% assign params.completed_by_id = UserResult.user._id %>
+    <% endif %>
+    <% if params.status == 'Closed' %>
+        <% assign params.closed_at = en.time.now %>
+        <% assign params.closed_by = UserResult.user.firstName | append: ' ' | append: UserResult.user.lastName %>
+        <% assign params.closed_by_id = UserResult.user._id %>
+    <% endif %>
+    
+    <% en.data.insert result datasetId params %>
+    <% assign returnData.result = result.row %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Deficiency added successfully.' %>
+    <% return returnData %>
+<% endif %>
+ 
+
+ 
+
+
+

@@ -1,0 +1,58 @@
+<div class="animated fadeIn">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="const_hd">
+                    <button class="btn btn-primary btn-sm mr-2" (click)="goToPackageCenter()">
+                        <i class="fa fa-arrow-left" aria-hidden="true"></i> &nbsp; Back
+                    </button> Package : {{packageDetailsObj?.name}}
+                    <!-- <button style="float:right" class="btn btn-sm btn-danger mt-2" type="button" (click)="deleteColorCollection()">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                    </button> -->
+                    <span style="float:right">
+                        {{packageDetailsObj?.project_name}}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="content-wrap">
+            <div class="row">
+                <div class="col-lg-12 col-xs-12">
+                    <ngb-tabset (tabChange)="doTabFunctions($event)" [activeId]="defaultActiveTab">
+                        <ngb-tab id="generalTab" title="General">
+                            <ng-template ngbTabContent>
+                                <app-package-general [packageId]="packageId" [packageDetails]="packageDetailsObj" (getDetailsEvent)="onDetailsEvent($event)"></app-package-general>
+                            </ng-template>
+                        </ngb-tab>
+                        <ngb-tab id="collectionTab" title="Collections">
+                            <ng-template ngbTabContent>
+                                <app-package-collections [packageId]="packageId" [packageDetails]="packageDetailsObj" (getDetailsEvent)="onDetailsEvent($event)"></app-package-collections>
+                            </ng-template>
+                        </ngb-tab>
+                        <ngb-tab id="packagesTab" title="Packages/Personalization Items">
+                            <ng-template ngbTabContent>
+                                <app-package-packages [packageId]="packageId" [packageDetails]="packageDetailsObj" (getDetailsEvent)="onDetailsEvent($event)"></app-package-packages>
+                            </ng-template>
+                        </ngb-tab>
+                        <ngb-tab id="includedOptionsTab" title="Included Options">
+                            <ng-template ngbTabContent>
+                                <app-included-options [packageId]="packageId" [packageDetails]="packageDetailsObj" (getDetailsEvent)="onDetailsEvent($event)"></app-included-options>
+                            </ng-template>
+                        </ngb-tab>
+
+                        <ngb-tab id="modelsTab" title="Models">
+                            <ng-template ngbTabContent>
+                                <app-package-models [packageId]="packageId" [packageDetails]="packageDetailsObj"></app-package-models>
+                            </ng-template>
+                        </ngb-tab>
+                        <ngb-tab id="unitTab" title="Units">
+                            <ng-template ngbTabContent>
+                                <app-package-units [packageId]="packageId" [packageDetails]="packageDetailsObj"></app-package-units>
+                            </ng-template>
+                        </ngb-tab>
+                    </ngb-tabset>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

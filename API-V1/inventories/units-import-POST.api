@@ -1,0 +1,25 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_units' %> 
+
+<% assign records = en.params.records %>
+<% assign existingDataCount = 0 %>
+<% for item in records  %>
+    <% assign query.project_id = item.project_id %>
+    <% if item.model_id != '' %>
+        <% assign query.model_id = item.model_id %>
+    <% endif %>
+    <% assign query.unit_no = item.unit_no %> 
+    
+    <% en.data.upsert result1 datasetId query item %>
+<% endfor %> 
+<% assign returnData.status = 1 %>
+<% assign returnData.message = 'Units imported successfully.' %>
+<% return returnData %>
+
+

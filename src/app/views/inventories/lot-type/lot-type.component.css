@@ -1,0 +1,24 @@
+table.list_table thead tr th {
+    padding: 10px 5px;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+table.list_table tbody tr:nth-of-type(odd) {
+    background-color: transparent;
+}
+
+table.list_table tbody tr td {
+    padding: 5px;
+}
+
+ul.pagination {
+    float: right;
+}
+.clear-search {
+    position: absolute;
+    right: 15px;
+    top: 7px;
+    opacity: 0.5;
+    z-index: 999;
+}

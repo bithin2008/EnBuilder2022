@@ -1,0 +1,19 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_units' %> 
+
+<% assign upQuery.status.$exists = false %>
+<% assign updata.$set.status = 'AVAILABLE' %>
+<% en.data.updateMany rresults datasetId upQuery updata %>
+<% assign returnData.status = 1 %>
+<% assign returnData.message = 'Unit updated successfully.' %>
+<% assign returnData.result = rresults %>
+<% return returnData %>
+
+
+

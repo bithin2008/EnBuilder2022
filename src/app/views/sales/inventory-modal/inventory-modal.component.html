@@ -1,0 +1,74 @@
+<!-- inventory modal start-->
+<div class="inventory-modal">
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Unit Inventory </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="activeModal.dismiss()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" style="position:relative;">
+        <div class="modal-body-container">
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="display-block list-group list-group-flush list-group-horizontal">
+                        <li class="list-group-item borderless" *ngFor="let item of blockType;">
+                            <div class="color-block" [ngStyle]="{'background-color':item?.color}"></div>
+                            <div class="color-text pl-2">{{item?.type}}</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row pl-4">
+                <div class="col-lg-12 col-xs-12">
+                    <button [class]="selectedTabType=='condominium' ? 'btn btn-sm btn-primary' :'btn btn-sm btn-secondary'" type="button" (click)="openTab('condominium')">
+                        Condominium
+                    </button>
+                    <button [class]="selectedTabType=='townhouse' ? 'btn btn-sm btn-primary' :'btn btn-sm btn-secondary'" type="button" (click)="openTab('townhouse')">
+                        Townhouse
+                    </button>
+                    <button [class]="selectedTabType=='semi-detached' ? 'btn btn-sm btn-primary' :'btn btn-sm btn-secondary'" type="button" (click)="openTab('semi-detached')">
+                        Semi Detached
+                    </button>
+                    <button [class]="selectedTabType=='detached' ? 'btn btn-sm btn-primary' :'btn btn-sm btn-secondary'" type="button" (click)="openTab('detached')">
+                        Detached
+                    </button>
+                </div> 
+            </div>       
+            <div class="row pl-3">
+                <div class="col-lg-12 col-xs-12" *ngIf="selectedTabType=='condominium'">    
+                    <div style="position: relative;" [hidden]="!displayCanvas">
+                        <div class="canvas-container" [ngStyle]="{'height':canvasHeight+'px'}">
+                            <canvas id="view-plan-designer"></canvas>
+                        </div>
+                    </div>
+                </div> 
+                <div class="col-lg-12 col-xs-12" *ngIf="selectedTabType=='townhouse'">   
+                        <div style="position: relative;" [hidden]="!displayCanvas">
+                            <div class="canvas-container" [ngStyle]="{'height':canvasHeight+'px'}">
+                                <canvas id="view-plan-designer"></canvas>
+                            </div>
+                        </div>
+                </div>     
+                <div class="col-lg-12 col-xs-12" *ngIf="selectedTabType=='semi-detached'">  
+                    <div style="position: relative;" [hidden]="!displayCanvas">
+                        <div class="canvas-container" [ngStyle]="{'height':canvasHeight+'px'}">
+                            <canvas id="view-plan-designer"></canvas>
+                        </div>
+                    </div>
+                </div>     
+                <div class="col-lg-12 col-xs-12" *ngIf="selectedTabType=='detached'"> 
+                    <div style="position: relative;" [hidden]="!displayCanvas">
+                        <div class="canvas-container" [ngStyle]="{'height':canvasHeight+'px'}">
+                            <canvas id="view-plan-designer"></canvas>
+                        </div>
+                    </div>
+                </div>     
+
+            </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="activeModal.dismiss()">Close</button>
+    </div>
+</div>
+<div class="custom-modal-backdrop"></div>
+<!-- inventory modal end-->

@@ -1,0 +1,671 @@
+<div class="animated fadeIn">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="const_hd">
+                    <button class="btn btn-primary btn-sm mr-2" (click)="goToSales()">
+                        <i class="fa fa-arrow-left" aria-hidden="true"></i> &nbsp; Back
+                    </button> Contacts : {{contactDetails?.first_name}} {{contactDetails?.last_name}}
+                </div>
+            </div>
+            <div class="col-md-4 text-right mb-2">
+                <button class="btn btn-sm btn-primary mr-2" [disabled]="!contactDetails._id" type="button" (click)="requestToCreateDeal()">
+                    Create deal
+                </button>
+                <button class="btn btn-sm btn-danger" type="button" (click)="deleteContact()"> Delete</button>
+            </div>
+        </div>
+        <div class="content-wrap">
+            <div class="project-details">
+                <div class="row">
+                    <div class="col-md-6 padding-right-2">
+                        <div class="card">
+                            <div class="card-body h-235">
+                                <div class="col-md-12">
+                                    <h4>Personal Info
+                                        <button style="font-size:12px;float: right;" class="btn btn-sm btn-primary" type="button" (click)="openBasicContactModal(basicContactDetails)">
+                                            <i class="fas fa-pencil-alt" style="font-size:12px;"></i>
+                                        </button>
+                                    </h4>
+                                    <dl class="row">
+                                        <!-- <dd class="col-md-10"></dd>
+                                    <dd class="col-md-2 text-right">
+                                    </dd> -->
+                                        <dd class="col-md-5">Prefix</dd>
+                                        <dd class="col-md-7">: {{contactDetails?.prefix}}</dd>
+                                        <dd class="col-md-5">First Name</dd>
+                                        <dd class="col-md-7">: {{contactDetails?.first_name}}</dd>
+                                        <dd class="col-md-5">Middle Name</dd>
+                                        <dd class="col-md-7">: {{contactDetails?.middle_name}}</dd>
+                                        <dd class="col-md-5">Last Name </dd>
+                                        <dd class="col-md-7">: {{contactDetails?.last_name}}</dd>
+                                        <dd class="col-md-5">Display Name</dd>
+                                        <dd class="col-md-7">: {{contactDetails?.display_name}}</dd>
+                                        <dd class="col-md-5">Salutation</dd>
+                                        <dd class="col-md-7">: {{contactDetails?.salutation}}</dd>
+                                        <dd class="col-md-5">Family Salutation:</dd>
+                                        <dd class="col-md-7">: {{contactDetails?.family_salutation}}</dd>
+
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 padding-left-1">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-body h-112">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4>Contact Type
+                                                    <button style="font-size:12px;float: right;" class="btn btn-sm btn-primary" type="button" (click)="openEditContactType(updateContactType)">
+                                                        <i class="fas fa-pencil-alt" style="font-size:12px;"></i>
+                                                    </button>
+                                                </h4>
+                                                <div class="form-check">
+                                                    <span>
+                                                        {{getSelectedContacts}}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-body h-112">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4 class="mb-1">
+                                                    Purchaser Portal
+                                                </h4>
+                                                <div class="custom-control custom-checkbox mb-2">
+                                                    <input type="checkbox" (change)="allowLogin()" class="custom-control-input" [ngModelOptions]="{standalone: true}" id="allow_login" [(ngModel)]="contactDetails.allow_login">
+                                                    <label class="custom-control-label" for="allow_login">Allow Login</label>
+                                                </div>
+                                                <button class="btn btn-sm btn-primary" type="button" (click)="resetPassword()">
+                                                    Reset password
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 padding-right-2">
+                        <div class="card">
+                            <div class="card-body h-235">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h4>Phones
+                                            <button style="float: right;" type="button" class="btn btn-sm btn-primary" (click)="openAddPhone(phoneModal)">
+                                                <i class="fas fa-plus" style="font-size:12px;float: right;"></i>
+                                            </button>
+                                        </h4>
+                                        <div class="table-responsive">
+                                            <table style="table-layout: fixed; width: 100%;" class="table table-sm table-borderless">
+                                                <tbody>
+                                                    <tr *ngFor="let phone of contactDetails?.phones" class="{{phone.is_inactive?'highlighted':''}}">
+                                                        <td width="180px" style="text-align: left;">
+                                                            {{phone.type}}:
+                                                            <a href="tel:{{phone.number}}">
+                                                                {{phone.formatted}}
+                                                            </a>
+                                                        </td>
+                                                        <td style="text-align: right; vertical-align: middle;">
+                                                            <button type="button" class="btn btn-sm btn-primary" (click)="openEditPhone(phoneModal,phone)">
+                                                                <i class="fas fa-pencil-alt" style="font-size:12px;"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 padding-left-1">
+                        <div class="card">
+                            <div class="card-body h-235">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h4 class="">Emails
+                                            <button style="float: right;" type="button" class="btn btn-sm btn-primary" (click)="openAddEmail(emailModal)">
+                                                <i class="fas fa-plus" style="font-size:12px;float: right;"></i>
+                                            </button>
+                                        </h4>
+                                        <div class="table-responsive">
+                                            <table style="table-layout: fixed; width: 100%;" class="table table-sm table-borderless">
+                                                <tbody>
+                                                    <tr *ngFor="let email of contactDetails?.emails" class="{{email.is_inactive?'highlighted':''}}">
+                                                        <td style="text-align: left;">
+                                                            {{email.type}}:
+                                                            <a href="mailto:{{email.email}}">{{email.email}}</a>
+                                                        </td>
+                                                        <td style="text-align: right; vertical-align: middle;">
+                                                            <button type="button" class="btn btn-sm btn-primary" (click)="openEditEmail(emailModal,email)">
+                                                                <i class="fas fa-pencil-alt" style="font-size:12px;"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 padding-right-2">
+                        <div class="card">
+                            <div class="card-body h-235">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h4>Addresses
+                                            <button style="float: right;" type="button" class="btn btn-sm btn-primary" (click)="openAddAddress(addressModal)">
+                                                <i class="fas fa-plus" style="font-size:12px;float: right;"></i>
+                                            </button>
+                                        </h4>
+                                        <div>
+                                            <dl *ngFor="let address of contactDetails?.addresses" class="{{address.is_inactive?'row highlighted':'row'}}">
+                                                <dd class="col-md-2">
+                                                    <span *ngIf="address.type">{{address.type}}:</span>
+                                                </dd>
+                                                <dd class="col-md-8">
+                                                    <a href="https://www.google.com/maps/place/{{address.street1}} {{address.street2}} {{address.street3}},{{address.city}},{{address.state}},{{address.country}}" target="_blank">
+                                                        <span *ngIf="address.street1">{{address.street1}},</span>
+                                                        <span *ngIf="address.street2">{{address.street2}},</span>
+                                                        <span *ngIf="address.street3">{{address.street3}},</span>
+                                                        <br>
+                                                        <span *ngIf="address.city">{{address.city}},</span>
+                                                        <span *ngIf="address.state">{{address.state}},</span>
+                                                        <br>
+                                                        <span *ngIf="address.zip">{{address.zip}},</span>
+                                                        <span *ngIf="address.country">{{address.country}}.</span>
+                                                    </a>
+                                                </dd>
+                                                <dd class="col-md-2" style="text-align: right;">
+                                                    <button type="button" class="btn btn-sm btn-primary" (click)="openEditAddress(addressModal,address)">
+                                                        <i class="fas fa-pencil-alt" style="font-size:12px;"></i>
+                                                    </button>
+                                                </dd>
+                                            </dl>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Lists -->
+                    <div class="col-sm-6 padding-left-1">
+                        <div class="card">
+                            <div class="card-body h-235">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h4 class="">Lists
+                                            <button style="float: right;" type="button" class="btn btn-sm btn-primary" (click)="openAddToList(addToListModal)">
+                                                <i class="fas fa-plus" style="font-size:12px;float: right;"></i>
+                                            </button>
+                                        </h4>
+                                        <div class="table-responsive">
+                                            <table style="table-layout: fixed; width: 100%;" class="table table-sm table-borderless" *ngIf="contactLists.length > 0">
+                                                <tbody>
+                                                    <tr *ngFor="let item of contactLists;let i = index">
+                                                        <td style="text-align: left; width:200px;">{{item?.name}}</td>
+                                                        <td style="text-align: right; vertical-align: middle;">
+                                                            <button type="button" class="btn btn-sm btn-danger" (click)="deleteFromList(item,i)">
+                                                                <i class="fas fa-trash-alt" style="font-size:12px;"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Deal -->
+                    <div class="col-md-6 padding-right-2">
+                        <div class="card deal-card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h4>Deals
+
+                                        </h4>
+                                        <table *ngIf="dealDetailsObj" class="table table-bordered table-sm list_table" style="margin: 0 auto;">
+                                            <thead>
+                                                <tr>
+                                                    <th width="200px">Project Name</th>
+                                                    <th width="100px">Unit No</th>
+                                                    <th width="150px">Price</th>
+                                                    <th width="150px">Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                <tr  class="link" *ngFor="let item of dealDetailsObj?.deals;let i = index;" (click)="navigateToDealDetials(item._id)">
+                                                    <td>{{item?.unit?.project_name}}</td>
+                                                    <td>
+                                                        {{item?.unit?.unit_no}}
+                                                    </td>
+                                                    <td>{{item?.unit?.price | currency:'USD'}} </td>
+                                                    <td>{{item?.stage}}</td>
+                                                </tr>
+                                                <tr *ngIf="dealDetailsObj?.deals.length==0">
+                                                    <td colspan="4" class="text-center"> No record found </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #addToListModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Add To a list</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">List:</label>
+                        <div class="col-sm-12">
+                            <select class="form-select" [(ngModel)]="formDetails.list">
+                                <option value="">Select</option>
+                                <option value="{{item._id}}" *ngFor="let item of lists">{{item?.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-primary" (click)="addToList()">Add</button>
+        </div>
+    </div>
+</ng-template>
+<!-- basic contact details:start -->
+<ng-template #basicContactDetails>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Update Contact</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Prefix:</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="basicFormDetails.prefix" class="form-control" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Last Name
+                                <!-- <span *ngIf="basicFormDetails.contact_type == 'Individual'" style="color:red">*</span> -->
+                                :</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="basicFormDetails.last_name" class="form-control" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Middle Name:</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="basicFormDetails.middle_name" class="form-control" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">First Name
+                                <!-- <span *ngIf="basicFormDetails.contact_type == 'Individual'" style="color:red">*</span> -->
+                                :</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="basicFormDetails.first_name" class="form-control" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Suffix:</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="basicFormDetails.suffix" class="form-control" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Display Name
+                                <span style="color:red">*</span>:</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="basicFormDetails.display_name" class="form-control" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Salutation:</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="basicFormDetails.salutation" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Family Salutation:</label>
+                            <div class="col-sm-12">
+                                <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="basicFormDetails.family_salutation" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updateBasicDetails()">Update</button>
+        </div>
+    </div>
+
+</ng-template>
+<!-- basic contact details:end -->
+
+<!-- phones contact details:start -->
+<ng-template #phoneModal>
+    <div class="modal-header">
+        <h4 *ngIf="!editPhone" class="modal-title pull-left">Add Phone</h4>
+        <h4 *ngIf="editPhone" class="modal-title pull-left">Update Phone</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Type:</label>
+                        <div class="col-sm-9">
+                            <select class="form-select" [(ngModel)]="phoneDetails.type">
+                                <option value="">-Select-</option>
+                                <option value="{{type.value}}" *ngFor="let type of phoneTypes">{{type.value}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Phone:</label>
+                        <div class="col-sm-9">
+                            <form #f="ngForm" [formGroup]="phoneForm">
+                                <div class="wrapper">
+                                    <ngx-intl-tel-input [cssClass]="'custom'" [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true" [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]" [selectFirstCountry]="false"
+                                        [selectedCountryISO]="CountryISO.Canada" [maxLength]="15" [phoneValidation]="true" [separateDialCode]="separateDialCode" name="phone" formControlName="phone">
+                                    </ngx-intl-tel-input>
+                                    <span *ngIf="f.form.controls['phone'].touched && f.form.controls['phone'].invalid" style="color: red;">Phone number is not valid.</span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="pmarketing" [(ngModel)]="phoneDetails.marketing">
+                                <label class="custom-control-label" for="pmarketing">Marketing</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="pis_inactive" [(ngModel)]="phoneDetails.is_inactive">
+                                <label class="custom-control-label" for="pis_inactive">Inactive</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="is_primary " [(ngModel)]="phoneDetails.is_primary ">
+                                <label class="custom-control-label" for="is_primary ">Primary </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button *ngIf="editPhone" type="button" class="btn btn-danger" (click)="deletePhone()">Delete</button>
+            <button *ngIf="editPhone" type="button" class="btn btn-primary ml-3" (click)="updatePhone()">Update</button>
+            <button *ngIf="!editPhone" type="button" class="btn btn-primary" (click)="addPhone()">Add</button>
+        </div>
+    </div>
+</ng-template>
+<!-- phones contact details:end -->
+
+<!-- email contact details:start -->
+<ng-template #emailModal>
+    <div class="modal-header">
+        <h4 *ngIf="!editEmail" class="modal-title pull-left">Add Email</h4>
+        <h4 *ngIf="editEmail" class="modal-title pull-left">Update Email</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Type:</label>
+                        <div class="col-sm-9">
+                            <select class="form-select" [(ngModel)]="emailDetails.type">
+                                <option value="">-Select-</option>
+                                <option value="{{type.value}}" *ngFor="let type of emailTypes">{{type.value}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Email:</label>
+                        <div class="col-sm-9">
+                            <input type="text" [(ngModel)]="emailDetails.email" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="marketing" [(ngModel)]="emailDetails.marketing">
+                                <label class="custom-control-label" for="marketing">Marketing</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="is_inactive" [(ngModel)]="emailDetails.is_inactive">
+                                <label class="custom-control-label" for="is_inactive">Inactive</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="is_primary " [(ngModel)]="emailDetails.is_primary ">
+                                <label class="custom-control-label" for="is_primary ">Primary </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button *ngIf="editEmail" type="button" class="btn btn-danger" (click)="deleteEmail()">Delete</button>
+            <button *ngIf="editEmail" type="button" class="btn btn-primary ml-3" (click)="updateEmail()">Update</button>
+            <button *ngIf="!editEmail" type="button" class="btn btn-primary" (click)="addEmail()">Add</button>
+        </div>
+    </div>
+</ng-template>
+<!-- email contact details:end -->
+
+<!-- address contact details:start -->
+<ng-template #addressModal>
+    <div class="modal-header">
+        <h4 *ngIf="!editAddress" class="modal-title pull-left">Add Address</h4>
+        <h4 *ngIf="editAddress" class="modal-title pull-left">Update Address</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Type:</label>
+                        <div class="col-sm-9">
+                            <select class="form-select" [(ngModel)]="addressDetails.type">
+                                <option value="">-Select-</option>
+                                <option value="{{type.value}}" *ngFor="let type of addressTypes">{{type.value}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Street1:</label>
+                        <div class="col-sm-9">
+                            <input type="text" [(ngModel)]="addressDetails.street1" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Street2:</label>
+                        <div class="col-sm-9">
+                            <input type="text" [(ngModel)]="addressDetails.street2" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Street3:</label>
+                        <div class="col-sm-9">
+                            <input type="text" [(ngModel)]="addressDetails.street3" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">City:</label>
+                        <div class="col-sm-9">
+                            <input type="text" [(ngModel)]="addressDetails.city" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">State/Province:</label>
+                        <div class="col-sm-9">
+                            <input type="text" [(ngModel)]="addressDetails.state" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">ZIP/Postal Code:</label>
+                        <div class="col-sm-9">
+                            <input type="text" [(ngModel)]="addressDetails.zip" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Country:</label>
+                        <div class="col-sm-9">
+                            <input type="text" [(ngModel)]="addressDetails.country" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="is_inactive" [(ngModel)]="addressDetails.is_inactive">
+                                <label class="custom-control-label" for="is_inactive">Inactive</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="is_primary" [(ngModel)]="addressDetails.is_primary">
+                                <label class="custom-control-label" for="is_primary">Primary </label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="is_mailing" [(ngModel)]="addressDetails.is_mailing">
+                                <label class="custom-control-label" for="is_mailing">Mailing </label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="is_shipping" [(ngModel)]="addressDetails.is_shipping">
+                                <label class="custom-control-label" for="is_shipping">Shipping </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button *ngIf="editAddress" type="button" class="btn btn-danger" (click)="deleteAddress()">Delete</button>
+            <button *ngIf="editAddress" type="button" class="btn btn-primary ml-3" (click)="updateAddress()">Update</button>
+            <button *ngIf="!editAddress" type="button" class="btn btn-primary" (click)="addAddress()">Add</button>
+        </div>
+    </div>
+</ng-template>
+<!-- address contact details:end -->
+
+<!-- content type -->
+<ng-template #updateContactType>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Update Contact</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-check" *ngFor="let item of contactTypes; let i = index">
+                            <input class="form-check-input" type="checkbox" id="contact_type{{i}}" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.isSelected">
+                            <label class="form-check-label" for="contact_type{{i}}">
+                                {{item.value}}
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="onUpdateContactType()">Update</button>
+        </div>
+    </div>
+
+</ng-template>

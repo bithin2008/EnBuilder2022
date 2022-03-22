@@ -1,0 +1,247 @@
+<!-- Parent Package: start -->
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-11 col-sm-9">
+                <h5>Parent Packages</h5>
+                <div>
+                    (Help: Homeowner must purchase at least one the parent package with in this list to buy this current package.)
+                </div>
+            </div>
+            <div class="col-md-1 col-sm-3 text-right">
+                <button class="btn btn-primary" type="button" (click)="openAddParentPackage(addParentPackageModal)">
+                    <i class="fa fa-pencil-alt" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="mt-2" *ngIf="packageDetails?.parent_package || packageDetails?.parent_package?.id">
+            <h5>
+                {{ packageDetails?.parent_package?.name}}
+            </h5>
+        </div>
+        <ng-container *ngIf="!packageDetails?.parent_package || !packageDetails?.parent_package?.id">
+            <div class="mt-3 text-center">
+                No parent package found
+            </div>
+        </ng-container>
+
+    </div>
+</div>
+<!-- Parent Package: end -->
+
+<!-- Incompatible Package: start -->
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-11 col-sm-9">
+                <h5>Incompatible Packages</h5>
+                <div>
+                    ( Help: If Homeowner purchases any one the packages listed here, this current package will not be available to user.)
+                </div>
+            </div>
+            <div class="col-md-1 col-sm-3 text-right">
+                <button class="btn btn-primary" type="button" (click)="openAddIncompatiblePackage(addIncompatiblePackageModal)">
+                    <i class="fa fa-pencil-alt" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+        <div class="table-responsive mt-2 mb-3" *ngIf="packageDetails && packageDetails.incompatible_packages && packageDetails.incompatible_packages.length>0">
+            <table class="table table-striped list_table" style="table-layout: fixed;">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th width="100px">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container>
+                        <tr *ngFor="let item of packageDetails.incompatible_packages; let j=index">
+                            <td>{{item.name}}</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger" type="button" (click)="deleteIncompatiblePackage(item,j)">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+        <!-- <div class="mt-2" *ngIf="packageDetails?.incompatible_packages || packageDetails?.incompatible_packages?.id">
+            <h5>
+                {{ packageDetails?.incompatible_packages?.name}}
+            </h5>
+        </div> -->
+        <ng-container *ngIf="!packageDetails?.incompatible_packages || ( packageDetails?.incompatible_packages && packageDetails?.incompatible_packages.length==0)">
+            <div class="mt-3 text-center">
+                No Incompatible Package Found
+            </div>
+        </ng-container>
+
+    </div>
+</div>
+<!-- Incompatible Package: end -->
+
+<!-- Incompatible Personalization Options: start -->
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-11 col-sm-9">
+                <h5>Incompatible Personalization Options</h5>
+                <div>
+                    (Help: If Homeowner purchases the current package, Personalization Options listed here will not be available to user.)
+                </div>
+            </div>
+            <div class="col-md-1 col-sm-3 text-right">
+                <button class="btn btn-primary" type="button" (click)="openAddOptions(addOptionsModal)">
+                    <i class="fa fa-pencil-alt" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+        <div class="table-responsive mt-2 mb-3" *ngIf="packageDetails && packageDetails.incompatible_personalization_options && packageDetails.incompatible_personalization_options.length>0">
+            <table class="table table-striped list_table" style="table-layout: fixed;">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th width="100px">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container>
+                        <tr *ngFor="let item of packageDetails.incompatible_personalization_options; let j=index">
+                            <td>{{item.name}}</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger" type="button" (click)="deleteIncompatibleOptions(item,j)">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+        <!-- <div class="mt-2" *ngIf="packageDetails?.incompatible_packages || packageDetails?.incompatible_packages?.id">
+            <h5>
+                {{ packageDetails?.incompatible_packages?.name}}
+            </h5>
+        </div> -->
+        <ng-container *ngIf="!packageDetails?.incompatible_personalization_options || ( packageDetails?.incompatible_personalization_options && packageDetails?.incompatible_personalization_options.length==0)">
+            <div class="mt-3 text-center">
+                No Incompatible Personalization Options Found
+            </div>
+        </ng-container>
+
+    </div>
+</div>
+<!-- Incompatible Personalization Options: end -->
+
+<ng-template #addParentPackageModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">Add Parent Package</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Package
+                                <span style="color:red">*</span>:</label>
+                            <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.parent_package">
+                                <option value="">Select Package</option>
+                                <option *ngFor="let item of packagesList" value={{item._id}}>{{item.name}}</option>
+                            </select>
+
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="addParentPackage()">Add</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #addIncompatiblePackageModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">Add Incompatible Package</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Package
+                                <span style="color:red">*</span>:</label>
+                            <ng-multiselect-dropdown (onDeSelectAll)="onSelectDeSelectAll('incompatible_packages',$event)" (onDeSelect)="onItemSelect()"
+                                (onSelect)="onItemSelect()" (onSelectAll)="onSelectDeSelectAll('incompatible_packages',$event)"
+                                [placeholder]="'Select Packages'" [ngModelOptions]="{standalone: true}" [data]="incompatiblePackagesList"
+                                [(ngModel)]="formDetails.incompatible_packages" [settings]="dropdownSettings">
+                            </ng-multiselect-dropdown>
+
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="addIncompatiblePackage()">Add</button>
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-template #addOptionsModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">Add Incompatible Personalization Options</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Incompatible Personalization Options
+                                <span style="color:red">*</span>:</label>
+                            <ng-multiselect-dropdown (onDeSelectAll)="onSelectDeSelectAll('incompatible_personalization_options',$event)" (onDeSelect)="onItemSelect()"
+                                (onSelect)="onItemSelect()" (onSelectAll)="onSelectDeSelectAll('incompatible_personalization_options',$event)"
+                                [placeholder]="'Select Options'" [ngModelOptions]="{standalone: true}" [data]="optionList" [(ngModel)]="formDetails.incompatible_personalization_options"
+                                [settings]="dropdownSettings">
+                            </ng-multiselect-dropdown>
+
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="addIncompatibleOptions()">Add</button>
+        </div>
+    </div>
+</ng-template>

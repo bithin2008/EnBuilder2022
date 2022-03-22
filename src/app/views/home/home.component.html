@@ -1,0 +1,20 @@
+<div class="animated fadeIn">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 col-xs-12">
+                <ngb-tabset [activeId]="defaultActiveTab">
+                    <ngb-tab id="masterTab" title="Master Serach">
+                        <ng-template ngbTabContent>
+                            <app-master-search returnUrl="home"></app-master-search>
+                        </ng-template>
+                    </ngb-tab>
+                    <!-- <ngb-tab id="subdivisionsTab" title="Subdivisions">
+                            <ng-template ngbTabContent>
+                                <app-sub-divisions returnUrl="home"></app-sub-divisions>
+                            </ng-template>
+                        </ngb-tab> -->
+                </ngb-tabset>
+            </div>
+        </div>
+    </div>
+</div>

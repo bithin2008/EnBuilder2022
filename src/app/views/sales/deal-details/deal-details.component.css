@@ -1,0 +1,167 @@
+.stage-container {
+    width: 100%;
+}
+
+#crumbs {
+    display: table;
+    width: 100%;
+}
+
+#crumbs ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: table-row;
+}
+
+#crumbs ul li {
+    display: table-cell;
+}
+
+#crumbs ul li a {
+    display: block;
+    height: 40px;
+    background: #3a3c42;
+    text-align: center;
+    padding: 10px 20px 0 25px;
+    position: relative;
+    margin: 0 5px 0 0;
+    font-size: 15px;
+    text-decoration: none;
+    color: #fff;
+    white-space: nowrap;
+}
+
+#crumbs ul li a:after {
+    content: "";
+    border-top: 20px solid transparent;
+    border-bottom: 20px solid transparent;
+    border-left: 20px solid #3a3c42;
+    position: absolute;
+    right: -20px;
+    top: 0;
+    z-index: 99;
+}
+
+#crumbs ul li a:before {
+    content: "";
+    border-top: 20px solid transparent;
+    border-bottom: 20px solid transparent;
+    border-left: 20px solid #fff;
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 0 20px 0 40px;
+}
+
+#crumbs ul li:first-child a:before {
+    display: none;
+}
+
+#crumbs ul li:last-child a {
+    padding-right: 40px;
+}
+
+#crumbs ul li:last-child a:after {
+    display: none;
+}
+
+#crumbs ul li a:hover,
+#crumbs ul li a.active {
+    background: #3498db;
+}
+
+#crumbs ul li a:hover:after,
+#crumbs ul li a.active:after {
+    border-left-color: #3498db;
+}
+
+.deal-card {
+    height: 400px;
+}
+
+::ng-deep .deal-box .ui-autocomplete {
+    display: grid !important;
+}
+
+::ng-deep .deal-box .p-autocomplete {
+    display: grid !important;
+    min-height: 35px !important;
+}
+
+::ng-deep .deal-box .p-autocomplete ul li input {
+    display: grid !important;
+    height: 20px !important;
+}
+
+.info-message {
+    display: flex;
+    padding: 10px 25px;
+    border: 1px solid;
+    border-radius: 5px;
+}
+
+.link {
+    color: #20a8d8;
+    text-decoration: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.doc-img-up-btn {
+    position: relative;
+    overflow: hidden;
+    /* bottom: 10px; */
+    /* right: 10px; */
+    float: right;
+}
+
+.doc-img-upload {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    left: 0;
+    top: 0;
+}
+
+.tableFixHead {
+    overflow-y: auto;
+    height: 225px;
+}
+.photo-holder {
+    padding: 5px;
+    position: relative;
+    display: block;
+    max-width: 250px;
+    border: 1px solid #ccc;
+    margin: 0 auto;
+}
+
+.photo-holder img{
+    width: 100%;
+}
+.photo-upload-btn {
+    cursor: pointer;
+    overflow: hidden;
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+}
+.photo-upload-btn input[type="file"] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+}
+
+.doc-img-up-btn {
+    position: relative;
+    overflow: hidden;
+    /* bottom: 10px; */
+    /* right: 10px; */
+}
+.no-td-top-boder{
+    border-top:none
+}

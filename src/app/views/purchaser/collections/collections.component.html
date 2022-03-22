@@ -1,0 +1,120 @@
+<div class="animated fadeIn">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="const_hd">
+                    <button class="btn btn-primary btn-sm mr-2" (click)="goBack()">
+                        <i class="fa fa-arrow-left" aria-hidden="true"></i> &nbsp; Back
+                    </button> Book Details :{{bookDetails?.name}}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-9">
+                                <h3>Collections</h3>
+                            </div>
+                            <div class="col-md-3">
+                                <button style="float:right" class="btn btn-primary mr-2" type="button" (click)="openAddCollectionModal(collectionModal)">Add</button>
+                                <button style="float:right" class="btn btn-primary mr-2" type="button" (click)="navigateToPagesApp()">Pages App Link</button>
+                            </div>
+                        </div>
+                        <div class="table-responsive mt-4">
+                            <table class="table table-striped list_table" style="table-layout: fixed;">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>
+                                            Action
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of bookDetails.collectionDetails" (click)="goToDetails(item._id)">
+                                        <td>
+                                            {{item.name}}
+                                        </td>
+                                        <td style="width:100px">
+                                            <button class="btn btn-sm btn-primary mr-2" type="button">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-danger" type="button" (click)="deleteCollection($event,item)">
+                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #collectionModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">{{isEdit? 'Edit' :'Add'}} Collection</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="mb-1 form-group">
+                    <label for="status" class="form-label">Book Name
+                        <span style="color:red">*</span> : {{formDetails.name}}
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="table-responsive visible-table-responsive mb-2">
+                    <table class="table table-striped table-sm list_table" style="table-layout: fixed;">
+                        <thead>
+                            <tr>
+                                <th style="padding-left: 10px; width: 50px;">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="chk_all" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedAllCollection"
+                                            (change)="selectAllCollection()">
+                                        <label class="custom-control-label" for="chk_all">&nbsp;</label>
+                                    </div>
+                                </th>
+                                <th style="width:250px">Collection Name</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="collections?.length>0">
+                            <tr *ngFor="let item of collections; let i=index">
+                                <td style="padding-left: 10px; width: 50px;">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="chk_{{i}}" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.is_selected">
+                                        <label class="custom-control-label" for="chk_{{i}}">&nbsp;</label>
+                                    </div>
+                                </td>
+                                <td style="width:80px; text-align: center;">
+                                    <label style="min-width: 40px;">
+                                        {{item.name}}
+                                    </label>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody *ngIf="collections?.length==0">
+                            <tr>
+                                <td colspan="2">No Row Found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" *ngIf="!isEdit" (click)="addOrUpdateBook()">Add</button>
+        </div>
+    </div>
+</ng-template>

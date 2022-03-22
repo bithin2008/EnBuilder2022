@@ -1,0 +1,233 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left">Create a Deal</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="activeModal.close()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <form autocomplete="off">
+        <ngb-tabset #t="ngbTabset">
+            <ngb-tab id="buyerTab" title="Buyer">
+                <ng-template ngbTabContent>
+                    <div class="modal-tab-area">
+                        <form autocomplete="off">
+                            <div class="step1">
+                                <div class="autocomplete-container">
+                                    <div class="form-group row">
+                                        <label for="Name" class="col-sm-12 col-form-label">Search for a contact
+                                            <span style="color:red">*</span>:</label>
+                                        <div class="col-sm-8">
+                                            <div class="deal-box  mb-1">
+                                                <p-autoComplete #autoCompleteObject [autofocus]="true" (onDropdownClick)="onDropdownClick()" [(ngModel)]="formDetails.contact_name"
+                                                    [suggestions]="contactList" [ngModelOptions]="{standalone: true}" [multiple]="true"
+                                                    (completeMethod)="searchAuto($event)" field="show_name"></p-autoComplete>
+                                            </div>
+                                            <div class="error text-right mb-1" *ngIf="contactList.length==0 && autosearchText.length>0">
+                                                No results found
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <button class="btn btn-primary mr-1" type="button" (click)="openNewContact()">New Contact</button>
+                                        </div>
+                                    </div>
+                                    <div class="constituent-container" *ngIf="formDetails?.contact_name.length>0">
+                                        <p *ngFor="let contact of formDetails?.contact_name">
+                                            {{contact?._id}},{{contact?.display_name}},{{contact?.email?.email}},{{contact?.phone?.number}}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <button type="button" class="btn btn-primary" *ngIf="formDetails?.contact_name.length>0" (click)="t.select('unitTab')">Next</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab id="unitTab" title="Unit" [disabled]="!formDetails.contact_name || formDetails.contact_name.length==0">
+                <ng-template ngbTabContent>
+                    <div class="modal-tab-area">
+                        <form autocomplete="off">
+                            <div class="form-group row">
+                                <label class="col-md-3 coltrol-label mt-1 mb-0">Project
+                                    <span style="color:red">*</span>:</label>
+                                <div class="col-md-5">
+                                    <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.project_id" id="projectId" (change)="changeProject()">
+                                        <option value="">Select Project</option>
+                                        <option *ngFor="let item of projectList" value={{item._id}}>{{item.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 coltrol-label mt-1 mb-0">Suite #
+                                    <span style="color:red">*</span>:</label>
+                                <div class="col-md-5 mb-2">
+                                    <input (keyup)="unitInputChanged($event.target.value)" #unit="ngModel" [disabled]="!formDetails.project_id" [ngModelOptions]="{standalone: true}"
+                                        [(ngModel)]="formDetails.unit_no" type="number" min="1" class="form-control" id="unit_no">
+                                    <div class="error" *ngIf="!formDetails.project_id">
+                                        Select project
+                                    </div>
+                                    <div class="error" *ngIf="!isSearching && formDetails.project_id && formDetails.unit_no && (!isUnitAvailable && (unit.dirty || unit.touched))">
+                                        Unit is not available
+                                    </div>
+                                    <div class="error" *ngIf="!isSearching && formDetails.project_id && unitList.length==0">
+                                        Units are not present for this project.
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="button" [disabled]="!formDetails.project_id" class="btn btn-primary btn-block  pl-1 pr-1" (click)="openCheckInventoryModal()">Check Inventory</button>
+                                </div>
+                            </div>
+
+                            <!-- <div class="form-group row">
+                                <label class="col-md-3 coltrol-label mt-1 mb-0">
+                                    Parking :
+                                </label>
+                                <div class="form-group col-md-1 col-sm-2">
+                                    <div class="custom-control custom-checkbox mb-2">
+                                        <input type="checkbox" class="custom-control-input" id="is_parking" [disabled]="!formDetails?.max_parking" [ngModelOptions]="{standalone: true}"
+                                            [(ngModel)]="formDetails.is_parking">
+                                        <label class="custom-control-label" for="is_parking"> &nbsp;</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-sm-3" *ngIf="formDetails.is_parking">
+                                    <input type="number" min="1" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.parking">
+                                </div>
+                                <div class="col-md-6 col-sm-5" *ngIf="!formDetails?.max_parking">
+                                    No Parking available to this Unit
+                                </div>
+                                <div class="col-md-6 col-sm-5" *ngIf="formDetails?.max_parking">
+                                    This unit is eligible for {{formDetails?.max_parking}} Parking
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 coltrol-label mt-1 mb-0">
+                                    Locker :
+                                </label>
+                                <div class="form-group col-md-1 col-sm-2">
+                                    <div class="custom-control custom-checkbox mb-2">
+                                        <input class="custom-control-input" [disabled]="!formDetails?.max_lockers" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.is_locker"
+                                            type="checkbox" id="is_locker">
+                                        <label class="custom-control-label" for="is_locker"> &nbsp;</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-sm-3" *ngIf="formDetails.is_locker">
+                                    <input type="number" min="1" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.locker">
+                                </div>
+                                <div class="col-md-6 col-sm-5" *ngIf="!formDetails?.max_lockers">
+                                    No Locker is available to this Unit
+                                </div>
+                                <div class="col-md-6 col-sm-5" *ngIf="formDetails?.max_lockers">
+                                    This unit is eligible for {{formDetails?.max_lockers}} Locker
+                                </div>
+                            </div> -->
+
+                            <div class="form-group row">
+                                <div class="col-md-3 m">Deal Type:</div>
+                                <div class="col-md-9">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group form-check mb-2">
+                                                <input type="radio" [(ngModel)]="formDetails.deal_type" value="Insider Deal" class="form-check-input" name="deal_type" id="insiderDeal">
+                                                <label class="form-check-label" for="insiderDeal">Insider Deal</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group form-check mb-2">
+                                                <input type="radio" [(ngModel)]="formDetails.deal_type" value="China Deal" class="form-check-input" name="deal_type" id="chinaDeal">
+                                                <label class="form-check-label" for="chinaDeal">China Deal</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group form-check mb-2">
+                                                <input type="radio" [(ngModel)]="formDetails.deal_type" value="Internatioanl Deal" class="form-check-input" name="deal_type"
+                                                    id="internatioanlDeal">
+                                                <label class="form-check-label" for="internatioanlDeal">Internatioanl Deal</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-3 coltrol-label mt-1 mb-0">Deposit structure
+                                    <span style="color:red">*</span>:</label>
+                                <div class="col-md-5">
+                                    <select class="form-select" [disabled]="!formDetails.project_id"  (change)="onChangeDepositeStructure()" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.deposit_structure">
+                                        <option value="">Select deposit structure</option>
+                                        <option *ngFor="let item of depositList" value={{item._id}}>{{item.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6" *ngIf="formDetails.deposit_structure">
+                                    <label>Start Date :
+                                        <b> &nbsp;&nbsp;&nbsp;{{this.formDetails.start | date:'yyyy-MM-dd'}}</b>
+                                    </label>
+                                </div>
+                                <div class="col-md-6" *ngIf="formDetails.deposit_structure">
+                                    <label>End Date :
+                                        <b>&nbsp;&nbsp;&nbsp;{{this.formDetails.end | date:'yyyy-MM-dd'}}</b>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <ng-container *ngIf="depositInfo.length>0">
+                                <div class="col-md-12">
+                                    <div class="table-responsive mb-5">
+                                        <table id="contactTable" class="table table-striped list_table" style="table-layout: fixed;">
+                                            <thead>
+                                                <tr>
+                                                    <th width="80px"></th>
+                                                    <th width="150px">Percent</th>
+                                                    <th width="150px">Amount</th>
+                                                    <th width="150px">Due Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let item of depositInfo;let i=index">
+                                                    <td>{{i==0?'Initial':i+1}}</td>
+                                                    <td>{{item?.percent ? item?.percent+'%' :'-'}}</td>
+                                                    <td>{{item?.amount ? (item?.amount | currency:'USD') :'-'}}</td>
+                                                    <td>
+                                                        {{item?.due_date |date:'yyyy-MM-dd'}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Total</td>
+                                                    <td></td>
+                                                    <td>{{formDetails?.total_amount | currency:'USD'}}</td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr *ngIf="depositInfo.length==0">
+                                                    <td colspan="4">No Record Found</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </ng-container>
+
+                            <div class="info-message bg-warning" *ngIf="!isSearching && formDetails.project_id && unitsSoldOut">
+                                Units sold out for the project&nbsp;
+                                <b>{{selectedProject?.name}}</b>.
+                            </div>
+                            <div class="info-message bg-warning" *ngIf="!isSearching && formDetails.project_id && depositList.length==0">
+                                Please create a deposit structure for the project&nbsp;
+                                <b>{{selectedProject?.name}}</b>.
+                            </div>
+                            <div class="info-message bg-warning" *ngIf="!isSearching && formDetails.unit_no && !isSalesPriceAvailable">
+                                Please add sales price for the unit&nbsp;
+                                <b>{{formDetails.unit_no}}</b>.
+                            </div>
+                        </form>
+                        <div class="text-right">
+                            <button type="button" class="btn btn-primary" (click)="createDeal()">Add</button>
+                        </div>
+                    </div>
+                </ng-template>
+            </ngb-tab>
+        </ngb-tabset>
+    </form>
+</div>

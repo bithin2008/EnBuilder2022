@@ -1,0 +1,122 @@
+
+<% assign params = en.params %>
+
+// for project 
+<% if params.type == 'project' %>
+    <% en.data.find results "bldr_projects" query "" orderby 100 1 %>
+    <% for item in results.rows %>
+        <% unassign query %>
+        <% unassign data %>
+        <% assign query._id = item._id %>
+        <% assign data._id = item._id %>
+        <% assign data.type = 'projects' %>
+        <% assign data.text = item.name | append: ' ' | append: item.project_code %>
+        <% assign data.text = data.text | append: ' ' | append: item.type %>
+        <% assign data.text = data.text | append: ' ' | append: item.features %>
+        <% assign data.text = data.text | append: ' ' | append: item.no_of_floors %>
+        <% assign data.text = data.text | append: ' ' | append: item.no_of_lots %>
+        <% en.data.upsert upresult "bldr_master_data" query data %>
+    <% endfor %>
+
+// for model 
+<% elsif params.type == 'model' %>
+    <% en.data.find results "bldr_models" query "" orderby 100 1 %>
+    <% for item in results.rows %>
+        <% unassign query %>
+        <% unassign data %>
+        <% assign query._id = item._id %>
+        <% assign data._id = item._id %>
+        <% assign data.type = 'models' %>
+        <% assign data.text = item.name | append: ' ' | append: item.bed %>
+        <% assign data.text = data.text | append: ' ' | append: item.bath %>
+        <% assign data.text = data.text | append: ' ' | append: item.den %>
+        <% assign data.text = data.text | append: ' ' | append: item.flex %>
+        <% assign data.text = data.text | append: ' ' | append: item.area %>
+        <% assign data.text = data.text | append: ' ' | append: item.media %>
+        <% assign data.text = data.text | append: ' ' | append: item.ceiling %>
+        <% assign data.text = data.text | append: ' ' | append: item.outdoor_type %>
+        <% assign data.text = data.text | append: ' ' | append: item.outdoor_area %>
+        <% assign data.text = data.text | append: ' ' | append: item.type %>
+        <% assign data.text = data.text | append: ' ' | append: item.collection %>
+        <% assign data.text = data.text | append: ' ' | append: item.notes %>
+        <% en.data.upsert upresult "bldr_master_data" query data %>
+    <% endfor %>
+// for unit
+<% elsif params.type == 'unit' %>
+    <% en.data.find results "bldr_units" query "" orderby 100 1 %>
+    <% for item in results.rows %>
+        <% unassign query %>
+        <% unassign data %>
+        <% assign query._id = item._id %>
+        <% assign data._id = item._id %>
+        <% assign data.type = 'units' %>
+        <% assign data.text = item.model_name | append: ' ' | append: item.bed %>
+        <% assign data.text = data.text | append: ' ' | append: item.bath %>
+        <% assign data.text = data.text | append: ' ' | append: item.den %>
+        <% assign data.text = data.text | append: ' ' | append: item.flex %>
+        <% assign data.text = data.text | append: ' ' | append: item.area %>
+        <% assign data.text = data.text | append: ' ' | append: item.media %>
+        <% assign data.text = data.text | append: ' ' | append: item.ceiling %>
+        <% assign data.text = data.text | append: ' ' | append: item.outdoor_type %>
+        <% assign data.text = data.text | append: ' ' | append: item.outdoor_area %>
+        <% assign data.text = data.text | append: ' ' | append: item.type %>
+        <% assign data.text = data.text | append: ' ' | append: item.collection %>
+        <% assign data.text = data.text | append: ' ' | append: item.notes %>
+        <% assign data.text = data.text | append: ' ' | append: item.status %>
+        <% assign data.text = data.text | append: ' ' | append: item.floor_marketing %>
+        <% assign data.text = data.text | append: ' ' | append: item.floor_legal %>
+        <% assign data.text = data.text | append: ' ' | append: item.unit_no_marketing %>
+        <% assign data.text = data.text | append: ' ' | append: item.unit_no_legal %>
+        <% assign data.text = data.text | append: ' ' | append: item.unit_no %>
+        <% assign data.text = data.text | append: ' ' | append: item.price %>
+        <% assign data.text = data.text | append: ' ' | append: item.sales_price %>
+        <% en.data.upsert upresult "bldr_master_data" query data %>
+    <% endfor %>
+// for registrant
+<% elsif params.type == 'registrant' %>
+    <% en.data.find results "bldr_registrants" query "" orderby 100 1 %>
+    <% for item in results.rows %>
+        <% unassign query %>
+        <% unassign data %>
+        <% assign query._id = item._id %>
+        <% assign data._id = item._id %>
+        <% assign data.type = 'registrants' %>
+        <% assign data.text = item.first_name | append: ' ' | append: item.last_name %>
+        <% assign data.text = data.text | append: ' ' | append: item.desired_project %>
+        <% assign data.text = data.text | append: ' ' | append: item.desired_unit_type %>
+        <% assign data.text = data.text | append: ' ' | append: item.desired_price_range %>
+        <% assign data.text = data.text | append: ' ' | append: item.how_did_you_hear %>
+        
+        <% for email in item.emails %>
+            <% assign data.text = data.text | append: ' ' | append: email.email %>
+        <% endfor %>
+        <% for phone in item.phones %>
+            <% assign data.text = data.text | append: ' ' | append: phone.number %>
+        <% endfor %>
+        <% for address in item.addresses %>
+            <% assign data.text = data.text | append: ' ' | append: address.street1 %>
+            <% assign data.text = data.text | append: ' ' | append: address.street2 %>
+            <% assign data.text = data.text | append: ' ' | append: address.street3 %>
+            <% assign data.text = data.text | append: ' ' | append: address.city %>
+            <% assign data.text = data.text | append: ' ' | append: address.state %>
+            <% assign data.text = data.text | append: ' ' | append: address.country %>
+            <% assign data.text = data.text | append: ' ' | append: address.zip %>
+        <% endfor %>
+        <% en.data.upsert upresult "bldr_master_data" query data %>
+    <% endfor %>
+<% endif %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

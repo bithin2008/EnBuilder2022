@@ -1,0 +1,38 @@
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_project_settings' %> 
+
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% assign obj = en.params %>
+    <% if obj.start %>
+        <% assign obj.start = obj.start | string_to_date: "yyyy-MM-dd" time-zone %>
+    <% endif %>
+    <% if obj.end %>
+        <% assign obj.end = obj.end | string_to_date: "yyyy-MM-dd" time-zone %>
+    <% endif %>
+    
+    <% en.data.update upResult datasetId query obj %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Incentive updated successfully.' %>
+    <% assign returnData.result = upResult %>
+    <% return returnData %>
+<% else %>
+    <% assign obj = en.params %>
+    <% if obj.start %>
+        <% assign obj.start = obj.start | string_to_date: "yyyy-MM-dd" time-zone %>
+    <% endif %>
+    <% if obj.end %>
+        <% assign obj.end = obj.end | string_to_date: "yyyy-MM-dd" time-zone %>
+    <% endif %>
+    
+    <% en.data.insert result datasetId obj %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Incentive added successfully.' %>
+    <% assign returnData.result = result %>
+    <% return returnData %>
+<% endif %>

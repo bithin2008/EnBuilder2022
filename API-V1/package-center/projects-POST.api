@@ -1,0 +1,26 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_projects' %>
+
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% assign params = en.params %> 
+    <% en.data.update upResult datasetId query params %>
+    <% assign returnData.status = 1 %> 
+    <% assign returnData.message = 'Project updated successfully.' %>
+    <% assign returnData.result = upResult %>
+    <% return returnData %>
+<% else %>
+    <% assign returnData.status = 0 %> 
+    <% assign returnData.message = 'Project not found.' %>
+    <% return returnData %>
+<% endif %>
+
+
+
+

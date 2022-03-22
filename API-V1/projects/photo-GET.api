@@ -1,0 +1,39 @@
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'crm_media' %>
+
+<% assign pageSize = 200 %> 
+<% assign page = 1 %>
+
+<% if en.params.pageSize %>
+    <% assign pageSize = en.params.pageSize %>
+<% endif %>
+<% if en.params.page %> 
+    <% assign page = en.params.page %>
+<% endif %> 
+<% if en.params.builder_id %>
+    <% assign query.builder_id = en.params.builder_id %>
+<% endif %>
+<% if en.params.project_id %>
+    <% assign query.project_id = en.params.project_id %>
+<% endif %>
+<% if en.params.model_id %>
+    <% assign query.model_id = en.params.model_id %>
+<% endif %>
+<% if en.params.type %>
+    <% assign query.type = en.params.type %>
+<% endif %>
+<% if en.params.source %>
+    <% assign query.source = en.params.source %>
+<% endif %>
+
+<% en.data.find results datasetId query "" orderBy pageSize page %>
+<% assign returnData.status = 1 %>
+<% assign returnData.message = 'Document list' %>
+<% assign returnData.results = results.rows %>
+<% assign returnData.pagination = results.pagination %>
+<% return returnData %>  

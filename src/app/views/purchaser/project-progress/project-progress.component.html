@@ -1,0 +1,420 @@
+<form autocomplete="off">
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <button style="float:right" class="btn btn-primary mr-2 mb-1" type="button" (click)="openAddProjectProgressModal(editModal)">Add</button>
+            <button style="float:right" class="btn btn-primary mr-2 mb-1" type="button" (click)="openProjectProgressSettingModal(projectSettingModal)">Settings</button>
+
+            <div class="form-group mr-2" style="float:right">
+                <select class="width-210 form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedProjectId" (change)="onProjectChange($event)">
+                    <option *ngFor="let item of projectList" value="{{item._id}}">{{item.name}}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="table-responsive mt-2 mb-3">
+    <table class="table table-striped list_table" style="table-layout: fixed;">
+        <thead>
+            <tr>
+                <th width="70px">Step</th>
+                <th width="200px">Photo</th>
+                <th width="80px">Gallery</th>
+                <th width="300px">Description</th>
+                <th class="text-center" width="180px">Time/Status</th>
+                <th width="250px"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngIf="projectProgress.length>0">
+                <tr *ngFor="let item of projectProgress;let i=index">
+                    <td>
+                        <div class="step-block">
+                            {{item?.step}}
+                        </div>
+                    </td>
+                    <td>
+                        <div (click)="openViewModalBox(mediaViewerModal,item)" *ngIf="item.photo" [ngStyle]="{'background-image': 'url(&quot;' + baseUrl+ item.photo.url +'/100&quot;)'}"
+                            class="doc-img-container" style="cursor: pointer">
+                        </div>
+                        <img *ngIf="!item.photo" class="doc-img-container" src="assets/img/no-image.jpg" width="30px" height="30px">
+                    </td>
+                    <td>{{item.gallery ? item?.gallery.length :'0'}}</td>
+                    <td [innerHtml]="item?.description"></td>
+                    <td>{{item?.time}}
+                        <br> {{item?.status}}
+                    </td>
+                    <td class="text-right">
+                        <button class="btn btn-primary btn-sm mr-2" type="button" [disabled]="i==0" (click)="reArrangeProgressStep('up',i)">
+                            <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                        </button>
+                        <button class="btn btn-primary btn-sm mr-2" type="button" [disabled]="(i+1)==projectProgress.length" (click)="reArrangeProgressStep('down',i)">
+                            <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                        </button>
+                        <button class="btn btn-primary btn-sm mr-2" type="button" (click)="openEditProjectProgressModal(editModal,item,i)">
+                            <i class="fa fa-pencil-alt" aria-hidden="true"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" type="button" (click)="deleteProjectProgress(item)">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>
+            </ng-container>
+            <ng-container *ngIf="projectProgress.length == 0">
+                <tr>
+                    <td colspan="6" class="text-center">No project progress found</td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+</div>
+<div class="row mt-3" *ngIf="paginationObj.total>=20">
+    <div class="col-md-6">
+        <div class="form-group">
+            <!-- <div class="col-sm-6"> -->
+            <span class="float-left" style="width:70px;margin-top: 6px;">Page Size:</span>
+            <span class="float-left" style="width:85px;">
+                <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="pageSize" (change)="setPageSize()">
+                    <option value="">-Select-</option>
+                                        <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </span>
+            <span class="float-left" style="margin-top: 6px !important;margin-left: 16px !important;">{{paginationObj.total}} Record(s) Found</span>
+            <!-- </div> -->
+        </div>
+    </div>
+    <div class="col-md-6">
+        <nav>
+            <ul class="pagination">
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" (click)="doPaginationWise(paginationObj.previousPage)">
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(1)">
+                        First
+                    </a>
+                </li>
+                <li class="page-item {{pagination == paginationObj.currentPage?'active':''}}" *ngFor="let pagination of paginationObj.items">
+                    <a class="page-link" (click)="doPaginationWise(pagination)">{{pagination}}</a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.totalPages)">
+                        Last
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" (click)="doPaginationWise(paginationObj.nextPage)">
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<ng-template #editModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">{{isEdit? 'Edit' :'Add'}} Progress Step</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body custom-edit-body">
+        <form autocomplete="off">
+            <ngb-tabset (tabChange)="doTabFunctions($event)">
+                <ngb-tab id="ModelTab" title="Basic">
+                    <ng-template ngbTabContent>
+                        <div class="modal-tab-area">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-1 form-group">
+                                        <label for="step" class="form-label">Step:
+                                            <!-- <span style="color:red">*</span>: -->
+                                        </label>
+                                        <input disabled [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.step" type="text" class="form-control" id="step">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-1 form-group">
+                                        <label for="time" class="form-label">Time :
+
+                                        </label>
+                                        <input [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.time" type="text" class="form-control" id="time">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="mb-1 form-group">
+                                        <label for="description" class="form-label">Description :
+                                            <!-- <span style="color:red">*</span> -->
+                                        </label>
+                                        <div [froalaEditor]="nonInlineEdit" [(froalaModel)]="formDetails.description">
+                                            {{formDetails.description ? formDetails.description : ''}}
+                                        </div>
+                                        <!-- <input [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.description" type="text" class="form-control" id="description"> -->
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-1 form-group">
+                                        <label for="status" class="form-label">Status :
+                                            <!-- <span style="color:red">*</span> -->
+                                        </label>
+                                        <input [ngModelOptions]="{standalone: true}" placeholder="Eg. Complete, In progress, Upcomming" [(ngModel)]="formDetails.status"
+                                            type="text" class="form-control" id="status">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="pt-4 mb-1 mt-1">
+                                        <input [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.is_published" type="checkbox" id="publish">&nbsp;&nbsp;&nbsp;
+                                        <label for="publish">Publish
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="pt-4 mb-1 mt-1">
+                                        <input [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.is_completed" type="checkbox" id="complete">&nbsp;&nbsp;&nbsp;
+                                        <label for="complete">Complete
+                                        </label>
+                                    </div>
+                                </div>
+                                <label> Photo :</label>
+                                <div class="photo-holder mt-3">
+                                    <span *ngIf="!uploadedPhoto">
+                                        <img class="component-icon" *ngIf="formDetails?.layout" [src]="formDetails?.layout" alt="">
+                                        <img class="component-icon" *ngIf="!formDetails?.layout" src="assets/img/no-image.jpg" alt="">
+                                    </span>
+                                    <button class="btn btn-primary btn-sm photo-upload-btn">
+                                        <i class="fa fa-upload"></i>
+                                        <input type="file" id="uploadLogo" accept="image/*" placeholder="Add Photo" (change)="uploadImage($event.target.files)">
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab id="viewsTab" title="Gallery" [disabled]="!isEdit">
+                    <ng-template ngbTabContent>
+                        <div class="modal-tab-area">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4>Photo
+                                        <button class="btn btn-sm btn-primary doc-img-up-btn" style="float: right;" type="button"> Add
+                                            <input class="doc-img-upload" accept="image/*" type="file" multiple (change)="uploadProjectProgressPhoto($event.target.files ,formDetails._id)">
+                                        </button>
+                                    </h4>
+                                    <br>
+                                    <ng-container *ngIf="galleryPhotoList?.length>0">
+                                        <ul class="film-strip">
+                                            <li class="photo" style="position: relative;" *ngFor="let item of galleryPhotoList">
+                                                <div class="delete-photo-icon" (click)="deleteGalleryPhoto(item,$event,formDetails._id)">
+                                                    <i class="fas fa-times"></i>
+                                                </div>
+                                                <div class="photo-container-div" [ngStyle]="{'background-image': 'url(&quot;' + baseUrl + item?.url + '/350&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }">
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </ng-container>
+                                </div>
+                                <div class="col-md-12" *ngIf="galleryPhotoList.length==0">
+
+                                    <ng-container>
+                                        <p class="text-center">No photo found.</p>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab id="VideoTab" title="Video" [disabled]="!isEdit">
+                    <ng-template ngbTabContent>
+                        <div class="modal-tab-area">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4>Video
+                                        <button class="btn btn-sm btn-primary doc-img-up-btn" (click)="openAddVideoModal(videoModal)" style="float: right;" type="button">
+                                            Add
+                                            <!-- <input class="doc-img-upload" accept="image/*" type="file" multiple (change)="uploadProjectProgressPhoto($event.target.files ,formDetails._id)"> -->
+                                        </button>
+                                    </h4>
+                                    <br>
+                                    <ng-container *ngIf="galleryVideoList?.length>0">
+                                        <ul class="film-strip">
+                                            <li class="video" style="position: relative;" *ngFor="let item of galleryVideoList;let i=index">
+                                                <div class="video-delete-photo-icon" (click)="deleteVideo(item,$event,i)">
+                                                    <i class="fas fa-times"></i>
+                                                </div>
+                                                <div *ngIf="item.video_type == 'YOUTUBE'" class="video-container-div" [ngStyle]="{'background-image': 'url(&quot;https://img.youtube.com/vi/'+ item?.video_id +'/mqdefault.jpg&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }">
+                                                </div>
+                                                <div *ngIf="item.video_type == 'VIMEO'" class="video-container-div" [ngStyle]="{'background-image': 'url(&quot;https://i.vimeocdn.com/video/'+ item?.video_id +'_400.jpg&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }">
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </ng-container>
+                                </div>
+                                <div class="col-md-12" *ngIf="galleryVideoList.length==0">
+
+                                    <ng-container>
+                                        <p class="text-center">No video found.</p>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngb-tab>
+            </ngb-tabset>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" *ngIf="isEdit && selectedTab=='ModelTab'" (click)="editProgressStep()">Update</button>
+            <button type="button" class="btn btn-primary" *ngIf="!isEdit && selectedTab=='ModelTab'" (click)="addProgressStep()">Add</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #projectSettingModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Project Progress Settings</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form autocomplete="off">
+            <div class="row">
+                <div class="col-md-12 mb-4">
+                    <div class="form-check">
+                        <input [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.is_progress_enabled" class="form-check-input" type="checkbox"
+                            value="" id="isEnable">
+                        <label class="form-check-label" for="isEnable">
+                            Enable
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="mb-1 form-group">
+                        <label for="label_text" class="form-label">Label Text
+                            <span style="color:red">*</span>:
+                        </label>
+                        <input [ngModelOptions]="{standalone: true}" placeholder="Project Progress" [(ngModel)]="formDetails.progress_label_text"
+                            type="text" class="form-control" id="label_text">
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updateSettingProgress()">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #videoModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Add Video</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="videoModalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="name">Video Type</label>
+                                <select class="form-select" [(ngModel)]="videoDetails.video_type">
+                                    <option value="">Select Video Type</option>
+                                    <option value="YOUTUBE">Youtube</option>
+                                    <option value="VIMEO">Vimeo</option>
+                                    <!-- <option value="MP4">MP4</option> -->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="name">Video Url</label>
+                                <input type="text" class="form-control" [(ngModel)]="videoDetails.url" name="url" placeholder="Video url">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="videoModalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="addVideos()">Add</button>
+        </div>
+    </div>
+</ng-template>
+<ng-template #mediaViewerModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left"> View Media </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body custom-all-media-body">
+        <div class="container-fluid">
+            <div *ngIf="selectedFile?.video_type=='YOUTUBE'">
+                <div class="row">
+                    <div class="text-center col-md-12">
+                        <iframe [src]="selectedFile?.showing_url" frameborder="0" width="100%" height="500px" webkitallowfullscreen mozallowfullscreen
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="selectedFile?.video_type=='VIMEO'">
+                <div class="row">
+                    <div class="text-center col-md-12">
+                        <iframe [src]="selectedFile?.showing_url" frameborder="0" width="100%" height="500px" webkitallowfullscreen mozallowfullscreen
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="selectedFile?.fileType=='IMAGE'">
+                <div class="row">
+                    <div class="text-center  col-md-12">
+                        <img loading="lazy" style="max-width:100%" [src]="baseUrl + selectedFile?.url+'/1000'" alt="{{selectedFile?.name}}">
+
+                    </div>
+                </div>
+            </div>
+            <div class="pt-3 row">
+
+            </div>
+        </div>
+    </div>
+    <div class="pt-1 pl-1 pr-1 pb-0 modal-footer">
+        <div class="text-center col-md-12" style="overflow-y: hidden">
+            <ul class="film-strip scrollable-ul">
+                <li class="all-media" style="position: relative;" *ngFor="let item of allMediaList">
+                    <div (click)="changeSelectedFile(item)" *ngIf="item.fileType == 'IMAGE'" [class]="item?.url==selectedFile?.url ? 'green-border pointer modal-photo-container-div' :'pointer modal-photo-container-div' "
+                        [ngStyle]="{'background-image': 'url(&quot;' + baseUrl + item?.url + '/350&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }">
+                    </div>
+                    <div (click)="changeSelectedFile(item)" *ngIf="item.video_type == 'YOUTUBE'" [class]="item?.url==selectedFile?.url ? 'green-border pointer modal-video-container-div' :'pointer modal-video-container-div'"
+                        [ngStyle]="{'background-image': 'url(&quot;https://img.youtube.com/vi/'+ item?.video_id +'/mqdefault.jpg&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }">
+                    </div>
+                    <div (click)="changeSelectedFile(item)" *ngIf="item.video_type == 'VIMEO'" [class]="item?.url==selectedFile?.url ? 'green-border pointer modal-video-container-div' :'pointer modal-video-container-div'"
+                        [ngStyle]="{'background-image': 'url(&quot;https://i.vimeocdn.com/video/'+ item?.video_id +'_400.jpg&quot;)', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center' }">
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</ng-template>

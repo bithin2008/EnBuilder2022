@@ -1,0 +1,696 @@
+<div class="animated fadeIn">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="const_hd">
+                    <button class="btn btn-primary btn-sm mr-2" (click)="goToInventory()">
+                        <i class="fa fa-arrow-left" aria-hidden="true"></i> &nbsp; Back
+                    </button> Bicycle Floors Details
+                    <button style="float:right" class="btn btn-sm btn-danger mt-2" type="button" (click)="deleteFloorplan()">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="content-wrap">
+            <div class="row">
+                <div class="col-lg-12 col-xs-12">
+                    <div class="project-details">
+                        <div class="row">
+                            <div class="col-md-12 mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <h5>Name: {{floorDetailsObj?.name}} </h5>
+                                                <p>Project Name: {{floorDetailsObj?.project_name}}</p>
+                                            </div>
+                                            <div class="col-md-2 text-right">
+                                                <button class="btn btn-primary btn-sm" type="button" (click)="openEditBicycleFloorModal(editModal)">
+                                                    <i class="fa fa-pencil-alt" aria-hidden="true"></i>
+                                                </button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <h5>Bicycle Floor Layout</h5>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button class="btn btn-sm btn-primary doc-img-up-btn" style="float: right;" type="button"> Upload Floorplan
+                                                    <input class="doc-img-upload" accept="image/*" type="file" (change)="uploadFloorplan($event.target.files)">
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <ng-container *ngIf="APICallCompleted">
+                                            <div style="position: relative; margin:0 auto; width:1000px;">
+
+                                                <div *ngIf="floorDetailsObj?.layout" class="parking-floorplan" [ngStyle]="{'background-image': 'url(&quot;' + baseUrl + floorDetailsObj?.layout?.url + '&quot;)','width': '100%'}"></div>
+
+                                                <div style="position: absolute; left: 0; top:0; width: 1000px; height: 1000; z-index: 99;">
+                                                    <canvas id="bicycleSlotDesigner" width="1000" height="1000"></canvas>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                        <div class="row no-gutters">
+                                            <div class="col-md-6 col-sm-12 text-center" *ngFor="let type of bicycleTypes">
+                                                {{type?.name}}(Selected)
+                                                <img class="car-img" src="assets/img/bicycle-icons/{{type?.premium_available}}"> {{type?.name}}(Standard)
+                                                <img class="car-img" src="assets/img/bicycle-icons/{{type?.standard_available}}">
+                                            </div>
+                                        </div>
+                                        <div class="row no-gutters">
+                                            <div class="col-md-2 col-sm-12 text-center" *ngFor="let addon of bicycleAddons">
+                                                {{addon?.name}}
+                                                <img class="addon-img" src="assets/img/addons-icon/{{addon?.addon_icon}}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-4">
+                                <div class="card">
+
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <h5>Bicycles</h5>
+                                            </div>
+                                            <div class="col-md-4 text-right">
+                                                <button class="btn btn-sm btn-primary mr-2" (click)="openBulkAddModal(bulkAddModal)"> Bulk Add </button>
+                                                <button class="btn btn-sm btn-primary" (click)="openBulkEditModal(bulkAddModal)"> Bulk Edit </button>
+                                            </div>
+                                        </div>
+                                        <div class="text-center pt-3">
+                                            <div class="table-responsive  mb-5" *ngIf="bicycleUnitList?.length > 0">
+                                                <table class="table table-striped table-sm list_table" style="table-layout: fixed;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th width="100" (click)="setOrder('number')">Bicycle
+                                                                <span *ngIf="order != 'number'">
+                                                                    <i class="fas fa-sort"></i>
+                                                                </span>
+                                                                <span *ngIf="reverse && order == 'number'">▼</span>
+                                                                <span *ngIf="!reverse && order == 'number'">▲</span>
+                                                            </th>
+                                                            <th width="150" (click)="setOrder('type')">Type
+                                                                <span *ngIf="order != 'type'">
+                                                                    <i class="fas fa-sort"></i>
+                                                                </span>
+                                                                <span *ngIf="reverse && order == 'type'">▼</span>
+                                                                <span *ngIf="!reverse && order == 'type'">▲</span>
+                                                            </th>
+                                                            <th width="120" (click)="setOrder('price')">Price
+                                                                <span *ngIf="order != 'price'">
+                                                                    <i class="fas fa-sort"></i>
+                                                                </span>
+                                                                <span *ngIf="reverse && order == 'price'">▼</span>
+                                                                <span *ngIf="!reverse && order == 'price'">▲</span>
+                                                            </th>
+                                                            <th width="120" (click)="setOrder('cost')">Cost
+                                                                <span *ngIf="order != 'cost'">
+                                                                    <i class="fas fa-sort"></i>
+                                                                </span>
+                                                                <span *ngIf="reverse && order == 'cost'">▼</span>
+                                                                <span *ngIf="!reverse && order == 'cost'">▲</span>
+                                                            </th>
+                                                            <th width="220">Addons </th>
+                                                            <th width="220">Mandatory </th>
+                                                            <!-- <th width="80">Premium </th> -->
+                                                            <th width="170" (click)="setOrder('status')">Status
+                                                                <span *ngIf="order != 'status'">
+                                                                    <i class="fas fa-sort"></i>
+                                                                </span>
+                                                                <span *ngIf="reverse && order == 'status'">▼</span>
+                                                                <span *ngIf="!reverse && order == 'status'">▲</span>
+                                                            </th>
+
+                                                            <th width="100" (click)="setOrder('number')">Bicycle
+                                                                <span *ngIf="order != 'number'">
+                                                                    <i class="fas fa-sort"></i>
+                                                                </span>
+                                                                <span *ngIf="reverse && order == 'number'">▼</span>
+                                                                <span *ngIf="!reverse && order == 'number'">▲</span>
+                                                            </th>
+                                                            <th width="100" (click)="setOrder('unit')">Unit
+                                                                <span *ngIf="order != 'unit'">
+                                                                    <i class="fas fa-sort"></i>
+                                                                </span>
+                                                                <span *ngIf="reverse && order == 'unit'">▼</span>
+                                                                <span *ngIf="!reverse && order == 'unit'">▲</span>
+                                                            </th>
+                                                            <th width="220"></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let item of bicycleUnitList">
+                                                            <td>{{item?.number}}</td>
+                                                            <td>{{item?.type}}</td>
+                                                            <td>{{item?.price | currency:'USD'}}</td>
+                                                            <td>{{item.cost | currency:'USD'}}</td>
+                                                            <td>
+                                                                <span *ngFor="let obj of item?.addons;let j=index">{{obj?.name}}
+                                                                    <ng-container *ngIf="j+1!=item?.addons.length">, </ng-container>
+                                                                </span>
+                                                            </td>
+                                                            <td>
+                                                                <span *ngFor="let obj of item?.mandatory_addons;let j=index">{{obj?.name}}
+                                                                    <ng-container *ngIf="j+1!=item?.mandatory_addons.length">, </ng-container>
+                                                                </span>
+                                                            </td>
+                                                            <!-- <td>{{item.is_premium ? 'Yes' :'No'}} </td> -->
+                                                            <td>{{item?.status | uppercase}}</td>
+                                                            <td>{{item?.number}}</td>
+                                                            <td>{{item?.unit_no}} </td>
+                                                            <td class="text-right">
+                                                                <button class="btn btn-sm btn-primary mr-2" *ngIf="!item.unit_no" [disabled]="!item?.space_object" (click)="openAssignModal(assignModal,item)">Assign</button>
+                                                                <button class="btn btn-sm btn-primary mr-2" *ngIf="item.unit_no" (click)="releaseParkingSpace(item)">Release</button>
+                                                                <!-- <button class="btn btn-sm btn-primary" (click)="releaseParkingToUnit(item)">Release</button>&nbsp; -->
+                                                                <button class="btn btn-sm btn-primary mr-2" [disabled]="item.status=='SOLD'" (click)="openEditBicycleModal(editBicycleUnitModal,item)">
+                                                                    <i aria-hidden="true" class="fa fa-edit"></i>
+                                                                </button>
+                                                                <button (click)="openBicycleDesignerModal(bicycleUnitDesignModal,item)" [disabled]="item.status=='SOLD'" [class]="item?.space_object ? 'btn btn-sm btn-primary mr-2' :'btn btn-sm btn-secondary mr-2'">
+                                                                    <i aria-hidden="true" class="fa fa-location-arrow"></i>
+                                                                </button>
+                                                                <button class="btn btn-sm btn-danger" [disabled]="item.status=='SOLD'" type="button" (click)="deleteBicycleUnit(item)">
+                                                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <!-- <div class="row mt-3" *ngIf="paginationObj?.total>=20">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <span class="float-left" style="width:70px;margin-top: 6px;">Page Size:</span>
+                                                        <span class="float-left" style="width:70px;">
+                                                            <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="pageSize" (change)="setPageSizeFloorPlan()">
+                                                                <option value="">-Select-</option>
+                                                                                                                                <option value="20">20</option>
+                                                                <option value="30">30</option>
+                                                                <option value="50">50</option>
+                                                                <option value="100">100</option>
+                                                            </select>
+                                                        </span>
+                                                        <span class="float-left" style="margin-top: 6px !important;margin-left: 16px !important;">{{paginationObj?.total}} Record(s) Found</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <nav>
+                                                        <ul class="pagination">
+                                                            <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                                                                <a class="page-link" (click)="doPaginationWise(paginationObj.previousPage)">
+                                                                    <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                                                                </a>
+                                                            </li>
+                                                            <li class="page-item {{pagination == paginationObj.currentPage?'active':''}}" *ngFor="let pagination of paginationObj.items">
+                                                                <a class="page-link" (click)="doPaginationWise(pagination)">{{pagination}}</a>
+                                                            </li>
+                                                            <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                                                                <a class="page-link" (click)="doPaginationWise(paginationObj.nextPage)">
+                                                                    <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </nav>
+                                                </div>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #bulkAddModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">{{isEdit?'Edit':'Add'}} Bicycle Units</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" style="padding-top: 0;height: calc(90vh - 100px);">
+        <form autocomplete="off" style="height: inherit;">
+            <div class="table-responsive mb-2" style="height: inherit;">
+                <table class="table table-striped table-sm list_table table-header-fixed" style="table-layout: fixed;">
+                    <thead>
+                        <tr>
+                            <th style="width:200px">Bicycle #
+                            </th>
+                            <th style="width:250px">Type
+                            </th>
+                            <th style="width:120px">Price
+                            </th>
+                            <th style="width:120px">Cost</th>
+                            <th style="width:200px">Available Add-ons</th>
+                            <th style="width:200px">Mandatory Add-ons</th>
+                            <!-- <th style="width:80px">Premium
+                            </th> -->
+                            <th style="width:120px">Status
+                            </th>
+                            <!-- <th style="width:200px">Unit #</th> -->
+                            <th style="width:70px">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="bulkBicycleData?.length>0">
+                        <tr *ngFor="let item of bulkBicycleData; let i=index">
+                            <td width="100">
+                                <input type="text" [ngModelOptions]="{standalone: true}" class="form-control form-control-sm" name="parkingNumber" [(ngModel)]="item.number">
+                            </td>
+                            <td>
+                                <span *ngIf="item.hasOwnProperty('space_object')">
+                                    <span *ngIf="(item.space_object | json) != '{}'">
+                                        <select disabled [ngModelOptions]="{standalone: true}" class="form-select form-control-sm" id="bicycle_type{{i}}" name="bicycle_type"
+                                            [(ngModel)]="item.type">
+                                            <option value="">Select bicycle Type</option>
+                                            <option value="{{item.name}}" *ngFor='let item of bicycleTypes'>
+                                                {{item.name}}
+                                            </option>
+                                        </select>
+                                    </span>
+                                </span>
+                                <span *ngIf="!item.hasOwnProperty('space_object')">
+                                    <select class="form-select form-control-sm" [ngModelOptions]="{standalone: true}" id="bicycleType{{i}}" name="bicycleTypes"
+                                        [(ngModel)]="item.type">
+                                        <option value="">Select bicycle Type</option>
+                                        <option value="{{item.name}}" *ngFor='let item of bicycleTypes'>
+                                            {{item.name}}
+                                        </option>
+                                    </select>
+                                </span>
+                            </td>
+                            <td>
+                                <input type="number" class="form-control form-control-sm" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.price"
+                                    class="form-control form-control-sm" name="bicyclePrice">
+                            </td>
+                            <td>
+                                <input [disabled]="item.space_status=='SOLD'" type="number" class="form-control form-control-sm" [ngModelOptions]="{standalone: true}"
+                                    [(ngModel)]="item.cost" class="form-control form-control-sm" name="parkingCost">
+                            </td>
+                            <td>
+                                <ng-multiselect-dropdown [disabled]="item.space_status=='SOLD'" [placeholder]="'Select Addons'" [ngModelOptions]="{standalone: true}"
+                                    [data]="bicycleAddons" [(ngModel)]="item.addons" [settings]="dropdownSettings">
+                                </ng-multiselect-dropdown>
+                            </td>
+
+                            <td>
+                                <ng-multiselect-dropdown [placeholder]="'Select Addons'" [ngModelOptions]="{standalone: true}" [data]="bicycleAddons" [(ngModel)]="item.mandatory_addons"
+                                    [settings]="dropdownSettings">
+                                </ng-multiselect-dropdown>
+                            </td>
+
+                            <!-- <td style="width:80px; text-align: center;">
+                                <div class="custom-control custom-checkbox pt-2">
+                                    <input id="is_premium{{i}}" type="checkbox" class="custom-control-input" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.is_premium">
+                                    <label class="custom-control-label" for="is_premium{{i}}">&nbsp;</label>
+                                </div>
+                            </td> -->
+
+                            <td style="width:120px">
+                                <select class="form-select form-control-sm" [disabled]="item.space_status=='SOLD'  || item.space_status=='CUSTOMER SELECTION' || item.space_status=='CUSTOMER SUBMITTED'" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.status" id="bicycle_status{{i}}"
+                                    name="bicycle_status">
+                                    <option value="">Select status</option>
+                                    <option value="AVAILABLE">AVAILABLE</option>
+                                    <option value="MARKETING HOLD">MARKETING HOLD</option>
+                                    <option value="SALES HOLD">SALES HOLD</option>
+                                    <option value="SOLD">SOLD</option>
+                                    <option value="CUSTOMER SELECTION">CUSTOMER SELECTION</option>
+                                    <option value="CUSTOMER SUBMITTED">CUSTOMER SUBMITTED</option>    
+                                </select>
+                            </td>
+                            <!-- <td>
+                                    <input type="number" class="form-control form-control-sm" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.unit" class="form-control form-control-sm"
+                                        name="bicycleUnit">
+                                </td> -->
+                            <td>
+                                <button *ngIf="!isEdit" (click)="deleteBicycle(item,i)" class="btn btn-sm btn-danger" [disabled]="item.space_status=='SOLD'">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+
+                                <button *ngIf="isEdit" (click)="deleteBicycleBulkEditUnit(item,i)" class="btn btn-sm btn-danger" [disabled]="item.space_status=='SOLD'">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody *ngIf="bulkBicycleData?.length==0">
+                        <tr>
+                            <td colspan="8">No Bicycle Found</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+    <div style="padding: 10px; border-top: 1px solid #c8ced3;">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="row" *ngIf="!isEdit">
+                    <div class="col-md-2">
+                        <input type="text" class="form-control form-control-sm" name="parkingPrefix" placeholder="Prefix" [(ngModel)]="populateObj.prefix">
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control form-control-sm" name="parkingPrice" placeholder="Suffix" [(ngModel)]="populateObj.suffix">
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" class="form-control form-control-sm" name="parkingPrice" placeholder="Start" min="0" step="1" [(ngModel)]="populateObj.start">
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" class="form-control form-control-sm" name="parkingPrice" placeholder="End" min="0" step="1" [(ngModel)]="populateObj.end">
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-sm btn-primary" (click)="populateBicycleRow()"> Populate Number </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 text-right">
+                <button class="btn btn-sm btn-danger mr-2" (click)="modalRef.hide()">Close</button>
+                <span *ngIf="!isEdit">
+                    <button class="btn btn-sm btn-primary" (click)="addBulkBicycle()">Add</button>
+                </span>
+                <span *ngIf="isEdit">
+                    <button class="btn btn-sm btn-primary" (click)="updateBulkBicycle()">Update</button>
+                </span>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #editModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">Edit Bicycle Floor</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Project :
+                                <b> {{formDetails.project_name}} </b>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Name
+                                <span style="color:red">*</span>:</label>
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.name" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="editBicycleFloor()">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #editBicycleUnitModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">Edit Bicycle Unit</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Bicycle Number :
+                                <b>{{formDetails.number}}</b>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Floor :
+                                <b>{{formDetails.floor_name}}</b>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Price
+                                <span style="color:red">*</span>:</label>
+                            <input type="number" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.price" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Cost
+                                <span style="color:red">*</span>:</label>
+                            <input type="number" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.cost" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div>
+                                <label>Addons:</label>
+                            </div>
+                            <ng-multiselect-dropdown [placeholder]="'Select Addons'" [ngModelOptions]="{standalone: true}" [data]="bicycleAddons" [(ngModel)]="formDetails.addons"
+                                [settings]="dropdownSettings">
+                            </ng-multiselect-dropdown>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div>
+                                <label>Mandatory Addons:</label>
+                            </div>
+                            <ng-multiselect-dropdown [placeholder]="'Select Addons'" [ngModelOptions]="{standalone: true}" [data]="bicycleAddons" [(ngModel)]="formDetails.mandatory_addons"
+                                [settings]="dropdownSettings">
+                            </ng-multiselect-dropdown>
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="Type">Type</label>
+
+                            <select class="form-select" id="Type" [disabled]="formDetails.status=='SOLD' || (formDetails.hasOwnProperty('space_object') && (formDetails.space_object | json) != '{}')"
+                                [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.type">
+                                <option value="">Select bicycle Type</option>
+                                <option value="{{item.name}}" *ngFor='let item of bicycleTypes'>
+                                    {{item.name}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="status">Status</label>
+                            <select class="form-select" [disabled]="formDetails.status=='SOLD' || formDetails.status=='CUSTOMER SELECTION' || formDetails.status=='CUSTOMER SUBMITTED'" id="status" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.status">
+                                <option value="">Select Status</option>
+                                <option value="AVAILABLE">AVAILABLE</option>
+                                <option value="MARKETING HOLD">MARKETING HOLD</option>
+                                <option value="SALES HOLD">SALES HOLD</option>
+                                <option value="SOLD">SOLD</option>
+                                <option value="CUSTOMER SELECTION">CUSTOMER SELECTION</option>
+                                <option value="CUSTOMER SUBMITTED">CUSTOMER SUBMITTED</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-12">
+                        <div class="form-group mt-4">
+                            <div class="custom-control custom-checkbox pt-2">
+                                <input id="ispremium" type="checkbox" class="custom-control-input" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.is_premium">
+                                <label class="custom-control-label" for="ispremium">Is premium</label>
+                            </div>
+                        </div>
+                        <div>
+                            (Help:When this unit is marked Premium, please set the price to be premium price)
+                        </div>
+                    </div> -->
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="editBicycleUnit(formDetails)">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #bicycleUnitDesignModal>
+    <div class="modal-header">
+        <div style="width: 100%;">
+            <div class="row">
+                <div class="col-md-3">
+                    <h5>Bicycle Unit Designer</h5>
+                </div>
+                <div class="col-md-4">
+                    <h5>Bicycle Floor: {{ floorDetailsObj.name }}</h5>
+                </div>
+                <div class="col-md-3">
+                    <h5>Bicycle Unit: {{ bicycleObj.number }} </h5>
+                </div>
+                <div class="col-md-2 text-right">
+                    <!-- <button class="btn btn-sm btn-danger" type="button"> <i class="fa fa-trash" aria-hidden="true"></i></button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div class="unit-list">
+            <div class="button-area">
+                <button class="btn btn-sm btn-primary mr-2 clear-rect1" (click)="rotateCounterClock()">Rotate Counter Clockwise</button>
+                <button class="btn btn-sm btn-primary mr-2 clear-rect2" (click)="rotateClock()">Rotate Clockwise
+                </button>
+                <button class="btn btn-sm btn-primary mr-2 increase-size" (click)="increaseSize()">Increase Size</button>
+                <button class="btn btn-sm btn-primary mr-2 decrease-size" (click)="decreaseSize()">Decrease Size</button>
+            </div>
+            <div class="parking-floorplan" [ngStyle]="{'background-image': 'url(&quot;' + baseUrl+floorDetailsObj?.layout?.url + '&quot;)'}"></div>
+            <div style="position: absolute; left: 0; top: 0; width: 1000px; height: 1000px; margin-top: 46px; left: 50%; margin-left: -500px;">
+                <canvas id="space-designer" width="1000" height="1000"></canvas>
+            </div>
+        </div>
+    </div>
+    <div style="padding: 10px; border-top: 1px solid #c8ced3;">
+        <div class="row">
+            <div class="col-md-8">
+            </div>
+            <div class="col-md-4 text-right">
+                <button class="btn btn-sm btn-danger mr-2" (click)="modalRef.hide()">Close</button>
+                <button class="btn btn-sm btn-primary" (click)="saveCanvas()">Save</button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<ng-template #assignModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">Assign Bicycle</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Parking Number :
+                                <b>{{formDetails?.number}}</b>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Floor :
+                                <b>{{formDetails?.floor_name}}</b>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Price :
+                                <b>{{formDetails?.price | currency:'USD'}}</b>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Cost :
+                                <b>{{formDetails?.cost| currency:'USD'}}</b>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Type :
+                                <b>{{formDetails?.type}}</b>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="status">Status :
+                                <b>{{formDetails?.status}}</b>
+                            </label>
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="status">Is premium :
+                                <b>{{formDetails?.is_premium ?'Yes': 'No'}}</b>
+                            </label>
+                        </div>
+                    </div> -->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div>
+                                <label>Addons :
+                                    <b *ngIf="formDetails?.addons && formDetails?.addons.length>0">
+                                        <span *ngFor="let addon of formDetails?.addons;let i=index">{{addon?.name}}
+                                            <span *ngIf="(i+1)!= formDetails.addons.length">,</span>
+                                        </span>
+                                    </b>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div>
+                                <label>Mandatory Addons :
+                                    <b *ngIf="formDetails?.mandatory_addons && formDetails?.mandatory_addons.length>0">
+                                        <span *ngFor="let addon of formDetails?.mandatory_addons;let i=index">{{addon?.name}}
+                                            <span *ngIf="(i+1)!= formDetails.mandatory_addons.length">,</span>
+                                        </span>
+                                    </b>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Unit No
+                                <span style="color:red">*</span>
+                                :</label>
+                            <input type="text" (keyup)="allowToAssign=false" [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="formDetails.unit" class="form-control">
+                            <!-- <div class="error" *ngIf="formDetails.unit && !allowToAssign"> Cannot assign parking</div> -->
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-primary mr-2 mt-4" (click)="checkUnitExistance(formDetails.unit)">Process</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" [disabled]="!allowToAssign" (click)="assignParkingSpace()">Submit</button>
+
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,25 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+
+
+<% assign datasetId = 'crm_geography' %> 
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% en.data.update upResult datasetId query en.params %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Geography updated successfully.' %>
+    <% assign returnData.result = upResult %>
+    <% return returnData %>
+<% else %>
+    <% en.data.insert result datasetId en.params %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Geography added successfully.' %>
+    <% assign returnData.result = result %>
+    <% return returnData %>
+<% endif %>
+

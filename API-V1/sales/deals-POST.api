@@ -1,0 +1,175 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_deals' %>  
+<% assign user = UserResult.user %>
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% assign params = en.params %>
+    <% if params.acknowledgement_date %>
+        <% assign params.acknowledgement_date = params.acknowledgement_date | string_to_date: "yyyy-MM-dd" time-zone %>
+    <% endif %>
+    <% if params.actual_completion_date %>
+        <% assign params.actual_completion_date = params.actual_completion_date | string_to_date: "yyyy-MM-dd" time-zone %>
+    <% endif %>
+    <% if params.closing_date %>
+        <% assign params.closing_date = params.closing_date | string_to_date: "yyyy-MM-dd" time-zone %> 
+    <% endif %>
+    <% if params.distribution_date %>
+        <% assign params.distribution_date = params.distribution_date | string_to_date: "yyyy-MM-dd" time-zone %>
+    <% endif %>
+    <% if params.executed_date %>
+        <% assign params.executed_date = params.executed_date | string_to_date: "yyyy-MM-dd" time-zone %>
+    <% endif %>
+    <% if params.expected_completion_date %>
+        <% assign params.expected_completion_date = params.expected_completion_date | string_to_date: "yyyy-MM-dd" time-zone %>
+    <% endif %>
+    <% if params.firm_date %>
+        <% assign params.firm_date = params.firm_date | string_to_date: "yyyy-MM-dd" time-zone %>
+    <% endif %>
+    <% if params.initiated_on %>
+        <% assign params.initiated_on = params.initiated_on | string_to_date: "yyyy-MM-dd" time-zone %>
+    <% endif %>
+    <% if params.signed_date %>
+        <% assign params.signed_date = params.signed_date | string_to_date: "yyyy-MM-dd" time-zone %>
+    <% endif %>
+    <% if params.out_for_sign_date %>
+        <% assign params.out_for_sign_date = params.out_for_sign_date | string_to_date: "yyyy-MM-dd" time-zone %>
+    <% endif %>
+    <% if params.signing_out_date %>
+        <% assign params.signing_out_date = params.signing_out_date | string_to_date: "yyyy-MM-dd" time-zone %>
+    <% endif %>
+    <% if params.stage == 'FIRM' %>
+        <% assign params.firmed_on = en.time.now %>
+        <% assign params.firmed_by = user.firstName | append: ' ' | append: user.lastName %>
+    <% endif %>
+    <% if params.sales_verified %>
+        <% assign params.sales_verified = params.sales_verified %>
+        <% assign params.sales_verified_on = en.time.now %>
+        <% assign params.sales_verified_by = user.firstName | append: ' ' | append: user.lastName %>
+    <% endif %>
+    <% if params.finance_verified %>
+        <% assign params.finance_verified = params.finance_verified %>
+        <% assign params.finance_verified_on = en.time.now %>
+        <% assign params.finance_verified_by = user.firstName | append: ' ' | append: user.lastName %>
+    <% endif %>
+    // for saving notes
+    <% if params.notes %>
+        <% assign noteData.created_by = user.firstName | append: ' ' | append: user.lastName  %>
+        <% assign noteData.create_date = en.time.now %> 
+        <% assign noteData.body = params.notes %> 
+        <% assign noteData.deal_id = params._id %>
+        
+        <% en.data.insert result "crm_notes" noteData %> 
+        
+        <% unassign params.notes %>
+    <% endif %>
+    
+    <% en.data.update upResult datasetId query params %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Deal updated successfully.' %>
+    <% assign returnData.result = upResult %> 
+    <% return returnData %>
+<% else %>
+    <% assign params = en.params %>
+    <% if params.unit_id %>
+        // for checking availability of unit
+        <% assign unitQuery._id = params.unit_id %>
+        <% en.data.findOne unitResult "bldr_units" unitQuery %>
+        <% assign unitDetails = unitResult.row %>
+        <% if unitDetails.status == 'AVAILABLE' %>
+            <% assign params.stage = 'RESERVED' %>
+            <% assign params.unit._id = unitDetails._id %>
+            <% assign params.unit.builder_id = unitDetails.builder_id %>
+            <% assign params.unit.builder_name = unitDetails.builder_name %>
+            <% assign params.unit.project_id = unitDetails.project_id %>
+            <% assign params.unit.project_name = unitDetails.project_name %>
+            <% assign params.unit.model_id = unitDetails.model_id %>
+            <% assign params.unit.model_name = unitDetails.model_name %>
+            <% assign params.unit.area = unitDetails.area %>
+            <% assign params.unit.bath = unitDetails.bath %>
+            <% assign params.unit.bed = unitDetails.bed %>
+            <% assign params.unit.ceiling = unitDetails.ceiling %>
+            <% assign params.unit.den = unitDetails.den %>
+            <% assign params.unit.floor_legal = unitDetails.floor_legal %>
+            <% assign params.unit.floor_marketing = unitDetails.floor_marketing %>
+            <% assign params.unit.outdoor_area = unitDetails.outdoor_area %>
+            <% assign params.unit.price = unitDetails.price %>
+            <% assign params.unit.floor_premium = unitDetails.floor_premium %>
+            <% assign params.unit.unit_premium = unitDetails.unit_premium %>
+            <% assign params.unit.sales_price = unitDetails.sales_price %>
+            <% assign params.unit.tax = unitDetails.tax %>
+            <% assign params.unit.type = unitDetails.type %>
+            <% assign params.unit.unit_no = unitDetails.unit_no %>
+            <% assign params.unit.unit_no_legal = unitDetails.unit_no_legal %>
+            <% assign params.unit.outdoor_type = unitDetails.outdoor_type %>
+            <% assign params.unit.flex = unitDetails.flex %>
+            <% assign params.unit.media = unitDetails.media %>
+            <% assign params.unit.collection = unitDetails.collection %> 
+            <% assign params.unit.unit_no_marketing = unitDetails.unit_no_marketing %>
+            <% assign params.unit.views = unitDetails.views %>
+            <% assign params.allocate_bicycle = unitDetails.allocate_bicycle %>
+            <% assign params.allocate_parking = unitDetails.allocate_parking %>
+            <% assign params.allocate_locker = unitDetails.allocate_locker %>
+            
+            <% assign params.max_bicycle = unitDetails.max_bicycle %>
+            <% assign params.max_lockers = unitDetails.max_lockers %>
+            <% assign params.max_parking = unitDetails.max_parking %>
+            
+            <% assign params.is_bicycle_eligible = unitDetails.is_bicycle_eligible %>
+            <% assign params.is_locker_eligible = unitDetails.is_locker_eligible %>
+            <% assign params.is_parking_eligible = unitDetails.is_parking_eligible %>
+             
+            <% unassign params.unit_id %>
+             
+            <% rem en.data.setsequence results 'deal-id' 2000 %>
+            <% en.data.nextsequence results 'deal-id' %>
+            <% assign id = results.value | int_to_string %>
+            <% assign params._id = id %> 
+            <% assign params.initiated_on = en.time.now %> 
+            <% assign params.design_studio.status = 'NOT STARTED' %>
+            <% assign params.parking_selection.status = 'NOT STARTED' %>
+            <% assign params.locker_selection.status = 'NOT STARTED' %>
+            <% assign params.bicycle_selection.status = 'NOT STARTED' %>
+             
+            <% en.data.insert result datasetId params %>
+            
+            // for updating unit status 
+            <% assign unitData.status = 'SOLD' %>
+            <% assign unitData.deal_id = result.row._id %> 
+            <% en.data.update unitUpResult "bldr_units" unitQuery unitData %>
+            
+            <% assign returnData.status = 1 %> 
+            <% assign returnData.message = 'Deal added successfully.' %>
+            <% assign returnData.result = result %>
+            <% return returnData %>
+            <% exit %>
+        <% else %> 
+            <% assign returnData.status = 0 %>
+            <% assign returnData.message = 'Unit is not available' %>
+            <% return returnData %>
+            <% exit %> 
+        <% endif %> 
+    <% else %>
+        <% assign params.stage = 'NEW' %>
+        
+        <% rem en.data.setsequence results 'deal-id' 2000 %>
+        <% en.data.nextsequence results 'deal-id' %>
+        <% assign id = results.value | int_to_string %>
+        <% assign params._id = id %> 
+        <% assign params.initiated_on = en.time.now %> 
+        
+        <% en.data.insert result datasetId params %>
+        <% assign returnData.status = 1 %>
+        <% assign returnData.message = 'Deal added successfully.' %>
+        <% assign returnData.result = result %>
+        <% return returnData %>
+
+    <% endif %>
+    
+<% endif %>
+

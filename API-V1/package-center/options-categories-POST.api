@@ -1,0 +1,37 @@
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_project_settings' %> 
+
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% en.data.findone categoryDetails datasetId query %>
+    <% assign categoryDetails = categoryDetails.row %>
+    <% assign obj = en.params %>
+    <% en.data.update upResult datasetId query obj %>
+    
+    <% if en.params.name %>
+        ///// for updating category name in other datasets///////  
+        <% if categoryDetails.name != en.params.name %>
+            <% assign upQuery.category_id = en.params._id %>
+            <% assign updata.$set.category_name = en.params.name %>
+            <% en.data.updateMany rresults 'bldr_personalization_options' upQuery updata %>
+        <% endif %>
+    <% endif %>
+    
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Category updated successfully.' %>
+    <% assign returnData.result = upResult %>
+    <% return returnData %>
+<% else %>
+    <% assign obj = en.params %>
+    <% assign obj.type = "PERSONALIZATION-OPTIONS-CATEGORY" %>
+    <% en.data.insert result datasetId obj %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Category added successfully.' %>
+    <% assign returnData.result = result %>
+    <% return returnData %>
+<% endif %>

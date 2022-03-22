@@ -1,0 +1,207 @@
+<div class="animated fadeIn">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="const_hd">
+                    <button class="btn btn-primary btn-sm mr-3" (click)="goBack()">
+                        <i class="fa fa-arrow-left" aria-hidden="true"></i> &nbsp; Back
+                    </button>List Details : {{listDetails.name}}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-xs-12">
+                <div class="card">
+                    <div class="card-body card_table_body">
+                        <div class="row mb-3">
+                            <div class="col-md-11">
+                                <p>{{listDetails.description}}</p>
+                            </div>
+                            <div class="col-md-1">
+                                <button type="button" class="btn btn-sm btn-primary" (click)="openEditList(editModal)">
+                                    <i class="fas fa-pencil-alt" style="font-size:12px;"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <form autocomplete="off">
+                            <div class="row mb-2">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-2">
+                                    <div class="form-group row">
+                                        <div class="col-sm-12">
+                                            <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.region" (change)="getCountries(filterForm.region);doSearch()">
+                                                <option value="">All Regions</option>
+                                                <option value="{{item.name}}" *ngFor="let item of regions">{{item.name}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group row">
+                                        <div class="col-sm-12">
+                                            <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.country" (change)="getStates(filterForm.country);doSearch()">
+                                                <option value="">All Countries</option>
+                                                <option value="{{item.name}}" *ngFor="let item of countries">{{item.name}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group row">
+                                        <div class="col-sm-12">
+                                            <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.state" (change)="doSearch()">
+                                                <option value="">All States</option>
+                                                <option value="{{item.name}}" *ngFor="let item of states">{{item.name}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group row">
+                                        <div class="col-sm-12">
+                                            <div class="input-group position-relative">
+                                                <input type="text" style="padding-right: 25px;" class="form-control" placeholder="Search" [ngModelOptions]="{standalone: true}" [(ngModel)]="filterForm.searchText" name="search" (keyup)="doSearch()">
+                                                <span class="clear-search" *ngIf="isClear" (click)="clearSearch()">
+                                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" class="btn btn-danger mr-2" (click)="clearFilter()">Clear</button>
+                                    <button *ngIf="isProcessBtnShow" type="button" class="btn btn-primary" (click)="removeFromList()">Remove from list</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="table-responsive">
+                            <table class="table table-striped driver_list_table" style="table-layout: fixed;">
+                                <thead>
+                                    <tr>
+                                        <th style="padding-left: 10px; width: 50px;">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="th_chk_all" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedAll" (change)="selectAll();">
+                                                <label class="custom-control-label" for="th_chk_all">&nbsp;</label>
+                                            </div>
+                                        </th>
+                                        <th width="180px">Date</th>
+                                        <th width="180px">Last name </th>
+                                        <th width="180px"> First name </th>
+                                        <th width="180px"> Display name </th>
+                                        <th width="180px">Email</th>
+                                        <th width="180px">Phone</th>
+                                        <th width="180px">Country</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of contactList;let i = index">
+                                        <td style="padding-left: 10px;width: 50px;">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" [ngModelOptions]="{standalone: true}" id="customCheck{{i}}" [(ngModel)]="item.selected" (change)="showProcessBtn()">
+                                                <label class="custom-control-label" for="customCheck{{i}}">&nbsp;</label>
+                                            </div>
+                                        </td>
+                                        <td (click)="goToDetails(item._id)">{{item._created | date:'MMM d, y, h:mm a'}}</td>
+                                        <td (click)="goToDetails(item._id)">{{item.last_name}}</td>
+                                        <td (click)="goToDetails(item._id)">{{item.first_name}}</td>
+                                        <td (click)="goToDetails(item._id)">{{item.display_name}}</td>
+                                        <td (click)="goToDetails(item._id)" class="min-td-width-email">
+                                            {{item?.emails?.email}}
+                                        </td>
+                                        <td (click)="goToDetails(item._id)" class="min-td-width-phone">
+                                            {{item?.phones?.formatted}}
+                                        </td>
+                                        <td (click)="goToDetails(item._id)">{{item?.geography?.country}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row  mt-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <!-- <div class="col-sm-6"> -->
+                                    <span class="float-left" style="width:70px;margin-top: 6px;">Page Size:</span>
+                                    <span class="float-left" style="width:85px;">
+                                        <select class="form-select" [(ngModel)]="pageSize" (change)="setPageSize()">
+                                            <option value="">-Select-</option>
+                                                                                        <option value="20">20</option>
+                                            <option value="30">30</option>
+                                            <option value="50">50</option>
+                                            <option value="100">100</option>
+                                        </select>
+                                    </span>
+                                    <span class="float-left" style="margin-top: 6px !important;margin-left: 16px !important;">{{paginationObj.total}} Record(s) Found</span>
+                                    <!-- </div> -->
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <nav>
+                                    <ul class="pagination">
+                                        <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                                            <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.previousPage)">
+                                                <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                                            </a>
+                                        </li>
+                                        <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                                            <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(1)">
+                                                First
+                                            </a>
+                                        </li>
+                                        <li class="page-item {{pagination == paginationObj.currentPage?'active':''}}" *ngFor="let pagination of paginationObj.items">
+                                            <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(pagination)">{{pagination}}</a>
+                                        </li>
+                                        <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                                            <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.totalPages)">
+                                                Last
+                                            </a>
+                                        </li>
+                                        <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                                            <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.nextPage)">
+                                                <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #editModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit List</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">List name:</label>
+                        <div class="col-sm-12">
+                            <input type="text" disabled="true" [(ngModel)]="formDetails.name" class="form-control" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">List Description:</label>
+                        <div class="col-sm-12">
+                            <textarea type="text" [(ngModel)]="formDetails.description" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-primary" (click)="updateLists()">Update</button>
+        </div>
+    </div>
+</ng-template>

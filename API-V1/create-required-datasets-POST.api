@@ -1,0 +1,853 @@
+
+
+///////////// for bldr_amenities///////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_amenities' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_amenities' %>            
+    <% assign dataset.name = 'bldr_amenities' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+///////////// for bldr_bicycle_addons///////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_bicycle_addons' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_bicycle_addons' %>            
+    <% assign dataset.name = 'bldr_bicycle_addons' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+///////////// for bldr_bicycle_area///////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_bicycle_area' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_bicycle_area' %>            
+    <% assign dataset.name = 'bldr_bicycle_area' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+///////////// for bldr_bicycle_selection///////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_bicycle_selection' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_bicycle_selection' %>            
+    <% assign dataset.name = 'bldr_bicycle_selection' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+//////////////// for bldr_bicycle_types///////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_bicycle_types' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_bicycle_types' %>            
+    <% assign dataset.name = 'bldr_bicycle_types' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+////////////// for bldr_bicycle_units/////////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_bicycle_units' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_bicycle_units' %>            
+    <% assign dataset.name = 'bldr_bicycle_units' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+///////////// for bldr_builders/////////////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_builders' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_builders' %>            
+    <% assign dataset.name = 'bldr_builders' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+///////////// for bldr_checklist_categories/////////////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_checklist_categories' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_checklist_categories' %>            
+    <% assign dataset.name = 'bldr_checklist_categories' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+///////////// for bldr_checklists/////////////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_checklists' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_checklists' %>            
+    <% assign dataset.name = 'bldr_checklists' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+/////////////// for bldr_color_collections/////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_color_collections' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_color_collections' %>            
+    <% assign dataset.name = 'bldr_color_collections' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+////////////////// for bldr_color_selection////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_color_selection' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_color_selection' %>            
+    <% assign dataset.name = 'bldr_color_selection' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+/////////////// for bldr_deals/////////////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_deals' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_deals' %>            
+    <% assign dataset.name = 'bldr_deals' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+//////////////// for bldr_deficiencies//////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_deficiencies' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_deficiencies' %>            
+    <% assign dataset.name = 'bldr_deficiencies' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+/////////////// for bldr_deposits/////////////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_deposits' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_deposits' %>            
+    <% assign dataset.name = 'bldr_deposits' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %> 
+
+
+///////////////// for bldr_homeowners_guides/////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_homeowners_guides' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_homeowners_guides' %>            
+    <% assign dataset.name = 'bldr_homeowners_guides' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+///////////////// for bldr_inspection_items/////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_inspection_items' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_inspection_items' %>            
+    <% assign dataset.name = 'bldr_inspection_items' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+///////////////// for bldr_inspections/////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_inspections' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_inspections' %>            
+    <% assign dataset.name = 'bldr_inspections' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+///////////////// for bldr_layout_customizations/////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_layout_customizations' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_layout_customizations' %>            
+    <% assign dataset.name = 'bldr_layout_customizations' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+////////////// for bldr_locker_addons///////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_locker_addons' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_locker_addons' %>            
+    <% assign dataset.name = 'bldr_locker_addons' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+////////////// for bldr_locker_area///////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_locker_area' %>
+<% if !datasetResult.dataset %> 
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_locker_area' %>            
+    <% assign dataset.name = 'bldr_locker_area' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+////////////// for bldr_locker_selection///////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_locker_selection' %> 
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_locker_selection' %>            
+    <% assign dataset.name = 'bldr_locker_selection' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+/////////////// for bldr_locker_types////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_locker_types' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_locker_types' %>            
+    <% assign dataset.name = 'bldr_locker_types' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+//////////////// for bldr_locker_units////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_locker_units' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_locker_units' %>            
+    <% assign dataset.name = 'bldr_locker_units' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+//////////////// for bldr_lot_types/////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_lot_types' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_lot_types' %>            
+    <% assign dataset.name = 'bldr_lot_types' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+//////////////// for bldr_master_data/////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_master_data' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_master_data' %>            
+    <% assign dataset.name = 'bldr_master_data' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+///////////////// for bldr_models//////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_models' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_models' %>            
+    <% assign dataset.name = 'bldr_models' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+///////////////// for bldr_occupancy/////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_occupancy' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_occupancy' %>            
+    <% assign dataset.name = 'bldr_occupancy' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+/////////////// for bldr_packages//////////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_packages' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_packages' %>            
+    <% assign dataset.name = 'bldr_packages' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+//////////////// for bldr_parking_addons////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_parking_addons' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_parking_addons' %>            
+    <% assign dataset.name = 'bldr_parking_addons' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+////////////// for bldr_parking_floors////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_parking_floors' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_parking_floors' %>            
+    <% assign dataset.name = 'bldr_parking_floors' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+////////////// for bldr_parking_selection////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_parking_selection' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_parking_selection' %>            
+    <% assign dataset.name = 'bldr_parking_selection' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+//////////////// for bldr_parking_spaces////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_parking_spaces' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_parking_spaces' %>            
+    <% assign dataset.name = 'bldr_parking_spaces' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+////////////// for bldr_parking_types///////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_parking_types' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_parking_types' %>            
+    <% assign dataset.name = 'bldr_parking_types' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+////////////// for bldr_payments///////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_payments' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_payments' %>            
+    <% assign dataset.name = 'bldr_payments' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+///////////// for bldr_pc_models_units//////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_pc_models_units' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_pc_models_units' %>            
+    <% assign dataset.name = 'bldr_pc_models_units' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+///////////// for bldr_personalization_options/////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_personalization_options' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_personalization_options' %>            
+    <% assign dataset.name = 'bldr_personalization_options' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+////////////// for bldr_portal_activity////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_portal_activity' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_portal_activity' %>            
+    <% assign dataset.name = 'bldr_portal_activity' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+///////////////// for bldr_project_progress///////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_project_progress' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_project_progress' %>            
+    <% assign dataset.name = 'bldr_project_progress' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+///////////////// for bldr_project_settings///////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_project_settings' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_project_settings' %>            
+    <% assign dataset.name = 'bldr_project_settings' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+////////////////// for bldr_projects///////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_projects' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_projects' %>            
+    <% assign dataset.name = 'bldr_projects' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+//////////////// for bldr_registrants//////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_registrants' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_registrants' %>            
+    <% assign dataset.name = 'bldr_registrants' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+//////////////// for bldr_subdivisions////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_subdivisions' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_subdivisions' %>            
+    <% assign dataset.name = 'bldr_subdivisions' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+/////////////// for bldr_units///////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_units' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_units' %>            
+    <% assign dataset.name = 'bldr_units' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+/////////////// for bldr_worksheets////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'bldr_worksheets' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'bldr_worksheets' %>            
+    <% assign dataset.name = 'bldr_worksheets' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+////////////////// for contacts/////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'contacts' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'contacts' %>            
+    <% assign dataset.name = 'contacts' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+////////////////// for crm_comments/////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'crm_comments' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'crm_comments' %>            
+    <% assign dataset.name = 'crm_comments' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+////////////////// for crm_documents/////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'crm_documents' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'crm_documents' %>            
+    <% assign dataset.name = 'crm_documents' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+/////////////// for crm_geography/////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'crm_geography' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'crm_geography' %>            
+    <% assign dataset.name = 'crm_geography' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+/////////////// for crm_history////////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'crm_history' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'crm_history' %>            
+    <% assign dataset.name = 'crm_history' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+//////////////// for crm_media/////////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'crm_media' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'crm_media' %>            
+    <% assign dataset.name = 'crm_media' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+////////////////// for crm_notes///////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'crm_notes' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'crm_notes' %>            
+    <% assign dataset.name = 'crm_notes' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+////////////// for crm_settings///////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'crm_settings' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'crm_settings' %>            
+    <% assign dataset.name = 'crm_settings' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+//////////////// for crm_territories/////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'crm_territories' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'crm_territories' %>            
+    <% assign dataset.name = 'crm_territories' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+/////////////for en_settings////////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'en_settings' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'en_settings' %>            
+    <% assign dataset.name = 'en_settings' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+////////////// for pages_collections////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'pages_collections' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'pages_collections' %>            
+    <% assign dataset.name = 'pages_collections' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+///////////////// for pages_pages/////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'pages_pages' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'pages_pages' %>            
+    <% assign dataset.name = 'pages_pages' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+/////////////// for pages_published/////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'pages_published' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'pages_published' %>            
+    <% assign dataset.name = 'pages_published' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+//////////////// for pages_tiles/////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'pages_tiles' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'pages_tiles' %>            
+    <% assign dataset.name = 'pages_tiles' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+////////////// for umc_lists//////////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'umc_lists' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'umc_lists' %>            
+    <% assign dataset.name = 'umc_lists' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+//////////////////for users//////////////////////
+
+<% unassign datasetResult %>
+<% en.data.sets.get datasetResult 'users' %>
+<% if !datasetResult.dataset %>
+    
+    <% unassign dataset %>
+    <% assign dataset.id = 'users' %>            
+    <% assign dataset.name = 'users' %> 
+    <% en.data.sets.create createResult dataset %>
+<% endif %>
+
+
+
+/////////////////////////For creating photos field as array /////////////////
+<% assign field1.id           = "photos" %>               
+<% assign field1.name         = "photos" %>            
+<% assign field1.data_type    = "IMAGE" %>         
+<% assign field1.ui_type      = "FILEUPLOAD" %>           
+<% assign field1.isArray      = true %>
+<% assign field1.is_array     = true %> 
+
+<% assign field2.id           = "attachments" %>               
+<% assign field2.name         = "attachments" %>            
+<% assign field2.data_type    = "FILE" %>         
+<% assign field2.ui_type      = "FILEUPLOAD" %>           
+<% assign field2.isArray      = true %>
+<% assign field2.is_array     = true %>
+
+<% assign field3.id           = "gallery" %>               
+<% assign field3.name         = "gallery" %>             
+<% assign field3.data_type    = "IMAGE" %>         
+<% assign field3.ui_type      = "FILEUPLOAD" %>           
+<% assign field3.isArray      = true %>
+<% assign field3.is_array     = true %>
+
+<% assign field4.id           = "legal_documents" %>               
+<% assign field4.name         = "legal_documents" %>            
+<% assign field4.data_type    = "FILE" %>         
+<% assign field4.ui_type      = "FILEUPLOAD" %>           
+<% assign field4.isArray      = true %>
+<% assign field4.is_array     = true %>
+
+<% assign field5.id           = "marketing_documents" %>               
+<% assign field5.name         = "marketing_documents" %>            
+<% assign field5.data_type    = "FILE" %>         
+<% assign field5.ui_type      = "FILEUPLOAD" %>           
+<% assign field5.isArray      = true %>
+<% assign field5.is_array     = true %>
+
+<% en.data.sets.createField results "bldr_builders" field1 %>
+<% en.data.sets.createField results "bldr_color_collections" field1 %>
+<% en.data.sets.createField results "bldr_packages" field1 %>
+<% en.data.sets.createField results "bldr_personalization_options" field1 %>
+<% en.data.sets.createField results "bldr_projects" field1 %>
+
+
+<% en.data.sets.createField results "bldr_deficiencies" field2 %> 
+
+
+<% en.data.sets.createField results "bldr_project_progress" field3 %> 
+<% en.data.sets.createField results "bldr_amenities" field3 %> 
+
+
+<% en.data.sets.createField results "bldr_projects" field4 %>
+<% en.data.sets.createField results "bldr_projects" field5 %>
+
+
+<% return "message" "All datasets are created and fields are added successfully" %>
+
+<% exit %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+

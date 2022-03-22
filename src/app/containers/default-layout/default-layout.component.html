@@ -1,0 +1,104 @@
+<app-header [asideMenuToggler]="'lg'" [navbarBrandFull]="{src:'assets/img/logo.png',alt:'EnMobi'}" [navbarBrandMinimized]="{src:'assets/img/logo_mini.png',alt:'EnMobi'}" [navbarBrandRouterLink]="['/builders']" [fixed]="true" [sidebarToggler]="'lg'" class="top_menu_nav">
+    <ul class="nav navbar-nav ml-auto" style="margin-right:25px !important;">
+        <!-- <li class="nav-item">
+            <div class="timer">
+                <div class="base-timer">
+                    <svg class="base-timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <g class="base-timer__circle">
+                      <circle class="base-timer__path-elapsed" cx="50" cy="50" r="45" />
+                      <path id="base-timer-path-remaining" stroke-dasharray="283"
+                        class="base-timer__path-remaining" d="
+                        M 50, 50
+                        m -45, 0
+                        a 45,45 0 1,0 90,0
+                        a 45,45 0 1,0 -90,0
+                      "></path>
+                    </g>
+                  </svg>
+                    <span id="base-timer-label" class="base-timer__label">
+                    {{ idleTimerLeft }}
+                  </span>
+                </div>
+            </div>
+        </li> -->
+        <li class="nav-item dropdown" dropdown placement="bottom right">
+            <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false">
+                {{userName}}<img src="assets/img/user.png" class="img-avatar" />
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
+                <a class="dropdown-item" (click)="openChangePassword()"><i class="fa fa-lock"></i> Change Password</a>
+                <a class="dropdown-item" (click)="logout()"><i class="fa fa-lock"></i> Logout</a>
+            </div>
+        </li>
+    </ul>
+</app-header>
+<div class="app-body">
+    <app-sidebar #appSidebar [fixed]="true" [display]="'lg'" [minimized]="false" (minimizedChange)="toggleMinimize($event)">
+        <app-sidebar-nav [navItems]="navItems" [perfectScrollbar] [disabled]="appSidebar.minimized"></app-sidebar-nav>
+        <app-sidebar-minimizer></app-sidebar-minimizer>
+    </app-sidebar>
+    <main class="main">
+        <br>
+        <div class="container-fluid">
+            <router-outlet></router-outlet>
+        </div>
+    </main>
+</div>
+<app-footer class="crm-footer">
+    <div class="row">
+        <div class="col-md-6 footer-logo">
+            <img src="assets/img/logo.png" height="30px" />
+        </div>
+        <div class="col-md-6 copyright-text">
+            <span class="mr-3">
+                {{ idleTimerLeft }}
+              </span>
+            <!-- <img src="assets/img/enmobi-logo-e.png" height="30px"/> -->
+            <span>Powered by EnMobi <br>&copy; 2020 EnMobi Inc.</span>
+        </div>
+    </div>
+    <!-- <span class="ml-auto">  &copy; 2020 EnMobi </span> -->
+</app-footer>
+<div bsModal #profileModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Change Password</h4>
+                <button type="button" class="close" (click)="profileModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="newpassword">New Password</label>
+                    <input type="password" class="form-control" id="newpassword" [(ngModel)]="profile.newpassword" name="newpassword">
+                </div>
+                <div class="form-group">
+                    <label for="confirmpassword">Confirm Password</label>
+                    <input type="password" class="form-control" id="confirmpassword" name="confirmpassword" [(ngModel)]="profile.confirmpassword">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="updatePassword()">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div bsModal #logoutTimerModal="bs-modal" class="modal logout-warning-modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Alert!</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger" role="alert">
+                    You will be logged out in <span class="time-in-mins">{{ timeLeft }}</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" (click)='continue()'>Continue</button>
+                <button class="btn btn-danger" (click)='logout()'>Logout</button>
+            </div>
+        </div>
+    </div>
+</div>

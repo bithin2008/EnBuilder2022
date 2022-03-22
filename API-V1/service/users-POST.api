@@ -1,0 +1,29 @@
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_project_settings' %> 
+
+
+<% assign obj = en.params %>
+<% if obj.users %>
+    <% for item in obj.users %>
+        <% unassign query %>
+        <% unassign data %>
+        <% assign query.project_id = item.project_id %>
+        <% assign query.user_id = item.user_id %>
+        <% assign data = item %>
+        <% assign data.type = 'SERVICE-USER' %>
+        <% en.data.upsert result datasetId query data %>
+    <% endfor %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'User updated successfully.' %>
+    <% return returnData %> 
+<% else %>
+    <% assign returnData.status = 0 %> 
+    <% assign returnData.message = 'User list is empty.' %>
+    <% return returnData %>
+<% endif %> 
+ 

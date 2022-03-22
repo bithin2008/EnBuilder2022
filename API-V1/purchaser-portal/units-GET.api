@@ -1,0 +1,153 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_units' %>
+
+<% if en.params._id %>
+    <% assign query._id = en.params._id %>
+    <% en.data.findone result datasetId query %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Unit details' %>
+    <% assign returnData.result = result.row %>
+    
+    <% unassign query %>
+    <% assign query._id = result.row.deal_id %>
+    <% en.data.findone dealResult "bldr_deals" query %>
+    <% assign returnData.result.deal = dealResult.row %>
+    
+    <% return returnData %>
+<% else %>
+    <% assign pageSize = 200 %> 
+    <% if en.params.pageSize %>
+        <% assign pageSize = en.params.pageSize %>
+    <% endif %>
+    <% assign page = 1 %>
+    <% if en.params.page %> 
+        <% assign page = en.params.page %>
+    <% endif %> 
+    
+    <% assign skip = page | minus:1 | multiply: pageSize %>
+    
+    <% if en.params.sortBy %>
+        <% if en.params.sortOrder =='ASC' %>
+            <% assign orderBy[en.params.sortBy] = 1 %>
+        <% else %>
+            <% assign orderBy[en.params.sortBy] = -1 %>
+        <% endif %>
+    <% else %>
+        <% assign orderBy.unit_no = 1 %>
+    <% endif %>
+    <% if en.params.project_id %>
+        <% assign query.project_id = en.params.project_id %>  
+    <% endif %>
+    <% if en.params.model_id %>
+        <% assign query.model_id.$in = en.params.model_id | split:"," %>  
+    <% endif %>
+    <% if en.params.status %>
+        <% assign query.status = en.params.status %> 
+    <% endif %>
+    <% if en.params.floor %>
+        <% assign query.floor_legal.$in = en.params.floor | split:"," %>
+    <% endif %>
+    <% if en.params.bed %>
+        <% assign query.bed.$in = en.params.bed | splittoint:"," %>
+    <% endif %>
+    <% if en.params.bath %>
+        <% assign query.bath.$in = en.params.bath | splittoint:"," %>
+    <% endif %>
+    <% if en.params.media %>
+        <% assign query.media.$in = en.params.media | splittoint:","  %>
+    <% endif %>
+    <% if en.params.flex %>
+        <% assign query.flex.$in = en.params.flex | splittoint:","  %>
+    <% endif %>
+    <% if en.params.ceiling %>
+        <% assign query.ceiling.$in = en.params.ceiling | splittoint:","  %>
+    <% endif %>
+    <% if en.params.den %>
+        <% assign query.den.$in = en.params.den | splittoint:"," %>
+    <% endif %>  
+    <% if en.params.views %>
+        <% assign query.views.$in = en.params.views | splittrim:"," %>
+    <% endif %>
+    <% en.data.find results datasetId query "_id" orderBy pageSize page %>
+    <% assign returnData.status = 1 %>
+    <% assign returnData.message = 'Unit list' %>
+    <% assign returnData.pagination = results.pagination %>
+    
+    <% json cquery1 %>
+    {
+        "queries":[
+            {
+                "$match":{}
+            },
+            {
+                $skip:<<skip>>
+            },
+            {
+                $limit:<<pageSize>>
+            },
+            {
+                "$lookup":{
+                    from: "bldr_deals",
+                    as: "deal",
+                    let: { 
+                        deal_id: "$deal_id"
+                    },
+                    pipeline:[
+                        { 
+                            $match : { 
+                                $expr : {
+                                    $and : [
+                                        { $eq : [ '$_id', '$$deal_id' ] }
+                                    ]
+                                }
+                                
+                            } 
+                        },
+                        { 
+                            $project : {
+                                deposit_structure_def: 0,
+                                deposit_structure_id: 0,
+                                unit: 0
+                            } 
+                        }
+                    ]
+                }
+            }
+        ]
+    } 
+    <% endjson %>
+    <% if query %>
+        <% assign cquery1.queries[0].$match = query %>
+    <% endif %>
+    <% rem return 'query' cquery1.queries %>
+    <% en.data.aggregate result1 datasetId cquery1.queries %> 
+    
+    <% assign returnData.results = result1 %>
+    <% return returnData %>
+<% endif %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

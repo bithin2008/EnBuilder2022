@@ -1,0 +1,27 @@
+
+
+.info-message {
+    display: flex;
+    padding: 10px 25px;
+    border: 1px solid;
+    border-radius: 5px;
+}
+
+.link {
+    color: #20a8d8;
+    text-decoration: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+::ng-deep .deal-box .ui-autocomplete {
+    display: grid !important;
+}
+
+::ng-deep .deal-box .p-autocomplete {
+    display: grid !important;
+    min-height: 35px !important;
+}
+::ng-deep .deal-box .p-autocomplete ul li input {
+    display: grid !important;
+    height: 20px !important;
+}

@@ -1,0 +1,196 @@
+<form autocomplete="off">
+    <div class="row mb-3">
+        <div class="col-md-11">
+        </div>
+        <!-- <div class="col-md-3">
+            <div class="form-group">
+                <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedProject" (change)="onProjectChange($event)">
+                    <option *ngFor="let item of projectList" value="{{item._id}}">{{item.name}}</option>
+                </select>
+            </div>
+        </div> -->
+        <div class="col-md-1 col-sm-2">
+            <button class="btn btn-primary" type="button" (click)="openAddCollectionDetailsModal(addModal)">Add</button>
+
+        </div>
+    </div>
+</form>
+<div class="table-responsive mt-2 mb-3">
+    <table class="table table-striped list_table" style="table-layout: fixed;">
+        <thead>
+            <tr>
+
+                <th width="180px">Project</th>
+                <th width="180px">Name</th>
+                <th width="180px">Active</th>
+                <th width="180px">Order</th>
+                <th width="180px">Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngIf="colorCollections.length>0">
+                <tr *ngFor="let item of colorCollections;let i=index">
+                    <td (click)="goToCollectionDetails(item)">{{item.project_name}}</td>
+                    <td (click)="goToCollectionDetails(item)">{{item.name}}</td>
+                    <!-- <td (click)="goToCollectionDetails(item)">{{item.cost | currency:'USD'}}</td>
+                    <td (click)="goToCollectionDetails(item)">{{item.price | currency:'USD'}}</td> -->
+                    <!-- <td>{{item.is_active ? 'Yes':'No'}}</td> -->
+                    <td>
+                        <div class="form-check form-switch pl-5">
+                            <input class="form-check-input" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.is_active" (change)="onStatusChange(item)"
+                                type="checkbox" id="flexSwitchCheckChecked{{i}}" name="is_active{{i}}">
+                        </div>
+                    </td>
+                    <td (click)="goToCollectionDetails(item)">{{item.order}}</td>
+                    <td (click)="goToCollectionDetails(item)">
+                        <button class="btn btn-primary btn-sm mr-2" type="button" [disabled]="i==0" (click)="reArrangeProgressStep($event,'up',i)">
+                            <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                        </button>
+                        <button class="btn btn-primary btn-sm mr-2" type="button" [disabled]="(i+1)==colorCollections.length" (click)="reArrangeProgressStep($event,'down',i)">
+                            <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                        </button>
+                        <!-- <button class="btn btn-primary btn-sm mr-2" type="button" (click)="openEditCollectionDetailsModal($event, addModal,item)">
+                            <i class="fa fa-pencil-alt" aria-hidden="true"></i>
+                        </button> -->
+                        <button class="btn btn-sm btn-danger" type="button" (click)="deleteColorCollection($event,item)">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>
+            </ng-container>
+            <ng-container *ngIf="colorCollections.length == 0">
+                <tr>
+                    <td colspan="5" class="text-center">No color collection found</td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+</div>
+<div class="row mt-3" *ngIf="paginationObj.total>=20">
+    <div class="col-md-6">
+        <div class="form-group">
+            <!-- <div class="col-sm-6"> -->
+            <span class="float-left" style="width:70px;margin-top: 6px;">Page Size:</span>
+            <span class="float-left" style="width:85px;">
+                <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="pageSize" (change)="setPageSize()">
+                    <option value="">-Select-</option>
+                                        <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </span>
+            <span class="float-left" style="margin-top: 6px !important;margin-left: 16px !important;">{{paginationObj.total}} Record(s) Found</span>
+            <!-- </div> -->
+        </div>
+    </div>
+    <div class="col-md-6">
+        <nav>
+            <ul class="pagination">
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.previousPage)">
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(1)">
+                        First
+                    </a>
+                </li>
+                <li class="page-item {{pagination == paginationObj.currentPage?'active':''}}" *ngFor="let pagination of paginationObj.items">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(pagination)">{{pagination}}</a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.totalPages)">
+                        Last
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.nextPage)">
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<ng-template #addModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">{{isEdit?'Edit':'Add'}} Color Collection</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Order :
+                            </label>
+                            <input type="number" disabled [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.order" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Project
+                                <span style="color:red">*</span>:</label>
+                            <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.project_id" id="projectId">
+                                <option value="">Select Project</option>
+                                <option *ngFor="let item of projectList" value={{item._id}}>{{item.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Name
+                                <span style="color:red">*</span>:</label>
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.name" class="form-control">
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Cost
+                                <span style="color:red">*</span>
+                                :</label>
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.cost" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Price
+                                <span style="color:red">*</span> :
+                            </label>
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.price" class="form-control">
+                        </div>
+                    </div> -->
+                    <div class="col-md-6 ">
+                        <div class="form-group  pt-4">
+                            <div class="custom-control custom-checkbox">
+                                <input id="is_active" type="checkbox" class="custom-control-input" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.is_active">&nbsp;
+                                <label class="custom-control-label" for="is_active">Active</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Description :
+                            </label>
+                            <div type="text" [froalaEditor]="nonInlineEdit" [(froalaModel)]="formDetails.description">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" *ngIf="!isEdit" (click)="addColorCollection()">Add</button>
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,29 @@
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% assign datasetId = 'bldr_subdivisions' %>
+<% if en.params._id %>
+    <% assign query1.subdivision_id = en.params._id %>
+    <% en.data.findOne projectResult "bldr_projects" query1 "name" %>
+    <% if projectResult.row %>
+        <% assign returnData.status = 0 %>
+        <% assign returnData.message = 'Subdivision can not be deleted. One or more projects is associated with it.' %>
+        <% assign returnData.result = null %>
+        <% return returnData %>
+    <% else %>
+        <% assign query._id = en.params._id %>
+        <% en.data.delete results datasetId query %>
+        <% assign returnData.status = 1 %>
+        <% assign returnData.message = 'Subdivision deleted successfully.' %>
+        <% assign returnData.result = results %>
+        <% return returnData %>
+    <% endif %>
+<% else %>
+    <% assign returnData.status = 0 %>
+    <% assign returnData.message = 'Subdivision id not found.' %>
+    <% assign returnData.result = null %>
+    <% return returnData %>
+<% endif %>

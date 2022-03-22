@@ -1,0 +1,28 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+<% if en.params.project_id %>
+    <% assign query.spaces.$elemMatch.name = en.params.name %>
+    <% en.data.findOne modelResult "bldr_models" query %>
+    <% if modelResult.row %>
+        <% assign returnData.status = 0 %>
+        <% assign returnData.message = 'This Space is used in one or more model(s).' %>
+        <% return returnData %>
+    <% else %>
+        <% assign projectQuery._id = en.params.project_id %>
+        <% assign dataToUpdate.$pull.spaces = en.params.name %>
+        <% en.data.update result "bldr_projects" projectQuery dataToUpdate %>
+        <% assign returnData.status = 1 %>
+        <% assign returnData.message = 'Space deleted successfully.' %>
+        <% return returnData %>
+    <% endif %>
+<% else %>
+    <% assign returnData.status = 0 %>
+    <% assign returnData.message = 'Project id not found.' %>
+    <% assign returnData.result = null %>
+    <% return returnData %>
+<% endif %> 

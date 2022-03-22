@@ -1,0 +1,73 @@
+<div class="animated fadeIn">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="const_hd">
+                    {{title}}
+                    <div class="col-md-3 col-sm-5" style="float: right;">
+                        <div class="form-group mb-0 text-right">
+                            <select class="form-select" (change)="onProjectChange()" [(ngModel)]="projectId">
+                                <!-- <option value="">All Projects</option> -->
+                                <option *ngFor="let item of projectList" value={{item._id}}>{{item.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-3 col-sm-5" style="float: right;">
+                        <div class="form-group mb-0 text-right">
+                            <select class="form-select" (change)="onBuilderChange($event.target.value)" [(ngModel)]="builderId">
+                                <option value="">All Builder</option>
+                                <option *ngFor="let item of builderList" value={{item._id}}>{{item.name}}</option>
+                            </select>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <div class="col-lg-12 col-xs-12">
+                <ngb-tabset (tabChange)="doTabFunctions($event)" [activeId]="defaultActiveTab">
+                    <ngb-tab id="unitPricingTab" title="Unit Pricing">
+                        <ng-template ngbTabContent>
+                            <app-unit-pricing [events]="eventsSubject.asObservable()" (projectChanged)="onProjectChanged($event)" ></app-unit-pricing>
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab id="dealPricingTab" title="Deal Pricing">
+                        <ng-template ngbTabContent>
+                            <app-deal-pricing [events]="eventsSubject.asObservable()" (projectChanged)="onProjectChanged($event)"></app-deal-pricing>
+                        </ng-template>
+                    </ngb-tab>
+                   
+                    <ngb-tab id="depositTab" title="Deposits">
+                        <ng-template ngbTabContent>
+                            <app-deposit [events]="eventsSubject.asObservable()" (projectChanged)="onProjectChanged($event)"></app-deposit>
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab id="paymentTab" title="Payments">
+                        <ng-template ngbTabContent>
+                            <app-payments [events]="eventsSubject.asObservable()" (projectChanged)="onProjectChanged($event)"></app-payments>
+                        </ng-template>
+                    </ngb-tab>
+
+                    <ngb-tab id="commissionsTab" title="Commissions">
+                        <ng-template ngbTabContent>
+                            <!-- <component returnUrl="finance"></component> -->
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab id="depositStructureTab" title="Deposit Structure">
+                        <ng-template ngbTabContent>
+                            <app-deposit-structure [events]="eventsSubject.asObservable()" (projectChanged)="onProjectChanged($event)"></app-deposit-structure>
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab id="insentivesTab" title="Incentives">
+                        <ng-template ngbTabContent>
+                            <app-incentives [events]="eventsSubject.asObservable()" (projectChanged)="onProjectChanged($event)"></app-incentives>
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab id="settingsTab" title="Settings">
+                        <ng-template ngbTabContent>
+                            <app-finance-settings [events]="eventsSubject.asObservable()"></app-finance-settings>
+                        </ng-template>
+                    </ngb-tab>
+                </ngb-tabset>
+            </div>
+        </div>
+    </div>
+</div>

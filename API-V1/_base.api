@@ -1,0 +1,14 @@
+
+<% en.users.whoami UserResult %>
+<% if UserResult.isGuest  %>
+    <% assign returnData.status = 0 %>
+    <% assign returnData.message = 'Your session has been expired' %>
+    <% assign returnData.is_valid_session = false %>
+    <% assign returnData.result = null %>
+    <% return returnData %>
+<% else %>
+    <% assign returnData.is_valid_session = true %>
+<% endif %>
+
+<% assign time-zone = 'America/Toronto' %>
+<% assign file_is_private = false %>

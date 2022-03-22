@@ -1,0 +1,985 @@
+<div class="animated fadeIn">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="const_hd">
+                    <button
+                        class="btn btn-primary btn-sm mr-2"
+                        (click)="goBack()"
+                    >
+                        <i
+                            class="fa fa-arrow-left"
+                            aria-hidden="true"
+                        ></i>
+                        &nbsp; Back
+                    </button>
+                    Page Details
+                </div>
+            </div>
+        </div>
+        <div class="content-wrap">
+            <div class="row">
+                <div class="col-lg-12 col-xs-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="preview-container">
+                                <div class="preview-content">
+                                    <div class="page-body">
+                                        <ng-container *ngFor="let item of pageTilesArray ;let i = index;">
+                                            <div [ngSwitch]="item.type">
+                                                <div
+                                                    class="container-fluid"
+                                                    [ngStyle]="item.inline_style"
+                                                    [ngClass]="{'red_color': selectedItem === i}"
+                                                    *ngSwitchCase="'simple_section'"
+                                                >
+                                                    <div
+                                                        [ngStyle]="item.overlay_style"
+                                                        *ngIf="item.overlay"
+                                                    ></div>
+                                                    <div
+                                                        class="col-md-12"
+                                                        *ngIf="item.custom_bg == 'bvideo' && item.style.showing_url"
+                                                        class="iframstyle"
+                                                    >
+                                                        <iframe
+                                                            *ngIf="item.style.video_type == 'VIMEO' && item.style.showing_url"
+                                                            allow='autoplay'
+                                                            [src]="item.style.showing_url"
+                                                            frameborder="0"
+                                                            width="100%"
+                                                            height="100%"
+                                                            webkitallowfullscreen
+                                                            mozallowfullscreen
+                                                            allowfullscreen
+                                                        ></iframe>
+                                                        <iframe
+                                                            *ngIf="item.style.video_type == 'YOUTUBE' && item.style.showing_url"
+                                                            allow='autoplay'
+                                                            [src]="item.style.showing_url"
+                                                            frameborder="0"
+                                                            allowfullscreen
+                                                            width="100%"
+                                                            height="100%"
+                                                        ></iframe>
+                                                    </div>
+                                                    <div
+                                                        class="container content"
+                                                        [ngStyle]="{'min-height': item?.style?.min_height, 'padding-top': item?.style?.top_pad,  'padding-right': item?.style?.right_pad, 'padding-left': item?.style?.left_pad,   'text-align': item?.style?.content_align, 'padding-bottom': item?.style?.bottom_pad}"
+                                                    >
+                                                        <h2
+                                                            [ngStyle]="inline_style_title"
+                                                            class="heading pt-2"
+                                                            *ngIf="item.title_visible"
+                                                            [innerHTML]="(item.title ? item.title:'') | safeHtml"
+                                                        >
+                                                        </h2>
+                                                        <div class="cler_both"></div>
+                                                        <h3
+                                                            class="pt-3"
+                                                            *ngIf="item.sub_title_visible"
+                                                            [innerHtml]="(item.sub_title ? item.sub_title : '') | safeHtml"
+                                                        >
+                                                        </h3>
+                                                        <div class="cler_both"></div>
+                                                        <h6
+                                                            class="pt-3"
+                                                            *ngIf="item.body_visible"
+                                                            [innerHtml]="(item.body_text ? item.body_text : '') | safeHtml"
+                                                        >
+                                                        </h6>
+                                                        <div class="cler_both"></div>
+                                                        <ng-container *ngFor="let btn of item.buttons; let bntI = index">
+                                                            <ng-container *ngIf="btn.link_type=='link'">
+                                                                <a
+                                                                    href="{{btn.link}}"
+                                                                    *ngIf="item.button_visible"
+                                                                    class="btn"
+                                                                    [ngStyle]="btn.inline_style"
+                                                                    [innerHtml]="(btn.name ? btn.name : '') | safeHtml"
+                                                                >
+                                                                </a>
+                                                            </ng-container>
+                                                            <ng-container *ngIf="btn.link_type=='phone'">
+                                                                <a
+                                                                    href="tel:{{btn.link}}"
+                                                                    *ngIf="item.button_visible"
+                                                                    class="btn"
+                                                                    [ngStyle]="btn.inline_style"
+                                                                    [innerHtml]="(btn.name ? btn.name : '') | safeHtml"
+                                                                >
+                                                                </a>
+                                                            </ng-container>
+                                                            <ng-container *ngIf="btn.link_type=='whatsapp'">
+                                                                <a
+                                                                    href="https://wa.me/{{btn.link}}"
+                                                                    *ngIf="item.button_visible"
+                                                                    class="btn"
+                                                                    [ngStyle]="btn.inline_style"
+                                                                    [innerHtml]="(btn.name ? btn.name : '') | safeHtml"
+                                                                >
+                                                                </a>
+                                                            </ng-container>
+                                                            <ng-container *ngIf="btn.link_type=='email'">
+                                                                <a
+                                                                    href="mailto:{{btn.link}}"
+                                                                    *ngIf="item.button_visible"
+                                                                    class="btn"
+                                                                    [ngStyle]="btn.inline_style"
+                                                                    [innerHtml]="(btn.name ? btn.name : '') | safeHtml"
+                                                                >
+                                                                </a>
+                                                            </ng-container>
+                                                        </ng-container>
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="container-fluid slider-container"
+                                                    *ngSwitchCase="'SLIDER'"
+                                                    [ngClass]="{'red_color': selectedItem === i}"
+                                                >
+                                                    <ngb-carousel [keyboard]="false">
+                                                        <ng-template
+                                                            ngbSlide
+                                                            *ngFor="let slide of item.slides; let s_i = index"
+                                                        >
+                                                            <div
+                                                                [ngClass]="{'bg_fixed': item.parallax}"
+                                                                style="display: table; width: 100%;"
+                                                                class="tiles-image gridHover"
+                                                                [ngStyle]="
+                                                            {'height': item?.style?.min_height, 
+                                                            'margin-top': item?.style?.top_mar,                                                            
+                                                            'margin-bottom': item?.style?.bottom_mar,
+                                                            'margin-left': item?.style?.left_mar,
+                                                            'margin-right': item?.style?.right_mar,
+                                                            'background-position': 'center',  'position': 'relative',
+                                                            'background-size': item?.style?.bg_size,  
+                                                            'background-repeat': 'no-repeat',
+                                                            'background-image': !slide.image_url ? 'url(&quot;assets/img/placeholder-image.png&quot;)' : 'url(&quot;' + slide.image_url + '&quot;)'}"
+                                                            >
+                                                                <div
+                                                                    [ngStyle]="item.overlay_style"
+                                                                    *ngIf="item.overlay"
+                                                                ></div>
+                                                                <div class="tile_menu3">
+                                                                    <button
+                                                                        class="btn btn-light mr-1"
+                                                                        type="button"
+                                                                        (click)="fileView($event,item, s_i)"
+                                                                        ngbTooltip="Insert Image"
+                                                                    >
+                                                                        <i class="fas fa-images"></i>
+                                                                    </button>
+                                                                    <button
+                                                                        class="btn btn-light"
+                                                                        type="button"
+                                                                        ngbTooltip="Remove Slide"
+                                                                        (click)="delete_slide(item, i, s_i)"
+                                                                    >
+                                                                        <i class="fas fa-trash-alt"></i>
+                                                                    </button>
+                                                                </div>
+                                                                <div style="display: table-row;">
+                                                                    <div
+                                                                        style="display: table-cell; width: 100%;"
+                                                                        [ngStyle]="{'vertical-align': item?.style?.content_valign     }"
+                                                                    >
+                                                                        <div
+                                                                            class=" content"
+                                                                            [ngStyle]="{'padding-top': item?.style?.top_pad, 'height': item?.style?.content_height, 'padding-right': item?.style?.right_pad, 'padding-left': item?.style?.left_pad,   'text-align': item?.style?.content_align,'background': item?.style?.content_bg, 'padding-bottom': item?.style?.bottom_pad, 'vertical-align': item?.style?.content_valign     }"
+                                                                        >
+                                                                            <h3
+                                                                                [ngStyle]="inline_style_title"
+                                                                                class="heading"
+                                                                                *ngIf="item.title_visible"
+                                                                                [innerHtml]="(slide.title ? slide.title : '') | safeHtml"
+                                                                            >
+                                                                            </h3>
+                                                                            <div class="cler_both"></div>
+                                                                            <h4
+                                                                                *ngIf="item.sub_title_visible"
+                                                                                [innerHtml]="(slide.teaser ? slide.teaser : '') | safeHtml"
+                                                                            >
+                                                                            </h4>
+                                                                            <div class="cler_both"></div>
+                                                                            <div *ngIf="item.button_visible">
+                                                                                <ng-container *ngFor="let btn of slide.buttons; let bntI = index">
+                                                                                    <ng-container *ngIf="btn.link_type=='link'">
+                                                                                        <a
+                                                                                            href="{{btn.link}}"
+                                                                                            *ngIf="item.button_visible"
+                                                                                            class="btn"
+                                                                                            [ngStyle]="btn.inline_style"
+                                                                                            [innerHtml]="(btn.name ? btn.name : '') | safeHtml"
+                                                                                        >
+                                                                                        </a>
+                                                                                    </ng-container>
+                                                                                    <ng-container *ngIf="btn.link_type=='phone'">
+                                                                                        <a
+                                                                                            href="tel:{{btn.link}}"
+                                                                                            *ngIf="item.button_visible"
+                                                                                            class="btn"
+                                                                                            [ngStyle]="btn.inline_style"
+                                                                                            [innerHtml]="(btn.name ? btn.name : '') | safeHtml"
+                                                                                        >
+                                                                                        </a>
+                                                                                    </ng-container>
+                                                                                    <ng-container *ngIf="btn.link_type=='whatsapp'">
+                                                                                        <a
+                                                                                            href="https://wa.me/{{btn.link}}"
+                                                                                            *ngIf="item.button_visible"
+                                                                                            class="btn"
+                                                                                            [ngStyle]="btn.inline_style"
+                                                                                            [innerHtml]="(btn.name ? btn.name : '') | safeHtml"
+                                                                                        >
+                                                                                        </a>
+                                                                                    </ng-container>
+                                                                                    <ng-container *ngIf="btn.link_type=='email'">
+                                                                                        <a
+                                                                                            href="mailto:{{btn.link}}"
+                                                                                            *ngIf="item.button_visible"
+                                                                                            class="btn"
+                                                                                            [ngStyle]="btn.inline_style"
+                                                                                            [innerHtml]="(btn.name ? btn.name : '') | safeHtml"
+                                                                                        >
+                                                                                        </a>
+                                                                                    </ng-container>
+                                                                                </ng-container>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </ng-template>
+                                                    </ngb-carousel>
+                                                </div>
+                                                <div
+                                                    class="container-fluid"
+                                                    *ngSwitchCase="'VIDEO'"
+                                                    [ngClass]="{'red_color': selectedItem === i}"
+                                                    [ngStyle]="item.inline_style"
+                                                >
+                                                    <div
+                                                        [ngStyle]="item.overlay_style"
+                                                        *ngIf="item.overlay"
+                                                    ></div>
+                                                    <div
+                                                        class="container"
+                                                        [ngStyle]="{'height': item?.style?.min_height, 'padding-top': item?.style?.top_pad, 'text-align': item?.style?.content_align, 'padding-bottom': item?.style?.bottom_pad}"
+                                                    >
+                                                        <div class="row">
+                                                            <div
+                                                                class="col-md-{{item.cols}}"
+                                                                style="position: relative;"
+                                                            >
+                                                                <h2
+                                                                    [ngStyle]="inline_style_title"
+                                                                    class=" heading pt-2"
+                                                                    *ngIf="item.title_visible"
+                                                                    [innerHtml]="(item.title ? item.title : '') | safeHtml"
+                                                                ></h2>
+                                                                <div *ngIf="item.showing_url">
+                                                                    <iframe
+                                                                        *ngIf="item.video_type == 'VIMEO'"
+                                                                        [src]="item.showing_url"
+                                                                        frameborder="0"
+                                                                        width="100%"
+                                                                        height="400px"
+                                                                        webkitallowfullscreen
+                                                                        mozallowfullscreen
+                                                                        allowfullscreen
+                                                                    ></iframe>
+                                                                    <iframe
+                                                                        *ngIf="item.video_type == 'YOUTUBE'"
+                                                                        [src]="item.showing_url"
+                                                                        frameborder="0"
+                                                                        allowfullscreen
+                                                                        width="100%"
+                                                                        height="400px"
+                                                                    ></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="container-fluid"
+                                                    *ngSwitchCase="'FORM'"
+                                                    [ngClass]="{'red_color': selectedItem === i}"
+                                                    [ngStyle]="item.inline_style"
+                                                >
+                                                    <div
+                                                        [ngStyle]="item.overlay_style"
+                                                        *ngIf="item.overlay"
+                                                    ></div>
+                                                    <div class="container pt-5 pb-5">
+                                                        <div class="row">
+                                                            <div
+                                                                class="col-md-12"
+                                                                style="position: relative;"
+                                                            >
+                                                                <h3
+                                                                    *ngIf="item.title_visible"
+                                                                    [innerHtml]="(item.title ? item.title : '') | safeHtml"
+                                                                ></h3>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label>Name</label>
+                                                                    <input
+                                                                        type="text"
+                                                                        class="form-control"
+                                                                    >
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label>Email</label>
+                                                                    <input
+                                                                        type="text"
+                                                                        class="form-control"
+                                                                    >
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label>Phone</label>
+                                                                    <input
+                                                                        type="text"
+                                                                        class="form-control"
+                                                                    >
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label>Message</label>
+                                                                    <textarea
+                                                                        type="text"
+                                                                        class="form-control"
+                                                                    ></textarea>
+                                                                </div>
+                                                                <div class="form-group text-center">
+                                                                    <button
+                                                                        class="btn btn-primary"
+                                                                        type="button"
+                                                                    >
+                                                                        Submit Now
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="container-fluid"
+                                                    *ngSwitchCase="'CSLIDER'"
+                                                    [ngClass]="{'red_color': selectedItem === i}"
+                                                    [ngStyle]="item.inline_style"
+                                                >
+                                                    <div
+                                                        [ngStyle]="item.overlay_style"
+                                                        *ngIf="item.overlay"
+                                                    ></div>
+                                                    <div
+                                                        class="col-md-12"
+                                                        *ngIf="item.custom_bg == 'bvideo' && item.style.showing_url"
+                                                        class="iframstyle"
+                                                    >
+                                                        <iframe
+                                                            *ngIf="item.style.video_type == 'VIMEO' && item.style.showing_url"
+                                                            allow='autoplay'
+                                                            [src]="item.style.showing_url"
+                                                            frameborder="0"
+                                                            width="100%"
+                                                            height="530px"
+                                                            webkitallowfullscreen
+                                                            mozallowfullscreen
+                                                            allowfullscreen
+                                                        ></iframe>
+                                                        <iframe
+                                                            *ngIf="item.style.video_type == 'YOUTUBE' && item.style.showing_url"
+                                                            allow='autoplay'
+                                                            [src]="item.style.showing_url"
+                                                            frameborder="0"
+                                                            allowfullscreen
+                                                            width="100%"
+                                                            height="530px"
+                                                        ></iframe>
+                                                    </div>
+                                                    <div
+                                                        class="container"
+                                                        [ngStyle]="{'padding-top': item?.style?.top_pad, 'padding-bottom': item?.style?.bottom_pad}"
+                                                    >
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <h2
+                                                                    class="pt-2"
+                                                                    *ngIf="item.title_visible"
+                                                                    [innerHtml]="(item.title ? item.title : '') | safeHtml"
+                                                                ></h2>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <carousel
+                                                                    [noPause]="true"
+                                                                    class="conslide"
+                                                                    id="myCarousel"
+                                                                    [itemsPerSlide]="itemsPerSlide"
+                                                                    [singleSlideOffset]="singleSlideOffset"
+                                                                    [interval]="false"
+                                                                    [startFromIndex]="1"
+                                                                >
+                                                                    <slide
+                                                                        data-keyboard="false"
+                                                                        *ngFor="let slide of item.slides;  let i = index"
+                                                                        style="padding: 0 15px;"
+                                                                    >
+                                                                        <div class="card">
+                                                                            <div
+                                                                                *ngIf="slide.image_url"
+                                                                                class="tiles-grid-image2"
+                                                                                [ngStyle]="{'background-image': 'url(&quot;' + baseUrl+ slide.image_url  + '&quot;)'}"
+                                                                            >
+                                                                            </div>
+                                                                            <div class="card-body">
+                                                                                <h5 [innerHtml]="(slide.title ? slide.title : '') | safeHtml"></h5>
+                                                                                <p [innerHtml]="(slide.teaser ? slide.teaser : '') | safeHtml"></p>
+                                                                            </div>
+                                                                            <div
+                                                                                class="card-footer"
+                                                                                [innerHtml]="(slide.button1 ? slide.button1 : '') | safeHtml"
+                                                                            ></div>
+                                                                        </div>
+                                                                    </slide>
+                                                                </carousel>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- <div class="container-fluid" *ngSwitchCase="'HTML'" [ ngClass]="{'red_color': selectedItem === i}" style="background-color: #f6f5f5;">
+                                                    <div class="container pt-5 pb-5">
+                                                        <div class="row">
+                                                            <div class="col-md-12 text-center">
+                                                                <img src="assets/img/wireframe16.jpg">
+                                                            </div>
+                                                            <div class="col-md-12 mt-4 text-center">
+                                                                <button class="btn btn-primary" type="button" (click)="editorView(editorModal,item)">
+                                                                    <i class="fas fa-edit"></i> Edit HTML Code
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+                                                <div
+                                                    class="container-fluid"
+                                                    *ngSwitchCase="'TABS'"
+                                                    [ngClass]="{'red_color': selectedItem === i}"
+                                                    [ngStyle]="item.inline_style"
+                                                >
+                                                    <div
+                                                        [ngStyle]="item.overlay_style"
+                                                        *ngIf="item.overlay"
+                                                    ></div>
+                                                    <div
+                                                        class="col-md-12"
+                                                        *ngIf="item.custom_bg == 'bvideo' && item.style.showing_url"
+                                                        class="iframstyle"
+                                                    >
+                                                        <iframe
+                                                            *ngIf="item.style.video_type == 'VIMEO' && item.style.showing_url"
+                                                            allow='autoplay'
+                                                            [src]="item.style.showing_url"
+                                                            frameborder="0"
+                                                            width="100%"
+                                                            height="530px"
+                                                            webkitallowfullscreen
+                                                            mozallowfullscreen
+                                                            allowfullscreen
+                                                        ></iframe>
+                                                        <iframe
+                                                            *ngIf="item.style.video_type == 'YOUTUBE' && item.style.showing_url"
+                                                            allow='autoplay'
+                                                            [src]="item.style.showing_url"
+                                                            frameborder="0"
+                                                            allowfullscreen
+                                                            width="100%"
+                                                            height="530px"
+                                                        ></iframe>
+                                                    </div>
+                                                    <div
+                                                        class="container"
+                                                        [ngStyle]="{'padding-top': item?.style?.top_pad, 'padding-bottom': item?.style?.bottom_pad}"
+                                                    >
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <h3
+                                                                    *ngIf="item.title_visible"
+                                                                    [innerHtml]="(item.title ? item.title : '') | safeHtml"
+                                                                ></h3>
+                                                                <tabset>
+                                                                    <tab *ngFor="let tabs of item.tab_items">
+                                                                        <ng-template tabHeading>
+                                                                            <h2
+                                                                                class="tab-button"
+                                                                                [innerHtml]="(tabs.title ? tabs.title : '') | safeHtml"
+                                                                            ></h2>
+                                                                        </ng-template>
+                                                                        <div [innerHtml]="(tabs.details ? tabs.details : '') | safeHtml">
+                                                                            <a
+                                                                                href="{{btn.link}}"
+                                                                                *ngIf="item.button_visible"
+                                                                                type="button"
+                                                                                class="btn btn-primary custom_btn_style"
+                                                                                [innerHtml]="(tabs.button1 ? tabs.button1 : '') | safeHtml"
+                                                                            >
+                                                                            </a>
+                                                                        </div>
+                                                                    </tab>
+                                                                </tabset>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="container-fluid"
+                                                    *ngSwitchCase="'ACCORDION'"
+                                                    [ngClass]="{'red_color': selectedItem === i}"
+                                                    [ngStyle]="item.inline_style"
+                                                >
+                                                    <div
+                                                        [ngStyle]="item.overlay_style"
+                                                        *ngIf="item.overlay"
+                                                    ></div>
+                                                    <div
+                                                        class="col-md-12"
+                                                        *ngIf="item.custom_bg == 'bvideo' && item.style.showing_url"
+                                                        class="iframstyle"
+                                                    >
+                                                        <iframe
+                                                            *ngIf="item.style.video_type == 'VIMEO' && item.style.showing_url"
+                                                            allow='autoplay'
+                                                            [src]="item.style.showing_url"
+                                                            frameborder="0"
+                                                            width="100%"
+                                                            height="530px"
+                                                            webkitallowfullscreen
+                                                            mozallowfullscreen
+                                                            allowfullscreen
+                                                        ></iframe>
+                                                        <iframe
+                                                            *ngIf="item.style.video_type == 'YOUTUBE' && item.style.showing_url"
+                                                            allow='autoplay'
+                                                            [src]="item.style.showing_url"
+                                                            frameborder="0"
+                                                            allowfullscreen
+                                                            width="100%"
+                                                            height="530px"
+                                                        ></iframe>
+                                                    </div>
+                                                    <div
+                                                        class="container"
+                                                        [ngStyle]="{'padding-top': item?.style?.top_pad, 'padding-bottom': item?.style?.bottom_pad}"
+                                                    >
+                                                        <div class="row">
+                                                            <div
+                                                                class="col-sm-12"
+                                                                style="position: relative;"
+                                                            >
+                                                                <h3
+                                                                    *ngIf="item.title_visible"
+                                                                    [innerHtml]="(item.title ? item.title : '') | safeHtml"
+                                                                ></h3>
+                                                                <ngb-accordion
+                                                                    #a="ngbAccordion"
+                                                                    activeIds="custom-panel-1"
+                                                                >
+                                                                    <ngb-panel *ngFor="let accItem of item.accordian_items index as i">
+                                                                        <ng-template ngbPanelHeader>
+                                                                            <div class="d-flex align-items-center justify-content-between">
+                                                                                <button
+                                                                                    ngbPanelToggle
+                                                                                    class="btn btn-link container-fluid text-left pl-0"
+                                                                                >
+                                                                                    <h4 [innerHtml]="(accItem.title? accItem.title : '') | safeHtml"></h4>
+                                                                                </button>
+                                                                            </div>
+                                                                        </ng-template>
+                                                                        <ng-template ngbPanelContent>
+                                                                            <p [innerHtml]="(accItem.description? accItem.description : '') | safeHtml"></p>
+                                                                        </ng-template>
+                                                                    </ngb-panel>
+                                                                </ngb-accordion>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="container-fluid"
+                                                    *ngSwitchCase="'GRID'"
+                                                >
+                                                    <div
+                                                        class="container-fluid"
+                                                        [ngClass]="{'red_color': selectedItem === i}"
+                                                        *ngIf="item.grid_type == 'grid_dynamic'"
+                                                        [ngStyle]="item.inline_style"
+                                                    >
+                                                        <div
+                                                            [ngStyle]="item.overlay_style"
+                                                            *ngIf="item.overlay"
+                                                        ></div>
+                                                        <div
+                                                            class="col-md-12"
+                                                            *ngIf="item.custom_bg == 'bvideo' && item.style.showing_url"
+                                                            class="iframstyle"
+                                                        >
+                                                            <iframe
+                                                                *ngIf="item.style.video_type == 'VIMEO' && item.style.showing_url"
+                                                                allow='autoplay'
+                                                                [src]="item.style.showing_url"
+                                                                frameborder="0"
+                                                                width="100%"
+                                                                height="530px"
+                                                                webkitallowfullscreen
+                                                                mozallowfullscreen
+                                                                allowfullscreen
+                                                            ></iframe>
+                                                            <iframe
+                                                                *ngIf="item.style.video_type == 'YOUTUBE' && item.style.showing_url"
+                                                                allow='autoplay'
+                                                                [src]="item.style.showing_url"
+                                                                frameborder="0"
+                                                                allowfullscreen
+                                                                width="100%"
+                                                                height="530px"
+                                                            ></iframe>
+                                                        </div>
+                                                        <div
+                                                            class="container content"
+                                                            [ngStyle]="{'height': item?.style?.min_height, 'padding-top': item?.style?.top_pad, 'padding-bottom': item?.style?.bottom_pad}"
+                                                        >
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <h2
+                                                                        [ngStyle]="inline_style_title"
+                                                                        class=" heading pt-2"
+                                                                        *ngIf="item.title_visible"
+                                                                        [innerHtml]="(item.title ? item.title : '') | safeHtml"
+                                                                    ></h2>
+                                                                    <div class="row">
+                                                                        <ng-container *ngFor="let grid of item.grids; let g_i = index">
+                                                                            <div class="div_zin col-md-{{grid.cols}} mb-3">
+                                                                                <div [ngStyle]="grid.inline_style">
+                                                                                    <div
+                                                                                        *ngIf="grid.image_url && grid.grid_image_visible"
+                                                                                        class="tiles-grid-image2"
+                                                                                        [ngStyle]="{
+                                                                                        'border-top-right-radius':grid.inline_style.top_radius_right, 
+                                                                                        'height':grid.inline_style.image_height,
+                                                                                        'border-top-left-radius':grid.inline_style.top_radius_left, 
+                                                                                        'border-bottom-right-radius':grid.inline_style.bottom_radius_right, 
+                                                                                        'border-bottom-left-radius':grid.inline_style.bottom_radius_left, 
+                                                                                        'background-image': 'url(&quot;' + baseUrl+grid.image_url + '&quot;)'}"
+                                                                                    >
+                                                                                    </div>
+                                                                                    <div
+                                                                                        *ngIf="!grid.image_url && grid.grid_image_visible"
+                                                                                        class="tiles-grid-image2"
+                                                                                        [ngStyle]="{'background-image': 'url(&quot;assets/img/placeholder-image.png&quot;)'}"
+                                                                                    >
+                                                                                    </div>
+                                                                                    <h5
+                                                                                        class="pt-2"
+                                                                                        *ngIf="grid.grid_title_visible"
+                                                                                        [innerHtml]="(grid.title ? grid.title : '') | safeHtml"
+                                                                                    ></h5>
+                                                                                    <h6
+                                                                                        *ngIf="grid.grid_sub_visible"
+                                                                                        [innerHtml]="(grid.sub_title ? grid.sub_title : '') | safeHtml"
+                                                                                    ></h6>
+                                                                                    <p
+                                                                                        *ngIf="grid.grid_des_visible"
+                                                                                        [innerHtml]="(grid.description ? grid.description : '') | safeHtml"
+                                                                                    ></p>
+                                                                                    <ng-container *ngFor="let btn of grid.buttons; let bntI = index">
+                                                                                        <ng-container *ngIf="btn.link_type=='link'">
+                                                                                            <a
+                                                                                                href="{{btn.link}}"
+                                                                                                *ngIf="grid.button_visible"
+                                                                                                class="btn"
+                                                                                                [ngStyle]="btn.inline_style"
+                                                                                                [innerHtml]="(btn.name ? btn.name : '') | safeHtml"
+                                                                                            >
+                                                                                            </a>
+                                                                                        </ng-container>
+                                                                                        <ng-container *ngIf="btn.link_type=='phone'">
+                                                                                            <a
+                                                                                                href="tel:{{btn.link}}"
+                                                                                                *ngIf="grid.button_visible"
+                                                                                                class="btn"
+                                                                                                [ngStyle]="btn.inline_style"
+                                                                                                [innerHtml]="(btn.name ? btn.name : '') | safeHtml"
+                                                                                            >
+                                                                                            </a>
+                                                                                        </ng-container>
+                                                                                        <ng-container *ngIf="btn.link_type=='whatsapp'">
+                                                                                            <a
+                                                                                                href="https://wa.me/{{btn.link}}"
+                                                                                                *ngIf="grid.button_visible"
+                                                                                                class="btn"
+                                                                                                [ngStyle]="btn.inline_style"
+                                                                                                [innerHtml]="(btn.name ? btn.name : '') | safeHtml"
+                                                                                            >
+                                                                                            </a>
+                                                                                        </ng-container>
+                                                                                        <ng-container *ngIf="btn.link_type=='email'">
+                                                                                            <a
+                                                                                                href="mailto:{{btn.link}}"
+                                                                                                *ngIf="grid.button_visible"
+                                                                                                class="btn"
+                                                                                                [ngStyle]="btn.inline_style"
+                                                                                                [innerHtml]="(btn.name ? btn.name : '') | safeHtml"
+                                                                                            >
+                                                                                            </a>
+                                                                                        </ng-container>
+                                                                                    </ng-container>
+                                                                                </div>
+                                                                            </div>
+                                                                        </ng-container>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div
+                                                        class="container-fluid"
+                                                        [ngClass]="{'red_color': selectedItem === i}"
+                                                        *ngIf="item.grid_type == 'grid4'"
+                                                        [ngStyle]="item.inline_style"
+                                                    >
+                                                        <div
+                                                            [ngStyle]="item.overlay_style"
+                                                            *ngIf="item.overlay"
+                                                        ></div>
+                                                        <div
+                                                            class="col-md-12"
+                                                            *ngIf="item.custom_bg == 'bvideo' && item.style.showing_url"
+                                                            class="iframstyle"
+                                                        >
+                                                            <iframe
+                                                                *ngIf="item.style.video_type == 'VIMEO' && item.style.showing_url"
+                                                                allow='autoplay'
+                                                                [src]="item.style.showing_url"
+                                                                frameborder="0"
+                                                                width="100%"
+                                                                height="530px"
+                                                                webkitallowfullscreen
+                                                                mozallowfullscreen
+                                                                allowfullscreen
+                                                            ></iframe>
+                                                            <iframe
+                                                                *ngIf="item.style.video_type == 'YOUTUBE' && item.style.showing_url"
+                                                                allow='autoplay'
+                                                                [src]="item.style.showing_url"
+                                                                frameborder="0"
+                                                                allowfullscreen
+                                                                width="100%"
+                                                                height="530px"
+                                                            ></iframe>
+                                                        </div>
+                                                        <div
+                                                            class="container"
+                                                            [ngStyle]="{'height': item?.style?.min_height, 'padding-top': item?.style?.top_pad, 'padding-bottom': item?.style?.bottom_pad}"
+                                                        >
+                                                            <div class="row">
+                                                                <div class="col-md-{{item.cols}}">
+                                                                    <h2
+                                                                        [ngStyle]="inline_style_title"
+                                                                        class=" heading pt-2"
+                                                                        *ngIf="item.title_visible"
+                                                                        [innerHtml]="(item.title ? item.title : '') | safeHtml"
+                                                                    ></h2>
+                                                                    <div class="row">
+                                                                        <ng-container *ngFor="let grid of item.grids; let g_i = index">
+                                                                            <div class="col-md-{{grid.cols}}">
+                                                                                <div [ngStyle]="grid.inline_style">
+                                                                                    <div
+                                                                                        *ngIf="grid.image_url && grid.grid_image_visible"
+                                                                                        class="tiles-grid-image2"
+                                                                                        [ngStyle]="{
+                                                                                            'border-top-right-radius':grid.inline_style.top_radius_right, 
+                                                                                            'height':grid.inline_style.image_height,
+                                                                                            'border-top-left-radius':grid.inline_style.top_radius_left, 
+                                                                                            'border-bottom-right-radius':grid.inline_style.bottom_radius_right, 
+                                                                                            'border-bottom-left-radius':grid.inline_style.bottom_radius_left, 
+                                                                                            'background-image': 'url(&quot;' + baseUrl+grid.image_url + '&quot;)'}"
+                                                                                    >
+                                                                                    </div>
+                                                                                    <div
+                                                                                        *ngIf="!grid.image_url && grid.grid_image_visible"
+                                                                                        class="tiles-grid-image2"
+                                                                                        [ngStyle]="{'background-image': 'url(&quot;assets/img/placeholder-image.png&quot;)'}"
+                                                                                    >
+                                                                                    </div>
+                                                                                    <h5
+                                                                                        class="pt-2"
+                                                                                        *ngIf="grid.grid_title_visible"
+                                                                                        [innerHtml]="(grid.title ? grid.title : '') | safeHtml"
+                                                                                    ></h5>
+                                                                                    <h6
+                                                                                        *ngIf="grid.grid_sub_visible"
+                                                                                        [innerHtml]="(grid.sub_title ? grid.sub_title : '') | safeHtml"
+                                                                                    ></h6>
+                                                                                    <p
+                                                                                        *ngIf="grid.grid_des_visible"
+                                                                                        [innerHtml]="(grid.description ? grid.description : '') | safeHtml"
+                                                                                    ></p>
+                                                                                    <ng-container *ngFor="let btn of grid.buttons; let bntI = index">
+                                                                                        <ng-container *ngIf="btn.link_type=='link'">
+                                                                                            <a
+                                                                                                href="{{btn.link}}"
+                                                                                                *ngIf="grid.button_visible"
+                                                                                                class="btn"
+                                                                                                [ngStyle]="btn.inline_style"
+                                                                                                [innerHtml]="(btn.name ? btn.name : '') | safeHtml"
+                                                                                            >
+                                                                                            </a>
+                                                                                        </ng-container>
+                                                                                        <ng-container *ngIf="btn.link_type=='phone'">
+                                                                                            <a
+                                                                                                href="tel:{{btn.link}}"
+                                                                                                *ngIf="grid.button_visible"
+                                                                                                class="btn"
+                                                                                                [ngStyle]="btn.inline_style"
+                                                                                                [innerHtml]="(btn.name ? btn.name : '') | safeHtml"
+                                                                                            >
+                                                                                            </a>
+                                                                                        </ng-container>
+                                                                                        <ng-container *ngIf="btn.link_type=='whatsapp'">
+                                                                                            <a
+                                                                                                href="https://wa.me/{{btn.link}}"
+                                                                                                *ngIf="grid.button_visible"
+                                                                                                class="btn"
+                                                                                                [ngStyle]="btn.inline_style"
+                                                                                                [innerHtml]="(btn.name ? btn.name : '') | safeHtml"
+                                                                                            >
+                                                                                            </a>
+                                                                                        </ng-container>
+                                                                                        <ng-container *ngIf="btn.link_type=='email'">
+                                                                                            <a
+                                                                                                href="mailto:{{btn.link}}"
+                                                                                                *ngIf="grid.button_visible"
+                                                                                                class="btn"
+                                                                                                [ngStyle]="btn.inline_style"
+                                                                                                [innerHtml]="(btn.name ? btn.name : '') | safeHtml"
+                                                                                            >
+                                                                                            </a>
+                                                                                        </ng-container>
+                                                                                    </ng-container>
+                                                                                </div>
+                                                                            </div>
+                                                                        </ng-container>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div
+                                                        class="container-fluid"
+                                                        [ngClass]="{'red_color': selectedItem === i}"
+                                                        *ngIf="item.grid_type == 'grid5'"
+                                                        [ngStyle]="item.inline_style"
+                                                    >
+                                                        <div
+                                                            [ngStyle]="item.overlay_style"
+                                                            *ngIf="item.overlay"
+                                                        ></div>
+                                                        <div
+                                                            class="col-md-12"
+                                                            *ngIf="item.custom_bg == 'bvideo' && item.style.showing_url"
+                                                            class="iframstyle"
+                                                        >
+                                                            <iframe
+                                                                *ngIf="item.style.video_type == 'VIMEO' && item.style.showing_url"
+                                                                allow='autoplay'
+                                                                [src]="item.style.showing_url"
+                                                                frameborder="0"
+                                                                width="100%"
+                                                                height="530px"
+                                                                webkitallowfullscreen
+                                                                mozallowfullscreen
+                                                                allowfullscreen
+                                                            ></iframe>
+                                                            <iframe
+                                                                *ngIf="item.style.video_type == 'YOUTUBE' && item.style.showing_url"
+                                                                allow='autoplay'
+                                                                [src]="item.style.showing_url"
+                                                                frameborder="0"
+                                                                allowfullscreen
+                                                                width="100%"
+                                                                height="530px"
+                                                            ></iframe>
+                                                        </div>
+                                                        <div
+                                                            class="container"
+                                                            [ngStyle]="{'height': item?.style?.min_height,  'padding-top': item?.style?.top_pad, 'padding-bottom': item?.style?.bottom_pad}"
+                                                        >
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <h2
+                                                                        [ngStyle]="inline_style_title"
+                                                                        class=" heading pt-2"
+                                                                        *ngIf="item.title_visible"
+                                                                        [innerHtml]="(item.title ? item.title : '') | safeHtml"
+                                                                    ></h2>
+                                                                    <div class="row">
+                                                                        <ng-container *ngFor="let grid of item.grids; let g_i = index">
+                                                                            <div class="col-md-{{grid.cols}}">
+                                                                                <div
+                                                                                    class="tiles-grid-container"
+                                                                                    [ngStyle]="{'margin-top': grid?.style?.top_mar, 
+                                                                                'padding-top': grid?.style?.top_pad, 
+                                                                                'text-align': grid?.style?.content_align,
+                                                                                'padding-bottom': grid?.style?.bottom_pad,
+                                                                                'padding-left': grid?.style?.left_pad,
+                                                                                'padding-right': grid?.style?.right_pad,
+                                                                                'height': grid?.style?.height}"
+                                                                                >
+                                                                                    <div
+                                                                                        *ngIf="grid.grid_image_visible"
+                                                                                        class="tiles-grid-image"
+                                                                                        [ngStyle]="{'background-image': !grid.image_url ? 'url(&quot;assets/img/placeholder-image.png&quot;)' : 'url(&quot;' + baseUrl+ grid.image_url + '&quot;)'}"
+                                                                                    >
+                                                                                    </div>
+                                                                                    <div class="tile-grid-title">
+                                                                                        <h5
+                                                                                            *ngIf="grid.grid_title_visible"
+                                                                                            class="colorWhite"
+                                                                                            [innerHtml]="(grid.title ? grid.title : '') | safeHtml"
+                                                                                        ></h5>
+                                                                                        <h6
+                                                                                            *ngIf="grid.grid_sub_visible"
+                                                                                            class="colorWhite"
+                                                                                            [innerHtml]="(grid.sub_title ? grid.sub_title : '') | safeHtml"
+                                                                                        ></h6>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </ng-container>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

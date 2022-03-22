@@ -1,0 +1,20 @@
+
+<% include "../_base.api" %>
+
+<% if !returnData.is_valid_session %>
+    <% exit %>
+<% endif %>
+
+
+<% assign datasetId = 'bldr_models' %>
+
+<% assign orderBy.name = 1 %>
+
+<% assign params = en.params %>
+
+<% assign query.project_id = params.project_id %>
+<% en.data.distinct results1 datasetId "type" query %>
+<% assign returnData.status = 1 %>
+<% assign returnData.message = 'Model types' %>
+<% assign returnData.results = results1.values %>
+<% return returnData %>

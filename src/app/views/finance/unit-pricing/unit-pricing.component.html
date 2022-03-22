@@ -1,0 +1,436 @@
+<form autocomplete="off">
+    <div class="row mb-2 mt-2">
+        <div class="col-md-3 col-sm-4" *ngIf="collectionOptions.length>0">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('collection', $event)" (onDeSelect)="onItemSelect('collection')"
+                    (onSelect)="onItemSelect('collection')" (onSelectAll)="onSelectAll('collection', $event)" [placeholder]="'Select Model Collection'"
+                    [ngModelOptions]="{standalone: true}" [data]="collectionOptions" [(ngModel)]="filterForm.collection" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4" *ngIf="typeOptions.length>0">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('type', $event)" (onDeSelect)="onItemSelect('type')" (onSelect)="onItemSelect('type')"
+                    (onSelectAll)="onSelectAll('type', $event)" [placeholder]="'Select Model type'" [ngModelOptions]="{standalone: true}"
+                    [data]="typeOptions" [(ngModel)]="filterForm.type" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <ng-multiselect-dropdown [disabled]="!filterForm.collection" (onDeSelectAll)="onDeSelectAll('model_id', $event)" (onDeSelect)="onItemSelect()"
+                    (onSelect)="onItemSelect()" (onSelectAll)="onSelectAll('model_id', $event)" [placeholder]="'Select Model'"
+                    [ngModelOptions]="{standalone: true}" [data]="filterModelList" [(ngModel)]="filterForm.model_id" [settings]="modelDropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('den', $event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()"
+                    (onSelectAll)="onSelectAll('den', $event)" [placeholder]="'Select Den'" [ngModelOptions]="{standalone: true}"
+                    [data]="numberFields" [(ngModel)]="filterForm.den" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('beds',$event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()"
+                    (onSelectAll)="onSelectAll('beds',$event)" [placeholder]="'Select Beds'" [ngModelOptions]="{standalone: true}"
+                    [data]="numberFields" [(ngModel)]="filterForm.beds" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('baths',$event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()"
+                    (onSelectAll)="onSelectAll('baths',$event)" [placeholder]="'Select Baths'" [ngModelOptions]="{standalone: true}"
+                    [data]="numberFields" [(ngModel)]="filterForm.baths" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('media',$event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()"
+                    (onSelectAll)="onSelectAll('media',$event)" [placeholder]="'Select Media'" [ngModelOptions]="{standalone: true}"
+                    [data]="numberFields" [(ngModel)]="filterForm.media" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('flex',$event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()"
+                    (onSelectAll)="onSelectAll('flex',$event)" [placeholder]="'Select Flex'" [ngModelOptions]="{standalone: true}"
+                    [data]="numberFields" [(ngModel)]="filterForm.flex" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('building_type', $event)" (onDeSelect)="onItemSelect('building_type')" (onSelect)="onItemSelect('building_type')"
+                    (onSelectAll)="onSelectAll('building_type', $event)" [placeholder]="'Select Building Type'" [ngModelOptions]="{standalone: true}"
+                    [data]="buildingTypeList" [(ngModel)]="filterForm.building_type" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4" *ngIf="floorList.length>0">
+            <div class="form-group">
+                <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('floor_legal', $event)" (onDeSelect)="onItemSelect('floor_legal')" (onSelect)="onItemSelect('floor_legal')"
+                    (onSelectAll)="onSelectAll('floor_legal', $event)" [placeholder]="'Select Floor'" [ngModelOptions]="{standalone: true}"
+                    [data]="floorList" [(ngModel)]="filterForm.floor_legal" [settings]="dropdownSettings">
+                </ng-multiselect-dropdown>
+            </div>
+        </div>
+        <!-- <div class="col-md-3 col-sm-4">
+                    <div class="form-group">
+                        <ng-multiselect-dropdown (onDeSelectAll)="onDeSelectAll('ceiling',$event)" (onDeSelect)="onItemSelect()" (onSelect)="onItemSelect()"
+                            (onSelectAll)="onSelectAll('ceiling',$event)" [placeholder]="'Select Ceiling'" [ngModelOptions]="{standalone: true}"
+                            [data]="ceilingFields" [(ngModel)]="filterForm.ceiling" [settings]="dropdownSettings">
+                        </ng-multiselect-dropdown>
+                    </div>
+                </div> -->
+        <div class="col-md-3 col-sm-4 mb-2">
+            <div class="input-group position-relative">
+                <input class="form-control" name="search" placeholder="Type name or suite" style="padding-right: 25px;" type="text" [ngModelOptions]="{standalone: true}"
+                    [(ngModel)]="filterForm.searchText" name="search" (keyup)="doSearch()">
+                <span class="clear-search" *ngIf="isClear" (click)="clearSearch()">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-4">
+            <div class="input-group-btn">
+                <button class="btn btn-danger mr-1 mb-1" type="button" (click)="clearFilter()">Clear</button>
+                <button type="button" class="btn btn-primary mr-2 mb-1 " (click)="openEnableCols(enableColsModal)">Display Settings</button>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="table-responsive mt-2 mb-3">
+    <table class="table table-striped list_table" style="table-layout: fixed;">
+        <thead>
+            <tr>
+                <th width="180px" (click)="setOrder('project_name')">Project
+                    <span *ngIf="order != 'project_name'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'project_name'">▼</span>
+                    <span *ngIf="!reverse && order == 'project_name'">▲</span>
+                </th>
+                <th width="100px" (click)="setOrder('suite')">Suite
+                    <span *ngIf="order != 'suite'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'suite'">▼</span>
+                    <span *ngIf="!reverse && order == 'suite'">▲</span>
+                </th>
+                <!-- <th width="120px" class="text-right" (click)="setOrder('price')">Base Price
+                    <span *ngIf="order != 'price'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'price'">▼</span>
+                    <span *ngIf="!reverse && order == 'price'">▲</span>
+                </th>
+               
+                <th class="text-right" width="150px" (click)="setOrder('unit_premium')">Unit Premium
+                    <span *ngIf="order != 'unit_premium'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'unit_premium'">▼</span>
+                    <span *ngIf="!reverse && order == 'unit_premium'">▲</span>
+                </th>
+                <th class="text-right" width="150px" (click)="setOrder('floor_premium')">Floor Premium
+                    <span *ngIf="order != 'floor_premium'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'floor_premium'">▼</span>
+                    <span *ngIf="!reverse && order == 'floor_premium'">▲</span>
+                </th>
+                <th class="text-right" width="100px" (click)="setOrder('tax')">Tax
+                    <span *ngIf="order != 'tax'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'tax'">▼</span>
+                    <span *ngIf="!reverse && order == 'tax'">▲</span>
+                </th>
+                <th class="text-right" width="120px" (click)="setOrder('sales_price')">Sale Price
+                    <span *ngIf="order != 'sales_price'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'sales_price'">▼</span>
+                    <span *ngIf="!reverse && order == 'sales_price'">▲</span>
+                </th>
+                <th class="text-right" width="180px" (click)="setOrder('psf')">Price per ({{measureUnits[0]?.area}})
+                    <span *ngIf="order != 'psf'">
+                        <i class="fas fa-sort"></i>
+                    </span>
+                    <span *ngIf="reverse && order == 'psf'">▼</span>
+                    <span *ngIf="!reverse && order == 'psf'">▲</span>
+                </th> -->
+                <ng-container *ngFor="let type of dynamicColumns" >
+                    <th class="text-right" width="180px" *ngIf="type.isEnable" (click)="setOrder(type.fieldNum)">{{type?.name}}
+                        <span *ngIf="order != type.fieldNum">
+                            <i class="fas fa-sort"></i>
+                        </span>
+                        <span *ngIf="reverse && order == type.fieldNum">▼</span>
+                        <span *ngIf="!reverse && order == type.fieldNum">▲</span>
+                    </th>
+                </ng-container>
+                <th width="180px">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngIf="unitPricingList.length>0">
+                <tr *ngFor="let item of unitPricingList;let i=index">
+                    <td>{{item?.project_name}}</td>
+                    <td>{{item?.unit_no}}</td>
+                    <!-- <td class="text-right">{{item?.price | currency:'USD'}}</td>
+                    <td class="text-right">{{item?.unit_premium ? (item?.unit_premium | currency:'USD') :''}}</td>
+                    <td class="text-right">{{item?.floor_premium ? (item?.floor_premium | currency:'USD') :''}}</td>
+                    <td class="text-right">{{item?.tax ? (item?.tax | currency:'USD') :''}}</td>
+                    <td class="text-right">{{item?.sales_price ? (item?.sales_price | currency:'USD') :''}}</td>
+                    <td class="text-right">{{item?.psf ? (item?.psf | currency:'USD') : ''}}</td> -->
+                    <ng-container *ngFor="let type of dynamicColumns" >
+                        <td class="text-right" *ngIf="type.isEnable">
+                            <span>{{type?.fieldNum ? (item[type?.fieldNum] | currency:'USD' ): ''}} </span>
+                        </td>
+                    </ng-container>
+                    <td>
+                        <button class="btn btn-primary btn-sm mr-2" type="button" (click)="openUnitDetailsPage(item)">
+                            <i class="fas fa-eye" aria-hidden="true"></i>
+                        </button>
+                        <button class="btn btn-primary btn-sm mr-2" type="button" (click)="openEditUnitPriceModal(editPriceModal,item)">
+                            <i class="fa fa-pencil-alt" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>
+            </ng-container>
+            <ng-container *ngIf="unitPricingList.length == 0">
+                <tr>
+                    <td [attr.colspan]="colSpanVal" class="text-center">No unit price found</td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+</div>
+<div class="row mt-3" *ngIf="paginationObj.total>=20">
+    <div class="col-md-6">
+        <div class="form-group">
+            <!-- <div class="col-sm-6"> -->
+            <span class="float-left" style="width:70px;margin-top: 6px;">Page Size:</span>
+            <span class="float-left" style="width:85px;">
+                <select class="form-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="pageSize" (change)="setPageSize()">
+                    <option value="">-Select-</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </span>
+            <span class="float-left" style="margin-top: 6px !important;margin-left: 16px !important;">{{paginationObj.total}} Record(s) Found</span>
+            <!-- </div> -->
+        </div>
+    </div>
+    <div class="col-md-6">
+        <nav>
+            <ul class="pagination">
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" (click)="doPaginationWise(paginationObj.previousPage)">
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.previousPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(1)">
+                        First
+                    </a>
+                </li>
+                <li class="page-item {{pagination == paginationObj.currentPage?'active':''}}" *ngFor="let pagination of paginationObj.items">
+                    <a class="page-link" (click)="doPaginationWise(pagination)">{{pagination}}</a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" href="javascript:void(0);" (click)="doPaginationWise(paginationObj.totalPages)">
+                        Last
+                    </a>
+                </li>
+                <li class="page-item {{paginationObj.nextPage ==0 ?'disabled':'' }}">
+                    <a class="page-link" (click)="doPaginationWise(paginationObj.nextPage)">
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
+<ng-template #editPriceModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Unit Price</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Builder
+                            <b>{{formDetails?.builder_name}}</b>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Project:
+                            <b>{{formDetails?.project_name}}</b>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Suite:
+                            <b>{{formDetails?.unit_no}}</b>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">
+                            Base Price
+                            <span style="color:red">*</span>:
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="number" (keyup)="onBasePriceChange($event)" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.price"
+                                class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">
+                            Floor Premium
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="number" (keyup)="onFloorPremiumChange($event)" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.floor_premium"
+                                class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">
+                            Unit Premium
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="number" (keyup)="onUnitPremiumChange($event)" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.unit_premium"
+                                class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">
+                            Unit Price
+                            <span style="color:red">*</span>:
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="number" min="0" (keyup)="onUnitPriceChange()" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.price"
+                                class="form-control">
+                        </div>
+                    </div>
+                </div> -->
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">
+                            Tax
+                            <span style="color:red">*</span>:
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="number" (keyup)="onTaxChange($event)" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.tax"
+                                class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">
+                            Sales Price
+                            <span style="color:red">*</span>:
+                        </label>
+                        <div class="col-sm-12">
+                            <input [disabled]="true" type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.sales_price"
+                                class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">
+                            Price per ({{measureUnits[0]?.area}}):
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.psf" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">
+                            Dollar Per Unit ($PSU):
+                            
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.psu" class="form-control">
+                        </div>
+                    </div>
+                </div> -->
+
+                <!-- <div class="col-md-6 mb-4">
+                    <div class="form-check">
+                        <input [ngModelOptions]="{standalone: true}" [(ngModel)]="formDetails.is_active" class="form-check-input" type="checkbox"
+                            value="" id="isEnable">
+                        <label class="form-check-label" for="isEnable">
+                            Is Active
+                        </label>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="editUnitPriceModal()">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #enableColsModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Settings</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <h5>Choose Column</h5>
+            </div>
+            <div class="col-md-6" *ngFor="let item of formDetails.cols">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="{{item.fieldNum}}" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.isEnable">
+                    <label class="custom-control-label" for="{{item.fieldNum}}">{{item.name}}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="onSettingsSave()">Save</button>
+        </div>
+    </div>
+</ng-template>

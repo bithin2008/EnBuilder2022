@@ -1,0 +1,186 @@
+<!-- Sold With Options: start -->
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-11 col-sm-9">
+                <h5>Only sold with </h5>
+
+                <!-- <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="th_chk_all" (change)="onChangeSoldWithCheckbox()" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="should_sold_with">
+                    <label class="custom-control-label" for="th_chk_all">This option is only available with selected Options. </label>
+                </div> -->
+
+                <div>
+                    (Help: This option is only available with selected Options. User has to purchase the the selected option(s) in order to buy
+                    this option.)
+                </div>
+            </div>
+            <div class="col-md-1 col-sm-3 text-right">
+                <button class="btn btn-primary" type="button" (click)="openAddSoldWithOption(addSoldWithOptionModal)">
+                    <i class="fa fa-pencil-alt" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="table-responsive mt-2 mb-3" *ngIf="optionDetailsObj && optionDetailsObj.only_sold_with_options && optionDetailsObj.only_sold_with_options.length>0">
+            <table class="table table-striped list_table" style="table-layout: fixed;">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th width="100px">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container>
+                        <tr *ngFor="let item of optionDetailsObj.only_sold_with_options; let j=index">
+                            <td>{{item.name}}</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger" type="button" (click)="deleteSoldWithOption(item,j)">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+
+        <ng-container *ngIf="!optionDetailsObj?.only_sold_with_options || ( optionDetailsObj?.only_sold_with_options && optionDetailsObj?.only_sold_with_options.length==0)">
+            <div class="mt-3 text-center">
+                No Option Found
+            </div>
+        </ng-container>
+    </div>
+</div>
+<!-- Sold With Options: end -->
+
+<!-- Incompatible Options: start -->
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-11 col-sm-9">
+                <h5>Incompatible Options</h5>
+                <!-- <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="th_chk" (change)="onChangeSoldWithCheckbox()" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="incompatible_options">
+                    <label class="custom-control-label" for="th_chk">This option is not compatible with some options. </label>
+                </div> -->
+                <div>
+                    ( Help:This option is not compatible with some options. User cannot buy the current option along with the list of options(s)
+                    in this section. When user buys one of these options, current option will automatically disappear from
+                    the list.)
+                </div>
+            </div>
+            <div class="col-md-1 col-sm-3 text-right">
+                <button class="btn btn-primary" type="button" (click)="openAddIncompatibleOptions(addIncompatibleOptionModal)">
+                    <i class="fa fa-pencil-alt" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+        <div class="table-responsive mt-2 mb-3" *ngIf="optionDetailsObj && optionDetailsObj.incompatible_options && optionDetailsObj.incompatible_options.length>0">
+            <table class="table table-striped list_table" style="table-layout: fixed;">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th width="100px">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container>
+                        <tr *ngFor="let item of optionDetailsObj.incompatible_options; let j=index">
+                            <td>{{item.name}}</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger" type="button" (click)="deleteIncompatibleOptions(item,j)">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+
+        <ng-container *ngIf="!optionDetailsObj?.incompatible_options || ( optionDetailsObj?.incompatible_options && optionDetailsObj?.incompatible_options.length==0)">
+            <div class="mt-3 text-center">
+                No Incompatible Option Found
+            </div>
+        </ng-container>
+
+    </div>
+</div>
+<!-- Incompatible Options: end -->
+
+<ng-template #addSoldWithOptionModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">Add Sold With Options</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Options
+                                <span style="color:red">*</span>:</label>
+                            <ng-multiselect-dropdown (onDeSelectAll)="onSelectDeSelectAll('only_sold_with_options',$event)" (onDeSelect)="onItemSelect()"
+                                (onSelect)="onItemSelect()" (onSelectAll)="onSelectDeSelectAll('only_sold_with_options',$event)"
+                                [placeholder]="'Select Option'" [ngModelOptions]="{standalone: true}" [data]="soldWithOptionsList"
+                                [(ngModel)]="formDetails.only_sold_with_options" [settings]="dropdownSettings">
+                            </ng-multiselect-dropdown>
+
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="addSoldWithOption()">Add</button>
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-template #addIncompatibleOptionModal>
+    <div class="modal-header">
+        <h5 class="modal-title pull-left">Add Incompatible Options</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form autocomplete="off">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Incompatible Options
+                                <span style="color:red">*</span>:</label>
+                            <ng-multiselect-dropdown (onDeSelectAll)="onSelectDeSelectAll('incompatible_options',$event)" (onDeSelect)="onItemSelect()"
+                                (onSelect)="onItemSelect()" (onSelectAll)="onSelectDeSelectAll('incompatible_options',$event)"
+                                [placeholder]="'Select Options'" [ngModelOptions]="{standalone: true}" [data]="incompatibleOptionsList"
+                                [(ngModel)]="formDetails.incompatible_options" [settings]="dropdownSettings">
+                            </ng-multiselect-dropdown>
+
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="addIncompatibleOptions()">Add</button>
+        </div>
+    </div>
+</ng-template>
